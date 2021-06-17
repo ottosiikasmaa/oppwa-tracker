@@ -12576,6 +12576,8 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
     // errors
     Options.onError = function(){};
 
+    Options.fundingSources = undefined;
+
     Options.styling = undefined;
 
     Options.processing = {
@@ -28723,7 +28725,8 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
         }
     };
 
-    GooglePay.onPaymentAuthorized = function(paymentData) {
+    GooglePay.handlePaymentAuthorized = function(paymentData) {
+
         if(Options.googlePay.onPaymentAuthorized) {
             var promise = Options.googlePay.onPaymentAuthorized(paymentData);
             promise.then(function(promiseResult) {
@@ -28731,15 +28734,15 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
                     GooglePay.processPayment(paymentData);
                 }
             })
-            .catch(function(data) {  // jshint ignore:line
-                var message = "onPaymentAuthorized - Merchant passed a reject() to GooglePay.onPaymentAuthorized()" +
-                 "GooglePay returned PaymentDataError as -> " + JSON.stringify(data);
-                logger.error(message);
-                Options.onError(new WidgetError('GOOGLEPAY', 'onPaymentAuthorized', message));
-                // This would be called when merchant passes reject(). When reject() is passed
-                // Google errors as "DEVELOPER_ERROR in loadPaymentData: An error occurred in call back,
-                // please try to avoid this by setting structured error in callback response"
-            });
+                .catch(function(data) {  // jshint ignore:line
+                    var message = "onPaymentAuthorized - Merchant passed a reject() to GooglePay.onPaymentAuthorized()" +
+                        "GooglePay returned PaymentDataError as -> " + JSON.stringify(data);
+                    logger.error(message);
+                    Options.onError(new WidgetError('GOOGLEPAY', 'onPaymentAuthorized', message));
+                    // This would be called when merchant passes reject(). When reject() is passed
+                    // Google errors as "DEVELOPER_ERROR in loadPaymentData: An error occurred in call back,
+                    // please try to avoid this by setting structured error in callback response"
+                });
             return promise;
         }
         else {
@@ -28748,6 +28751,32 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
                 resolve({ transactionState: SUCCESS });
             });
         }
+    };
+
+    GooglePay.onPaymentAuthorized = function(paymentData) {
+
+        return GooglePay.resolveCheckoutId()
+            .then(
+                function(checkoutId) {
+                    if (!checkoutId) {
+                        //Return SUCCESS to dismiss the window
+                        return { transactionState: SUCCESS };
+                    }
+                    return GooglePay.handlePaymentAuthorized(paymentData);
+                },
+                function (err) {
+                    return {
+                        transactionState: "DEVELOPER_ERROR",
+                        error: {
+                            reason: "OTHER_ERROR",
+                            message: err ? err.message : "Something went very wrong.",
+                            intent: "PAYMENT_AUTHORIZATION"
+                        }
+                    };
+                }
+            ).catch(function (err){
+                GooglePay.onCancel(err);
+            });
     };
 
     function getIsReadyToPayRequest() {
@@ -28858,14 +28887,10 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
             Tracking.exception(info);
             return;
         }
-        var paymentsClient = GooglePay.getGooglePaymentsClient();
-        GooglePay.resolveCheckoutId()
-            .then(function() {
-                paymentsClient.loadPaymentData(getLoadPaymentDataRequest())
-                    .catch(function(err) {
-                        GooglePay.onCancel(err);
-                    });
-            });
+
+        GooglePay
+            .getGooglePaymentsClient()
+            .loadPaymentData(getLoadPaymentDataRequest());
     };
 
     GooglePay.onCancel = function(googleError) {
@@ -30699,13 +30724,14 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
         return $form;
     }
 
-    Payment.showInlineButtonForm = function(obj, customButtonFormId) {
-        var elements = [
-        	Generate.getBrandAccountInput(Util.trim(obj.subType)),
-			Generate.generateButtonElement(customButtonFormId),
-            Generate.generateHiddenFields(obj.hidden)
-		];
-
+    Payment.showInlineButtonForm = function(obj, customButtonFormIdArray) {
+        var elements = [Generate.getBrandAccountInput(Util.trim(obj.subType))];
+        if ($.isArray(customButtonFormIdArray)) {
+            customButtonFormIdArray.forEach((value) => {    // jshint ignore:line
+                elements.push(Generate.generateButtonElement(value.divName));
+            });
+        }
+		elements.push(Generate.generateButtonElement(obj.hidden));
         return buildPaymentAndReturnForm(obj, elements);
     };
 
@@ -32554,7 +32580,6 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     var logger = LoggerFactory.getLogger('PaypalRestPaymentForm');
 
     var PAYPAL_SDK_URL = "https://www.paypal.com/sdk/js";
-    var CUSTOM_BUTTON_FORM_ID = "paypalHostedButton";
     var SHOP_ORIGIN_PARAMETER = 'shopOrigin';
     var REDIRECT_URL_PARAMETER = 'redirectUrl';
     var METHOD_PARAMETER = 'method';
@@ -32565,6 +32590,8 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     var PAYMENT = '/payment';
     var CONFIRM = '/confirm';
     var HEADER_FORMAT = {"Accept": "application/json"};
+    var SUPPORTING_FUNDING_SOURCES = ["PAYPAL", "CARD", "PAYLATER", "CREDIT", "VENMO"];
+    var VALID_INPUT_FUNDING_SOURCES_ARRAY = [];
 
     /**
      * @param $form jquery object for the form inside which button is rendered
@@ -32609,7 +32636,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
             this.normalCheckout() : this.fastCheckout();
 
         if(Wpwl.checkout.config.createRegistration) {
-            return Generate.string(PAYPAL_SDK_URL, "?client-id=", checkoutData.clientId, "&vault=true&commit=false");
+            return Generate.string(PAYPAL_SDK_URL, "?client-id=", checkoutData.clientId, "&vault=true&commit=false&components=buttons,funding-eligibility");
         } else {
             return Generate.string(PAYPAL_SDK_URL,
                 "?integration-date=2019-09-10", // for backward compatibility with PayPal
@@ -32617,7 +32644,8 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
                 "&client-id=", checkoutData.clientId,
                 (currency ? "&currency=" + currency : ""),
                 "&intent=", checkoutData.intent,
-                "&commit=", checkoutData.commit);
+                "&commit=", checkoutData.commit,
+                "&components=buttons,funding-eligibility");
         }
     };
 
@@ -32794,18 +32822,78 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     };
 
     PaypalRestPaymentForm.prototype.renderButton = function() {
-        var buttonOptions = this.buttonCallbacks;
-        if (Options.styling !== undefined && Options.styling !== null) {
-            buttonOptions.style = Options.styling;
+        if(VALID_INPUT_FUNDING_SOURCES_ARRAY.length === 0) {
+            PaypalRestPaymentForm.getCustomButtonFormIdArray();
+        }
+        var fundingSourcesInputArray = Options.fundingSources;
+        if (fundingSourcesInputArray !== undefined && fundingSourcesInputArray !== null) {
+            // Loop over each funding source / payment method
+            VALID_INPUT_FUNDING_SOURCES_ARRAY.forEach(function(fundingSourceObj) {
+                var buttonOptions = this.buttonCallbacks || {};
+                if (Options.styling !== undefined && Options.styling !== null) {
+                    buttonOptions.style = Options.styling;
+                }
+                buttonOptions.fundingSource = fundingSourceObj.fundingSource;
+
+                // Initialize the buttons
+                var button = paypal.Buttons(buttonOptions); // jshint ignore:line
+                // Check if the button is eligible
+                if (button.isEligible()) {
+                    // Render the standalone button for that funding source
+                    var divName = "#" + fundingSourceObj.divName;
+                    button.render(divName);
+                    $(divName).css('display', 'block');
+                }
+            });
+        }
+        else {
+            // Options.fundingSources is not defined - We render whatever Paypal defaults
+            var buttonOptions = this.buttonCallbacks;
+            if (Options.styling !== undefined && Options.styling !== null) {
+                buttonOptions.style = Options.styling;
+            }
+
+            paypal.Buttons(buttonOptions)                    // jshint ignore:line
+                .render("#" + VALID_INPUT_FUNDING_SOURCES_ARRAY[0].divName);
         }
 
-        paypal.Buttons(buttonOptions)                    // jshint ignore:line
-            .render("#" + PaypalRestPaymentForm.getCustomButtonFormId());
         this.spinner.stop();
     };
 
-    PaypalRestPaymentForm.getCustomButtonFormId = function() {
-        return CUSTOM_BUTTON_FORM_ID;
+    PaypalRestPaymentForm.getCustomButtonFormIdArray = function() {
+        VALID_INPUT_FUNDING_SOURCES_ARRAY = [];
+        var fundingSourcesInputArray = Options.fundingSources;
+        // Try to work on the formed VALID_INPUT_FUNDING_SOURCES_ARRAY array from PaypalRestPaymentForm.getCustomButtonFormIdArray()
+        if (fundingSourcesInputArray !== undefined && fundingSourcesInputArray !== null) {
+            if ($.isArray(fundingSourcesInputArray)) {
+                // Verify values. If errorneous call onError. Prepare array with valid values and try to render
+                fundingSourcesInputArray.forEach((value) => {   // jshint ignore:line
+                        if ($.inArray(value.toUpperCase(), SUPPORTING_FUNDING_SOURCES) !== -1) {
+                            var fundingSourceObj =  {
+                                "fundingSource" : value.toLowerCase(),
+                                "divName" :  "payPalHosted" + value.toUpperCase() + "Button",
+                            };
+                            VALID_INPUT_FUNDING_SOURCES_ARRAY.push(fundingSourceObj);
+                        }
+                        else {
+                            Options.onError(new WidgetError('PAYPAL', 'renderButton', "Element '" + value + "' in wpwlOptions.fundingSources is not valid"));
+                        }
+                    }
+                );
+            }
+            else {
+                Options.onError(new WidgetError('PAYPAL', 'renderButton',
+                'wpwlOptions.fundingSources should be an array'));
+            }
+        }
+        else {
+            var fundingSourceObj =  {
+                "fundingSource" : undefined,
+                "divName" :  "payPalHostedButton",
+            };
+            VALID_INPUT_FUNDING_SOURCES_ARRAY.push(fundingSourceObj);
+        }
+        return VALID_INPUT_FUNDING_SOURCES_ARRAY;
     };
 
     PaypalRestPaymentForm.sendInternalPostRequest = function(endpoint, headers, data) {
@@ -33714,7 +33802,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			// 2nd configure block
 			var formAttributes = {id: id, subType: brand, hidden: hiddenParameters.getParameters()};
 			if ((brand === "PAYPAL" || brand === "PAYPAL_CONTINUE") && InlineFlow.isInlineFlow(brand)) {
-				var form = Payment.showInlineButtonForm(formAttributes, PaypalRestPaymentForm.getCustomButtonFormId());
+				var form = Payment.showInlineButtonForm(formAttributes, PaypalRestPaymentForm.getCustomButtonFormIdArray());
 				var paypalRestWidget = new PaypalRestPaymentForm(form);
 				paypalRestWidget.updateCheckoutWithPaymentBrand();
 				paypalRestWidget.downloadButton().then(function(){
@@ -34895,8 +34983,12 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		this.$input.attr('name', properties.name);
 		this.$input.prop('maxLength', properties.maxLength);
 		// Force no autocomplete to comply to security standards
-		this.$input.prop('autocomplete', 'off');
 		this.$input.attr("aria-label", properties.ariaLabel);
+        if (Parameter.CARD_NUMBER === properties.name) {
+            this.$input.prop("autocomplete", 'cc-number');
+        } else {
+            this.$input.prop("autocomplete", 'off');
+        }
 
         if (Parameter.CARD_CVV === properties.name) {
 		    // mask cvv
@@ -34909,7 +35001,6 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		    // remove hidden field in CVV iframe
 		    this.$form.find("#EndToEndIdentity").remove();
 		}
-
 	};
 
 	IframeToParentCommunication.prototype.setInputToFocus = function() {
