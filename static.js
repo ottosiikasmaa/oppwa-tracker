@@ -12576,8 +12576,6 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
     // errors
     Options.onError = function(){};
 
-    Options.fundingSources = undefined;
-
     Options.styling = undefined;
 
     Options.processing = {
@@ -16548,6 +16546,7 @@ define('module/Language',[],function(){
 	Language.dk = Language.da;
     Language.se = Language.sv;
     Language["in"] = Language.id;
+    Language.cs = Language.cz;
 
 	return Language;
 });
@@ -30390,7 +30389,7 @@ define('module/integrations/BancontactMobilePaymentWidget',['require','jquery','
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/error/OppError','module/logging/LoggerFactory'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -30417,6 +30416,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
     var YandexCheckoutPaymentWidget = require('module/integrations/YandexCheckoutPaymentWidget');
 	var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
 	var BancontactMobilePaymentWidget = require('module/integrations/BancontactMobilePaymentWidget');
+	var OppError = require("module/error/OppError");
 	var LoggerFactory = require('module/logging/LoggerFactory');
     var logger = LoggerFactory.getLogger('Payment');
 	var HAS_ERROR_CLASS = "wpwl-has-error";
@@ -30724,14 +30724,13 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
         return $form;
     }
 
-    Payment.showInlineButtonForm = function(obj, customButtonFormIdArray) {
-        var elements = [Generate.getBrandAccountInput(Util.trim(obj.subType))];
-        if ($.isArray(customButtonFormIdArray)) {
-            customButtonFormIdArray.forEach((value) => {    // jshint ignore:line
-                elements.push(Generate.generateButtonElement(value.divName));
-            });
-        }
-		elements.push(Generate.generateButtonElement(obj.hidden));
+    Payment.showInlineButtonForm = function(obj, customButtonFormId) {
+        var elements = [
+        	Generate.getBrandAccountInput(Util.trim(obj.subType)),
+			Generate.generateButtonElement(customButtonFormId),
+            Generate.generateHiddenFields(obj.hidden)
+		];
+
         return buildPaymentAndReturnForm(obj, elements);
     };
 
@@ -31146,6 +31145,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				.fail(function(error, message) {
 					var info = "validatePciIframes failed with error: " + error + " and message: " + message;
 					PaymentView.showSupportMessage(info, form);
+					Options.onError(new OppError(info, "PciIframeCommunicationError"));
 					Tracking.exception(info);
 				});
 			};
@@ -32580,6 +32580,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     var logger = LoggerFactory.getLogger('PaypalRestPaymentForm');
 
     var PAYPAL_SDK_URL = "https://www.paypal.com/sdk/js";
+    var CUSTOM_BUTTON_FORM_ID = "paypalHostedButton";
     var SHOP_ORIGIN_PARAMETER = 'shopOrigin';
     var REDIRECT_URL_PARAMETER = 'redirectUrl';
     var METHOD_PARAMETER = 'method';
@@ -32590,8 +32591,6 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     var PAYMENT = '/payment';
     var CONFIRM = '/confirm';
     var HEADER_FORMAT = {"Accept": "application/json"};
-    var SUPPORTING_FUNDING_SOURCES = ["PAYPAL", "CARD", "PAYLATER", "CREDIT", "VENMO"];
-    var VALID_INPUT_FUNDING_SOURCES_ARRAY = [];
 
     /**
      * @param $form jquery object for the form inside which button is rendered
@@ -32636,7 +32635,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
             this.normalCheckout() : this.fastCheckout();
 
         if(Wpwl.checkout.config.createRegistration) {
-            return Generate.string(PAYPAL_SDK_URL, "?client-id=", checkoutData.clientId, "&vault=true&commit=false&components=buttons,funding-eligibility");
+            return Generate.string(PAYPAL_SDK_URL, "?client-id=", checkoutData.clientId, "&vault=true&commit=false");
         } else {
             return Generate.string(PAYPAL_SDK_URL,
                 "?integration-date=2019-09-10", // for backward compatibility with PayPal
@@ -32644,8 +32643,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
                 "&client-id=", checkoutData.clientId,
                 (currency ? "&currency=" + currency : ""),
                 "&intent=", checkoutData.intent,
-                "&commit=", checkoutData.commit,
-                "&components=buttons,funding-eligibility");
+                "&commit=", checkoutData.commit);
         }
     };
 
@@ -32822,78 +32820,18 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     };
 
     PaypalRestPaymentForm.prototype.renderButton = function() {
-        if(VALID_INPUT_FUNDING_SOURCES_ARRAY.length === 0) {
-            PaypalRestPaymentForm.getCustomButtonFormIdArray();
-        }
-        var fundingSourcesInputArray = Options.fundingSources;
-        if (fundingSourcesInputArray !== undefined && fundingSourcesInputArray !== null) {
-            // Loop over each funding source / payment method
-            VALID_INPUT_FUNDING_SOURCES_ARRAY.forEach(function(fundingSourceObj) {
-                var buttonOptions = this.buttonCallbacks || {};
-                if (Options.styling !== undefined && Options.styling !== null) {
-                    buttonOptions.style = Options.styling;
-                }
-                buttonOptions.fundingSource = fundingSourceObj.fundingSource;
-
-                // Initialize the buttons
-                var button = paypal.Buttons(buttonOptions); // jshint ignore:line
-                // Check if the button is eligible
-                if (button.isEligible()) {
-                    // Render the standalone button for that funding source
-                    var divName = "#" + fundingSourceObj.divName;
-                    button.render(divName);
-                    $(divName).css('display', 'block');
-                }
-            });
-        }
-        else {
-            // Options.fundingSources is not defined - We render whatever Paypal defaults
-            var buttonOptions = this.buttonCallbacks;
-            if (Options.styling !== undefined && Options.styling !== null) {
-                buttonOptions.style = Options.styling;
-            }
-
-            paypal.Buttons(buttonOptions)                    // jshint ignore:line
-                .render("#" + VALID_INPUT_FUNDING_SOURCES_ARRAY[0].divName);
+        var buttonOptions = this.buttonCallbacks;
+        if (Options.styling !== undefined && Options.styling !== null) {
+            buttonOptions.style = Options.styling;
         }
 
+        paypal.Buttons(buttonOptions)                    // jshint ignore:line
+            .render("#" + PaypalRestPaymentForm.getCustomButtonFormId());
         this.spinner.stop();
     };
 
-    PaypalRestPaymentForm.getCustomButtonFormIdArray = function() {
-        VALID_INPUT_FUNDING_SOURCES_ARRAY = [];
-        var fundingSourcesInputArray = Options.fundingSources;
-        // Try to work on the formed VALID_INPUT_FUNDING_SOURCES_ARRAY array from PaypalRestPaymentForm.getCustomButtonFormIdArray()
-        if (fundingSourcesInputArray !== undefined && fundingSourcesInputArray !== null) {
-            if ($.isArray(fundingSourcesInputArray)) {
-                // Verify values. If errorneous call onError. Prepare array with valid values and try to render
-                fundingSourcesInputArray.forEach((value) => {   // jshint ignore:line
-                        if ($.inArray(value.toUpperCase(), SUPPORTING_FUNDING_SOURCES) !== -1) {
-                            var fundingSourceObj =  {
-                                "fundingSource" : value.toLowerCase(),
-                                "divName" :  "payPalHosted" + value.toUpperCase() + "Button",
-                            };
-                            VALID_INPUT_FUNDING_SOURCES_ARRAY.push(fundingSourceObj);
-                        }
-                        else {
-                            Options.onError(new WidgetError('PAYPAL', 'renderButton', "Element '" + value + "' in wpwlOptions.fundingSources is not valid"));
-                        }
-                    }
-                );
-            }
-            else {
-                Options.onError(new WidgetError('PAYPAL', 'renderButton',
-                'wpwlOptions.fundingSources should be an array'));
-            }
-        }
-        else {
-            var fundingSourceObj =  {
-                "fundingSource" : undefined,
-                "divName" :  "payPalHostedButton",
-            };
-            VALID_INPUT_FUNDING_SOURCES_ARRAY.push(fundingSourceObj);
-        }
-        return VALID_INPUT_FUNDING_SOURCES_ARRAY;
+    PaypalRestPaymentForm.getCustomButtonFormId = function() {
+        return CUSTOM_BUTTON_FORM_ID;
     };
 
     PaypalRestPaymentForm.sendInternalPostRequest = function(endpoint, headers, data) {
@@ -33802,7 +33740,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			// 2nd configure block
 			var formAttributes = {id: id, subType: brand, hidden: hiddenParameters.getParameters()};
 			if ((brand === "PAYPAL" || brand === "PAYPAL_CONTINUE") && InlineFlow.isInlineFlow(brand)) {
-				var form = Payment.showInlineButtonForm(formAttributes, PaypalRestPaymentForm.getCustomButtonFormIdArray());
+				var form = Payment.showInlineButtonForm(formAttributes, PaypalRestPaymentForm.getCustomButtonFormId());
 				var paypalRestWidget = new PaypalRestPaymentForm(form);
 				paypalRestWidget.updateCheckoutWithPaymentBrand();
 				paypalRestWidget.downloadButton().then(function(){
