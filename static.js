@@ -28889,7 +28889,10 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
 
         GooglePay
             .getGooglePaymentsClient()
-            .loadPaymentData(getLoadPaymentDataRequest());
+            .loadPaymentData(getLoadPaymentDataRequest())
+            .catch(function (err){
+                GooglePay.onCancel(err);
+            });
     };
 
     GooglePay.onCancel = function(googleError) {
