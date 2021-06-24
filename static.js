@@ -28126,7 +28126,7 @@ define('module/integrations/Affirm',['require','jquery','module/Generate','modul
     return Affirm;
 });
 /*global ApplePaySession,ApplePayError,Promise*/
-define('module/ApplePay',['require','jquery','module/Generate','module/InternalRequestCommunication','module/Locale','module/Options','module/PaymentView','module/Tracking','module/Util','module/Wpwl','module/Parameter'],function(require){
+define('module/ApplePay',['require','jquery','module/Generate','module/InternalRequestCommunication','module/Locale','module/Options','module/PaymentView','module/Tracking','module/Util','module/Wpwl','module/Parameter','module/error/WidgetError'],function(require){
 
 	var $ = require('jquery');
 	var Generate = require("module/Generate");
@@ -28138,6 +28138,7 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
     var Util = require('module/Util');
     var Wpwl = require('module/Wpwl');
     var Parameter = require('module/Parameter');
+    var WidgetError = require('module/error/WidgetError');
 
     // Options, defined in wpwlOptions.applePay, are copied to the Apple Pay payment request
     var REQUEST_OPTIONS = [
@@ -28434,11 +28435,15 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             } catch (error) {
                 // Do nothing. This error could happen when the merchant was successfully validated
                 // but the shopper canceled the payment and, as a result, invalidated the session.
+                Options.onError(new WidgetError('APPLEPAY', 'onValidateMerchant-completeMerchantValidation',
+                'Error during ApplyPaySession.completeMerchantValidation ' + error));
             }
         })
         .fail(function(response) {
-            session.abort();
             var info = "Starting Apple Pay session returned with status " + response.status;
+            Options.onError(new WidgetError('APPLEPAY', 'onValidateMerchant-fail',
+            'Failure reason - ' + info + ". Aborting Session."));
+            session.abort();
             Tracking.exception(info);
         });
     };
@@ -28551,11 +28556,12 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
                 { status: ApplePaySession.STATUS_SUCCESS });
         })
         .fail(function() {
-            session.completePayment((Options.applePay.version <= 2) ?
-                ApplePaySession.STATUS_FAILURE : {
-                    status: ApplePaySession.STATUS_FAILURE,
-                    errors: [new ApplePayError("unknown")]
-                });
+            var applePayErrorDetails = (Options.applePay.version <= 2) ? ApplePaySession.STATUS_FAILURE : {
+                                    status: ApplePaySession.STATUS_FAILURE,
+                                    errors: [new ApplePayError("unknown")]
+                                };
+            Options.onError(new WidgetError('APPLEPAY', 'pay', 'Failure reason ' + JSON.stringify(applePayErrorDetails)));
+            session.completePayment(applePayErrorDetails);
         })
         .always(function(response) {
             if (response && response.redirect && response.redirect.shortUrl) {
