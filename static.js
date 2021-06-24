@@ -16546,6 +16546,7 @@ define('module/Language',[],function(){
 	Language.dk = Language.da;
     Language.se = Language.sv;
     Language["in"] = Language.id;
+    Language.cs = Language.cz;
 
 	return Language;
 });
@@ -28723,7 +28724,8 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
         }
     };
 
-    GooglePay.onPaymentAuthorized = function(paymentData) {
+    GooglePay.handlePaymentAuthorized = function(paymentData) {
+
         if(Options.googlePay.onPaymentAuthorized) {
             var promise = Options.googlePay.onPaymentAuthorized(paymentData);
             promise.then(function(promiseResult) {
@@ -28731,15 +28733,15 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
                     GooglePay.processPayment(paymentData);
                 }
             })
-            .catch(function(data) {  // jshint ignore:line
-                var message = "onPaymentAuthorized - Merchant passed a reject() to GooglePay.onPaymentAuthorized()" +
-                 "GooglePay returned PaymentDataError as -> " + JSON.stringify(data);
-                logger.error(message);
-                Options.onError(new WidgetError('GOOGLEPAY', 'onPaymentAuthorized', message));
-                // This would be called when merchant passes reject(). When reject() is passed
-                // Google errors as "DEVELOPER_ERROR in loadPaymentData: An error occurred in call back,
-                // please try to avoid this by setting structured error in callback response"
-            });
+                .catch(function(data) {  // jshint ignore:line
+                    var message = "onPaymentAuthorized - Merchant passed a reject() to GooglePay.onPaymentAuthorized()" +
+                        "GooglePay returned PaymentDataError as -> " + JSON.stringify(data);
+                    logger.error(message);
+                    Options.onError(new WidgetError('GOOGLEPAY', 'onPaymentAuthorized', message));
+                    // This would be called when merchant passes reject(). When reject() is passed
+                    // Google errors as "DEVELOPER_ERROR in loadPaymentData: An error occurred in call back,
+                    // please try to avoid this by setting structured error in callback response"
+                });
             return promise;
         }
         else {
@@ -28748,6 +28750,32 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
                 resolve({ transactionState: SUCCESS });
             });
         }
+    };
+
+    GooglePay.onPaymentAuthorized = function(paymentData) {
+
+        return GooglePay.resolveCheckoutId()
+            .then(
+                function(checkoutId) {
+                    if (!checkoutId) {
+                        //Return SUCCESS to dismiss the window
+                        return { transactionState: SUCCESS };
+                    }
+                    return GooglePay.handlePaymentAuthorized(paymentData);
+                },
+                function (err) {
+                    return {
+                        transactionState: "DEVELOPER_ERROR",
+                        error: {
+                            reason: "OTHER_ERROR",
+                            message: err ? err.message : "Something went very wrong.",
+                            intent: "PAYMENT_AUTHORIZATION"
+                        }
+                    };
+                }
+            ).catch(function (err){
+                GooglePay.onCancel(err);
+            });
     };
 
     function getIsReadyToPayRequest() {
@@ -28858,13 +28886,12 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
             Tracking.exception(info);
             return;
         }
-        var paymentsClient = GooglePay.getGooglePaymentsClient();
-        GooglePay.resolveCheckoutId()
-            .then(function() {
-                paymentsClient.loadPaymentData(getLoadPaymentDataRequest())
-                    .catch(function(err) {
-                        GooglePay.onCancel(err);
-                    });
+
+        GooglePay
+            .getGooglePaymentsClient()
+            .loadPaymentData(getLoadPaymentDataRequest())
+            .catch(function (err){
+                GooglePay.onCancel(err);
             });
     };
 
@@ -30365,7 +30392,7 @@ define('module/integrations/BancontactMobilePaymentWidget',['require','jquery','
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/error/OppError','module/logging/LoggerFactory'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -30392,6 +30419,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
     var YandexCheckoutPaymentWidget = require('module/integrations/YandexCheckoutPaymentWidget');
 	var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
 	var BancontactMobilePaymentWidget = require('module/integrations/BancontactMobilePaymentWidget');
+	var OppError = require("module/error/OppError");
 	var LoggerFactory = require('module/logging/LoggerFactory');
     var logger = LoggerFactory.getLogger('Payment');
 	var HAS_ERROR_CLASS = "wpwl-has-error";
@@ -31120,6 +31148,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				.fail(function(error, message) {
 					var info = "validatePciIframes failed with error: " + error + " and message: " + message;
 					PaymentView.showSupportMessage(info, form);
+					Options.onError(new OppError(info, "PciIframeCommunicationError"));
 					Tracking.exception(info);
 				});
 			};
@@ -34895,8 +34924,12 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		this.$input.attr('name', properties.name);
 		this.$input.prop('maxLength', properties.maxLength);
 		// Force no autocomplete to comply to security standards
-		this.$input.prop('autocomplete', 'off');
 		this.$input.attr("aria-label", properties.ariaLabel);
+        if (Parameter.CARD_NUMBER === properties.name) {
+            this.$input.prop("autocomplete", 'cc-number');
+        } else {
+            this.$input.prop("autocomplete", 'off');
+        }
 
         if (Parameter.CARD_CVV === properties.name) {
 		    // mask cvv
@@ -34909,7 +34942,6 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		    // remove hidden field in CVV iframe
 		    this.$form.find("#EndToEndIdentity").remove();
 		}
-
 	};
 
 	IframeToParentCommunication.prototype.setInputToFocus = function() {
