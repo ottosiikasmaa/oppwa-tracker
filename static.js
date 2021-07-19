@@ -24497,15 +24497,16 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	};
 	
 	PaymentView.setUpIframeInputProperties = function(iframeCommunication){
-		iframeCommunication.applyInputProperties( {
-												name : iframeCommunication.$iframe.attr('name'),
-												maxLength: iframeCommunication.$iframe.attr('data-maxLength'),
-												maskCvv : Options.requireCvv && Options.maskCvv,
-												numberFormatting : Options.numberFormatting,
-												autocomplete: iframeCommunication.$iframe.attr('autocomplete'),
-												ariaLabel: iframeCommunication.$iframe.attr('aria-label'),
-												id: iframeCommunication.$iframe.attr('id')
-											});
+		iframeCommunication.applyInputProperties({
+			name : iframeCommunication.$iframe.attr('name'),
+			type : iframeCommunication.$iframe.attr('name')==='card.holder' ? 'text' : 'tel',
+			maxLength: iframeCommunication.$iframe.attr('data-maxLength'),
+			maskCvv : Options.requireCvv && Options.maskCvv,
+			numberFormatting : Options.numberFormatting,
+			autocomplete: iframeCommunication.$iframe.attr('autocomplete'),
+			ariaLabel: iframeCommunication.$iframe.attr('aria-label'),
+			id: iframeCommunication.$iframe.attr('id')
+		});
 	};
 	
 	PaymentView.setUpIframeCheckoutId = function(iframeCommunication){
@@ -35022,6 +35023,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	IframeToParentCommunication.prototype.applyInputProperties = function(properties) {
 		this.$input.attr('id', properties.id);
 		this.$input.attr('name', properties.name);
+		this.$input.attr('type', properties.type);
 		this.$input.prop('maxLength', properties.maxLength);
 		// Force no autocomplete to comply to security standards
 		this.$input.attr("aria-label", properties.ariaLabel);
