@@ -24591,6 +24591,24 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
         Tracking.exception(errorMessage);
     };
 
+     PaymentView.validatePciIframeFailed = function(error, message, $form) {
+            var errorMessage, errorName;
+            if (Util.isObject(error)) {
+                // error is probably a jquery XHR object
+                errorMessage = "validatePciIframes failed with status: " + error.statusText + "  and response: " + error.responseText;
+                var errorCode = error.responseJSON && error.responseJSON.result && error.responseJSON.result.code;
+                errorName = OppError.getErrorNameByReturnCode(errorCode) || "PciIframeCommunicationError";
+            } else {
+                // error is probably a jschannel string
+                errorMessage = "validatePciIframes failed with error: " + error + " and message: " + message;
+                errorName = "PciIframeCommunicationError";
+            }
+
+            PaymentView.showSupportMessage(errorMessage, $form);
+            Options.onError(new OppError(errorMessage, errorName));
+            Tracking.exception(errorMessage);
+        };
+
     PaymentView.hideOrShowMobile = function(hide){
     	var $form = $(this).closest("form");
 
@@ -30401,7 +30419,7 @@ define('module/integrations/BancontactMobilePaymentWidget',['require','jquery','
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/error/OppError','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/logging/LoggerFactory'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -30428,7 +30446,6 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
     var YandexCheckoutPaymentWidget = require('module/integrations/YandexCheckoutPaymentWidget');
 	var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
 	var BancontactMobilePaymentWidget = require('module/integrations/BancontactMobilePaymentWidget');
-	var OppError = require("module/error/OppError");
 	var LoggerFactory = require('module/logging/LoggerFactory');
     var logger = LoggerFactory.getLogger('Payment');
 	var HAS_ERROR_CLASS = "wpwl-has-error";
@@ -31157,10 +31174,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					}
 				})
 				.fail(function(error, message) {
-					var info = "validatePciIframes failed with error: " + error + " and message: " + message;
-					PaymentView.showSupportMessage(info, form);
-					Options.onError(new OppError(info, "PciIframeCommunicationError"));
-					Tracking.exception(info);
+					 PaymentView.validatePciIframeFailed(error, message, form);
 				});
 			};
 			
@@ -34890,8 +34904,12 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			return;
 		}
 		if (this.binCache.containsBin(bin)) {
-			this.binCache[bin].then(function(brands) {
+			this.binCache[bin]
+			.then(function(brands) {
 				this.processEnhancedBrands(val, brands);
+			}.bind(this))
+			.fail(function() {
+			    this.updateRegExpBrands(bin);
 			}.bind(this));
 		} else {
 			this.binCache[bin] = $.Deferred();
@@ -34902,7 +34920,8 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 					this.binCache[bin].resolve(brands);
 					this.processEnhancedBrands(val, brands);
 				}.bind(this),
-				error: function(){
+				error: function(xhr){
+				    this.binCache[bin].reject(xhr);
 					// Error retrieving EBM brands, fallback to regexp
 					this.updateRegExpBrands(bin);
 				}.bind(this)
