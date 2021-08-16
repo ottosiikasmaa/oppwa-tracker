@@ -12075,6 +12075,11 @@ define('module/Setting',['require','jquery','module/Parameter','module/forms/Car
 			}
 		},
 		VA:{
+			AFTERPAY: {
+				func: {
+					method: 'renderAfterPay'
+				}
+			},
 			PASTEANDPAY_V:{
 				accountId:{ name : "virtualAccount.accountId" } //input field
 			},
@@ -12567,6 +12572,9 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
     // Contains list of brand those support inline workflow.
     Options.inlineFlow = [];
 
+    // Contains list of brands to show Billing Agreement
+    Options.showBillingAgreement = [];
+
 	// lightbox e.g. masterpass
 	Options.onLightboxCancel = function(){};
 
@@ -12712,6 +12720,9 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			afterpayTermsAndCondition: "AfterPay Consumer Terms and Conditions",
+			afterpayAccept: "I have read and accepted AfterPay consumer Terms and Conditions.",
+			afterpayAcceptError: "Please accept the Terms and Conditions.",
 			countryCodes: [
                     {"value": "" , "label": "Please select"},
                     {"value":"AF", "label":"Afghanistan"},
@@ -13142,6 +13153,9 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			afterpayTermsAndCondition: "AfterPay Consumer Terms and Conditions",
+			afterpayAccept: "I have read and accepted AfterPay consumer Terms and Conditions.",
+			afterpayAcceptError: "Please accept the Terms and Conditions.",
 			countryCodes: [
 			        {"value": "" , "label": "Please select"},
                     {"value":"AF", "label":"Afghanistan"},
@@ -13558,6 +13572,9 @@ define('module/Language',[],function(){
 			mandateEntitlement: "Hinweis: Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.",
 			mandateConfirmation: "Ich bestätige, dass ich für das angegebene Konto unterschriftsberechtigt bin bzw. von dem Unterschriftsberechtigten bevollmächtigt bin, das Mandat zu erteilen. Ich stimme der Verkürzung der Frist für die Vorabankündigungen der Lastschrift auf 1 Kalendertag zu.",
 			mandateConfirmationError: "Bitte bestätigen Sie die Bedingungen.",
+			afterpayTermsAndCondition: "Allgemeine Geschäftsbedingungen",
+			afterpayAccept: "Ich stimme den AGBs von AfterPay zu.",
+			afterpayAcceptError: "Bitte akzeptieren Sie die Allgemeinen Geschäftsbedingungen.",
 			countryCodes : [
 			        {"value": "" , "label": "Bitte auswählen"},
                     {"value":"AF", "label":"Afghanistan"},
@@ -13888,6 +13905,9 @@ define('module/Language',[],function(){
         			mandateEntitlement: "En accord avec la législation en vigueur, je suis autorisé à demander un remboursement à ma banque sous réserve d'accord avec les termes et conditions de ma banque. Un remboursement doit être demandé durant les 8 semaines après que mon compte soit débité.",
         			mandateConfirmation: "Je confirme que je suis autorisé pour le compte mentionné à signer le contrat. J'accepte la réduction de la période de rétractation à 1 jour calandaire. Je certifie que les informations présentes dans ce contrat sont exacte et complète.",
         			mandateConfirmationError: "Merci d'accepter tous les termes et conditions avant de continuer.",
+        			afterpayTermsAndCondition: "AfterPay Termes et Conditions",
+        			afterpayAccept: "J'ai lu et accepté les termes et conditions du consommateur AfterPay.",
+        			afterpayAcceptError: "Veuillez accepter les termes et conditions.",
         			countryCodes: [
                         {"value": "", "label": "Veuillez sélectionner"},
                         {"value": "AF", "label": "Afghanistan"},
@@ -14548,7 +14568,10 @@ define('module/Language',[],function(){
 			mandateAuthorization: "By signing this mandate form, I authorize the creditor to send an instruction to my bank to debit my account in accordance with the instruction from the creditor.",
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
-			mandateConfirmationError: "Please agree to all the terms and conditions before continuing."
+			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			afterpayTermsAndCondition: "Termini e condizioni per i consumatori AfterPay",
+			afterpayAccept: "Ho letto e accettato Termini e Condizioni per i consumatori AfterPay.",
+			afterpayAcceptError: "Si prega di accettare i Termini e Condizioni.",
 		},
 		nl: {
 			accountBank:	"Bankcode",
@@ -14626,7 +14649,10 @@ define('module/Language',[],function(){
 			mandateAuthorization: "By signing this mandate form, I authorize the creditor to send an instruction to my bank to debit my account in accordance with the instruction from the creditor.",
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
-			mandateConfirmationError: "Please agree to all the terms and conditions before continuing."
+			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			afterpayTermsAndCondition: "Betalingsvoorwaarden",
+			afterpayAccept: "Ik ga akkoord met de betalings-voorwaarden van AfterPay.",
+			afterpayAcceptError: "Accepteer de algemene voorwaarden a.u.b."
 		},
 		da: {
 			accountBank:	"Bankkode",
@@ -14704,7 +14730,10 @@ define('module/Language',[],function(){
 			mandateAuthorization: "By signing this mandate form, I authorize the creditor to send an instruction to my bank to debit my account in accordance with the instruction from the creditor.",
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
-			mandateConfirmationError: "Please agree to all the terms and conditions before continuing."
+			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			afterpayTermsAndCondition: "Vilkaar og betingelser",
+			afterpayAccept: "Jeg har læst og accepteret AfterPay kunde betingelser og vilkår.",
+			afterpayAcceptError: "Accepter venligst vilkårene og betingelserne."
 		},
 		fi: {
 			accountBank:	"Pankin tunnus",
@@ -14782,7 +14811,10 @@ define('module/Language',[],function(){
 			mandateAuthorization: "By signing this mandate form, I authorize the creditor to send an instruction to my bank to debit my account in accordance with the instruction from the creditor.",
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
-			mandateConfirmationError: "Please agree to all the terms and conditions before continuing."
+			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			afterpayTermsAndCondition: "AfterPay -ehdot",
+			afterpayAccept: "Olen lukenut ja hyväksynyt AfterPay:n ehdot.",
+			afterpayAcceptError: "Hyväksy käyttöehdot."
 		},
 		sv: {
 			accountBank:	"Bankkod",
@@ -14860,7 +14892,10 @@ define('module/Language',[],function(){
 			mandateAuthorization: "By signing this mandate form, I authorize the creditor to send an instruction to my bank to debit my account in accordance with the instruction from the creditor.",
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
-			mandateConfirmationError: "Please agree to all the terms and conditions before continuing."
+			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			afterpayTermsAndCondition: "Avtalsvillkor för AfterPay",
+			afterpayAccept: "Jag godkänner betalvillkoren och förhands-informationen för AfterPay.",
+			afterpayAcceptError: "Godkänn villkoren."
 		},
 		tr: {
 			accountBank:	"Banka Kodu",
@@ -16308,7 +16343,10 @@ define('module/Language',[],function(){
 			mandateAuthorization: "By signing this mandate form, I authorize the creditor to send an instruction to my bank to debit my account in accordance with the instruction from the creditor.",
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
-			mandateConfirmationError: "Please agree to all the terms and conditions before continuing."
+			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			afterpayTermsAndCondition: "Vilkår for å betale med AfterPay - Forbruker",
+			afterpayAccept: "Jeg godkjenner vilkårene for AfterPay.",
+			afterpayAcceptError: "Godta vilkårene."
 		},
 		sk: {
 			accountBank:	"Kód banky",
@@ -18692,7 +18730,22 @@ define('module/Wpwl',[],function(){
 	return wpwl;
 });
 
-define('module/Generate',['require','jquery','dompurify','module/I18n','module/Locale','module/Options','module/Parameter','module/Setting','module/Browser','module/Util','module/Wpwl'],function(require) {
+define('module/BillingAgreement',['require','module/Options'],function (require) {
+
+	var Options = require('module/Options');
+
+	var BillingAgreement = {};
+
+	BillingAgreement.showBillingAgreement = function (brand) {
+		return Options.showBillingAgreement !== undefined && Options.showBillingAgreement !== null && Options.showBillingAgreement.filter(
+			function (value) {
+				return value === brand;
+			}).length > 0;
+	};
+
+	return BillingAgreement;
+});
+define('module/Generate',['require','jquery','dompurify','module/I18n','module/Locale','module/Options','module/Parameter','module/Setting','module/Browser','module/Util','module/Wpwl','module/BillingAgreement'],function(require) {
 	var $ = require('jquery');
 	var DOMPurify = require('dompurify');
 	var I18n = require('module/I18n');
@@ -18703,6 +18756,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 	var Browser = require('module/Browser');
 	var Util = require('module/Util');
 	var Wpwl = require('module/Wpwl');
+	var BillingAgreement = require("module/BillingAgreement");
 
 	var paymentSystem = Wpwl.isTestSystem ? "test" : "live";
 
@@ -18726,6 +18780,8 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 
 	Generate.showPaymentInputs = function(paymentInputs) { //generate input html
 		var paymentInputsString = [];
+
+		generateExtraPaymentInputs(paymentInputsString);
 		
 		for ( var elemName in paymentInputs ) {
 			/* istanbul ignore else */
@@ -18733,7 +18789,6 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 				var paymentData = paymentInputs[elemName];
 				
 				if (paymentData.type === 'submit') {
-					generateExtraPaymentInputs(paymentInputsString);
 					generatePaymentInput(paymentInputsString, elemName, paymentData);
 				} else if (paymentData.type === 'textOnly') {
 				    generateTextOnlyElement(paymentInputsString, elemName, paymentData);
@@ -18841,6 +18896,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
             value: paymentData.value,
             values: paymentData.values,
             valueLabels: paymentData.valueLabels,
+            hidden: paymentData.hidden,
             maxLength: paymentData.maxLength,
             autocomplete: 'off',
             cssClass: key
@@ -18850,7 +18906,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
     }
 	
 	Generate.generateCardRow = function(r){ //label, name, type, values, valueLabels, cssClass
-		return Generate.string(Generate.groupStart(r.cssClass),
+		return Generate.string(Generate.groupStart(r.cssClass, r.hidden),
 				checkSubmit(r),
 				checkSelect(r),
 				checkBrandLogos(r),
@@ -19315,8 +19371,9 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 				"</button>");
 	};
 
-	Generate.groupStart = function(className) {
-		return Generate.string("<div class='wpwl-group wpwl-group-", className, " wpwl-clearfix'>");
+	Generate.groupStart = function(className, hidden) {
+		var hiddenStyle = hidden ? ' style="display: none;"' : '';
+		return Generate.string("<div class='wpwl-group wpwl-group-", className, " wpwl-clearfix'"+hiddenStyle+">");
 	};
 
 	Generate.groupEnd = function() {
@@ -19557,6 +19614,34 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 		};
 		
 		return Generate.renderKlarna(data);
+	};
+
+	Generate.renderAfterPay = function () {
+		var brand = "AFTERPAY";
+		if (BillingAgreement.showBillingAgreement(brand)) {
+			var templates = {
+				termsAndConditions: "<div class='wpwl-group wpwl-group-customTermsAndConditions'>" +
+					"<a target='_blank' href='{termsAndConditionsLink}' class='customTermsAndConditions'>{termsAndConditions}</a></div>",
+
+				checkboxConfirmation: "<div class='wpwl-group wpwl-group-customAccept'><label><input type='checkbox' name='generalTermsAndConditions'/>" +
+					"{afterpayAccept}</label></div>"
+			};
+
+			var termsAndConditionsUrl = Generate.string("https://documents.myafterpay.com/consumer-terms-conditions/",
+				Generate.language, "_", Generate.country);
+			var logo = Generate.string(Generate.groupStart("brand"), Generate.logo(brand), Generate.groupEnd());
+			var termsAndConditions = Generate.templateEngine(templates.termsAndConditions, {
+				termsAndConditions: I18n.afterpayTermsAndCondition,
+				termsAndConditionsLink: termsAndConditionsUrl
+			});
+			var confirmation = Generate.templateEngine(templates.checkboxConfirmation, {
+				afterpayAccept: I18n.afterpayAccept
+			});
+			var submitButton = Generate.submitButton(Generate.getSubmitButtonLabel());
+			return Generate.string(logo, termsAndConditions, confirmation, submitButton);
+		}
+		var buttonWithLogo = Generate.string(Generate.groupStart("button"), Generate.buttonWithLogo(brand), Generate.groupEnd());
+		return Generate.string(buttonWithLogo);
 	};
 
 	Generate.renderIdeal = function(data){
@@ -26325,7 +26410,7 @@ define('module/forms/VirtualAccountPaymentForm',['require','shim/ObjectCreate','
 
 	return VirtualAccountPaymentForm;
 });
-define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options'],function(require){
+define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
@@ -26335,6 +26420,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	var Util = require('module/Util');
 	var VirtualAccountPaymentForm = require('module/forms/VirtualAccountPaymentForm');
 	var Options = require('module/Options');
+	var BillingAgreement = require("module/BillingAgreement");
 
 	var Validate = {};
 
@@ -26996,6 +27082,9 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		else if (brand === "STC_PAY") {
 			validationErrors = Validate.validateStcPayForm(paymentForm);
 		}
+		else if (brand === "AFTERPAY") {
+			validationErrors = Validate.validateAfterPayForm(paymentForm);
+		}
 		else {
             var cardHolderError, gtcError;
 
@@ -27268,6 +27357,17 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
         return validationErrors;
     };
 
+	Validate.validateAfterPayForm = function (paymentForm) {
+		var validationErrors = {};
+		var $checkbox = paymentForm.getGtcElement();
+		if (BillingAgreement.showBillingAgreement("AFTERPAY") && $checkbox !== undefined && !$checkbox.is(":checked")) {
+			validationErrors = Util.extend(validationErrors, {
+				afterpayAcceptError: $checkbox
+			});
+		}
+		return validationErrors;
+	};
+
 	return Validate;
 });
 
@@ -27351,6 +27451,10 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
         this.template.addObject({shopOrigin: Util.getOrigin()});
         this.$container.html(this.template.render());
 
+        if (Options.enableSAQACompliance===true) {
+            this.$container.find('.wpwl-group-submit').remove();
+        }
+
         var firstRegistration = this.registrations[0];
         if(firstRegistration.isCardAndCvvRequired){
             this.prepareCvvPciCompliance();
@@ -27411,24 +27515,26 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
         return cardHolderInput;
     };
 
-    /* jshint maxparams: 4 */
-    OneClickPaymentView.prototype.setUpIframe = function setUpIframe(iframeName, $form, $iframe, setIsValid) {
-        var self = this;
+    /* jshint maxparams: 5 */
+    OneClickPaymentView.prototype.setUpIframe = function setUpIframe(iframeName, $form, $iframe, setIsValid, onLoad) {
         $iframe.on('load', function () {
-            self.iframeCommunication = new ParentToIframeCommunication({
+            var iframeComms = new ParentToIframeCommunication({
                 $form: $form,
                 $iframe: $iframe
             }, {
                 setIsValid: setIsValid
             });
             var spinner = new Spinner(Options.spinner).spin($form.parent().get(0));
+            if (onLoad && typeof onLoad === 'function') {
+                onLoad(iframeComms);
+            }
 
-            PaymentView.setupPciIframe(self.iframeCommunication)
+            PaymentView.setupPciIframe(iframeComms)
                 .always(function () {
                     spinner.stop();
                     disableInputsAndSubmitButton($form, false);
 
-                    AutoFocus.checkAutoFocus([self.iframeCommunication]);
+                    AutoFocus.checkAutoFocus([iframeComms]);
                 })
                 .fail(function (reason) {
                     PaymentView.showPleaseTryAgainMessage($form);
@@ -27442,19 +27548,23 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
     };
 
     OneClickPaymentView.prototype.prepareHolderPciCompliance = function () {
-
+        var savedScope = this; // Ensure correct scope is used in call back later
         var $form = this.$container.find('form');
         var $cardIframe = $form.find('iframe[name=\"card.holder\"]');
          //set up the card Holder iframe
-        this.setUpIframe("Holder", $form, $cardIframe, PaymentView.setCardHolderIsValid);
+        this.setUpIframe("Holder", $form, $cardIframe, PaymentView.setCardHolderIsValid, function( iFrameComms ){
+            savedScope.holderIframeCommunication = iFrameComms;
+        });
     };
 
     OneClickPaymentView.prototype.prepareCvvPciCompliance = function () {
-
+        var savedScope = this; // Ensure correct scope is used in call back later
         var $form = this.$container.find('form');
         var $cvvIframe = $form.find('iframe[name=\"card.cvv\"]');
         //set up the card Cvv iframe
-        this.setUpIframe("Cvv", $form, $cvvIframe, PaymentView.setCardCvvIsValid);
+        this.setUpIframe("Cvv", $form, $cvvIframe, PaymentView.setCardCvvIsValid, function( iFrameComms ){
+            savedScope.iframeCommunication = iFrameComms;
+        });
 
     };
 
@@ -30984,6 +31094,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		// trigger events
 		triggerEvents($form);
 	}
+
 	function getCardPaymentData() {
 		var paymentData;
 	    if (Payment.style === 'logos') {
@@ -30993,6 +31104,9 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	    }
 		if (Options.enableSAQACompliance) {
 			paymentData = $.extend({}, paymentData, Setting.cardPaymentBasicSAQA);
+			paymentData.brand.hidden=true;
+			delete paymentData.submit;
+			Options.brandDetectionType = 'binlist';
 		}
 		return paymentData;
 	}
@@ -31001,7 +31115,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		var cardPaymentData = getCardPaymentData();
 		cardPaymentData.brand.values = obj.subTypes;
 		cardPaymentData.brand.valueLabels = Generate.generateSubTypesLabel(obj.subTypes);
-		
+
 		var triggerEvents = function(form) {
 			// trigger events
 			var cardPaymentForm = new CardPaymentForm(form);
@@ -31012,7 +31126,6 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		};
 
 		showPaymentForm(obj, "card", cardPaymentData, triggerEvents);
-
 	};
 
 	Payment.showDirectDebitPaymentForm = function(obj) { //generate frontend html form for direct debit
@@ -35422,16 +35535,20 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 		if (allowEmptyValue && val === "") {
 			return true;
-
 		} else if (brand === null) {
 			return false;
 
-		} if (this.$input.is(CARD_NUMBER_SELECTOR)) {
+		} 
+		
+		if (this.$input.is(CARD_NUMBER_SELECTOR)) {
 			return Validate.validateCardNumber(val, brand);
 
 		} else if (this.$input.is(CARD_CVV_SELECTOR)) {
 			return Validate.validateCVC(val, brand);
 		} else if (this.$input.is(CARD_HOLDER_SELECTOR)) {
+			if (!allowEmptyValue && val === "") {
+				return false;
+			}
 			return Validate.validateAccountHolder( val );
 		} else if (this.$input.is(EXPIRY_DATE_SELECTOR)) {
 			var splittedMonthYear = PaymentView.splitMonthYear( val );
