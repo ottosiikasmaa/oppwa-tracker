@@ -33813,10 +33813,10 @@ define('module/framemessaging/PreconditionIframe',['require','jquery','module/Wp
         if (input !== undefined) {
             surl.href = input;
             /*jshint scripturl:true*/
-            if (surl.href === input && surl.protocol !== 'javascript:')
+            if (surl.href.indexOf(input)===0  && surl.protocol !== 'javascript:')
                 return input;
         }
-        console.error("Fail to sanitize the input when updating precondition iframe. Input: " + input);
+        console.error("Fail to sanitize the input when updating precondition iframe.");
         return '';
     }
 
