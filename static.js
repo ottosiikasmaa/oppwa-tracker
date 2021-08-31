@@ -31105,6 +31105,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		if (Options.enableSAQACompliance) {
 			paymentData = $.extend({}, paymentData, Setting.cardPaymentBasicSAQA);
 			paymentData.brand.hidden=true;
+			delete paymentData.submit;
 			Options.brandDetectionType = 'binlist';
 		}
 		return paymentData;
@@ -31603,7 +31604,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				var iframeCommunications = Payment.iframeCommunications || {};
 				Object.keys(iframeCommunications).forEach(
 					function(key){
-						if (key!=='cvv') {
+						if (key==='holder' && window.wpwl.checkout.config.createRegistration) {
+							promises.push(Payment.iframeCommunications[key].validateInput(true));
+						}
+						else if (key!=='cvv') {
 							promises.push(Payment.iframeCommunications[key].validateInput(false));
 						}
 					}
@@ -32230,7 +32234,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		var $numberIframe = $cardForm.find('[name="' + Parameter.CARD_NUMBER + '"]');
 				
 		//set up the card number iframe
-		setupPromises.push(setupPciIframeOnLoad("card", $cardForm, $numberIframe, PaymentView.setCardNumberIsValid));
+		setupPromises.push(setupPciIframeOnLoad("number", $cardForm, $numberIframe, PaymentView.setCardNumberIsValid));
 
 		if (Options.enableSAQACompliance) {
 			var $holderIframe = $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]');
