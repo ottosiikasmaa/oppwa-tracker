@@ -33753,8 +33753,9 @@ define('module/integrations/forter',['require'],function(require){
 });
 /* jshint ignore:end */
 ;
-define('module/framemessaging/PreconditionIframe',['require','jquery'],function(require){
+define('module/framemessaging/PreconditionIframe',['require','jquery','module/Wpwl'],function(require){
 	var $ = require('jquery');
+    var Wpwl = require('module/Wpwl');
 
 	var PreconditionIframe = function(callbackFunction) {
         this.counter = 0;
@@ -33764,7 +33765,8 @@ define('module/framemessaging/PreconditionIframe',['require','jquery'],function(
     PreconditionIframe.prototype.validate = function(message) {
         return this.counter === 0 &&
                 message.data !== undefined &&
-                message.data.method === 'preconditionIframe';
+                message.data.method === 'preconditionIframe' &&
+                validateOrigin(message);
     };
 
     PreconditionIframe.prototype.notify = function(message) {
@@ -33783,6 +33785,11 @@ define('module/framemessaging/PreconditionIframe',['require','jquery'],function(
         }
     };
 
+    function validateOrigin(message) {
+        // validate the message is coming from opp redirect iframe
+        return message.origin === Wpwl.checkout.config.environmentConfig.url;
+    }
+
 	function render(message) {
 
         console.log("precondition iframe render");
@@ -33791,12 +33798,27 @@ define('module/framemessaging/PreconditionIframe',['require','jquery'],function(
 
             var host = message.data.host;
             message.data.preconditions.forEach(function (item, index) {
-                var $iframe = $(string("<iframe id=\"precondition", index, "\" class=\"wpwl-target\" src=\"", host, item.url,
-                                        "\" frameBorder=\"0\" style=\"display:none;\"/>"));
+                var $iframe = $(string("<iframe id=\"precondition", index,
+                    "\" class=\"wpwl-target\" frameBorder=\"0\" style=\"display:none;\"/>"));
+
+                $iframe.attr("src", sanitize(string(host, item.url)));
                 $parentLayer.append($iframe);
             });
         }
 	}
+
+    function sanitize(input) {
+
+        var surl = document.createElement('a');
+        if (input !== undefined) {
+            surl.href = input;
+            /*jshint scripturl:true*/
+            if (surl.href.indexOf(input)===0  && surl.protocol !== 'javascript:')
+                return input;
+        }
+        console.error("Fail to sanitize the input when updating precondition iframe.");
+        return '';
+    }
 
     function string() {
         return Array.prototype.slice.call(arguments).join("");
