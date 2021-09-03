@@ -33239,14 +33239,14 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     PaypalRestPaymentForm.prototype.onError = function(error) {
         logger.info("PayPal invoked onError callback with error reason: " + error);
         if (!this.sessionTimeoutHandled) {
-            Options.onError(ObjectCreate(WidgetError.prototype));
+            Options.onError(new WidgetError(this.getBrand(), this.getBrand() + ':onError', error));
         } else {
             logger.info("Subsequent onError callback after session timeout error suppressed");
         }
     };
 
     PaypalRestPaymentForm.prototype.onCancel = function(data) {
-        Options.onError(new WidgetError('PAYPAL', 'closed', data));
+        Options.onError(new WidgetError(this.getBrand(), 'closed', data));
     };
 
     PaypalRestPaymentForm.prototype.onShippingChange = function(data, actions) {
@@ -33435,6 +33435,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     };
 
     PaypalRestPaymentForm.prototype.getIntent = function() {
+        if (Options.paypal.intent) return Options.paypal.intent;
         if (Wpwl.checkout.paymentType === "PA") {
             return "authorize";
         }
