@@ -28649,6 +28649,8 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
 
     var ApplePay = {};
 
+    var BRAND = 'APPLEPAY';
+
     ApplePay.checkAndShowButton = function($form) {
         // Check browser compatibility
         if (!window.ApplePaySession ||
@@ -28768,7 +28770,7 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
         }
 
         // Calling the callback function to create checkout and then begin session
-        var createCheckoutResult = Options.createCheckout();
+        var createCheckoutResult = Options.createCheckout({brand:BRAND});
         var promise = Promise.resolve(createCheckoutResult);
         promise.then(function(checkoutId) {
             // Only begin the Apple Pay session if the returned checkoutId is truthy
@@ -28910,13 +28912,13 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             } catch (error) {
                 // Do nothing. This error could happen when the merchant was successfully validated
                 // but the shopper canceled the payment and, as a result, invalidated the session.
-                Options.onError(new WidgetError('APPLEPAY', 'onValidateMerchant-completeMerchantValidation',
+                Options.onError(new WidgetError(BRAND, 'onValidateMerchant-completeMerchantValidation',
                 'Error during ApplyPaySession.completeMerchantValidation ' + error));
             }
         })
         .fail(function(response) {
             var info = "Starting Apple Pay session returned with status " + response.status;
-            Options.onError(new WidgetError('APPLEPAY', 'onValidateMerchant-fail',
+            Options.onError(new WidgetError(BRAND, 'onValidateMerchant-fail',
             'Failure reason - ' + info + ". Aborting Session."));
             session.abort();
             Tracking.exception(info);
@@ -29009,7 +29011,7 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
     ApplePay.pay = function(session, payment, $form) {
         $form.append(Generate.hiddenInput(
             "applePay.paymentToken", JSON.stringify(payment.token.paymentData)));
-        $form.append(Generate.hiddenInput(Parameter.TOKEN_SOURCE, "APPLEPAY"));
+        $form.append(Generate.hiddenInput(Parameter.TOKEN_SOURCE, BRAND));
 
         if (Options.applePay.submitOnPaymentAuthorized) {
             ApplePay.appendContacts(payment, $form);
@@ -29035,7 +29037,7 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
                                     status: ApplePaySession.STATUS_FAILURE,
                                     errors: [new ApplePayError("unknown")]
                                 };
-            Options.onError(new WidgetError('APPLEPAY', 'pay', 'Failure reason ' + JSON.stringify(applePayErrorDetails)));
+            Options.onError(new WidgetError(BRAND, 'pay', 'Failure reason ' + JSON.stringify(applePayErrorDetails)));
             session.completePayment(applePayErrorDetails);
         })
         .always(function(response) {
@@ -29147,6 +29149,8 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
     var GooglePay = {};
     var SUCCESS = "SUCCESS";
 
+    var BRAND = 'GOOGLEPAY';
+
     GooglePay.createButton = function($form) {
         GooglePay.$form = $form;
 
@@ -29169,7 +29173,7 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
                     "user's readiness to pay, or it contains an invalid parameter and/or value. " +
                      "GooglePay returned -> " + JSON.stringify(err);
                     logger.error(message);
-                    Options.onError(new WidgetError('GOOGLEPAY', 'isReadyToPay', message));
+                    Options.onError(new WidgetError(BRAND, 'isReadyToPay', message));
                 });
         });
     };
@@ -29218,7 +29222,7 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
                     var message = "onPaymentAuthorized - Merchant passed a reject() to GooglePay.onPaymentAuthorized()" +
                         "GooglePay returned PaymentDataError as -> " + JSON.stringify(data);
                     logger.error(message);
-                    Options.onError(new WidgetError('GOOGLEPAY', 'onPaymentAuthorized', message));
+                    Options.onError(new WidgetError(BRAND, 'onPaymentAuthorized', message));
                     // This would be called when merchant passes reject(). When reject() is passed
                     // Google errors as "DEVELOPER_ERROR in loadPaymentData: An error occurred in call back,
                     // please try to avoid this by setting structured error in callback response"
@@ -29391,19 +29395,19 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
             else {
                 logger.error('User closed GooglePay Widget. Merchant not implemented onCancel callback. ' +
                     'Calling onError (if defined by merchant, else the default ACI implementation of onError).');
-                Options.onError(new WidgetError('GOOGLEPAY', 'closed', 'User closed GooglePay Widget! ' + stringifiedGoogleError));
+                Options.onError(new WidgetError(BRAND, 'closed', 'User closed GooglePay Widget! ' + stringifiedGoogleError));
             }
         }
         else if (googleError.statusCode === 'DEVELOPER_ERROR') {
             logger.error('loadPaymentData - DEVELOPER_ERROR ' +
                 'Calling onError (if defined by merchant, else the default ACI implementation of onError).');
-            Options.onError(new WidgetError('GOOGLEPAY', 'developer_error',
+            Options.onError(new WidgetError(BRAND, 'developer_error',
             'The passed PaymentDataRequest object was improperly formatted ' + stringifiedGoogleError));
         }
         else {
             logger.error('loadPaymentData - Unknown error status code from GooglePay. ' +
                 'Calling onError (if defined by merchant, else the default ACI implementation of onError).');
-            Options.onError(new WidgetError('GOOGLEPAY', googleError.statusCode,
+            Options.onError(new WidgetError(BRAND, googleError.statusCode,
             'Unknown error status code ' + stringifiedGoogleError));
         }
     };
@@ -29414,7 +29418,7 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
         }
         else {
             // Calling the callback function to create checkout and then begin session
-            var createCheckoutResult = Options.createCheckout();
+            var createCheckoutResult = Options.createCheckout({brand:BRAND});
             var promise = Promise.resolve(createCheckoutResult);
             promise.then(function(checkoutId) {
                 if (checkoutId) {
@@ -29431,7 +29435,7 @@ define('module/GooglePay',['require','jquery','module/Generate','module/Internal
     GooglePay.processPayment = function(paymentData) {
         GooglePay.$form.append(Generate.hiddenInput(
             "googlePay.paymentToken", paymentData.paymentMethodData.tokenizationData.token));
-        GooglePay.$form.append(Generate.hiddenInput(Parameter.TOKEN_SOURCE, "GOOGLEPAY"));
+        GooglePay.$form.append(Generate.hiddenInput(Parameter.TOKEN_SOURCE, BRAND));
 
         if (Options.googlePay.submitOnPaymentAuthorized) {
             GooglePay.appendContacts(paymentData);
@@ -33215,7 +33219,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
                 .then(processCreatePaymentResponse)
                 .fail(notifyError);
         }
-        return Options.createCheckout()
+        return Options.createCheckout({brand:this.getBrand()})
             .then(function(checkoutId) {
                 if (checkoutId) {
                     Wpwl.checkout.id = checkoutId;
@@ -33239,14 +33243,14 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     PaypalRestPaymentForm.prototype.onError = function(error) {
         logger.info("PayPal invoked onError callback with error reason: " + error);
         if (!this.sessionTimeoutHandled) {
-            Options.onError(ObjectCreate(WidgetError.prototype));
+            Options.onError(new WidgetError(this.getBrand(), this.getBrand() + ':onError', error));
         } else {
             logger.info("Subsequent onError callback after session timeout error suppressed");
         }
     };
 
     PaypalRestPaymentForm.prototype.onCancel = function(data) {
-        Options.onError(new WidgetError('PAYPAL', 'closed', data));
+        Options.onError(new WidgetError(this.getBrand(), 'closed', data));
     };
 
     PaypalRestPaymentForm.prototype.onShippingChange = function(data, actions) {
@@ -33435,6 +33439,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     };
 
     PaypalRestPaymentForm.prototype.getIntent = function() {
+        if (Options.paypal.intent) return Options.paypal.intent;
         if (Wpwl.checkout.paymentType === "PA") {
             return "authorize";
         }
@@ -33516,6 +33521,8 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
     var InternalRequestCommunication = require('module/InternalRequestCommunication');
     var LoggerFactory = require('module/logging/LoggerFactory');
     var logger = LoggerFactory.getLogger('AmazonPayWidget');
+
+    var BRAND = 'AMAZONPAY';
 
     /**
      * @param $form jquery object for the form inside which button is rendered
@@ -33610,7 +33617,7 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
     };
 
     AmazonPay.isAmazonPayBrand = function(brand) {
-        return (brand === "AMAZONPAY");
+        return (brand === BRAND);
     };
 
     function isFastCheckoutEnabled(){
@@ -33622,7 +33629,7 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
     AmazonPay.createCheckoutWithPaymentAndSubmit = function($form) {
         logger.info("createCheckoutWithPaymentAndSubmit called ");
         // Calling the callback function to create checkout and then begin session
-        var createCheckoutResult = Options.createCheckout();
+        var createCheckoutResult = Options.createCheckout({brand:BRAND});
         var promise = Promise.resolve(createCheckoutResult);
         promise.then(function(checkoutId) {
             if (checkoutId) {
@@ -33666,7 +33673,7 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
                 AmazonPay.performInitCheckout(payload);
             }  else {
                 logger.error("No create session response received, cannot proceed.");
-                Options.onError(new WidgetError("AMAZONPAY", "no_session", "No create session response received, cannot proceed."));
+                Options.onError(new WidgetError(BRAND, "no_session", "No create session response received, cannot proceed."));
             }
             })
          .fail(function(reason) {
@@ -33705,7 +33712,7 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
         if (SessionError.isSessionTimeout(reason)) {
             SessionError.onTimeoutError();
         } else {
-            Options.onError(new WidgetError("AMAZONPAY", "ajax_submit_fail", "Exception occurred while submitting the form via an Ajax call. Reason: " + reason));
+            Options.onError(new WidgetError(BRAND, "ajax_submit_fail", "Exception occurred while submitting the form via an Ajax call. Reason: " + reason));
         }
     }
 
