@@ -12390,6 +12390,9 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	//target iframe for Bancontact QR
 	Options.bancontactQr = {width: '100%', height: '270px'};
 
+	//target iframe for Upg QR
+	Options.upgQr = {width: '100%', height: '270px'};
+
 	// cvv
 	Options.requireCvv = true; // By default - cvv field should be displayed in the form (remark: name of this parameter can be deceiving).
 	Options.allowEmptyCvv = false; // By default - cvv should not be empty.
@@ -30875,9 +30878,173 @@ define('module/integrations/BancontactMobilePaymentWidget',['require','jquery','
 
     return BancontactMobilePaymentWidget;
 });
+/**
+ * This module contains the logic specific for Upg Mobile Payment brand i.e., MEEZA_QR and MEEZA_LINK
+ * This is used to load QR in iframe for MEEZA_QR and MEEZA_LINK brand
+ */
+/*jshint camelcase: false */
+define('module/integrations/UpgMobilePaymentWidget',['require','jquery','module/forms/PaymentForm','module/InternalRequestCommunication','module/Options','module/error/WidgetError','module/error/SessionError','module/logging/LoggerFactory','lib/Spinner'],function(require) {
+    var $ = require('jquery');
+    var PaymentForm = require('module/forms/PaymentForm');
+    var InternalRequestCommunication = require('module/InternalRequestCommunication');
+    var Options = require("module/Options");
+    var WidgetError = require("module/error/WidgetError");
+    var SessionError = require("module/error/SessionError");
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var logger = LoggerFactory.getLogger('UpgMobilePaymentWidget');
+    var Spinner = require('lib/Spinner');
+    var UpgMobilePaymentWidget = {};
+
+    UpgMobilePaymentWidget.parentDivClassSelector = null;
+    UpgMobilePaymentWidget.paymentBrand = null;
+
+    UpgMobilePaymentWidget.isUpgMobilePaymentBrand = function(brand) {
+        return UpgMobilePaymentWidget.isMeezaLinkBrand(brand) || UpgMobilePaymentWidget.isMeezaQRBrand(brand);
+    };
+
+    UpgMobilePaymentWidget.isMeezaLinkBrand = function(brand) {
+        return brand === "MEEZA_LINK";
+    };
+
+    UpgMobilePaymentWidget.isMeezaQRBrand = function(brand) {
+        return brand === "MEEZA_QR";
+    };
+
+    UpgMobilePaymentWidget.authorizePaymentAndLoadData = function(selectedPaymentForm) {
+        var formClassSelector = UpgMobilePaymentWidget.returnClassSelector($(selectedPaymentForm).attr('class'));
+        var form = $(formClassSelector);
+        var paymentForm = new PaymentForm(form);
+        this.paymentBrand = paymentForm.getBrand();
+
+        if (selectedPaymentForm.offsetParent){
+            this.parentDivClassSelector = UpgMobilePaymentWidget.returnClassSelector($(selectedPaymentForm.offsetParent).attr('class'));
+        } else {
+            this.parentDivClassSelector = "";
+        }
+
+        if (UpgMobilePaymentWidget.isUpgMobilePaymentBrand(this.paymentBrand)) {
+            UpgMobilePaymentWidget.prepareAndSendTransaction(form, selectedPaymentForm, this.paymentBrand);
+            return false;
+        }
+        return true;
+    };
+
+    UpgMobilePaymentWidget.returnClassSelector = function(classList){
+        if(classList) {
+            return "." + classList.replace(/\s+/g, ".");
+        } else {
+            return "";
+        }
+    };
+
+    /** Submits form and checks that required parameters are received in response.
+    * Calls functions for MEEZA_QR and MEEZA_LINK to load QR.
+    */
+    UpgMobilePaymentWidget.prepareAndSendTransaction = function(form, selectedPaymentForm, brand) {
+        // show spinner
+        var $formContainer = form.parent();
+        var spinner = new Spinner(Options.spinner).spin($formContainer.get(0));
+
+        ajaxSubmitForm(form)
+        .then(function(response) {
+            spinner.stop();
+            if (response && response.redirect && response.redirect.parameters) {
+                if (UpgMobilePaymentWidget.isUpgMobilePaymentBrand(brand)) {
+                    UpgMobilePaymentWidget.submitFormAndLoadQR(selectedPaymentForm, response, brand);
+                }
+            } else {
+                logger.error("No response received, cannot proceed.");
+                Options.onError(new WidgetError("Upg Mobile Payment brand", "no_session", "No response received, cannot proceed."));
+            }
+        })
+        .fail(function(reason) {
+            notifyError(reason);
+        });
+    };
+
+    /** Submit hidden form to payment.link and load QR in the existing iframe. */
+    UpgMobilePaymentWidget.submitFormAndLoadQR = function(selectedPaymentForm, response, brand) {
+        var getQrCode = function (param) {
+            return param.name === "qrCode";
+        };
+        var getTxId = function (param) {
+            return param.name === "txId";
+        };
+        var paymentLink = response.redirect.url;
+        var qrCode = response.redirect.parameters.find(getQrCode);
+        var txId = response.redirect.parameters.find(getTxId);
+
+        // check that request is successful and received required parameters in response
+        var requestNotSuccessful = !paymentLink || paymentLink === "" || !qrCode || qrCode.value === "" || !brand || brand === "" || !txId || txId.value === "" ;
+        if (requestNotSuccessful) {
+            logger.error("No payment link or parameters found for redirection, cannot proceed.");
+            Options.onError(new WidgetError(brand, "no_session", "No payment link or parameters found for redirection, cannot proceed."));
+            return;
+        }
+
+        // using the existing iframe for MEEZA_QR/MEEZA_LINK and removing wpwl-target class to have specified height as QR will be of height 250px
+        var dim = Options.upgQr;
+        var iframe = document.querySelectorAll('[name^="virtualAccount-' + brand + '"]')[0];
+        iframe.setAttribute("style", "display:inline");
+        iframe.setAttribute("width", dim.width);
+        iframe.setAttribute("height", dim.height);
+        iframe.setAttribute("class", "");
+
+        // create form and submit POST request to payment.link with all the received input parameters
+        if(paymentLink) {
+            this.submitHiddenForm(response, iframe.name);
+        } else {
+            logger.error("A transaction was already created. Cannot submit the hidden form, the success/failure callback url is not defined.");
+            Options.onError(new WidgetError(brand, "callback_not_def", "A transaction was already created. Cannot submit the hidden form, the success/failure callback url is not defined."));
+        }
+    };
+
+ /** Form needs to add in the parent division otherwise we see "Form submission canceled because the form is not connected" error and form doesn't submit */
+    UpgMobilePaymentWidget.submitHiddenForm = function(response, target) {
+        var params = response.redirect.parameters;
+        var i;
+        var inputParam="";
+        for (i=0; i< params.length; i++) {
+            inputParam = inputParam + '<input name=\"' + params[i].name + '\" type=\"hidden\" value=\"' + params[i].value + '\">';
+        }
+        var formHtml = '<form id=\"upgWalletForm\" action=' + response.redirect.url + ' lang=\"en\" accept-charset=\"UTF-8\"  method=POST target=\"' + target + '\">' + inputParam + '</form>';
+        var submitForm = $(formHtml);
+        $(this.parentDivClassSelector).append(submitForm);
+        submitForm.submit();
+    };
+
+    // submit the form via an ajax call (this would call the opp payment endpoint)
+    function ajaxSubmitForm(form) {
+        var endpointUrl = form.attr("action");
+        var formMethod = form.attr("method");
+        var formData = form.serialize();
+        return InternalRequestCommunication.getSender()
+        .then(function(sender) {
+            return sender.send({
+                url: endpointUrl,
+                method: formMethod,
+                headers: {
+                    Accept: "application/json; charset=utf-8"
+                },
+                data: formData
+            });
+        });
+    }
+
+    function notifyError(reason) {
+        logger.error("Exception occurred while submitting the form via an Ajax call. Reason: " + reason);
+        if (SessionError.isSessionTimeout(reason)) {
+            SessionError.onTimeoutError();
+        } else {
+            Options.onError(new WidgetError("Upg Mobile Payment brand", "ajax_submit_fail", "Exception occurred while submitting the form via an Ajax call. Reason: " + reason));
+        }
+    }
+
+    return UpgMobilePaymentWidget;
+});
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/UpgMobilePaymentWidget','module/logging/LoggerFactory'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -30904,6 +31071,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
     var YandexCheckoutPaymentWidget = require('module/integrations/YandexCheckoutPaymentWidget');
 	var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
 	var BancontactMobilePaymentWidget = require('module/integrations/BancontactMobilePaymentWidget');
+	var UpgMobilePaymentWidget = require('module/integrations/UpgMobilePaymentWidget');
 	var LoggerFactory = require('module/logging/LoggerFactory');
     var logger = LoggerFactory.getLogger('Payment');
 	var HAS_ERROR_CLASS = "wpwl-has-error";
@@ -31788,6 +31956,9 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
                     }
                     else if (BancontactMobilePaymentWidget.isBancontactMobilePaymentBrand(brand)) {
                         return BancontactMobilePaymentWidget.authorizePaymentAndLoadData(this);
+                    }
+                    else if (UpgMobilePaymentWidget.isUpgMobilePaymentBrand(brand)) {
+                        return UpgMobilePaymentWidget.authorizePaymentAndLoadData(this);
                     }
                     else {
                         return true;
