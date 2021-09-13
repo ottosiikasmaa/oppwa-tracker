@@ -11797,7 +11797,7 @@ define('module/Setting',['require','jquery','module/Parameter','module/forms/Car
 
 	s.cardPaymentBasicSAQA = {
 		//expiryMonth & expiryYear are now hidden inputs filled from text input in format MM / YY
-		expiry: { i18nIdentifier:"expiryDate", name:"card.expiry", id:"ccexp", type:"iframe", i18nPlaceholderIdentifier:"mmyy", dataAction:"blur-card-expiry" },
+		expiry: { i18nIdentifier:"expiryDate", id:"ccexp", type:"iframe", i18nPlaceholderIdentifier:"mmyy", dataAction:"blur-card-expiry" },
 		cardHolder: { i18nIdentifier:"cardHolder", name:"card.holder", type:"iframe" }
 	},
 
@@ -35277,8 +35277,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 	var autocompleteAttributes = {};
 	autocompleteAttributes[Parameter.CARD_NUMBER] = 'cc-number';
-	autocompleteAttributes["card.expiry"] = 'cc-exp';
-	autocompleteAttributes[Parameter.CARD_HOLDER] = "cc-holder";
+	autocompleteAttributes[Parameter.CARD_HOLDER] = "cc-name";
 	autocompleteAttributes[Parameter.CARD_CVV] = "cc-csc";
 
 	var IframeToParentCommunication = function(){
@@ -35713,9 +35712,14 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		this.$input.prop('maxLength', properties.maxLength);
 		this.$input.attr("aria-label", properties.ariaLabel);
         
+		// Set autocomplete
 		if(properties.name in autocompleteAttributes && Options.enableSAQACompliance ||
 			properties.name === Parameter.CARD_NUMBER) {
 			this.$input.prop("autocomplete", autocompleteAttributes[properties.name]);
+		}
+		else if(properties.id === "ccexp" && Options.enableSAQACompliance){
+			// expiry field does not have a 'name' attribute, so we use 'id' to identify it
+			this.$input.prop("autocomplete", "cc-exp");
 		}
 		else {
 			this.$input.prop("autocomplete", 'off');
