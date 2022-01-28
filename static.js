@@ -11770,7 +11770,7 @@ define('text',['module'], function (module) {
 define('text!module/json/brands.json',[],function () { return '{\n  "AFTERPAY": {\n    "render": "VA",\n    "label": "AfterPay",\n    "brand": "AFTERPAY"\n  },\n  "AFTERPAY_PACIFIC": {\n    "render": "VA",\n    "label": "AfterPay Pacific",\n    "brand": "AFTERPAY_PACIFIC"\n  },\n  "ALIPAY": {\n    "render": "VA",\n    "label": "Alipay",\n    "brand": "ALIPAY"\n  },\n  "ALLPAGO_INVOICE": {\n    "render": "PP",\n    "label": "Invoice",\n    "brand": "ALLPAGO_INVOICE"\n  },\n  "AMAZONPAY": {\n    "render": "VA",\n    "label": "AmazonPay",\n    "brand": "AMAZONPAY"\n  },\n  "AMEX": {\n    "render": "CC",\n    "label": "American Express",\n    "brand": "AMEX"\n  },\n  "APOSTAR": {\n    "render": "PP",\n    "label": "Apostar",\n    "brand": "APOSTAR"\n  },\n  "APPLEPAY": {\n    "render": "VA",\n    "label": "Apple Pay",\n    "brand": "APPLEPAY"\n  },\n  "ARGENCARD": {\n    "render": "CC",\n    "label": "Argencard",\n    "brand": "ARGENCARD"\n  },\n  "ASTROPAY_STREAMLINE_CASH": {\n    "render": "VA",\n    "brand": "ASTROPAY_STREAMLINE_CASH"\n  },\n  "ASTROPAY_STREAMLINE_OT": {\n    "render": "VA",\n    "brand": "ASTROPAY_STREAMLINE_OT"\n  },\n  "ASYACARD": {\n    "render": "CC",\n    "label": "AsyaCard",\n    "brand": "ASYACARD"\n  },\n  "AURA": {\n    "render": "CC",\n    "label": "Aura",\n    "brand": "AURA"\n  },\n  "AXESS": {\n    "render": "CC",\n    "label": "Axess",\n    "brand": "AXESS"\n  },\n  "BALOTO": {\n    "render": "PP",\n    "label": "Baloto",\n    "brand": "BALOTO"\n  },\n  "BANCOLOMBIA": {\n    "render": "PP",\n    "label": "Bancolombia",\n    "brand": "BANCOLOMBIA"\n  },\n  "BANCONTACT_LINK": {\n    "render": "VA",\n    "label": "Bancontact Link",\n    "brand": "BANCONTACT_LINK"\n  },\n  "BANCONTACT_QR": {\n    "render": "VA",\n    "label": "Bancontact QR",\n    "brand": "BANCONTACT_QR"\n  },\n  "BBVA_CONTINENTAL": {\n    "render": "PP",\n    "label": "BBVA Continental",\n    "brand": "BBVA_CONTINENTAL"\n  },\n  "BCCARD": {\n    "render": "CC",\n    "label": "BC Card",\n    "brand": "BCCARD"\n  },\n  "BCMC": {\n    "render": "CC",\n    "label": "Bancontact/Mister Cash",\n    "brand": "BCMC",\n    "noCvv": true\n  },\n  "BCP": {\n    "render": "PP",\n    "label": "BCP",\n    "brand": "BCP"\n  },\n  "BELK_GIFT_CARD": {\n    "render": "CC",\n    "label": "Belk Gift Card",\n    "brand": "BELK_GIFT_CARD"\n  },\n  "BELK_PRIVATE_LABEL": {\n    "render": "CC",\n    "label": "Belk Private Label",\n    "brand": "BELK_PRIVATE_LABEL"\n  },\n  "BEVALIDA": {\n    "render": "PP",\n    "label": "Bevalida",\n    "brand": "BEVALIDA"\n  },\n  "BITCOIN": {\n    "render": "PP",\n    "label": "Bitcoin",\n    "brand": "BITCOIN"\n  },\n  "BOLETO": {\n    "render": "PP",\n    "label": "Boleto",\n    "brand": "BOLETO"\n  },\n  "BONUS": {\n    "render": "CC",\n    "label": "Bonus",\n    "brand": "BONUS"\n  },\n  "BOTON_PSE": {\n    "render": "PP",\n    "label": "BotonPSE",\n    "brand": "BOTON_PSE"\n  },\n  "BRADESCO": {\n    "render": "PP",\n    "label": "Bradesco",\n    "brand": "BRADESCO"\n  },\n  "CAJA_AREQUIPA": {\n    "render": "PP",\n    "label": "Caja Arequipa",\n    "brand": "CAJA_AREQUIPA"\n  },\n  "CAJA_CUSCO": {\n    "render": "PP",\n    "label": "Caja Cusco",\n    "brand": "CAJA_CUSCO"\n  },\n  "CAJA_HUANCAYO": {\n    "render": "PP",\n    "label": "Caja Huancayo",\n    "brand": "CAJA_HUANCAYO"\n  },\n  "CAJA_ICA": {\n    "render": "PP",\n    "label": "Caja ICA",\n    "brand": "CAJA_ICA"\n  },\n  "CAJA_PIURA": {\n    "render": "PP",\n    "label": "Caja Piura",\n    "brand": "CAJA_PIURA"\n  },\n  "CAJA_TACNA": {\n    "render": "PP",\n    "label": "Caja Tacna",\n    "brand": "CAJA_TACNA"\n  },\n  "CAJA_TRUJILLO": {\n    "render": "PP",\n    "label": "Caja Trujillo",\n    "brand": "CAJA_TRUJILLO"\n  },\n  "CARDFINANS": {\n    "render": "CC",\n    "label": "CardFinans",\n    "brand": "CARDFINANS"\n  },\n  "CARNET": {\n    "render": "CC",\n    "label": "Carnet",\n    "brand": "CARNET"\n  },\n  "CARTEBANCAIRE": {\n    "render": "CC",\n    "label": "Carte Bancaire",\n    "brand": "CARTEBANCAIRE"\n  },\n  "CARTEBLEUE": {\n    "render": "CC",\n    "label": "Carte Bleue",\n    "brand": "CARTEBLEUE"\n  },\n  "CASH_ON_DELIVERY": {\n    "render": "OD",\n    "label": "Cash on delivery",\n    "brand": "CASH_ON_DELIVERY"\n  },\n  "CASHPRESSO": {\n    "render": "VA",\n    "label": "Cashpresso",\n    "brand": "CASHPRESSO"\n  },\n  "CASHU": {\n    "render": "VA",\n    "label": "CashU",\n    "brand": "CASHU"\n  },\n  "CENCOSUD": {\n    "render": "CC",\n    "label": "Cencosud",\n    "brand": "CENCOSUD"\n  },\n  "CHINAUNIONPAY": {\n    "render": "VA",\n    "label": "China UnionPay",\n    "brand": "CHINAUNIONPAY"\n  },\n  "CMR_FALABELLA": {\n    "render": "CC",\n    "label": "CMR Falabella",\n    "brand": "CMR_FALABELLA"\n  },\n  "CORDIAL": {\n    "render": "CC",\n    "label": "Cordial",\n    "brand": "CORDIAL"\n  },\n  "CORDOBESA": {\n    "render": "CC",\n    "label": "Cordobesa",\n    "brand": "CORDOBESA"\n  },\n  "CREDIT_CLICK": {\n    "render": "VA",\n    "label": "CreditClick",\n    "brand": "CREDIT_CLICK"\n  },\n  "DANKORT": {\n    "render": "CC",\n    "label": "Dankort",\n    "brand": "DANKORT"\n  },\n  "DAOPAY": {\n    "render": "VA",\n    "label": "daopay",\n    "brand": "DAOPAY"\n  },\n  "DATACODE": {\n    "render": "VA",\n    "label": "DataCode",\n    "brand": "DATACODE",\n    "customView": true\n  },\n  "DELTA": {\n    "render": "CC",\n    "label": "Delta",\n    "brand": "DELTA"\n  },\n  "DIMONEX": {\n    "render": "PP",\n    "label": "Dimonex",\n    "brand": "DIMONEX"\n  },\n  "DINACARD": {\n    "render": "CC",\n    "label": "DinaCard",\n    "brand": "DINACARD"\n  },\n  "DINERS": {\n    "render": "CC",\n    "label": "Diners",\n    "brand": "DINERS"\n  },\n  "DIRECTDEBIT_AT": {\n    "render": "DD",\n    "label": "Österreich",\n    "country": "AT",\n    "brand": "DIRECTDEBIT_AT",\n    "customView": true\n  },\n  "DIRECTDEBIT_DE": {\n    "render": "DD",\n    "label": "Deutschland",\n    "country": "DE",\n    "brand": "DIRECTDEBIT_DE"\n  },\n  "DIRECTDEBIT_SEPA": {\n    "render": "DD",\n    "label": "",\n    "country": "",\n    "brand": "DIRECTDEBIT_SEPA"\n  },\n  "SEPA": {\n    "render": "DD",\n    "label": "SEPA",\n    "country": "",\n    "brand": "SEPA",\n    "customView": true\n  },\n  "DIRECTDEBIT_SEPA_MIX_AT": {\n    "render": "DD",\n    "label": "Österreich",\n    "country": "AT",\n    "brand": "DIRECTDEBIT_SEPA_MIX_AT",\n    "customView": true\n  },\n  "DIRECTDEBIT_SEPA_MIX_DE": {\n    "render": "DD",\n    "label": "Deutschland",\n    "country": "DE",\n    "brand": "DIRECTDEBIT_SEPA_MIX_DE"\n  },\n  "DIRECTDEBIT_US": {\n    "render": "DD",\n    "label": "USA",\n    "country": "US",\n    "brand": "DIRECTDEBIT_US"\n  },\n  "DISCOVER": {\n    "render": "CC",\n    "label": "Discover",\n    "brand": "DISCOVER"\n  },\n  "EFECTY": {\n    "render": "PP",\n    "label": "Efecty",\n    "brand": "EFECTY"\n  },\n  "ELO": {\n    "render": "CC",\n    "label": "ELO",\n    "brand": "ELO"\n  },\n  "ENTERCASH": {\n    "render": "OT",\n    "label": "Entercash",\n    "brand": "ENTERCASH",\n    "customView": true\n  },\n  "ENTERPAY": {\n  "render": "VA",\n  "label": "EnterPay",\n  "brand": "ENTERPAY"\n  },\n  "EPS": {\n    "render": "OT",\n    "label": "EPS",\n    "brand": "EPS",\n    "customView": true\n  },\n  "EURO6000": {\n    "render": "CC",\n    "label": "EURO 6000",\n    "brand": "EURO6000"\n  },\n  "FACILYPAY_3X": {\n    "render": "VA",\n    "label": "Facilypay 3X",\n    "brand": "FACILYPAY_3X"\n  },\n  "FACILYPAY_4X": {\n    "render": "VA",\n    "label": "Facilypay 4X",\n    "brand": "FACILYPAY_4X"\n  },\n  "FACILYPAY_3XSANSFRAIS": {\n    "render": "VA",\n    "label": "Facilypay 3X Sansfrais",\n    "brand": "FACILYPAY_3XSANSFRAIS"\n  },\n  "FACILYPAY_4XSANSFRAIS": {\n    "render": "VA",\n    "label": "Facilypay 4X Sansfrais",\n    "brand": "FACILYPAY_4XSANSFRAIS"\n  },\n  "FOURB": {\n    "render": "CC",\n    "label": "FourB",\n    "brand": "FOURB"\n  },\n  "GANA": {\n    "render": "PP",\n    "label": "GANA",\n    "brand": "GANA"\n  },\n  "GIROPAY": {\n    "render": "OT",\n    "label": "giropay",\n    "brand": "GIROPAY"\n  },\n  "GOOGLEPAY": {\n    "render": "VA",\n    "label": "Google Pay",\n    "brand": "GOOGLEPAY"\n  },\n  "HIPERCARD": {\n    "render": "CC",\n    "label": "Hipercard",\n    "brand": "HIPERCARD"\n  },\n  "IDEAL": {\n    "render": "OT",\n    "label": "iDeal",\n    "brand": "IDEAL"\n  },\n  "IK_PRIVATE_LABEL": {\n    "render": "CC",\n    "label": "Private Label",\n    "brand": "IK_PRIVATE_LABEL"\n  },\n  "IK_PRIVATE_LABEL_VA": {\n    "render": "VA",\n    "label": "Private Label",\n    "brand": "IK_PRIVATE_LABEL_VA"\n  },\n  "IKANOOI_FI": {\n    "render": "VA",\n    "label": "Ikano Lasku",\n    "brand": "IKANOOI_FI"\n  },\n  "IKANOOI_NO": {\n    "render": "VA",\n    "label": "Ikano Faktura NO",\n    "brand": "IKANOOI_NO"\n  },\n  "IKANOOI_SE": {\n    "render": "VA",\n    "label": "Ikano Faktura SE",\n    "brand": "IKANOOI_SE"\n  },\n  "INICIS": {\n    "render": "VA",\n    "label": "KG Inicis",\n    "brand": "INICIS"\n  },\n  "INTERAC_ONLINE": {\n    "render": "OT",\n    "label": "Interac",\n    "brand": "INTERAC_ONLINE"\n  },\n  "INTERAC": {\n    "render": "VA",\n    "label": "Interac",\n    "brand": "INTERAC"\n  },\n  "INTERBANK": {\n    "render": "PP",\n    "label": "Interbank",\n    "brand": "INTERBANK"\n  },\n  "INVOICE": {\n    "render": "IV",\n    "label": "Invoice",\n    "brand": "INVOICE"\n  },\n  "IPARA": {\n    "render": "VA",\n    "label": "iPara",\n    "brand": "IPARA"\n  },\n  "IUPAY": {\n    "render": "VA",\n    "label": "Iupay",\n    "brand": "IUPAY"\n  },\n  "JCB": {\n    "render": "CC",\n    "label": "JCB",\n    "brand": "JCB"\n  },\n  "KLARNA_INSTALLMENTS": {\n    "render": "VA",\n    "label": "Klarna Account",\n    "brand": "KLARNA_INSTALLMENTS"\n  },\n  "KLARNA_INVOICE": {\n    "render": "VA",\n    "label": "Klarna Invoice",\n    "brand": "KLARNA_INVOICE"\n  },\n  "KLARNA_CHECKOUT": {\n    "render": "VA",\n    "label": "Klarna Checkout",\n    "brand": "KLARNA_CHECKOUT"\n  },\n  "KLARNA_PAYMENTS_BILLPAY": {\n    "render": "VA",\n    "label": "Billpay",\n    "brand": "KLARNA_PAYMENTS_BILLPAY"\n  },\n  "KLARNA_PAYMENTS_PAYLATER": {\n    "render": "VA",\n    "label": "Pay Later",\n    "brand": "KLARNA_PAYMENTS_PAYLATER"\n  },\n  "KLARNA_PAYMENTS_PAYNOW": {\n    "render": "VA",\n    "label": "Pay Now",\n    "brand": "KLARNA_PAYMENTS_PAYNOW"\n  },\n  "KLARNA_PAYMENTS_SLICEIT": {\n    "render": "VA",\n    "label": "Slice It",\n    "brand": "KLARNA_PAYMENTS_SLICEIT"\n  },\n  "LASER": {\n    "render": "CC",\n    "label": "Laser",\n    "brand": "LASER"\n  },\n  "LYFPAY": {\n    "render": "VA",\n    "label": "Lyf Pay",\n    "brand": "LYFPAY"\n  },\n  "MACH_PAY": {\n    "render": "VA",\n    "label": "MACH Pay",\n    "brand": "MACH_PAY"\n  },\n  "MADA": {\n    "render": "CC",\n    "label": "mada",\n    "brand": "MADA"\n  },\n  "MAESTRO": {\n    "render": "CC",\n    "label": "Maestro",\n    "brand": "MAESTRO"\n  },\n  "MAGNA": {\n    "render": "CC",\n    "label": "Magna",\n    "brand": "MAGNA"\n  },\n  "MASTER": {\n    "render": "CC",\n    "label": "Mastercard",\n    "brand": "MASTER"\n  },\n  "MASTERDEBIT": {\n    "render": "CC",\n    "label": "Mastercard Debit",\n    "brand": "MASTERDEBIT"\n  },\n  "MASTERPASS": {\n    "render": "VA",\n    "label": "MasterPass",\n    "brand": "MASTERPASS"\n  },\n  "MAXIMUM": {\n    "render": "CC",\n    "label": "Maximum",\n    "brand": "MAXIMUM"\n  },\n  "MBWAY": {\n    "render": "VA",\n    "label": "MBWAY",\n    "brand": "MBWAY"\n  },\n  "MEEZA": {\n    "render": "CC",\n    "label": "Meeza",\n    "brand": "MEEZA"\n  },\n  "MEEZA_LINK": {\n    "render": "VA",\n    "label": "Meeza Link",\n    "brand": "MEEZA_LINK"\n  },\n  "MEEZA_QR": {\n    "render": "VA",\n    "label": "Meeza QR",\n    "brand": "MEEZA_QR"\n  },\n  "MERCADOLIVRE": {\n    "render": "CC",\n    "label": "Cartao MercadoLivre",\n    "brand": "MASTERPASS"\n  },\n  "MERCADO_PAGO": {\n    "render": "VA",\n    "label": "Mercado Pago",\n    "brand": "MERCADO_PAGO"\n  },\n  "MONEYBOOKERS": {\n    "render": "VA",\n    "label": "Skrill",\n    "brand": "MONEYBOOKERS"\n  },\n  "MONEYSAFE": {\n    "render": "VA",\n    "label": "Moneysafe",\n    "brand": "MONEYSAFE"\n  },\n  "MULTICAJA": {\n    "render": "PP",\n    "label": "Multicaja",\n    "brand": "MULTICAJA"\n  },\n  "NATIVA": {\n    "render": "CC",\n    "label": "Nativa Master Card",\n    "brand": "NATIVA"\n  },\n  "NARANJA": {\n    "render": "CC",\n    "label": "Naranja",\n    "brand": "NARANJA"\n  },\n  "NEQUI": {\n    "render": "PP",\n    "label": "Nequi",\n    "brand": "NEQUI"\n  },\n  "NETELLER": {\n    "render": "VA",\n    "label": "NETELLER",\n    "brand": "NETELLER",\n    "customView": true\n  },\n  "ONECARD": {\n    "render": "VA",\n    "label": "OneCard",\n    "brand": "ONECARD"\n  },\n  "ONEY_CARD": {\n    "render": "VA",\n    "label": "ONEY_CARD",\n    "brand":"ONEY_CARD"\n  },\n  "ONEY_BANK_CARD": {\n    "render": "CC",\n    "label": "Oney Bank Card",\n    "brand":"ONEY_BANK_CARD"\n  },\n  "ONEY_PRIVATE_CARD": {\n    "render": "CC",\n    "label": "Oney Private Card",\n    "brand":"ONEY_PRIVATE_CARD",\n    "noCvv":true,\n    "birthDate":true\n  },\n  "ONEY_GIFTCARD": {\n    "render": "VA",\n    "label": "ONEY_GIFTCARD",\n    "brand": "ONEY_GIFTCARD"\n  },\n  "OXXO": {\n    "render": "PP",\n    "label": "OXXO",\n    "brand": "OXXO"\n  },\n  "PAGOSNET": {\n    "render": "PP",\n    "label": "Pagosnet",\n    "brand": "PAGOSNET"\n  },\n  "PASTEANDPAY_V": {\n    "render": "VA",\n    "label": "PasteAndPay",\n    "brand": "PASTEANDPAY_V",\n    "customView": true\n  },\n  "PAYBOX": {\n    "render": "VA",\n    "label": "paybox",\n    "brand": "PAYBOX"\n  },\n  "PAYDIREKT": {\n    "render": "VA",\n    "label": "Paydirekt",\n    "brand": "PAYDIREKT"\n  },\n  "PAY_FAWRY": {\n    "render": "VA",\n    "label": "Pay @fawry",\n    "brand": "PAY_FAWRY"\n  },\n  "PAYOLUTION_ELV": {\n    "render": "VA",\n    "label": "payolution",\n    "brand": "PAYOLUTION_ELV"\n  },\n  "PAYOLUTION_INS": {\n    "render": "VA",\n    "label": "payolution",\n    "brand": "PAYOLUTION_INS"\n  },\n  "PAYOLUTION_INVOICE": {\n    "render": "VA",\n    "label": "payolution",\n    "brand": "PAYOLUTION_INVOICE"\n  },\n  "PAYPAL": {\n    "render": "VA",\n    "label": "PayPal",\n    "brand": "PAYPAL"\n  },\n  "PAYPAL_CONTINUE": {\n    "render": "VA",\n    "label": "PayPal Continue",\n    "brand": "PAYPAL_CONTINUE"\n  },\n  "PAYLIB": {\n    "render": "VA",\n    "label": "PayLib",\n    "brand": "PAYLIB"\n  },\n  "SENCILLITO": {\n    "render": "PP",\n    "label": "Sencillito",\n    "brand": "SENCILLITO"\n  },\n  "SHETAB": {\n    "render": "VA",\n    "label": "Shetab",\n    "brand": "SHETAB"\n  },\n  "STAPLES": {\n    "render": "CC",\n    "label": "Staples",\n    "brand": "STAPLES",\n    "noCvv": true,\n    "noExpiryDate": true\n  },\n  "STC_PAY": {\n    "render": "VA",\n    "label": "STC Pay",\n    "brand": "STC_PAY"\n  },\n  "PAGO_EFECTIVO": {\n    "render": "PP",\n    "label": "PagoEfectivo",\n    "brand": "PAGO_EFECTIVO"\n  },\n  "PAGO_FACIL": {\n    "render": "PP",\n    "label": "PagoFacil",\n    "brand": "PAGO_FACIL"\n  },\n  "PAYNET": {\n    "render": "PP",\n    "label": "PayNet",\n    "brand": "PAYNET"\n  },\n  "PAYSAFECARD": {\n    "render": "VA",\n    "label": "paysafecard",\n    "brand": "PAYSAFECARD"\n  },\n  "PAYTRAIL": {\n    "render": "OT",\n    "label": "Paytrail",\n    "brand": "PAYTRAIL"\n  },\n  "PF_KARTE_DIRECT": {\n    "render": "VA",\n    "label": "PostFinance Karte Direct",\n    "brand": "PF_KARTE_DIRECT"\n  },\n  "POLI": {\n    "render": "OT",\n    "label": "POLi",\n    "brand": "POLI"\n  },\n  "POSTEPAY": {\n    "render": "CC",\n    "label": "Postepay",\n    "brand": "POSTEPAY"\n  },\n  "PREPAYMENT": {\n    "render": "PP",\n    "label": "PrePayment",\n    "brand": "PREPAYMENT"\n  },\n  "PRESTO": {\n    "render": "CC",\n    "label": "Presto",\n    "brand": "PRESTO"\n  },\n  "PRZELEWY": {\n    "render": "VA",\n    "label": "przelewy24",\n    "brand": "PRZELEWY"\n  },\n  "PUNTO_RED": {\n    "render": "PP",\n    "label": "PuntoRed",\n    "brand": "PUNTO_RED"\n  },\n  "QIWI": {\n    "render": "VA",\n    "label": "Qiwi",\n    "brand": "QIWI",\n    "customView": true\n  },\n  "RAPI_PAGO": {\n    "render": "PP",\n    "label": "RapiPago",\n    "brand": "RAPI_PAGO"\n  },\n  "RATENKAUF": {\n    "render": "VA",\n    "label": "Ratenkauf",\n    "brand": "RATENKAUF"\n  },\n  "RED_SERVI": {\n    "render": "PP",\n    "label": "RedServi",\n    "brand": "RED_SERVI"\n  },\n  "RUPAY": {\n    "render": "CC",\n    "label": "RuPay",\n    "brand": "RUPAY"\n  },\n  "SERVIRED": {\n    "render": "CC",\n    "label": "ServiRed",\n    "brand": "SERVIRED"\n  },\n  "SADAD": {\n    "render": "OT",\n    "label": "SADAD",\n    "brand": "SADAD",\n    "customView": true\n  },\n  "SCOTIABANK": {\n    "render": "PP",\n    "label": "ScotiaBank",\n    "brand": "SCOTIABANK"\n  },\n  "SERVIPAG": {\n    "render": "PP",\n    "label": "Servipag",\n    "brand": "SERVIPAG"\n  },\n  "SIBS_MULTIBANCO": {\n    "render": "PP",\n    "label": "MULTIBANCO",\n    "brand": "SIBS_MULTIBANCO"\n  },\n  "SISTEMACLAVE": {\n    "render": "CC",\n    "label": "Sistema Clave",\n    "brand":"SISTEMACLAVE"\n  },\n  "SOFORTUEBERWEISUNG": {\n    "render": "OT",\n    "label": "SOFORT Überweisung",\n    "brand": "SOFORTUEBERWEISUNG"\n  },\n  "SPEI": {\n    "render": "PP",\n    "label": "Spei",\n    "brand": "SPEI"\n  },\n  "SU_RED": {\n    "render": "PP",\n    "label": "SuRed",\n    "brand": "SU_RED"\n  },\n  "SU_SUERTE": {\n    "render": "PP",\n    "label": "SuSuerte",\n    "brand": "SU_SUERTE"\n  },\n  "TARJETASHOPPING": {\n    "render": "CC",\n    "label": "Tarjeta Shopping",\n    "brand": "TARJETASHOPPING"\n  },\n  "TENPAY": {\n    "render": "VA",\n    "label": "TENPAY",\n    "brand": "TENPAY"\n  },\n  "TRUSTLY": {\n    "render": "VA",\n    "label": "TRUSTLY",\n    "brand": "TRUSTLY"\n  },\n  "TRUSTPAY_VA": {\n    "render": "VA",\n    "label": "Trustpay Virtual Account",\n    "brand": "TRUSTPAY_VA"\n  },\n  "_2C2P": {\n    "render": "VA",\n    "label": "2C2P",\n    "brand":"_2C2P"\n  },\n  "UKASH": {\n    "render": "VA",\n    "label": "Ukash",\n    "brand": "UKASH"\n  },\n  "UNIONPAY": {\n    "render": "CC",\n    "label": "UnionPay",\n    "brand": "UNIONPAY"\n  },\n  "UNIONPAY_GENERIC": {\n    "render": "CC",\n    "label": "UnionPay Generic",\n    "brand": "UNIONPAY_GENERIC",\n    "noCvv": true,\n    "noExpiryDate": true\n  },\n  "UNIONPAY_SMS": {\n    "render": "CC",\n    "label": "UnionPay SMS",\n    "brand": "UNIONPAY_SMS",\n    "mobilePhone": true\n  },\n  "VISA": {\n    "render": "CC",\n    "label": "Visa",\n    "brand": "VISA"\n  },\n  "VISADEBIT": {\n    "render": "CC",\n    "label": "Visa Debit",\n    "brand": "VISADEBIT"\n  },\n  "VISAELECTRON": {\n    "render": "CC",\n    "label": "Visa Electron",\n    "brand": "VISAELECTRON"\n  },\n  "VPAY": {\n    "render": "CC",\n    "label": "V PAY",\n    "brand": "VPAY"\n  },\n  "WEB_PAY": {\n    "render": "VA",\n    "label": "Web Pay",\n    "brand": "WEB_PAY"\n  },\n  "WECHAT_PAY": {\n    "render": "VA",\n    "label": "WeChat Pay",\n    "brand": "WECHAT_PAY"\n  },\n  "WESTERN_UNION": {\n    "render": "PP",\n    "label": "Western Union",\n    "brand": "WESTERN_UNION"\n  },\n  "YANDEX": {\n    "render": "VA",\n    "label": "Yandex",\n    "brand": "YANDEX"\n  },\n  "YANDEX_CARD": {\n    "render": "VA",\n    "label": "Yandex Card",\n    "brand": "YANDEX_CARD"\n  },\n  "YANDEX_CHECKOUT": {\n    "render": "VA",\n    "label": "Yandex Checkout",\n    "brand": "YANDEX_CHECKOUT"\n  },\n  "TCARD": {\n    "render": "CC",\n    "label": "T-CARD",\n    "brand": "TCARD"\n  },\n  "TCARDDEBIT": {\n    "render": "CC",\n    "label": "T-CARD Debit",\n    "brand": "TCARDDEBIT"\n  },\n  "PRIVATE_LABEL": {\n    "render": "CC",\n    "label": "Private label",\n    "brand": "PRIVATE_LABEL"\n  },\n  "ALIA": {\n    "render": "CC",\n    "label": "Alia",\n    "brand": "ALIA"\n  },\n  "ALIADEBIT": {\n    "render": "CC",\n    "label": "Alia Debit",\n    "brand": "ALIADEBIT"\n  },\n  "AIRPLUS": {\n    "render": "CC",\n    "label": "AirPlus",\n    "brand": "AIRPLUS",\n    "noCvv": true\n  },\n  "AFFIRM": {\n    "render": "VA",\n    "label": "Affirm",\n    "brand": "AFFIRM"\n  },\n  "SOFINCOSANSFRAIS": {\n    "render": "VA",\n    "label": "Sofinco Sans Frais",\n    "brand": "SOFINCOSANSFRAIS"\n  },\n  "SOFINCO": {\n    "render": "VA",\n    "label": "Sofinco",\n    "brand": "SOFINCO"\n  },\n  "JIFITI": {\n    "render": "VA",\n    "label": "Jifiti",\n    "brand": "JIFITI"\n  },\n  "TABBY": {\n    "render": "VA",\n    "label": "Tabby",\n    "brand": "TABBY"\n  },\n  "TAMARA": {\n    "render": "VA",\n    "label": "Tamara",\n    "brand": "TAMARA"\n  },\n  "CREDISENSA": {\n    "render": "CC",\n    "label": "Credisensa",\n    "brand": "CREDISENSA"\n  },\n  "CABAL": {\n    "render": "CC",\n    "label": "Cabal",\n    "brand": "CABAL"\n  },\n  "CABALDEBIT": {\n    "render": "CC",\n    "label": "Cabal Debit",\n    "brand": "CABALDEBIT"\n  },\n  "PICPAY": {\n    "render": "VA",\n    "label": "Picpay",\n    "brand": "PICPAY"\n  },\n  "PIX": {\n    "render": "PP",\n    "label": "Pix",\n    "brand": "PIX"\n  },\n  "CASHLINKMALTA": {\n    "render": "CC",\n    "label": "CashlinkMalta",\n    "brand": "CASHLINKMALTA"\n  },\n  "SADAD_VA": {\n    "render": "VA",\n    "label": "Sadad VA",\n    "brand": "SADAD_VA"\n  },\n  "MSTART": {\n    "render": "VA",\n    "label": "Mstart",\n    "brand": "MSTART"\n  },\n  "SWISSBILLING": {\n    "render": "VA",\n    "label": "SwissBilling",\n    "brand": "SWISSBILLING"\n  },\n  "IKEA_PVL_IKANO_LOAN": {\n    "render": "CC",\n    "label": "IKEA_PVL_IKANO_LOAN",\n    "brand": "IKEA_PVL_IKANO_LOAN"\n  },\n  "IKEA_VISA_ADS_FAMILY": {\n    "render": "CC",\n    "label": "IKEA_VISA_ADS_FAMILY",\n    "brand": "IKEA_VISA_ADS_FAMILY"\n  },\n  "IKEA_PVL_ADS_PROJEKT": {\n    "render": "CC",\n    "label": "IKEA_PVL_ADS_PROJEKT",\n    "brand": "IKEA_PVL_ADS_PROJEKT"\n  },\n  "IKEA_PVL_SOFINCO_RC": {\n    "render": "CC",\n    "label": "IKEA_PVL_SOFINCO_RC",\n    "brand": "IKEA_PVL_SOFINCO_RC"\n  },\n  "IKEA_MC_SOFINCO_RC": {\n    "render": "CC",\n    "label": "IKEA_MC_SOFINCO_RC",\n    "brand": "IKEA_MC_SOFINCO_RC"\n  },\n  "IKEA_MC_CEMBRA_RC": {\n    "render": "CC",\n    "label": "IKEA_MC_CEMBRA_RC",\n    "brand": "IKEA_MC_CEMBRA_RC"\n  },\n  "IKEA_PVL_IKANO_FAM": {\n    "render": "CC",\n    "label": "IKEA_PVL_IKANO_FAM",\n    "brand": "IKEA_PVL_IKANO_FAM"\n  },\n  "IKEA_PVL_IKANO_TEMP": {\n    "render": "CC",\n    "label": "IKEA_PVL_IKANO_TEMP",\n    "brand": "IKEA_PVL_IKANO_TEMP"\n  },\n  "CHEQUE_VACANCES": {\n    "render": "VA",\n    "label": "Cheque Vacances",\n    "brand": "CHEQUE_VACANCES"\n  },\n  "IKEA_PVL_AGOS_OTL": {\n    "render": "CC",\n    "label": "IKEA_PVL_AGOS_OTL",\n    "brand": "IKEA_PVL_AGOS_OTL"\n  },\n  "PREPAYMENT_VRP": {\n    "render": "PP",\n    "label": "Prepayment VRP",\n    "brand": "PREPAYMENT_VRP"\n  },\n  "TWINT": {\n    "render": "VA",\n    "label": "Twint",\n    "brand": "TWINT"\n  },\n  "CLICK_TO_PAY": {\n    "render": "VA",\n    "label": "Click to Pay",\n    "brand": "CLICK_TO_PAY"\n  },\n  "SCHEELS": {\n    "render": "CC",\n    "label": "Scheels",\n    "brand": "SCHEELS"\n  },\n  "ROCKETFUEL": {\n    "render": "VA",\n    "label": "RocketFuel",\n    "brand": "ROCKETFUEL"\n  },\n  "VIPPS": {\n    "render": "VA",\n    "label": "Vipps",\n    "brand": "VIPPS"\n  },\n  "HEB_GIFT_CARD": {\n    "render": "CC",\n    "label": "Heb Gift Card",\n    "brand": "HEB_GIFT_CARD",\n    "noExpiryDate": true\n  },\n  "ZOODPAY": {\n    "render": "VA",\n    "label": "ZoodPay",\n    "brand": "ZOODPAY"\n  },\n  "RL_PRIVATE_LABEL_VA": {\n    "render": "VA",\n    "label": "RL Private Label VA",\n    "brand": "RL_PRIVATE_LABEL_VA",\n    "noExpiryDate": true\n  }\n}\n';});
 
 
-define('text!module/json/brands-validation.json',[],function () { return '{\n  "AMEX": {\n    "number": "(^3[47]\\\\d{13}$)|(^311111111111117$)",\n    "detection": "^3[47]",\n    "luhn": true,\n    "pattern": "{{9999}} {{999999}} {{99999}}",\n    "cvvLength": 4\n  },\n  "BELK_GIFT_CARD": {\n    "number": "(^\\\\d{14,19}$)",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "cvvLength": 4,\n    "expiryDate": false\n  },\n  "CARTEBLEUE": {\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "DINERS": {\n    "number": "^(30[0-5]\\\\d{11,16})|(3095\\\\d{12,15})|(36\\\\d{12,17})|(3[89]\\\\d{14,17})|(60110[^4]\\\\d{10,13})|(6011[2-4]\\\\d{11,14})|(60117[4789]\\\\d{10,13})|(60118[6-9]\\\\d{10,13})|(60119\\\\d{11,14})|(64[4-9]\\\\d{13,16})|(650[0-5]\\\\d{12,15})|(65060[^0]\\\\d{10,13})|(65061[^0]\\\\d{10,13})|(6506[2-9]\\\\d{11,14})|(650[7-9]\\\\d{12,15})|(65[^0]\\\\d{13,16})$",\n    "detection": "^(?:30[0-5]|3095|36|3[89])",\n    "luhn": true,\n    "pattern": "{{9999}} {{999999}} {{999999999}}"\n  },\n  "DISCOVER": {\n    "number": "^(30[0-5]\\\\d{11,16})|(3095\\\\d{12,15})|(36\\\\d{12,17})|(3[89]\\\\d{14,17})|(60110[^4]\\\\d{10,13})|(6011[2-4]\\\\d{11,14})|(60117[4789]\\\\d{10,13})|(60118[6-9]\\\\d{10,13})|(60119\\\\d{11,14})|(64[4-9]\\\\d{13,16})|(650[0-5]\\\\d{12,15})|(65060[^0]\\\\d{10,13})|(65061[^0]\\\\d{10,13})|(6506[2-9]\\\\d{11,14})|(650[7-9]\\\\d{12,15})|(65[^0]\\\\d{13,16})$",\n    "detection": "^(?:60110[^4]|6011[2-4]|60117[4789]|60118[6-9]|60119|64[4-9]|650[0-5]|65060[^0]|65061[^0]|6506[2-9]|650[7-9]|65[^0])",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "ENROUTE": {\n    "number": "^(?:(?:2014)|(?:2149))\\\\d{11}$",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "JCB": {\n    "number": "^(?:(?:35(\\\\d{14}|\\\\d{17}))|(?:2131\\\\d{11})|(?:1800\\\\d{11}))$",\n    "detection": "^(?:35|2131|1800)",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "DANKORT": {\n    "number": "^(5019\\\\d{12}|4\\\\d{15})$",\n    "detection": "^(?:5019|4571)",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "BELK_PRIVATE_LABEL": {\n    "number": "(^604583\\\\d{10,13}$)",\n    "detection": "^604583",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "expiryDate": false\n  },\n  "IK_PRIVATE_LABEL": {\n    "detection": "^(601779101|603231067|603231065|633156008|924610151|600200)",\n    "optionalCvv": true\n  },\n  "IK_PRIVATE_LABEL_VA": {\n    "detection": "^(601779101|603231067|603231065|633156008|924610151|600200)",\n    "optionalCvv": true\n  },\n  "IKEA_PVL_IKANO_FAM": {\n    "number": "^(600405)\\\\d{10}$",\n    "detection": "^(600405)",\n    "luhn": true\n  },\n  "IKEA_PVL_IKANO_LOAN": {\n    "number": "^(555857)\\\\d{10}$",\n    "detection": "^(555857)",\n    "luhn": true\n  },\n  "IKEA_PVL_IKANO_TEMP": {\n    "number": "^(627598)\\\\d{10}$",\n    "detection": "^(627598)",\n    "luhn": true\n  },\n  "IKEA_VISA_ADS_FAMILY": {\n    "number": "^(406367)\\\\d{10}$",\n    "detection": "^(406367)",\n    "luhn": true\n  },\n  "IKEA_PVL_ADS_PROJEKT": {\n    "number": "^(456420)\\\\d{10}$",\n    "detection": "^(456420)",\n    "luhn": true\n  },\n  "IKEA_PVL_SOFINCO_RC": {\n    "number": "^(525778)\\\\d{10}$",\n    "detection": "^(525778)",\n    "luhn": true\n  },\n  "IKEA_MC_SOFINCO_RC": {\n    "number": "^(549538)\\\\d{10}$",\n    "detection": "^(549538)",\n    "luhn": true\n  },\n  "IKEA_MC_CEMBRA_RC": {\n    "number": "^(513659)\\\\d{10}$",\n    "detection": "^(513659)",\n    "luhn": true\n  },\n  "IKEA_PVL_AGOS_OTL": {\n    "number": "^(540890)\\\\d{10}$",\n    "detection": "^(540890)",\n    "luhn": true\n  },\n  "TCARD": {\n    "detection": "^(949625|949626|949627|949622|949623|949624|949610|949611|949612|949619|949620|949621|949628|949629|949630|949633|949634|949635|949636|949637|949638|949639|949640|949616|949617|949618|949613|949614|949615)"\n  },\n  "TCARDDEBIT": {\n    "detection": "^(949625|949626|949627|949622|949623|949624|949610|949611|949612|949619|949620|949621|949628|949629|949630|949633|949634|949635|949636|949637|949638|949639|949640|949616|949617|949618|949613|949614|949615)"\n  },\n  "MEEZA": {\n    "number": "^(507803[0-4][0-9]|50780350|50780362|507808[3-9][0-9]|507809[0-9][0-9]|507810[0-2][0-9])\\\\d{4,12}$",\n    "detection": "^(507803[0-4][0-9]|50780350|50780362|507808[3-9][0-9]|507809[0-9][0-9]|507810[0-2][0-9])",\n    "luhn": true\n  },\n  "MADA" : {\n    "number" : "^(242030|360705|362596|369989|403024|406136|406996|407197|407395|409201|410621|410685|412565|417633|419593|420132|421141|422817|422818|422819|428331|428671|428672|428673|431361|432328|434107|439954|440533|440647|440795|445564|446393|446404|446672|454097|455036|455708|457865|457997|458456|462220|468540|468541|468542|468543|474491|483010|483011|483012|484783|486094|486095|486096|489318|489319|504300|508160|513213|520058|521076|524130|524514|529415|529741|530060|530906|531095|531196|532013|535825|535989|536023|537767|543085|543357|549760|554180|558563|585265|588845|588846|588848|588849|588850|588982|588983|589005|589206|601149|604906|605141|636120|651000|968201|968202|968203|968204|968205|968206|968207|968208|968209|968211)(\\\\d{7,13})$",\n    "detection" : "^(?:242030|360705|362596|369989|403024|406136|406996|407197|407395|409201|410621|410685|412565|417633|419593|420132|421141|422817|422818|422819|428331|428671|428672|428673|431361|432328|434107|439954|440533|440647|440795|445564|446393|446404|446672|454097|455036|455708|457865|457997|458456|462220|468540|468541|468542|468543|474491|483010|483011|483012|484783|486094|486095|486096|489318|489319|504300|508160|513213|520058|521076|524130|524514|529415|529741|530060|530906|531095|531196|532013|535825|535989|536023|537767|543085|543357|549760|554180|558563|585265|588845|588846|588848|588849|588850|588982|588983|589005|589206|601149|604906|605141|636120|651000|968201|968202|968203|968204|968205|968206|968207|968208|968209|968211)",\n    "luhn" : true,\n    "pattern" : "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "expiryDate" : true\n  },\n  "MAESTRO": {\n    "number": "^(?!(53055|52816|515111|521662|530514|603231065|603231067))(((50)(\\\\d{10,17}$))|((5106)(\\\\d{8,15}$))|((511071)(\\\\d{6,13}$))|((511106)(\\\\d{6,13}$))|((51479)[23](\\\\d{6,13}$))|((5151)[12](\\\\d{7,14}$))|((515400)(\\\\d{6,13}$))|((5191)(\\\\d{8,15}$))|((5205)(\\\\d{8,15}$))|((5216)(\\\\d{8,15}$))|((5220)[89](\\\\d{7,14}$))|((5258)(\\\\d{8,15}$))|((5281)(\\\\d{8,15}$))|((529235)(\\\\d{6,13}$))|((53)[24](\\\\d{9,16}$))|((5305)(\\\\d{8,15}$))|((539043)(\\\\d{6,13}$))|((53905)[24](\\\\d{6,13}$))|((5407)(\\\\d{8,15}$))|((5435)(\\\\d{8,15}$))|((545391)(\\\\d{6,13}$))|((545433)(\\\\d{6,13}$))|((545729)(\\\\d{6,13}$))|((5464)(\\\\d{8,15}$))|((5464)(\\\\d{8,15}$))|((5509)(\\\\d{8,15}$))|((55310)[34](\\\\d{6,13}$))|((553725)(\\\\d{6,13}$))|((553783)(\\\\d{6,13}$))|((554563)(\\\\d{6,13}$))|((554587)(\\\\d{6,13}$))|((557205)(\\\\d{6,13}$))|((56)[0678](\\\\d{9,16}$))|((5610)(\\\\d{8,15}$))|((56119)(\\\\d{8,15}$))|((5612)(\\\\d{8,15}$))|((563)[235](\\\\d{8,15}$))|((564141)(\\\\d{6,13}$))|((564158)(\\\\d{6,13}$))|((5642)(\\\\d{8,15}$))|((5651)(\\\\d{8,15}$))((564076)(\\\\d{6,13}$))|((57)[0125789](\\\\d{9,16}$))|((573)[134](\\\\d{8,15}$))|((574)[25789](\\\\d{8,15}$))|((575)[234567](\\\\d{8,15}$))|((5768)(\\\\d{8,15}$))|((5817(?:02|07|15|21|24|[3][1,6-9]|[4][0,2-9]|50|51|56|66|69|73|78|84|87|90|91|97))(\\\\d{6,13}$))|((58)[34](\\\\d{9,16}$))|((581149|589242|589973|589785|589812|599032)(\\\\d{6,13}$))|((58980)(\\\\d{7,14}$))|((60)[1-6](\\\\d{9,16}$))|((600206)(\\\\d{6,13}$))|((600343|600452|603231|623020|627252)(\\\\d{6,13}$))|((60079)(\\\\d{7,14}$))|((6009)[0689](\\\\d{7,14}$))|(61\\\\d{10,17}$)|((621)[89](\\\\d{8,15}$))|((622)[01](\\\\d{8,15}$))|((627)(\\\\d{9,16}$))|((628)[01](\\\\d{8,15}$))|((6294)(\\\\d{8,15}$))|((630)[14](\\\\d{8,15}$))|((6338)(\\\\d{8,15}$))|((636)[0137](\\\\d{8,15}$))|((6371)(\\\\d{8,15}$))|((639)[0-7](\\\\d{8,15}$))|((640)[023468](\\\\d{8,15}$))|((641083)(\\\\d{6,13}$))|((641377)(\\\\d{6,13}$))|((641382)(\\\\d{6,13}$))|((641466)(\\\\d{6,13}$))|((641798)(\\\\d{6,13}$))|((641860)(\\\\d{6,13}$))|((642041)(\\\\d{6,13}$))|((642068)(\\\\d{6,13}$))|((642097)(\\\\d{6,13}$))|((642098)(\\\\d{6,13}$))|((6421)[4579](\\\\d{7,14}$))|((64211)[079](\\\\d{6,13}$))|((6422)[02456](\\\\d{7,14}$))|((642301)(\\\\d{6,13}$))|((642335)(\\\\d{6,13}$))|(67\\\\d{10,17}$)|((7083)(\\\\d{8,15}$))|((589004|589283|589311|589229|505874|505878|601073|504997|601030|560332)(\\\\d{6,13}$)))",\n    "detection": "^(?!(510658|515111|519123|519163|521662|52816|530514|53055|543556|543557|543560|603231065|603231067))(?=(5018|5020|5038|504997|505874|505878|5106|511071|511106|51479[23]|5151[12]|515400|5191|5205|5216|5220[89]5258|5281|529235|5305|539043|53905[24]|53[24]5407|5435|545391|545433|545729|5464|5464|5509|55310[34]553725|553783|554563|554587|557205|560332|5610|56119|5612|563[235]|564076|564141|564158|5642|5651|56[0678]573[134]|574[25789]|575[234567]|5768|57[0125789]|5817|581149|589004|589229|589242|589283|589311|589916|589973|589785|58980|589812|58[34]599032|600206|600343|600452|601030|601073|603231|60079|6009[0689]|60[1-6]|61|621[89]|622[01]|623020|627|628[01]|6294|630[14]|6338|636[137]|6371|639[0-7]|640[023468]641083|641377|641382|641466|641798|641860|642041|642068|642097|642098|64211[079]|6421[4579]|6422[02456]|642301|642335|67|7083))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true\n  },\n  "MASTER": {\n    "number": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|530514))((5[0-8]\\\\d{14}$)|((5396)(\\\\d{8,15}$))|((5410)(\\\\d{8,15}$))|((5471)(\\\\d{8,15}$))|(6[17]\\\\d{14}$)|(7[017]\\\\d{14}$)|(2[3-6]\\\\d{14}$)|(22[3-9]\\\\d{13}$)|(222[1-9]\\\\d{12}$)|(27[01]\\\\d{13}$)|(2720\\\\d{12}$))",\n    "detection": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|530514))(?=(5[0-8]|6[17]|7[017]|2[3-6]|22[3-9]|222[1-9]|27[01]|2720|5396|5410|5471))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "MASTERDEBIT": {\n    "number": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|521662))((5[0-8]\\\\d{14}$)|(53562)(\\\\d[6-9])(\\\\d{10})|(53563)(\\\\d[0,1])(\\\\d{10})|(53564)(\\\\d[7,8])(\\\\d{10})|()(535670)(\\\\d{10})|((5396)(\\\\d{8,15}$))|(6[17]\\\\d{14}$)|(7[017]\\\\d{14}$)|(2[3-6]\\\\d{14}$)|(22[3-9]\\\\d{13}$)|(222[1-9]\\\\d{12}$)|(27[01]\\\\d{13}$)|(2720\\\\d{12}$))",\n    "detection": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|521662))(?=(5[0-8]|6[17]|7[017]|2[3-6]|22[3-9]|222[1-9]|27[01]|2720|5396))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "VISA": {\n    "number": "^4(?:(?:\\\\d{12})|(?:\\\\d{15})|(?:\\\\d{16})|(?:\\\\d{17})|(?:\\\\d{18}))$",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "VISAELECTRON": {\n    "number": "^4(?:(?:\\\\d{12})|(?:\\\\d{15})|(?:\\\\d{16})|(?:\\\\d{17})|(?:\\\\d{18}))$",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "VISADEBIT": {\n    "number": "^4\\\\d*",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "POSTEPAY": {\n    "number": "^4\\\\d*",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "UNIONPAY": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "UNIONPAY_GENERIC": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "UNIONPAY_SMS": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "NARANJA": {\n    "luhn": false\n  },\n  "PRIVATE_LABEL": {\n    "number": "^\\\\d{10,21}$",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "ALIA": {\n    "detection": "^(504997|60103|601073|505874|505878)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": true\n  },\n  "ALIADEBIT": {\n    "detection": "^(504997|60103|601073|505874|505878)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": true\n  },\n  "AIRPLUS": {\n    "number": "^(1220|1920)\\\\d{11}$",\n    "detection": "^(1220|1920)",\n    "luhn": true,\n    "expiryDate": true\n  },\n  "ONEY_BANK_CARD": {\n    "number": "^(49715202|49716402)\\\\d*",\n    "detection": "^(49715202|49716402)",\n    "luhn": false\n  },\n  "ONEY_PRIVATE_CARD": {\n    "number": "^(50320202|50320222|50320226|50320260|50320261|50320262)\\\\d*",\n    "detection": "^(50320202|50320222|50320226|50320260|50320261|50320262)",\n    "luhn": false\n  },\n  "SISTEMACLAVE": {\n    "number": "^(588968\\\\d{3,}|601377\\\\d{3,})$",\n    "detection": "^(588968|601377)",\n    "luhn": false\n  },\n  "CARTEBANCAIRE": {\n    "number": "^[4-6]\\\\d*",\n    "detection": "^[4-6]",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "CREDISENSA": {\n    "number": "^(900010|960018|555067|910001|919901|920001|929901|000029200)\\\\d*",\n    "detection": "^(900010|960018|555067|910001|919901|920001|929901|000029200)",\n    "luhn": false\n  },\n  "CABAL": {\n    "number": "^(589657|(6042(0[2|6|7|8|9]))|(6042(1[1|2|3|5|6|9]))|604228|604233|(6042(4[4|5|9]))|(6042(5[0|1|4|6]]))|604265)|(60431[6|7|9])|604327|(60434[1|2|3|5|7|8])]\\\\d*",\n    "detection": "^(589657|(6042(0[2|6|7|8|9]))|(6042(1[1|2|3|5|6|9]))|604228|604233|(6042(4[4|5|9]))|(6042(5[0|1|4|6]]))|604265)|(60431[6|7|9])|604327|(60434[1|2|3|5|7|8])]",\n    "luhn": true\n  },\n  "CABALDEBIT": {\n    "number": "^(604201|604218|604246)\\\\d*",\n    "detection": "^(604201|604218|604246)",\n    "luhn": true\n  },\n  "CASHLINKMALTA": {\n    "number": "^(588731)\\\\d{11}$",\n    "detection": "^(588731)",\n    "luhn": true\n  },\n  "STAPLES": {\n    "number": "^(7972\\\\d{12}|6035517\\\\d{9}|6011100[02]\\\\d{8}|600649[19]\\\\d{9})$",\n    "detection": "^(7972|6035517|6011100[02]|600649[19])",\n    "luhn": true,\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "SCHEELS":{\n    "number": "^(441840\\\\d{10}|441855\\\\d{10}|469451\\\\d{10}|498865\\\\d{10}|441822\\\\d{10})$",\n    "detection": "^(441840|441855|469451|498865|441822})",\n    "luhn": true\n  },\n  "HEB_GIFT_CARD": {\n    "number": "^(6006496919|6006496920)\\\\d{9}",\n    "detection": "^(6006496919|6006496920)",\n    "luhn": false,\n    "cvvLength": 4,\n    "expiryDate": false\n  },\n  "RL_PRIVATE_LABEL_VA": {\n    "number": "^(60|61|62)\\\\d{14}",\n    "detection": "^(60|61|62)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": false\n  }\n}\n';});
+define('text!module/json/brands-validation.json',[],function () { return '{\n  "AMEX": {\n    "number": "(^3[47]\\\\d{13}$)|(^311111111111117$)",\n    "detection": "^3[47]",\n    "luhn": true,\n    "pattern": "{{9999}} {{999999}} {{99999}}",\n    "cvvLength": 4\n  },\n  "BELK_GIFT_CARD": {\n    "number": "(^\\\\d{14,19}$)",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "cvvLength": 4,\n    "expiryDate": false\n  },\n  "CARTEBLEUE": {\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "DINERS": {\n    "number": "^(30[0-5]\\\\d{11,16})|(3095\\\\d{12,15})|(36\\\\d{12,17})|(3[89]\\\\d{14,17})|(60110[^4]\\\\d{10,13})|(6011[2-4]\\\\d{11,14})|(60117[4789]\\\\d{10,13})|(60118[6-9]\\\\d{10,13})|(60119\\\\d{11,14})|(64[4-9]\\\\d{13,16})|(650[0-5]\\\\d{12,15})|(65060[^0]\\\\d{10,13})|(65061[^0]\\\\d{10,13})|(6506[2-9]\\\\d{11,14})|(650[7-9]\\\\d{12,15})|(65[^0]\\\\d{13,16})$",\n    "detection": "^(?:30[0-5]|3095|36|3[89])",\n    "luhn": true,\n    "pattern": "{{9999}} {{999999}} {{999999999}}"\n  },\n  "DISCOVER": {\n    "number": "^(30[0-5]\\\\d{11,16})|(3095\\\\d{12,15})|(36\\\\d{12,17})|(3[89]\\\\d{14,17})|(60110[^4]\\\\d{10,13})|(6011[2-4]\\\\d{11,14})|(60117[4789]\\\\d{10,13})|(60118[6-9]\\\\d{10,13})|(60119\\\\d{11,14})|(64[4-9]\\\\d{13,16})|(650[0-5]\\\\d{12,15})|(65060[^0]\\\\d{10,13})|(65061[^0]\\\\d{10,13})|(6506[2-9]\\\\d{11,14})|(650[7-9]\\\\d{12,15})|(65[^0]\\\\d{13,16})$",\n    "detection": "^(?:60110[^4]|6011[2-4]|60117[4789]|60118[6-9]|60119|64[4-9]|650[0-5]|65060[^0]|65061[^0]|6506[2-9]|650[7-9]|65[^0])",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "ENROUTE": {\n    "number": "^(?:(?:2014)|(?:2149))\\\\d{11}$",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "JCB": {\n    "number": "^(?:(?:35(\\\\d{14}|\\\\d{17}))|(?:2131\\\\d{11})|(?:1800\\\\d{11}))$",\n    "detection": "^(?:35|2131|1800)",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "DANKORT": {\n    "number": "^(5019\\\\d{12}|4\\\\d{15})$",\n    "detection": "^(?:5019|4571)",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "BELK_PRIVATE_LABEL": {\n    "number": "(^604583\\\\d{10,13}$)",\n    "detection": "^604583",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "expiryDate": false\n  },\n  "IK_PRIVATE_LABEL": {\n    "detection": "^(601779101|603231067|603231065|633156008|924610151|600200)",\n    "optionalCvv": true\n  },\n  "IK_PRIVATE_LABEL_VA": {\n    "detection": "^(601779101|603231067|603231065|633156008|924610151|600200)",\n    "optionalCvv": true\n  },\n  "IKEA_PVL_IKANO_FAM": {\n    "number": "^(600405)\\\\d{10}$",\n    "detection": "^(600405)",\n    "luhn": true\n  },\n  "IKEA_PVL_IKANO_LOAN": {\n    "number": "^(555857)\\\\d{10}$",\n    "detection": "^(555857)",\n    "luhn": true\n  },\n  "IKEA_PVL_IKANO_TEMP": {\n    "number": "^(627598)\\\\d{10}$",\n    "detection": "^(627598)",\n    "luhn": true\n  },\n  "IKEA_VISA_ADS_FAMILY": {\n    "number": "^(406367)\\\\d{10}$",\n    "detection": "^(406367)",\n    "luhn": true\n  },\n  "IKEA_PVL_ADS_PROJEKT": {\n    "number": "^(456420)\\\\d{10}$",\n    "detection": "^(456420)",\n    "luhn": true\n  },\n  "IKEA_PVL_SOFINCO_RC": {\n    "number": "^(525778)\\\\d{10}$",\n    "detection": "^(525778)",\n    "luhn": true\n  },\n  "IKEA_MC_SOFINCO_RC": {\n    "number": "^(549538)\\\\d{10}$",\n    "detection": "^(549538)",\n    "luhn": true\n  },\n  "IKEA_MC_CEMBRA_RC": {\n    "number": "^(513659)\\\\d{10}$",\n    "detection": "^(513659)",\n    "luhn": true\n  },\n  "IKEA_PVL_AGOS_OTL": {\n    "number": "^(540890)\\\\d{10}$",\n    "detection": "^(540890)",\n    "luhn": true\n  },\n  "TCARD": {\n    "detection": "^(949625|949626|949627|949622|949623|949624|949610|949611|949612|949619|949620|949621|949628|949629|949630|949633|949634|949635|949636|949637|949638|949639|949640|949616|949617|949618|949613|949614|949615)"\n  },\n  "TCARDDEBIT": {\n    "detection": "^(949625|949626|949627|949622|949623|949624|949610|949611|949612|949619|949620|949621|949628|949629|949630|949633|949634|949635|949636|949637|949638|949639|949640|949616|949617|949618|949613|949614|949615)"\n  },\n  "MEEZA": {\n    "number": "^(507803[0-4][0-9]|50780350|50780362|507808[3-9][0-9]|507809[0-9][0-9]|507810[0-2][0-9])\\\\d{4,12}$",\n    "detection": "^(507803[0-4][0-9]|50780350|50780362|507808[3-9][0-9]|507809[0-9][0-9]|507810[0-2][0-9])",\n    "luhn": true\n  },\n  "MADA" : {\n    "number" : "^(242030|403024|406136|406996|407197|407395|409201|410621|410685|412565|417633|419593|420132|421141|422817|422818|422819|428331|428671|428672|428673|431361|432328|434107|439954|440533|440647|440795|445564|446393|446404|446672|454097|455036|455708|457865|457997|458456|462220|468540|468541|468542|468543|474491|483010|483011|483012|484783|486094|486095|486096|489318|489319|504300|508160|513213|520058|521076|524130|524514|529415|529741|530060|530906|531095|531196|532013|535825|535989|536023|537767|543085|543357|549760|554180|558563|585265|588845|588846|588848|588849|588850|588982|588983|589005|589206|604906|605141|636120|968201|968202|968203|968204|968205|968206|968207|968208|968209|968211)(\\\\d{7,13})$",\n    "detection" : "^(?:242030|403024|406136|406996|407197|407395|409201|410621|410685|412565|417633|419593|420132|421141|422817|422818|422819|428331|428671|428672|428673|431361|432328|434107|439954|440533|440647|440795|445564|446393|446404|446672|454097|455036|455708|457865|457997|458456|462220|468540|468541|468542|468543|474491|483010|483011|483012|484783|486094|486095|486096|489318|489319|504300|508160|513213|520058|521076|524130|524514|529415|529741|530060|530906|531095|531196|532013|535825|535989|536023|537767|543085|543357|549760|554180|558563|585265|588845|588846|588848|588849|588850|588982|588983|589005|589206|604906|605141|636120|968201|968202|968203|968204|968205|968206|968207|968208|968209|968211)",\n    "luhn" : true,\n    "pattern" : "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "expiryDate" : true\n  },\n  "MAESTRO": {\n    "number": "^(?!(53055|52816|515111|521662|530514|603231065|603231067))(((50)(\\\\d{10,17}$))|((5106)(\\\\d{8,15}$))|((511071)(\\\\d{6,13}$))|((511106)(\\\\d{6,13}$))|((51479)[23](\\\\d{6,13}$))|((5151)[12](\\\\d{7,14}$))|((515400)(\\\\d{6,13}$))|((5191)(\\\\d{8,15}$))|((5205)(\\\\d{8,15}$))|((5216)(\\\\d{8,15}$))|((5220)[89](\\\\d{7,14}$))|((5258)(\\\\d{8,15}$))|((5281)(\\\\d{8,15}$))|((529235)(\\\\d{6,13}$))|((53)[24](\\\\d{9,16}$))|((5305)(\\\\d{8,15}$))|((539043)(\\\\d{6,13}$))|((53905)[24](\\\\d{6,13}$))|((5407)(\\\\d{8,15}$))|((5435)(\\\\d{8,15}$))|((545391)(\\\\d{6,13}$))|((545433)(\\\\d{6,13}$))|((545729)(\\\\d{6,13}$))|((5464)(\\\\d{8,15}$))|((5464)(\\\\d{8,15}$))|((5509)(\\\\d{8,15}$))|((55310)[34](\\\\d{6,13}$))|((553725)(\\\\d{6,13}$))|((553783)(\\\\d{6,13}$))|((554563)(\\\\d{6,13}$))|((554587)(\\\\d{6,13}$))|((557205)(\\\\d{6,13}$))|((56)[0678](\\\\d{9,16}$))|((5610)(\\\\d{8,15}$))|((56119)(\\\\d{8,15}$))|((5612)(\\\\d{8,15}$))|((563)[235](\\\\d{8,15}$))|((564141)(\\\\d{6,13}$))|((564158)(\\\\d{6,13}$))|((5642)(\\\\d{8,15}$))|((5651)(\\\\d{8,15}$))((564076)(\\\\d{6,13}$))|((57)[0125789](\\\\d{9,16}$))|((573)[134](\\\\d{8,15}$))|((574)[25789](\\\\d{8,15}$))|((575)[234567](\\\\d{8,15}$))|((5768)(\\\\d{8,15}$))|((5817(?:02|07|15|21|24|[3][1,6-9]|[4][0,2-9]|50|51|56|66|69|73|78|84|87|90|91|97))(\\\\d{6,13}$))|((58)[34](\\\\d{9,16}$))|((581149|589242|589973|589785|589812|599032)(\\\\d{6,13}$))|((58980)(\\\\d{7,14}$))|((60)[1-6](\\\\d{9,16}$))|((600206)(\\\\d{6,13}$))|((600343|600452|603231|623020|627252)(\\\\d{6,13}$))|((60079)(\\\\d{7,14}$))|((6009)[0689](\\\\d{7,14}$))|(61\\\\d{10,17}$)|((621)[89](\\\\d{8,15}$))|((622)[01](\\\\d{8,15}$))|((627)(\\\\d{9,16}$))|((628)[01](\\\\d{8,15}$))|((6294)(\\\\d{8,15}$))|((630)[14](\\\\d{8,15}$))|((6338)(\\\\d{8,15}$))|((636)[0137](\\\\d{8,15}$))|((6371)(\\\\d{8,15}$))|((639)[0-7](\\\\d{8,15}$))|((640)[023468](\\\\d{8,15}$))|((641083)(\\\\d{6,13}$))|((641377)(\\\\d{6,13}$))|((641382)(\\\\d{6,13}$))|((641466)(\\\\d{6,13}$))|((641798)(\\\\d{6,13}$))|((641860)(\\\\d{6,13}$))|((642041)(\\\\d{6,13}$))|((642068)(\\\\d{6,13}$))|((642097)(\\\\d{6,13}$))|((642098)(\\\\d{6,13}$))|((6421)[4579](\\\\d{7,14}$))|((64211)[079](\\\\d{6,13}$))|((6422)[02456](\\\\d{7,14}$))|((642301)(\\\\d{6,13}$))|((642335)(\\\\d{6,13}$))|(67\\\\d{10,17}$)|((7083)(\\\\d{8,15}$))|((589004|589283|589311|589229|505874|505878|601073|504997|601030|560332)(\\\\d{6,13}$)))",\n    "detection": "^(?!(510658|515111|519123|519163|521662|52816|530514|53055|543556|543557|543560|603231065|603231067))(?=(5018|5020|5038|504997|505874|505878|5106|511071|511106|51479[23]|5151[12]|515400|5191|5205|5216|5220[89]5258|5281|529235|5305|539043|53905[24]|53[24]5407|5435|545391|545433|545729|5464|5464|5509|55310[34]553725|553783|554563|554587|557205|560332|5610|56119|5612|563[235]|564076|564141|564158|5642|5651|56[0678]573[134]|574[25789]|575[234567]|5768|57[0125789]|5817|581149|589004|589229|589242|589283|589311|589916|589973|589785|58980|589812|58[34]599032|600206|600343|600452|601030|601073|603231|60079|6009[0689]|60[1-6]|61|621[89]|622[01]|623020|627|628[01]|6294|630[14]|6338|636[137]|6371|639[0-7]|640[023468]641083|641377|641382|641466|641798|641860|642041|642068|642097|642098|64211[079]|6421[4579]|6422[02456]|642301|642335|67|7083))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true\n  },\n  "MASTER": {\n    "number": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|530514))((5[0-8]\\\\d{14}$)|((5396)(\\\\d{8,15}$))|((5410)(\\\\d{8,15}$))|((5471)(\\\\d{8,15}$))|(6[17]\\\\d{14}$)|(7[017]\\\\d{14}$)|(2[3-6]\\\\d{14}$)|(22[3-9]\\\\d{13}$)|(222[1-9]\\\\d{12}$)|(27[01]\\\\d{13}$)|(2720\\\\d{12}$))",\n    "detection": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|530514))(?=(5[0-8]|6[17]|7[017]|2[3-6]|22[3-9]|222[1-9]|27[01]|2720|5396|5410|5471))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "MASTERDEBIT": {\n    "number": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|521662))((5[0-8]\\\\d{14}$)|(53562)(\\\\d[6-9])(\\\\d{10})|(53563)(\\\\d[0,1])(\\\\d{10})|(53564)(\\\\d[7,8])(\\\\d{10})|()(535670)(\\\\d{10})|((5396)(\\\\d{8,15}$))|(6[17]\\\\d{14}$)|(7[017]\\\\d{14}$)|(2[3-6]\\\\d{14}$)|(22[3-9]\\\\d{13}$)|(222[1-9]\\\\d{12}$)|(27[01]\\\\d{13}$)|(2720\\\\d{12}$))",\n    "detection": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|521662))(?=(5[0-8]|6[17]|7[017]|2[3-6]|22[3-9]|222[1-9]|27[01]|2720|5396))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "VISA": {\n    "number": "^4(?:(?:\\\\d{12})|(?:\\\\d{15})|(?:\\\\d{16})|(?:\\\\d{17})|(?:\\\\d{18}))$",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "VISAELECTRON": {\n    "number": "^4(?:(?:\\\\d{12})|(?:\\\\d{15})|(?:\\\\d{16})|(?:\\\\d{17})|(?:\\\\d{18}))$",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "VISADEBIT": {\n    "number": "^4\\\\d*",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "POSTEPAY": {\n    "number": "^4\\\\d*",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "UNIONPAY": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "UNIONPAY_GENERIC": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "UNIONPAY_SMS": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "NARANJA": {\n    "luhn": false\n  },\n  "PRIVATE_LABEL": {\n    "number": "^\\\\d{10,21}$",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "ALIA": {\n    "detection": "^(504997|60103|601073|505874|505878)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": true\n  },\n  "ALIADEBIT": {\n    "detection": "^(504997|60103|601073|505874|505878)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": true\n  },\n  "AIRPLUS": {\n    "number": "^(1220|1920)\\\\d{11}$",\n    "detection": "^(1220|1920)",\n    "luhn": true,\n    "expiryDate": true\n  },\n  "ONEY_BANK_CARD": {\n    "number": "^(49715202|49716402)\\\\d*",\n    "detection": "^(49715202|49716402)",\n    "luhn": false\n  },\n  "ONEY_PRIVATE_CARD": {\n    "number": "^(50320202|50320222|50320226|50320260|50320261|50320262)\\\\d*",\n    "detection": "^(50320202|50320222|50320226|50320260|50320261|50320262)",\n    "luhn": false\n  },\n  "SISTEMACLAVE": {\n    "number": "^(588968\\\\d{3,}|601377\\\\d{3,})$",\n    "detection": "^(588968|601377)",\n    "luhn": false\n  },\n  "CARTEBANCAIRE": {\n    "number": "^[4-6]\\\\d*",\n    "detection": "^[4-6]",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "CREDISENSA": {\n    "number": "^(900010|960018|555067|910001|919901|920001|929901|000029200)\\\\d*",\n    "detection": "^(900010|960018|555067|910001|919901|920001|929901|000029200)",\n    "luhn": false\n  },\n  "CABAL": {\n    "number": "^(589657|(6042(0[2|6|7|8|9]))|(6042(1[1|2|3|5|6|9]))|604228|604233|(6042(4[4|5|9]))|(6042(5[0|1|4|6]]))|604265)|(60431[6|7|9])|604327|(60434[1|2|3|5|7|8])]\\\\d*",\n    "detection": "^(589657|(6042(0[2|6|7|8|9]))|(6042(1[1|2|3|5|6|9]))|604228|604233|(6042(4[4|5|9]))|(6042(5[0|1|4|6]]))|604265)|(60431[6|7|9])|604327|(60434[1|2|3|5|7|8])]",\n    "luhn": true\n  },\n  "CABALDEBIT": {\n    "number": "^(604201|604218|604246)\\\\d*",\n    "detection": "^(604201|604218|604246)",\n    "luhn": true\n  },\n  "CASHLINKMALTA": {\n    "number": "^(588731)\\\\d{11}$",\n    "detection": "^(588731)",\n    "luhn": true\n  },\n  "STAPLES": {\n    "number": "^(7972\\\\d{12}|6035517\\\\d{9}|6011100[02]\\\\d{8}|600649[19]\\\\d{9})$",\n    "detection": "^(7972|6035517|6011100[02]|600649[19])",\n    "luhn": true,\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "SCHEELS":{\n    "number": "^(441840\\\\d{10}|441855\\\\d{10}|469451\\\\d{10}|498865\\\\d{10}|441822\\\\d{10})$",\n    "detection": "^(441840|441855|469451|498865|441822})",\n    "luhn": true\n  },\n  "HEB_GIFT_CARD": {\n    "number": "^(6006496919|6006496920)\\\\d{9}",\n    "detection": "^(6006496919|6006496920)",\n    "luhn": false,\n    "cvvLength": 4,\n    "expiryDate": false\n  },\n  "RL_PRIVATE_LABEL_VA": {\n    "number": "^(60|61|62)\\\\d{14}",\n    "detection": "^(60|61|62)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": false\n  }\n}\n';});
 
 /*jshint camelcase: false */
 define('module/Setting',['require','jquery','module/Parameter','module/forms/CardPaymentForm','text!module/json/brands.json','text!module/json/brands-validation.json'],function(require) {
@@ -12456,8 +12456,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	// Click To Pay
 	Options.loadClickToPay = false;
 	Options.isClickToPayInitSuccess = false;
-	Options.clickToPayBrands = ['VISA', 'VISADEBIT', 'VISAELECTRON', 'MASTER', 'MASTERDEBIT', 'AMEX', 'DISCOVER', 'DINERS'];
-	Options.clickToPayInitializedBrands = [];
+	Options.clickToPayBrands = ['VISA', 'MASTER', 'AMEX', 'DISCOVER'];
 
 	// spinner
 	Options.spinner = {};
@@ -12756,8 +12755,6 @@ define('module/Language',[],function(){
 			afterpayTermsAndCondition: "AfterPay Consumer Terms and Conditions",
 			afterpayAccept: "I have read and accepted AfterPay consumer Terms and Conditions.",
 			afterpayAcceptError: "Please accept the Terms and Conditions.",
-			meezaQrLabel: "Pay through MEEZA App using QR code scan",
-			meezaLinkLabel: "Pay through MEEZA App using Notification",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
 			countryCodes: [
                     {"value": "" , "label": "Please select"},
@@ -13193,8 +13190,6 @@ define('module/Language',[],function(){
 			afterpayTermsAndCondition: "AfterPay Consumer Terms and Conditions",
 			afterpayAccept: "I have read and accepted AfterPay consumer Terms and Conditions.",
 			afterpayAcceptError: "Please accept the Terms and Conditions.",
-			meezaQrLabel: "ادفع من خلال تطبيق ميزة باستخدام مسح كود QR",
-			meezaLinkLabel: "ادفع من خلال تطبيق ميزة باستخدام الإشعارات",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
 			countryCodes: [
                     {"value": "" , "label": "الرجاء الإختيار"},
@@ -21244,19 +21239,6 @@ define('module/Tracking',['require','jquery','module/Generate','module/Wpwl'],fu
     return Tracking;
 });
 
-define('module/SaqaUtil',['require','module/Wpwl','module/Options'],function(require){
-	var Wpwl = require('module/Wpwl');
-	var Options = require('module/Options');
-
-    var SaqaUtil = {};
-
-    SaqaUtil.isSAQACompliance = function(){
-        return Options.enableSAQACompliance || Wpwl.checkout.config.oppCnpSaqa;
-    };
-
-    return SaqaUtil;
-});
-
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -24002,7 +23984,7 @@ return $.ui.autocomplete;
 
 } ) );
 
-define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','module/SaqaUtil','jquery-ui/widgets/autocomplete'],function(require){
+define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','jquery-ui/widgets/autocomplete'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var CVVHint = require('module/CVVHint');
@@ -24024,7 +24006,6 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	var Generate = require('module/Generate');
 	var Setting = require('module/Setting');
 	var Detection = require('module/Detection');
-	var SaqaUtil = require('module/SaqaUtil');
     require('jquery-ui/widgets/autocomplete');
 
 	var HAS_ERROR_CLASS = "wpwl-has-error";
@@ -24055,7 +24036,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			if (errors.hasOwnProperty(i)){
 				var $elem = $(errors[i]);
 				
-				if (!SaqaUtil.isSAQACompliance() && $elem.is("[name=\"" +Parameter.CARD_EXPIRY_MONTH + "\"], [name=\"" + Parameter.CARD_EXPIRY_YEAR + "\"]")) {
+				if (!Options.enableSAQACompliance && $elem.is("[name=\"" + Parameter.CARD_EXPIRY_MONTH + "\"], [name=\"" + Parameter.CARD_EXPIRY_YEAR + "\"]")) {
 					// expiry month and year are hidden fields. we need the element
 					// which is visible to the shopper
 					$elem = $elem.closest("form").find("[data-action=\"blur-card-expiry\"]");
@@ -24073,7 +24054,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	PaymentView.addErrorMessage = function($elem, message) {
 		var customErrorClass = "wpwl-hint-" + message;
 
-		if( !SaqaUtil.isSAQACompliance() && Options.forceCardHolderEqualsBillingName && $elem.is("[name=\"" + Parameter.SUR_NAME + "\"], [name=\"" + Parameter.GIVEN_NAME + "\"]")) {
+		if( !Options.enableSAQACompliance && Options.forceCardHolderEqualsBillingName && $elem.is("[name=\"" + Parameter.SUR_NAME + "\"], [name=\"" + Parameter.GIVEN_NAME + "\"]")) {
 			$elem = $elem.closest("form").find("[name=\"" + Parameter.SUR_NAME + "\"]");
 			var givenNameErrorElem = $elem.siblings(".wpwl-hint-givenNameError");
 			if(givenNameErrorElem.length > 0) {
@@ -24566,7 +24547,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	};
 	
 	PaymentView.initFormatter = function() {
-		if (!SaqaUtil.isSAQACompliance()){
+		if (!Options.enableSAQACompliance){
 			new InputDateFormatter({
 				selector: '[data-action="blur-card-expiry"]'
 			}).format();	
@@ -24920,7 +24901,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 		if ($elem.hasClass(HAS_ERROR_CLASS)){
 			$elem.removeClass(HAS_ERROR_CLASS);
 			
-			if( !SaqaUtil.isSAQACompliance() && Options.forceCardHolderEqualsBillingName && $elem.is("[name=\"" + Parameter.SUR_NAME + "\"], [name=\"" + Parameter.GIVEN_NAME + "\"]")){
+			if( !Options.enableSAQACompliance && Options.forceCardHolderEqualsBillingName && $elem.is("[name=\"" + Parameter.SUR_NAME + "\"], [name=\"" + Parameter.GIVEN_NAME + "\"]")){
 			    var customErrorClass = "wpwl-hint-";
 
 			    if($elem.is("[name=\"" + Parameter.SUR_NAME + "\"]")) {
@@ -26534,7 +26515,7 @@ define('module/forms/VirtualAccountPaymentForm',['require','shim/ObjectCreate','
 
 	return VirtualAccountPaymentForm;
 });
-define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement','module/SaqaUtil'],function(require){
+define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
@@ -26545,7 +26526,6 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	var VirtualAccountPaymentForm = require('module/forms/VirtualAccountPaymentForm');
 	var Options = require('module/Options');
 	var BillingAgreement = require("module/BillingAgreement");
-	var SaqaUtil = require('module/SaqaUtil');
 
 	var Validate = {};
 
@@ -26571,7 +26551,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		var $accountExpiryMonth;
 		var $accountExpiryYear;
 
-		if (SaqaUtil.isSAQACompliance()) {
+		if (Options.enableSAQACompliance) {
 			validationErrors = Util.extend({}, l, m, o2);
 		} else {
 			$accountExpiryMonth = paymentForm.getExpiryMonthElement();
@@ -26604,7 +26584,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 			validationErrors = Util.extend( validationErrors, n);
 		}
 		
-		if( !SaqaUtil.isSAQACompliance() && Options.forceCardHolderEqualsBillingName ) {
+		if( !Options.enableSAQACompliance && Options.forceCardHolderEqualsBillingName ){
 			$surName = paymentForm.getSurNameElement();
 			$givenName = paymentForm.getGivenNameElement();
 			
@@ -26626,15 +26606,15 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 			}
 			$accountNumber.val( Util.trimAll( paymentForm.getNumber() ) );
 			$accountBrand.val( Util.trimAll( paymentForm.getBrand() ) );
-			if (!SaqaUtil.isSAQACompliance()) {
+			if (!Options.enableSAQACompliance) {
 				$accountExpiryMonth.val( Util.trimAll( paymentForm.getExpiryMonth() ) );
 				$accountExpiryYear.val( Util.trimAll( paymentForm.getExpiryYear() ) );
 			}
 			$accountHolder.val( Util.trim( paymentForm.getHolder() ) );
 
-			if( !SaqaUtil.isSAQACompliance() && Options.forceCardHolderEqualsBillingName ){
-                $surName.val( Util.trim( paymentForm.getSurName() ) );
-                $givenName.val( Util.trim( paymentForm.getGivenName() ) );
+			if( !Options.enableSAQACompliance && Options.forceCardHolderEqualsBillingName ){
+				$surName.val( Util.trim( paymentForm.getSurName() ) );
+				$givenName.val( Util.trim( paymentForm.getGivenName() ) );
 			}
 
 		}
@@ -27508,7 +27488,7 @@ define('text!template/oneclickpayment/paypalRestFraudNetJs.html',[],function () 
 
 define('text!template/oneclickpayment/holderIframe.html',[],function () { return '<iframe class="wpwl-control wpwl-control-iframe wpwl-control-cardHolder disabled" src="<%- obj.registration.pciIframeSrc %>" name="card.holder" placeholder="<%= obj.registration.lang.cardHolder  %>" aria-label="<%= obj.registration.lang.cardHolder  %>" scrolling="no" frameborder="0"></iframe>';});
 
-define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentUtil','module/Options','module/PaymentView','module/AutoFocus','module/ParentToIframeCommunication','module/RegistrationType','lib/Spinner','module/Template','module/Tracking','module/Generate','module/Validate','module/Util','module/I18n','module/DateFormatter','module/SaqaUtil','text!template/oneclickpayment/main.html','text!template/oneclickpayment/iframe.html','text!template/oneclickpayment/paypalRestFraudNetJs.html','text!template/oneclickpayment/holderIframe.html'],function(require){
+define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentUtil','module/Options','module/PaymentView','module/AutoFocus','module/ParentToIframeCommunication','module/RegistrationType','lib/Spinner','module/Template','module/Tracking','module/Generate','module/Validate','module/Util','module/I18n','module/DateFormatter','text!template/oneclickpayment/main.html','text!template/oneclickpayment/iframe.html','text!template/oneclickpayment/paypalRestFraudNetJs.html','text!template/oneclickpayment/holderIframe.html'],function(require){
     var $ = require("jquery");
     var OneClickPaymentUtil = require("module/OneClickPaymentUtil");
     var Options = require("module/Options");
@@ -27524,7 +27504,6 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
     var Util = require('module/Util');
     var I18n = require("module/I18n");
     var DateFormatter = require('module/DateFormatter');
-    var SaqaUtil = require('module/SaqaUtil');
 
     var mainTemplateHtml = require("text!template/oneclickpayment/main.html");
     var iframeTemplateHtml = require("text!template/oneclickpayment/iframe.html");
@@ -27577,7 +27556,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
         this.template.addObject({shopOrigin: Util.getOrigin()});
         this.$container.html(this.template.render());
 
-        if (SaqaUtil.isSAQACompliance() ===true) {
+        if (Options.enableSAQACompliance===true) {
             this.$container.find('.wpwl-group-submit').remove();
         }
 
@@ -27593,7 +27572,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
 
         if(firstRegistration.isHolderRequired) {
             this.$container.find(".wpwl-wrapper-required-registration-holder:first").append(this.generateHolderInput(firstRegistration));
-            if (SaqaUtil.isSAQACompliance()) {
+            if (Options.enableSAQACompliance) {
                 this.prepareHolderPciCompliance();
             }
         }
@@ -27627,7 +27606,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
     OneClickPaymentView.prototype.generateHolderInput = function(registration) {
         var properties = registration.holderProperties;
         var cardHolderInput;
-        if (SaqaUtil.isSAQACompliance()) {
+        if (Options.enableSAQACompliance) {
             this.holderIframeTemplate.addObject({registration: registration});
             cardHolderInput = this.holderIframeTemplate.render();
         } else {
@@ -27724,7 +27703,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
         if (registration.isHolderRequired){
             $selected.closest(".wpwl-registration").find(".wpwl-wrapper-required-registration-holder")
                 .append(this.generateHolderInput(registration));
-            if (SaqaUtil.isSAQACompliance()) {
+            if (Options.enableSAQACompliance) {
                 this.prepareHolderPciCompliance();
             }
         }
@@ -27748,7 +27727,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
 
         var result = true;
         if(registration.isHolderRequired) {
-            if (SaqaUtil.isSAQACompliance()) {
+            if (Options.enableSAQACompliance) {
                 result = validateCardHolderIframe(this.holderIframeCommunication, result, this.iframeCommunication);
             } else {
                 result = validateHolder($selected, registration);
@@ -31208,10 +31187,9 @@ define('module/integrations/TrustlyInlineWidget',['require','jquery','module/Inl
  * This is used to load QR in iframe for MEEZA_QR and MEEZA_LINK brand
  */
 /*jshint camelcase: false */
-define('module/integrations/UpgMobilePaymentWidget',['require','jquery','module/forms/PaymentForm','module/I18n','module/InternalRequestCommunication','module/Options','module/error/WidgetError','module/error/SessionError','module/logging/LoggerFactory','lib/Spinner'],function(require) {
+define('module/integrations/UpgMobilePaymentWidget',['require','jquery','module/forms/PaymentForm','module/InternalRequestCommunication','module/Options','module/error/WidgetError','module/error/SessionError','module/logging/LoggerFactory','lib/Spinner'],function(require) {
     var $ = require('jquery');
     var PaymentForm = require('module/forms/PaymentForm');
-    var I18n = require("module/I18n");
     var InternalRequestCommunication = require('module/InternalRequestCommunication');
     var Options = require("module/Options");
     var WidgetError = require("module/error/WidgetError");
@@ -31240,11 +31218,7 @@ define('module/integrations/UpgMobilePaymentWidget',['require','jquery','module/
         $form.find("button[type=\"submit\"]").attr("title", brand);
         var buttonlabel = document.createElement("Label");
         buttonlabel.setAttribute("for","payButtonLabel");
-        if (brand === "MEEZA_QR") {
-            buttonlabel.innerHTML = I18n.meezaQrLabel;
-        } else if (brand === "MEEZA_LINK") {
-            buttonlabel.innerHTML = I18n.meezaLinkLabel;
-        }
+        buttonlabel.innerHTML = 'Pay via ' + brand + '';
         $form.append(buttonlabel);
     };
 
@@ -31458,16 +31432,16 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			return;
 		}
 		var brands = [];
-		if (ccBrandsForClickToPay.indexOf("VISA") > -1 || ccBrandsForClickToPay.indexOf("VISADEBIT") > -1 || ccBrandsForClickToPay.indexOf("VISAELECTRON") > -1) {
+		if (ccBrandsForClickToPay.indexOf("VISA") > -1) {
 			brands.push("visa");
 		}
-		if (ccBrandsForClickToPay.indexOf("MASTER") > -1 || ccBrandsForClickToPay.indexOf("MASTERDEBIT") > -1) {
+		if (ccBrandsForClickToPay.indexOf("MASTER") > -1) {
 			brands.push("mastercard");
 		}
 		if (ccBrandsForClickToPay.indexOf("AMEX") > -1) {
 			brands.push("amex");
 		}
-		if (ccBrandsForClickToPay.indexOf("DISCOVER") > -1 || ccBrandsForClickToPay.indexOf("DINERS") > -1) {
+		if (ccBrandsForClickToPay.indexOf("DISCOVER") > -1) {
 			brands.push("discover");
 		}
 
@@ -31499,7 +31473,6 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				Options.isClickToPayInitSuccess = true;
 				button.removeAttribute("disabled");
 				ClickToPayPaymentWidget.initializedBrands = result.availableCardBrands;
-				ClickToPayPaymentWidget.updateInitializedBrandsForNewUserFlow(result.availableCardBrands);
 				$(clickToPayForm).find("button").html('<src-mark card-brands=' + ClickToPayPaymentWidget.initializedBrands + '></src-mark>');
 				logger.info('Mastercard Click To Pay available brands:' + ClickToPayPaymentWidget.initializedBrands);
 				ClickToPayPaymentWidget.callGetCards(spinner);
@@ -31563,27 +31536,6 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		return clickToPay.init(initInput);
 	};
 
-	ClickToPayPaymentWidget.updateInitializedBrandsForNewUserFlow = function(initializedBrands) {
-		var brands = [];
-		if (initializedBrands.indexOf("visa") > -1) {
-			brands.push("VISA");
-			brands.push("VISADEBIT");
-			brands.push("VISAELECTRON");
-		}
-		if (initializedBrands.indexOf("mastercard") > -1) {
-			brands.push("MASTER");
-			brands.push("MASTERDEBIT");
-		}
-		if (initializedBrands.indexOf("amex") > -1) {
-			brands.push("AMEX");
-		}
-		if (initializedBrands.indexOf("discover") > -1) {
-			brands.push("DISCOVER");
-			brands.push("DINERS");
-		}
-		Options.clickToPayInitializedBrands = brands;
-	};
-
 	/** Calling getCards() right after init() to save rendering time when CLICK_TO_PAY is selected.
 	* Rendered cards will be then added to src card list when CLICK_TO_PAY is selected.
 	* Cannot be rendered as after successful operation, request needs to be sent to backend, payment form is required for the purpose.
@@ -31618,7 +31570,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 
 	ClickToPayPaymentWidget.emailIdLookup = function(spinner) {
 		var customerEmailAddress = Wpwl.checkout.customerEmail;
-		if (customerEmailAddress !== undefined && customerEmailAddress !== null) {
+		if (customerEmailAddress !== undefined || customerEmailAddress !== null) {
 			var emailId = {
 						"email": customerEmailAddress
 						};
@@ -31645,20 +31597,13 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		}
 	};
 
-	ClickToPayPaymentWidget.requestOtp = function(isFirstCall, requestedChannel) {
-		var initiateValidationPromise;
-		if (!isFirstCall) {
-			var requestedValidationChannel = {
-											"requestedValidationChannelId": requestedChannel
-										};
-			initiateValidationPromise = new Promise(function (resolve) {
-				resolve(clickToPay.initiateValidation(requestedValidationChannel));
-			});
-		} else {
-			initiateValidationPromise = new Promise(function (resolve) {
-				resolve(clickToPay.initiateValidation());
-			});
-		}
+	ClickToPayPaymentWidget.requestOtp = function(requestedChannel) {
+		var requestedValidationChannel = {
+										"requestedValidationChannelId": requestedChannel
+									};
+		var initiateValidationPromise = new Promise(function (resolve) {
+			resolve(clickToPay.initiateValidation(requestedValidationChannel));
+		});
 
 		initiateValidationPromise
 		.then(function(result) {
@@ -31672,7 +31617,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	ClickToPayPaymentWidget.addSrcOtpInput = function(result) {
 		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
 		var otpInputPresent = document.querySelector('src-otp-input');
-		if (otpInputPresent !== null && otpInputPresent !== undefined) {
+		if (otpInputPresent !== null || otpInputPresent !== undefined) {
 			// remove existing oTP input element if any
 			$(otpInputPresent).remove();
 		}
@@ -31707,7 +31652,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	ClickToPayPaymentWidget.addEventListenerForChannelSelection = function(result, srcOtpInput, clickToPayForm) {
 		var channels = [];
 		var i = 0;
-		if ((result.supportedValidationChannels !== undefined && result.supportedValidationChannels !== null) && result.supportedValidationChannels.length > 0) {
+		if ((result.supportedValidationChannels !== undefined || result.supportedValidationChannels !== null) && result.supportedValidationChannels.length > 0) {
 			for (i=0; i < result.supportedValidationChannels.length; i++) {
 				var channel = result.supportedValidationChannels[i];
 				var option = {
@@ -31727,11 +31672,11 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		// continue event listener for channel selection - Request OTP on selected channel
 		srcChannel.addEventListener('continue', function(obj) {
 			$(srcChannel).remove();
-			if (obj.detail !== undefined && obj.detail !== null) {
+			if (obj.detail !== undefined || obj.detail !== null) {
 				if (obj.detail.identityType === "GUEST") {
 					logger.info("Please try to enroll new card or use EMAIL or SMS validation.");
 				} else {
-					ClickToPayPaymentWidget.requestOtp(false, obj.detail.identityType);
+					ClickToPayPaymentWidget.requestOtp(obj.detail.identityType);
 				}
 			} else {
 				logger.error("Unforeseen error for requested channel.");
@@ -31780,6 +31725,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var loadCardsPromise = new Promise(function (resolve) {
 			resolve(srcCardList.loadCards(ClickToPayPaymentWidget.cards));
 		});
+
 		 loadCardsPromise
 		 .then(function() {
 			 /** timeout used as Mastercard Click to Pay SDK Library takes a bit of time to load cards.
@@ -31863,7 +31809,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		if (ClickToPayPaymentWidget.isCardsFromCookies) {
 			ClickToPayPaymentWidget.displayCards();
 		} else if (ClickToPayPaymentWidget.isClickToPayEnrolled) {
-			ClickToPayPaymentWidget.requestOtp(true, null);
+			ClickToPayPaymentWidget.requestOtp("SMS");
 		} else {
 			ClickToPayPaymentWidget.submitAjaxRequest(ClickToPayPaymentWidget.$form);
 		}
@@ -31930,7 +31876,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			});
 		});
 	}
-//"brandDetectionPriority":["MASTERDEBIT", "MASTER"]
+
 	function notifyError(reason) {
 		logger.error("Exception occurred while submitting the form via an Ajax call. Reason: " + reason);
 		if (SessionError.isSessionTimeout(reason)) {
@@ -31945,7 +31891,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -31968,7 +31914,6 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var Wpwl = require('module/Wpwl');
 	var AutoFocus = require('module/AutoFocus');
 	var ApplePay = require('module/ApplePay');
-	var SaqaUtil = require('module/SaqaUtil');
 	var KlarnaPaymentsInlineWidget = require('module/integrations/KlarnaPaymentsInlineWidget');
     var YandexCheckoutPaymentWidget = require('module/integrations/YandexCheckoutPaymentWidget');
 	var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
@@ -32160,7 +32105,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	    } else {
 	        paymentData = Options.requireCvv ? Setting.cardPaymentData : Setting.cardPaymentDataWithoutCvv;
 	    }
-		if (SaqaUtil.isSAQACompliance()) {
+		if (Options.enableSAQACompliance) {
 			paymentData = $.extend({}, paymentData, Setting.cardPaymentBasicSAQA);
 			paymentData.brand.hidden=true;
 			delete paymentData.submit;
@@ -32400,7 +32345,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			PaymentView.initFormatter.call(this);
 		});
 
-		if (!SaqaUtil.isSAQACompliance()) {
+		if (!Options.enableSAQACompliance) {
 			$(document).on('blur.wpwlEvent forcedBlur.wpwlEvent', "[data-action=\"blur-card-expiry\"]", function(){
 
 				PaymentView.populateExpiryMonthAndYearFields.call(this);
@@ -32635,19 +32580,11 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				var $clickToPayConfirmation = paymentForm.getClickToPayConfirmationCheckbox();
 				var isChecked = $clickToPayConfirmation.is(":checked");
 				if (isChecked && Options.isClickToPayInitSuccess) {
-					var brand = getBrand($form);
-					if (Options.clickToPayInitializedBrands.indexOf(brand) > -1) {
-						// TODO : Further Click to Pay Integration and Mastercard JS method calls for New User Flow
-						console.log("Click To Pay checkbox is checked. Click to Pay flow will be used for the request");
-						// submitting form for now to keep the flow working, later will be updated with new user flow
-						$form.submit();
-					} else {
-						console.log("Click To Pay checkbox is checked but the brand is not initialized for Click to Pay, card flow will be used.");
-						$form.submit();
-					}
-				} else {
-					$form.submit();
+					// TO DO : Further Click to Pay Integration and Mastercard JS method calls
+					console.log("Click To Pay checkbox is checked. Click to Pay flow will be used for the request");
 				}
+
+				$form.submit();
 			};
 
 			Payment.submitPciIframes = function(){
@@ -32887,7 +32824,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				Payment.blurInputCardExpiry.call(this);
 			});
 
-			if (!SaqaUtil.isSAQACompliance()) {
+			if (!Options.enableSAQACompliance) {
 				$(document).on('keyup.wpwlEvent', '[data-action=\"blur-card-expiry\"]', function(){
 					Payment.keyUpExpiryDate.call(this);
 				});
@@ -32977,7 +32914,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
             });
 
 			//divide card.holder by customer.surname and customer.givenName
-			if( !SaqaUtil.isSAQACompliance() && Options.forceCardHolderEqualsBillingName ){
+			if( !Options.enableSAQACompliance && Options.forceCardHolderEqualsBillingName ){
 				$(document).on('blur.wpwlEvent', 'input[name="' + Parameter.SUR_NAME + '"], input[name="' + Parameter.GIVEN_NAME + '"]', function(){
 					Payment.blurInputCard.call(this);
 				});
@@ -33082,14 +33019,14 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			}
 
 			// disable elements which should not be sent
-			if (!SaqaUtil.isSAQACompliance()) {
+			if (!Options.enableSAQACompliance) {
 				$form.find("[data-action=\"blur-card-expiry\"]").attr("disabled", true);
 			}
 			$form.find('[name="' + CardPaymentForm.WIDGET_BIRTH_DATE + '"]').attr("disabled", true);
 			$form.find("[name=\"generalTermsAndConditions\"]").attr("disabled", true);
 			$form.find("[name=\"accept\"]").attr("disabled", true);
 
-			if(!SaqaUtil.isSAQACompliance() && Options.forceCardHolderEqualsBillingName){
+			if(!Options.enableSAQACompliance && Options.forceCardHolderEqualsBillingName){
 				$form.find('[name="' + Parameter.CARD_HOLDER + '"]').removeAttr("disabled");
 			}
 
@@ -33337,7 +33274,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		//set up the card number iframe
 		setupPromises.push(setupPciIframeOnLoad("number", $cardForm, $numberIframe, PaymentView.setCardNumberIsValid));
 
-		if (SaqaUtil.isSAQACompliance()) {
+		if (Options.enableSAQACompliance) {
 			var $holderIframe = $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]');
 			//set up the card holder iframe
 			setupPromises.push(setupPciIframeOnLoad("holder", $cardForm, $holderIframe, PaymentView.setCardHolderIsValid));
@@ -33380,7 +33317,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	};
 
 	Payment.disableNonPciInputsAndSubmitButton = function($form, disabled){
-		if (!SaqaUtil.isSAQACompliance()) {
+		if (!Options.enableSAQACompliance) {
 			$form.find("[data-action=\"blur-card-expiry\"]").prop("disabled", disabled);
 			$form.find("[name=\"" + Parameter.CARD_HOLDER + "\"]").prop("disabled", disabled);
 		}
@@ -35108,7 +35045,7 @@ define('module/framemessaging/SessionTimeoutErrorHandler',['require','module/Opt
 	return SessionTimeoutErrorNotification;
 });
 /*jshint camelcase: false */
-define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','module/ApplePay','module/GooglePay','module/Console','lib/Spinner','module/Options','module/error/OppError','module/CountDownLatch','module/Message','module/MessageView','module/Parameter','module/Parameters','module/Payment','module/Setting','module/SpecForm','module/Wpwl','module/Billing','module/CardHolder','module/Util','module/SaqaUtil','module/integrations/RedShieldDeviceId','module/integrations/CyberSourceRiskDeviceId','module/integrations/KountIntegration','module/Generate','module/InternalRequestCommunication','module/IdealPaymentWidget','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/forms/PaypalRestPaymentForm','module/InlineFlow','module/integrations/AmazonPayWidget','module/integrations/ClickToPayPaymentWidget','module/integrations/UpgMobilePaymentWidget','module/FrameMessenger','module/integrations/forter','module/ForterUtils','module/framemessaging/PreconditionIframe','module/framemessaging/Redirect','module/framemessaging/SessionTimeoutErrorHandler','module/error/WidgetError','module/logging/LoggerFactory','shim/ObjectCreate'],function(require){
+define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','module/ApplePay','module/GooglePay','module/Console','lib/Spinner','module/Options','module/error/OppError','module/CountDownLatch','module/Message','module/MessageView','module/Parameter','module/Parameters','module/Payment','module/Setting','module/SpecForm','module/Wpwl','module/Billing','module/CardHolder','module/Util','module/integrations/RedShieldDeviceId','module/integrations/CyberSourceRiskDeviceId','module/integrations/KountIntegration','module/Generate','module/InternalRequestCommunication','module/IdealPaymentWidget','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/forms/PaypalRestPaymentForm','module/InlineFlow','module/integrations/AmazonPayWidget','module/integrations/ClickToPayPaymentWidget','module/integrations/UpgMobilePaymentWidget','module/FrameMessenger','module/integrations/forter','module/ForterUtils','module/framemessaging/PreconditionIframe','module/framemessaging/Redirect','module/framemessaging/SessionTimeoutErrorHandler','module/error/WidgetError','module/logging/LoggerFactory','shim/ObjectCreate'],function(require){
 	var $ = require('jquery');
 	var Affirm = require('module/integrations/Affirm');
 	var ApplePay = require('module/ApplePay');
@@ -35129,7 +35066,6 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	var Billing = require('module/Billing');
 	var CardHolder = require('module/CardHolder');
 	var Util = require('module/Util');
-	var SaqaUtil = require('module/SaqaUtil');
 	var RedShieldDeviceId = require('module/integrations/RedShieldDeviceId');
 	var CyberSourceRiskDeviceId = require('module/integrations/CyberSourceRiskDeviceId');
 	var KountIntegration = require('module/integrations/KountIntegration');
@@ -35378,7 +35314,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 		specForm.after( paymentBlock );
 
         var hiddenParameters = createHiddenParameters(shopperResultUrl, Options.shopperResultTarget, true);
-		if (!SaqaUtil.isSAQACompliance()) {
+		if (!Options.enableSAQACompliance) {
 			hiddenParameters.add(Parameter.CARD_EXPIRY_MONTH, "");
 			hiddenParameters.add(Parameter.CARD_EXPIRY_YEAR, "");
 		}
@@ -35771,7 +35707,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	}
 
 	function prepareCardHolderBilling(){
-		if (!SaqaUtil.isSAQACompliance()) {
+		if (!Options.enableSAQACompliance) {
 			CardHolder.initCardHolder();
 		}
 	}
@@ -36242,7 +36178,7 @@ define('module/ExpiryDate',['require','jquery','module/Parameter','module/Paymen
 	return ExpiryDate;
 });
 
-define('module/IframeToParentCommunication',['require','jquery','lib/Channel','module/Detection','module/Setting','module/InputFormatter','module/NumberOnlyFormatter','module/Validate','module/IframeStylesLoader','module/Parameter','module/Util','module/Options','module/Generate','module/ExpiryDate','module/PaymentView','module/SaqaUtil'],function(require){
+define('module/IframeToParentCommunication',['require','jquery','lib/Channel','module/Detection','module/Setting','module/InputFormatter','module/NumberOnlyFormatter','module/Validate','module/IframeStylesLoader','module/Parameter','module/Util','module/Options','module/Generate','module/ExpiryDate','module/PaymentView'],function(require){
 	var $ = require('jquery');
 	var Channel = require('lib/Channel');
 	var Detection = require('module/Detection');
@@ -36264,7 +36200,6 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	var Generate = require('module/Generate');
 	var ExpiryDate = require('module/ExpiryDate');
 	var PaymentView = require('module/PaymentView');
-	var SaqaUtil = require('module/SaqaUtil');
 
 	var autocompleteAttributes = {};
 	autocompleteAttributes[Parameter.CARD_NUMBER] = 'cc-number';
@@ -36731,13 +36666,13 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		this.$input.attr('type', properties.type);
 		this.$input.prop('maxLength', properties.maxLength);
 		this.$input.attr("aria-label", properties.ariaLabel);
-
+        
 		// Set autocomplete
-		if(properties.name in autocompleteAttributes && SaqaUtil.isSAQACompliance() ||
-		    properties.name === Parameter.CARD_NUMBER) {
-            this.$input.prop("autocomplete", autocompleteAttributes[properties.name]);
+		if(properties.name in autocompleteAttributes && Options.enableSAQACompliance ||
+			properties.name === Parameter.CARD_NUMBER) {
+			this.$input.prop("autocomplete", autocompleteAttributes[properties.name]);
 		}
-		else if(properties.id === "ccexp" && SaqaUtil.isSAQACompliance()){
+		else if(properties.id === "ccexp" && Options.enableSAQACompliance){
 			// expiry field does not have a 'name' attribute, so we use 'id' to identify it
 			this.$input.prop("autocomplete", "cc-exp");
 		}
