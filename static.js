@@ -32194,9 +32194,67 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	return ClickToPayPaymentWidget;
 });
 
+/*global Promise*/
+define('module/FastCheckout',['require','jquery','module/Generate','module/Tracking','module/logging/LoggerFactory','module/PaymentView','module/Wpwl','module/Options','module/forms/PaymentForm'],function (require) {
+
+    var $ = require('jquery');
+    var Generate = require('module/Generate');
+    var Tracking = require("module/Tracking");
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var logger = LoggerFactory.getLogger('FastCheckout');
+    var PaymentView = require('module/PaymentView');
+    var Wpwl = require('module/Wpwl');
+    var Options = require('module/Options');
+    var PaymentForm = require('module/forms/PaymentForm');
+    var FastCheckout = {};
+
+    FastCheckout.submitForm = function(event, validateVirtualAccount) {
+         var $form = $(this);
+         event.preventDefault();
+
+         if (typeof Options.createCheckout !== "function") {
+             var info = "Fast Checkout - Checkout ID and createCheckout not found";
+             PaymentView.showSupportMessage(info, $form);
+             Tracking.exception(info);
+             return false;
+         }
+         var paymentForm = new PaymentForm($form);
+         var promise = Promise.resolve(Options.createCheckout({brand:paymentForm.getBrand()}));
+
+         promise.then(function(checkoutId) {
+
+             if (checkoutId) {
+                 Wpwl.checkout.id = checkoutId;
+
+                 if (validateVirtualAccount.call($form[0], $.Event("submit"))) {
+
+                     $(document).off('submit.wpwlEvent', 'form.wpwl-form-virtualAccount');
+                     $form.attr("action", FastCheckout.generatePaymentEndpoint(checkoutId));
+                     return $form.submit();
+                 }
+
+             } else {
+                 var info = "Error occurred while creating checkout";
+                 logger.error(info);
+                 Tracking.exception(info);
+             }
+         }, function(response) {
+             var info = "Creating checkout returned error: " + JSON.stringify(response);
+             logger.error(info);
+             Tracking.exception(info);
+         });
+         return false;
+    };
+
+    FastCheckout.generatePaymentEndpoint = function  (checkoutId) {
+        return Generate.string(Wpwl.url, '/v', Wpwl.apiVersion, '/checkouts/', checkoutId, '/payment');
+    };
+
+    return FastCheckout;
+});
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -32227,6 +32285,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var TrustlyInlineWidget = require('module/integrations/TrustlyInlineWidget');
 	var UpgMobilePaymentWidget = require('module/integrations/UpgMobilePaymentWidget');
 	var ClickToPayPaymentWidget = require('module/integrations/ClickToPayPaymentWidget');
+    var FastCheckout = require('module/FastCheckout');
 	var ForterUtils = require('module/ForterUtils');
 	var LoggerFactory = require('module/logging/LoggerFactory');
     var logger = LoggerFactory.getLogger('Payment');
@@ -33297,7 +33356,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			});
 
 			$(document).on('submit.wpwlEvent', 'form.wpwl-form-virtualAccount', function(event){
-				return Payment.validateVirtualAccount.call(this, event);
+                if (Wpwl.checkout.id) {
+                    return Payment.validateVirtualAccount.call(this, event);
+                }
+                return FastCheckout.submitForm.call(this, event, Payment.validateVirtualAccount);
 			});
 
 			$(document).on('submit.wpwlEvent', 'form.wpwl-form-prepayment', function(event){
@@ -36063,7 +36125,7 @@ define('module/SpecFormUtil',['require','jquery','module/MessageView','module/Sp
 	SpecFormUtil.DEFAULT_BRANDS = ["AMEX", "CASH_ON_DELIVERY", "DIRECTDEBIT_SEPA", "IDEAL",
 	        "INVOICE", "MASTER", "PAYPAL", "SOFORTUEBERWEISUNG", "VISA"];
 
-    SpecFormUtil.FAST_CHECKOUT_BRANDS = ["APPLEPAY", "PAYPAL_CONTINUE", "GOOGLEPAY", "AMAZONPAY"];
+    SpecFormUtil.FAST_CHECKOUT_BRANDS = ["APPLEPAY", "PAYPAL_CONTINUE", "GOOGLEPAY", "AMAZONPAY", "VIPPS"];
 
 	SpecFormUtil.prototype.getSpecForms = function() {
 		var allFormsOnPageArray = this.getAllForms();
