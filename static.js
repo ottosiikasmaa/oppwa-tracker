@@ -11174,6 +11174,9 @@ define('module/Parameter',[],function(){
     Parameter.C2P_SRC_TX_ID = 'customParameters[C2P.SRC.TRANSACTION.ID]';
     Parameter.C2P_LOCALE = 'customParameters[C2P.DPA.LOCALE]';
     Parameter.C2P_NETWORK = 'customParameters[C2P.NETWORK]';
+    Parameter.C2P_NEW_USER = 'customParameters[C2P.NEW.USER]';
+    Parameter.C2P_NEW_USER_CARD_BRAND = 'customParameters[C2P.NEW.USER.CARD.BRAND]';
+
     Parameter.AFFIRM_CHECKOUT_TOKEN = 'customParameters[AFFIRM.CHECKOUT.TOKEN]';
 
 	return Parameter;
@@ -11771,7 +11774,7 @@ define('text',['module'], function (module) {
 define('text!module/json/brands.json',[],function () { return '{\n  "AFTERPAY": {\n    "render": "VA",\n    "label": "AfterPay",\n    "brand": "AFTERPAY"\n  },\n  "AFTERPAY_PACIFIC": {\n    "render": "VA",\n    "label": "AfterPay Pacific",\n    "brand": "AFTERPAY_PACIFIC"\n  },\n  "ALIPAY": {\n    "render": "VA",\n    "label": "Alipay",\n    "brand": "ALIPAY"\n  },\n  "ALLPAGO_INVOICE": {\n    "render": "PP",\n    "label": "Invoice",\n    "brand": "ALLPAGO_INVOICE"\n  },\n  "AMAZONPAY": {\n    "render": "VA",\n    "label": "AmazonPay",\n    "brand": "AMAZONPAY"\n  },\n  "AMEX": {\n    "render": "CC",\n    "label": "American Express",\n    "brand": "AMEX"\n  },\n  "APOSTAR": {\n    "render": "PP",\n    "label": "Apostar",\n    "brand": "APOSTAR"\n  },\n  "APPLEPAY": {\n    "render": "VA",\n    "label": "Apple Pay",\n    "brand": "APPLEPAY"\n  },\n  "ARGENCARD": {\n    "render": "CC",\n    "label": "Argencard",\n    "brand": "ARGENCARD"\n  },\n  "ASTROPAY_STREAMLINE_CASH": {\n    "render": "VA",\n    "brand": "ASTROPAY_STREAMLINE_CASH"\n  },\n  "ASTROPAY_STREAMLINE_OT": {\n    "render": "VA",\n    "brand": "ASTROPAY_STREAMLINE_OT"\n  },\n  "ASYACARD": {\n    "render": "CC",\n    "label": "AsyaCard",\n    "brand": "ASYACARD"\n  },\n  "AURA": {\n    "render": "CC",\n    "label": "Aura",\n    "brand": "AURA"\n  },\n  "AXESS": {\n    "render": "CC",\n    "label": "Axess",\n    "brand": "AXESS"\n  },\n  "BALOTO": {\n    "render": "PP",\n    "label": "Baloto",\n    "brand": "BALOTO"\n  },\n  "BANCOLOMBIA": {\n    "render": "PP",\n    "label": "Bancolombia",\n    "brand": "BANCOLOMBIA"\n  },\n  "BANCONTACT_LINK": {\n    "render": "VA",\n    "label": "Bancontact Link",\n    "brand": "BANCONTACT_LINK"\n  },\n  "BANCONTACT_QR": {\n    "render": "VA",\n    "label": "Bancontact QR",\n    "brand": "BANCONTACT_QR"\n  },\n  "BBVA_CONTINENTAL": {\n    "render": "PP",\n    "label": "BBVA Continental",\n    "brand": "BBVA_CONTINENTAL"\n  },\n  "BCCARD": {\n    "render": "CC",\n    "label": "BC Card",\n    "brand": "BCCARD"\n  },\n  "BCMC": {\n    "render": "CC",\n    "label": "Bancontact/Mister Cash",\n    "brand": "BCMC",\n    "noCvv": true\n  },\n  "BCP": {\n    "render": "PP",\n    "label": "BCP",\n    "brand": "BCP"\n  },\n  "BELK_GIFT_CARD": {\n    "render": "CC",\n    "label": "Belk Gift Card",\n    "brand": "BELK_GIFT_CARD"\n  },\n  "BELK_PRIVATE_LABEL": {\n    "render": "CC",\n    "label": "Belk Private Label",\n    "brand": "BELK_PRIVATE_LABEL"\n  },\n  "BEVALIDA": {\n    "render": "PP",\n    "label": "Bevalida",\n    "brand": "BEVALIDA"\n  },\n  "BITCOIN": {\n    "render": "PP",\n    "label": "Bitcoin",\n    "brand": "BITCOIN"\n  },\n  "BOLETO": {\n    "render": "PP",\n    "label": "Boleto",\n    "brand": "BOLETO"\n  },\n  "BONUS": {\n    "render": "CC",\n    "label": "Bonus",\n    "brand": "BONUS"\n  },\n  "BOTON_PSE": {\n    "render": "PP",\n    "label": "BotonPSE",\n    "brand": "BOTON_PSE"\n  },\n  "BRADESCO": {\n    "render": "PP",\n    "label": "Bradesco",\n    "brand": "BRADESCO"\n  },\n  "CAJA_AREQUIPA": {\n    "render": "PP",\n    "label": "Caja Arequipa",\n    "brand": "CAJA_AREQUIPA"\n  },\n  "CAJA_CUSCO": {\n    "render": "PP",\n    "label": "Caja Cusco",\n    "brand": "CAJA_CUSCO"\n  },\n  "CAJA_HUANCAYO": {\n    "render": "PP",\n    "label": "Caja Huancayo",\n    "brand": "CAJA_HUANCAYO"\n  },\n  "CAJA_ICA": {\n    "render": "PP",\n    "label": "Caja ICA",\n    "brand": "CAJA_ICA"\n  },\n  "CAJA_PIURA": {\n    "render": "PP",\n    "label": "Caja Piura",\n    "brand": "CAJA_PIURA"\n  },\n  "CAJA_TACNA": {\n    "render": "PP",\n    "label": "Caja Tacna",\n    "brand": "CAJA_TACNA"\n  },\n  "CAJA_TRUJILLO": {\n    "render": "PP",\n    "label": "Caja Trujillo",\n    "brand": "CAJA_TRUJILLO"\n  },\n  "CARDFINANS": {\n    "render": "CC",\n    "label": "CardFinans",\n    "brand": "CARDFINANS"\n  },\n  "CARNET": {\n    "render": "CC",\n    "label": "Carnet",\n    "brand": "CARNET"\n  },\n  "CARTEBANCAIRE": {\n    "render": "CC",\n    "label": "Carte Bancaire",\n    "brand": "CARTEBANCAIRE"\n  },\n  "CARTEBLEUE": {\n    "render": "CC",\n    "label": "Carte Bleue",\n    "brand": "CARTEBLEUE"\n  },\n  "CASH_ON_DELIVERY": {\n    "render": "OD",\n    "label": "Cash on delivery",\n    "brand": "CASH_ON_DELIVERY"\n  },\n  "CASHPRESSO": {\n    "render": "VA",\n    "label": "Cashpresso",\n    "brand": "CASHPRESSO"\n  },\n  "CASHU": {\n    "render": "VA",\n    "label": "CashU",\n    "brand": "CASHU"\n  },\n  "CENCOSUD": {\n    "render": "CC",\n    "label": "Cencosud",\n    "brand": "CENCOSUD"\n  },\n  "CHINAUNIONPAY": {\n    "render": "VA",\n    "label": "China UnionPay",\n    "brand": "CHINAUNIONPAY"\n  },\n  "CMR_FALABELLA": {\n    "render": "CC",\n    "label": "CMR Falabella",\n    "brand": "CMR_FALABELLA"\n  },\n  "CORDIAL": {\n    "render": "CC",\n    "label": "Cordial",\n    "brand": "CORDIAL"\n  },\n  "CORDOBESA": {\n    "render": "CC",\n    "label": "Cordobesa",\n    "brand": "CORDOBESA"\n  },\n  "CREDIT_CLICK": {\n    "render": "VA",\n    "label": "CreditClick",\n    "brand": "CREDIT_CLICK"\n  },\n  "DANKORT": {\n    "render": "CC",\n    "label": "Dankort",\n    "brand": "DANKORT"\n  },\n  "DAOPAY": {\n    "render": "VA",\n    "label": "daopay",\n    "brand": "DAOPAY"\n  },\n  "DATACODE": {\n    "render": "VA",\n    "label": "DataCode",\n    "brand": "DATACODE",\n    "customView": true\n  },\n  "DELTA": {\n    "render": "CC",\n    "label": "Delta",\n    "brand": "DELTA"\n  },\n  "DIMONEX": {\n    "render": "PP",\n    "label": "Dimonex",\n    "brand": "DIMONEX"\n  },\n  "DINACARD": {\n    "render": "CC",\n    "label": "DinaCard",\n    "brand": "DINACARD"\n  },\n  "DINERS": {\n    "render": "CC",\n    "label": "Diners",\n    "brand": "DINERS"\n  },\n  "DIRECTDEBIT_AT": {\n    "render": "DD",\n    "label": "Österreich",\n    "country": "AT",\n    "brand": "DIRECTDEBIT_AT",\n    "customView": true\n  },\n  "DIRECTDEBIT_DE": {\n    "render": "DD",\n    "label": "Deutschland",\n    "country": "DE",\n    "brand": "DIRECTDEBIT_DE"\n  },\n  "DIRECTDEBIT_SEPA": {\n    "render": "DD",\n    "label": "",\n    "country": "",\n    "brand": "DIRECTDEBIT_SEPA"\n  },\n  "SEPA": {\n    "render": "DD",\n    "label": "SEPA",\n    "country": "",\n    "brand": "SEPA",\n    "customView": true\n  },\n  "DIRECTDEBIT_SEPA_MIX_AT": {\n    "render": "DD",\n    "label": "Österreich",\n    "country": "AT",\n    "brand": "DIRECTDEBIT_SEPA_MIX_AT",\n    "customView": true\n  },\n  "DIRECTDEBIT_SEPA_MIX_DE": {\n    "render": "DD",\n    "label": "Deutschland",\n    "country": "DE",\n    "brand": "DIRECTDEBIT_SEPA_MIX_DE"\n  },\n  "DIRECTDEBIT_US": {\n    "render": "DD",\n    "label": "USA",\n    "country": "US",\n    "brand": "DIRECTDEBIT_US"\n  },\n  "DISCOVER": {\n    "render": "CC",\n    "label": "Discover",\n    "brand": "DISCOVER"\n  },\n  "EFECTY": {\n    "render": "PP",\n    "label": "Efecty",\n    "brand": "EFECTY"\n  },\n  "ELO": {\n    "render": "CC",\n    "label": "ELO",\n    "brand": "ELO"\n  },\n  "ENTERCASH": {\n    "render": "OT",\n    "label": "Entercash",\n    "brand": "ENTERCASH",\n    "customView": true\n  },\n  "ENTERPAY": {\n  "render": "VA",\n  "label": "EnterPay",\n  "brand": "ENTERPAY"\n  },\n  "EPS": {\n    "render": "OT",\n    "label": "EPS",\n    "brand": "EPS",\n    "customView": true\n  },\n  "EURO6000": {\n    "render": "CC",\n    "label": "EURO 6000",\n    "brand": "EURO6000"\n  },\n  "FACILYPAY_3X": {\n    "render": "VA",\n    "label": "Facilypay 3X",\n    "brand": "FACILYPAY_3X"\n  },\n  "FACILYPAY_4X": {\n    "render": "VA",\n    "label": "Facilypay 4X",\n    "brand": "FACILYPAY_4X"\n  },\n  "FACILYPAY_3XSANSFRAIS": {\n    "render": "VA",\n    "label": "Facilypay 3X Sansfrais",\n    "brand": "FACILYPAY_3XSANSFRAIS"\n  },\n  "FACILYPAY_4XSANSFRAIS": {\n    "render": "VA",\n    "label": "Facilypay 4X Sansfrais",\n    "brand": "FACILYPAY_4XSANSFRAIS"\n  },\n  "FOURB": {\n    "render": "CC",\n    "label": "FourB",\n    "brand": "FOURB"\n  },\n  "GANA": {\n    "render": "PP",\n    "label": "GANA",\n    "brand": "GANA"\n  },\n  "GIROPAY": {\n    "render": "OT",\n    "label": "giropay",\n    "brand": "GIROPAY"\n  },\n  "GOOGLEPAY": {\n    "render": "VA",\n    "label": "Google Pay",\n    "brand": "GOOGLEPAY"\n  },\n  "HIPERCARD": {\n    "render": "CC",\n    "label": "Hipercard",\n    "brand": "HIPERCARD"\n  },\n  "IDEAL": {\n    "render": "OT",\n    "label": "iDeal",\n    "brand": "IDEAL"\n  },\n  "IK_PRIVATE_LABEL": {\n    "render": "CC",\n    "label": "Private Label",\n    "brand": "IK_PRIVATE_LABEL"\n  },\n  "IK_PRIVATE_LABEL_VA": {\n    "render": "VA",\n    "label": "Private Label",\n    "brand": "IK_PRIVATE_LABEL_VA"\n  },\n  "IKANOOI_FI": {\n    "render": "VA",\n    "label": "Ikano Lasku",\n    "brand": "IKANOOI_FI"\n  },\n  "IKANOOI_NO": {\n    "render": "VA",\n    "label": "Ikano Faktura NO",\n    "brand": "IKANOOI_NO"\n  },\n  "IKANOOI_SE": {\n    "render": "VA",\n    "label": "Ikano Faktura SE",\n    "brand": "IKANOOI_SE"\n  },\n  "INICIS": {\n    "render": "VA",\n    "label": "KG Inicis",\n    "brand": "INICIS"\n  },\n  "INTERAC_ONLINE": {\n    "render": "OT",\n    "label": "Interac",\n    "brand": "INTERAC_ONLINE"\n  },\n  "INTERAC": {\n    "render": "VA",\n    "label": "Interac",\n    "brand": "INTERAC"\n  },\n  "INTERBANK": {\n    "render": "PP",\n    "label": "Interbank",\n    "brand": "INTERBANK"\n  },\n  "INVOICE": {\n    "render": "IV",\n    "label": "Invoice",\n    "brand": "INVOICE"\n  },\n  "IPARA": {\n    "render": "VA",\n    "label": "iPara",\n    "brand": "IPARA"\n  },\n  "IUPAY": {\n    "render": "VA",\n    "label": "Iupay",\n    "brand": "IUPAY"\n  },\n  "JCB": {\n    "render": "CC",\n    "label": "JCB",\n    "brand": "JCB"\n  },\n  "KLARNA_INSTALLMENTS": {\n    "render": "VA",\n    "label": "Klarna Account",\n    "brand": "KLARNA_INSTALLMENTS"\n  },\n  "KLARNA_INVOICE": {\n    "render": "VA",\n    "label": "Klarna Invoice",\n    "brand": "KLARNA_INVOICE"\n  },\n  "KLARNA_CHECKOUT": {\n    "render": "VA",\n    "label": "Klarna Checkout",\n    "brand": "KLARNA_CHECKOUT"\n  },\n  "KLARNA_PAYMENTS_BILLPAY": {\n    "render": "VA",\n    "label": "Billpay",\n    "brand": "KLARNA_PAYMENTS_BILLPAY"\n  },\n  "KLARNA_PAYMENTS_PAYLATER": {\n    "render": "VA",\n    "label": "Pay Later",\n    "brand": "KLARNA_PAYMENTS_PAYLATER"\n  },\n  "KLARNA_PAYMENTS_PAYNOW": {\n    "render": "VA",\n    "label": "Pay Now",\n    "brand": "KLARNA_PAYMENTS_PAYNOW"\n  },\n  "KLARNA_PAYMENTS_SLICEIT": {\n    "render": "VA",\n    "label": "Slice It",\n    "brand": "KLARNA_PAYMENTS_SLICEIT"\n  },\n  "LASER": {\n    "render": "CC",\n    "label": "Laser",\n    "brand": "LASER"\n  },\n  "LYFPAY": {\n    "render": "VA",\n    "label": "Lyf Pay",\n    "brand": "LYFPAY"\n  },\n  "MACH_PAY": {\n    "render": "VA",\n    "label": "MACH Pay",\n    "brand": "MACH_PAY"\n  },\n  "MADA": {\n    "render": "CC",\n    "label": "mada",\n    "brand": "MADA"\n  },\n  "MAESTRO": {\n    "render": "CC",\n    "label": "Maestro",\n    "brand": "MAESTRO"\n  },\n  "MAGNA": {\n    "render": "CC",\n    "label": "Magna",\n    "brand": "MAGNA"\n  },\n  "MASTER": {\n    "render": "CC",\n    "label": "Mastercard",\n    "brand": "MASTER"\n  },\n  "MASTERDEBIT": {\n    "render": "CC",\n    "label": "Mastercard Debit",\n    "brand": "MASTERDEBIT"\n  },\n  "MASTERPASS": {\n    "render": "VA",\n    "label": "MasterPass",\n    "brand": "MASTERPASS"\n  },\n  "MAXIMUM": {\n    "render": "CC",\n    "label": "Maximum",\n    "brand": "MAXIMUM"\n  },\n  "MBWAY": {\n    "render": "VA",\n    "label": "MBWAY",\n    "brand": "MBWAY"\n  },\n  "MEEZA": {\n    "render": "CC",\n    "label": "Meeza",\n    "brand": "MEEZA"\n  },\n  "MEEZA_LINK": {\n    "render": "VA",\n    "label": "Meeza Link",\n    "brand": "MEEZA_LINK"\n  },\n  "MEEZA_QR": {\n    "render": "VA",\n    "label": "Meeza QR",\n    "brand": "MEEZA_QR"\n  },\n  "MERCADOLIVRE": {\n    "render": "CC",\n    "label": "Cartao MercadoLivre",\n    "brand": "MASTERPASS"\n  },\n  "MERCADO_PAGO": {\n    "render": "VA",\n    "label": "Mercado Pago",\n    "brand": "MERCADO_PAGO"\n  },\n  "MONEYBOOKERS": {\n    "render": "VA",\n    "label": "Skrill",\n    "brand": "MONEYBOOKERS"\n  },\n  "MONEYSAFE": {\n    "render": "VA",\n    "label": "Moneysafe",\n    "brand": "MONEYSAFE"\n  },\n  "MULTICAJA": {\n    "render": "PP",\n    "label": "Multicaja",\n    "brand": "MULTICAJA"\n  },\n  "NATIVA": {\n    "render": "CC",\n    "label": "Nativa Master Card",\n    "brand": "NATIVA"\n  },\n  "NARANJA": {\n    "render": "CC",\n    "label": "Naranja",\n    "brand": "NARANJA"\n  },\n  "NEQUI": {\n    "render": "PP",\n    "label": "Nequi",\n    "brand": "NEQUI"\n  },\n  "NETELLER": {\n    "render": "VA",\n    "label": "NETELLER",\n    "brand": "NETELLER",\n    "customView": true\n  },\n  "ONECARD": {\n    "render": "VA",\n    "label": "OneCard",\n    "brand": "ONECARD"\n  },\n  "ONEY_CARD": {\n    "render": "VA",\n    "label": "ONEY_CARD",\n    "brand":"ONEY_CARD"\n  },\n  "ONEY_BANK_CARD": {\n    "render": "CC",\n    "label": "Oney Bank Card",\n    "brand":"ONEY_BANK_CARD"\n  },\n  "ONEY_PRIVATE_CARD": {\n    "render": "CC",\n    "label": "Oney Private Card",\n    "brand":"ONEY_PRIVATE_CARD",\n    "noCvv":true,\n    "birthDate":true\n  },\n  "ONEY_GIFTCARD": {\n    "render": "VA",\n    "label": "ONEY_GIFTCARD",\n    "brand": "ONEY_GIFTCARD"\n  },\n  "OXXO": {\n    "render": "PP",\n    "label": "OXXO",\n    "brand": "OXXO"\n  },\n  "PAGOSNET": {\n    "render": "PP",\n    "label": "Pagosnet",\n    "brand": "PAGOSNET"\n  },\n  "PASTEANDPAY_V": {\n    "render": "VA",\n    "label": "PasteAndPay",\n    "brand": "PASTEANDPAY_V",\n    "customView": true\n  },\n  "PAYBOX": {\n    "render": "VA",\n    "label": "paybox",\n    "brand": "PAYBOX"\n  },\n  "PAYDIREKT": {\n    "render": "VA",\n    "label": "Paydirekt",\n    "brand": "PAYDIREKT"\n  },\n  "PAY_FAWRY": {\n    "render": "VA",\n    "label": "Pay @fawry",\n    "brand": "PAY_FAWRY"\n  },\n  "PAYOLUTION_ELV": {\n    "render": "VA",\n    "label": "payolution",\n    "brand": "PAYOLUTION_ELV"\n  },\n  "PAYOLUTION_INS": {\n    "render": "VA",\n    "label": "payolution",\n    "brand": "PAYOLUTION_INS"\n  },\n  "PAYOLUTION_INVOICE": {\n    "render": "VA",\n    "label": "payolution",\n    "brand": "PAYOLUTION_INVOICE"\n  },\n  "PAYPAL": {\n    "render": "VA",\n    "label": "PayPal",\n    "brand": "PAYPAL"\n  },\n  "PAYPAL_CONTINUE": {\n    "render": "VA",\n    "label": "PayPal Continue",\n    "brand": "PAYPAL_CONTINUE"\n  },\n  "PAYLIB": {\n    "render": "VA",\n    "label": "PayLib",\n    "brand": "PAYLIB"\n  },\n  "SENCILLITO": {\n    "render": "PP",\n    "label": "Sencillito",\n    "brand": "SENCILLITO"\n  },\n  "SHETAB": {\n    "render": "VA",\n    "label": "Shetab",\n    "brand": "SHETAB"\n  },\n  "STAPLES": {\n    "render": "CC",\n    "label": "Staples",\n    "brand": "STAPLES",\n    "noCvv": true,\n    "noExpiryDate": true\n  },\n  "STC_PAY": {\n    "render": "VA",\n    "label": "STC Pay",\n    "brand": "STC_PAY"\n  },\n  "PAGO_EFECTIVO": {\n    "render": "PP",\n    "label": "PagoEfectivo",\n    "brand": "PAGO_EFECTIVO"\n  },\n  "PAGO_FACIL": {\n    "render": "PP",\n    "label": "PagoFacil",\n    "brand": "PAGO_FACIL"\n  },\n  "PAYNET": {\n    "render": "PP",\n    "label": "PayNet",\n    "brand": "PAYNET"\n  },\n  "PAYSAFECARD": {\n    "render": "VA",\n    "label": "paysafecard",\n    "brand": "PAYSAFECARD"\n  },\n  "PAYTRAIL": {\n    "render": "OT",\n    "label": "Paytrail",\n    "brand": "PAYTRAIL"\n  },\n  "PF_KARTE_DIRECT": {\n    "render": "VA",\n    "label": "PostFinance Karte Direct",\n    "brand": "PF_KARTE_DIRECT"\n  },\n  "POLI": {\n    "render": "OT",\n    "label": "POLi",\n    "brand": "POLI"\n  },\n  "POSTEPAY": {\n    "render": "CC",\n    "label": "Postepay",\n    "brand": "POSTEPAY"\n  },\n  "PREPAYMENT": {\n    "render": "PP",\n    "label": "PrePayment",\n    "brand": "PREPAYMENT"\n  },\n  "PRESTO": {\n    "render": "CC",\n    "label": "Presto",\n    "brand": "PRESTO"\n  },\n  "PRZELEWY": {\n    "render": "VA",\n    "label": "przelewy24",\n    "brand": "PRZELEWY"\n  },\n  "PUNTO_RED": {\n    "render": "PP",\n    "label": "PuntoRed",\n    "brand": "PUNTO_RED"\n  },\n  "QIWI": {\n    "render": "VA",\n    "label": "Qiwi",\n    "brand": "QIWI",\n    "customView": true\n  },\n  "RAPI_PAGO": {\n    "render": "PP",\n    "label": "RapiPago",\n    "brand": "RAPI_PAGO"\n  },\n  "RATENKAUF": {\n    "render": "VA",\n    "label": "Ratenkauf",\n    "brand": "RATENKAUF"\n  },\n  "RED_SERVI": {\n    "render": "PP",\n    "label": "RedServi",\n    "brand": "RED_SERVI"\n  },\n  "RUPAY": {\n    "render": "CC",\n    "label": "RuPay",\n    "brand": "RUPAY"\n  },\n  "SERVIRED": {\n    "render": "CC",\n    "label": "ServiRed",\n    "brand": "SERVIRED"\n  },\n  "SADAD": {\n    "render": "OT",\n    "label": "SADAD",\n    "brand": "SADAD",\n    "customView": true\n  },\n  "SCOTIABANK": {\n    "render": "PP",\n    "label": "ScotiaBank",\n    "brand": "SCOTIABANK"\n  },\n  "SERVIPAG": {\n    "render": "PP",\n    "label": "Servipag",\n    "brand": "SERVIPAG"\n  },\n  "SIBS_MULTIBANCO": {\n    "render": "PP",\n    "label": "MULTIBANCO",\n    "brand": "SIBS_MULTIBANCO"\n  },\n  "SISTEMACLAVE": {\n    "render": "CC",\n    "label": "Sistema Clave",\n    "brand":"SISTEMACLAVE"\n  },\n  "SOFORTUEBERWEISUNG": {\n    "render": "OT",\n    "label": "SOFORT Überweisung",\n    "brand": "SOFORTUEBERWEISUNG"\n  },\n  "SPEI": {\n    "render": "PP",\n    "label": "Spei",\n    "brand": "SPEI"\n  },\n  "SU_RED": {\n    "render": "PP",\n    "label": "SuRed",\n    "brand": "SU_RED"\n  },\n  "SU_SUERTE": {\n    "render": "PP",\n    "label": "SuSuerte",\n    "brand": "SU_SUERTE"\n  },\n  "TARJETASHOPPING": {\n    "render": "CC",\n    "label": "Tarjeta Shopping",\n    "brand": "TARJETASHOPPING"\n  },\n  "TENPAY": {\n    "render": "VA",\n    "label": "TENPAY",\n    "brand": "TENPAY"\n  },\n  "TRUSTLY": {\n    "render": "VA",\n    "label": "TRUSTLY",\n    "brand": "TRUSTLY"\n  },\n  "TRUSTPAY_VA": {\n    "render": "VA",\n    "label": "Trustpay Virtual Account",\n    "brand": "TRUSTPAY_VA"\n  },\n  "_2C2P": {\n    "render": "VA",\n    "label": "2C2P",\n    "brand":"_2C2P"\n  },\n  "UKASH": {\n    "render": "VA",\n    "label": "Ukash",\n    "brand": "UKASH"\n  },\n  "UNIONPAY": {\n    "render": "CC",\n    "label": "UnionPay",\n    "brand": "UNIONPAY"\n  },\n  "UNIONPAY_GENERIC": {\n    "render": "CC",\n    "label": "UnionPay Generic",\n    "brand": "UNIONPAY_GENERIC",\n    "noCvv": true,\n    "noExpiryDate": true\n  },\n  "UNIONPAY_SMS": {\n    "render": "CC",\n    "label": "UnionPay SMS",\n    "brand": "UNIONPAY_SMS",\n    "mobilePhone": true\n  },\n  "VISA": {\n    "render": "CC",\n    "label": "Visa",\n    "brand": "VISA"\n  },\n  "VISADEBIT": {\n    "render": "CC",\n    "label": "Visa Debit",\n    "brand": "VISADEBIT"\n  },\n  "VISAELECTRON": {\n    "render": "CC",\n    "label": "Visa Electron",\n    "brand": "VISAELECTRON"\n  },\n  "VPAY": {\n    "render": "CC",\n    "label": "V PAY",\n    "brand": "VPAY"\n  },\n  "WEB_PAY": {\n    "render": "VA",\n    "label": "Web Pay",\n    "brand": "WEB_PAY"\n  },\n  "WECHAT_PAY": {\n    "render": "VA",\n    "label": "WeChat Pay",\n    "brand": "WECHAT_PAY"\n  },\n  "WESTERN_UNION": {\n    "render": "PP",\n    "label": "Western Union",\n    "brand": "WESTERN_UNION"\n  },\n  "YANDEX": {\n    "render": "VA",\n    "label": "Yandex",\n    "brand": "YANDEX"\n  },\n  "YANDEX_CARD": {\n    "render": "VA",\n    "label": "Yandex Card",\n    "brand": "YANDEX_CARD"\n  },\n  "YANDEX_CHECKOUT": {\n    "render": "VA",\n    "label": "Yandex Checkout",\n    "brand": "YANDEX_CHECKOUT"\n  },\n  "TCARD": {\n    "render": "CC",\n    "label": "T-CARD",\n    "brand": "TCARD"\n  },\n  "TCARDDEBIT": {\n    "render": "CC",\n    "label": "T-CARD Debit",\n    "brand": "TCARDDEBIT"\n  },\n  "PRIVATE_LABEL": {\n    "render": "CC",\n    "label": "Private label",\n    "brand": "PRIVATE_LABEL"\n  },\n  "ALIA": {\n    "render": "CC",\n    "label": "Alia",\n    "brand": "ALIA"\n  },\n  "ALIADEBIT": {\n    "render": "CC",\n    "label": "Alia Debit",\n    "brand": "ALIADEBIT"\n  },\n  "AIRPLUS": {\n    "render": "CC",\n    "label": "AirPlus",\n    "brand": "AIRPLUS",\n    "noCvv": true\n  },\n  "AFFIRM": {\n    "render": "VA",\n    "label": "Affirm",\n    "brand": "AFFIRM"\n  },\n  "SOFINCOSANSFRAIS": {\n    "render": "VA",\n    "label": "Sofinco Sans Frais",\n    "brand": "SOFINCOSANSFRAIS"\n  },\n  "SOFINCO": {\n    "render": "VA",\n    "label": "Sofinco",\n    "brand": "SOFINCO"\n  },\n  "JIFITI": {\n    "render": "VA",\n    "label": "Jifiti",\n    "brand": "JIFITI"\n  },\n  "TABBY": {\n    "render": "VA",\n    "label": "Tabby",\n    "brand": "TABBY"\n  },\n  "TAMARA": {\n    "render": "VA",\n    "label": "Tamara",\n    "brand": "TAMARA"\n  },\n  "CREDISENSA": {\n    "render": "CC",\n    "label": "Credisensa",\n    "brand": "CREDISENSA"\n  },\n  "CABAL": {\n    "render": "CC",\n    "label": "Cabal",\n    "brand": "CABAL"\n  },\n  "CABALDEBIT": {\n    "render": "CC",\n    "label": "Cabal Debit",\n    "brand": "CABALDEBIT"\n  },\n  "PICPAY": {\n    "render": "VA",\n    "label": "Picpay",\n    "brand": "PICPAY"\n  },\n  "PIX": {\n    "render": "PP",\n    "label": "Pix",\n    "brand": "PIX"\n  },\n  "CASHLINKMALTA": {\n    "render": "CC",\n    "label": "CashlinkMalta",\n    "brand": "CASHLINKMALTA"\n  },\n  "SADAD_VA": {\n    "render": "VA",\n    "label": "Sadad VA",\n    "brand": "SADAD_VA"\n  },\n  "MSTART": {\n    "render": "VA",\n    "label": "Mstart",\n    "brand": "MSTART"\n  },\n  "SWISSBILLING": {\n    "render": "VA",\n    "label": "SwissBilling",\n    "brand": "SWISSBILLING"\n  },\n  "IKEA_PVL_IKANO_LOAN": {\n    "render": "CC",\n    "label": "IKEA_PVL_IKANO_LOAN",\n    "brand": "IKEA_PVL_IKANO_LOAN"\n  },\n  "IKEA_VISA_ADS_FAMILY": {\n    "render": "CC",\n    "label": "IKEA_VISA_ADS_FAMILY",\n    "brand": "IKEA_VISA_ADS_FAMILY"\n  },\n  "IKEA_PVL_ADS_PROJEKT": {\n    "render": "CC",\n    "label": "IKEA_PVL_ADS_PROJEKT",\n    "brand": "IKEA_PVL_ADS_PROJEKT"\n  },\n  "IKEA_PVL_SOFINCO_RC": {\n    "render": "CC",\n    "label": "IKEA_PVL_SOFINCO_RC",\n    "brand": "IKEA_PVL_SOFINCO_RC"\n  },\n  "IKEA_MC_SOFINCO_RC": {\n    "render": "CC",\n    "label": "IKEA_MC_SOFINCO_RC",\n    "brand": "IKEA_MC_SOFINCO_RC"\n  },\n  "IKEA_MC_CEMBRA_RC": {\n    "render": "CC",\n    "label": "IKEA_MC_CEMBRA_RC",\n    "brand": "IKEA_MC_CEMBRA_RC"\n  },\n  "IKEA_PVL_IKANO_FAM": {\n    "render": "CC",\n    "label": "IKEA_PVL_IKANO_FAM",\n    "brand": "IKEA_PVL_IKANO_FAM"\n  },\n  "IKEA_PVL_IKANO_TEMP": {\n    "render": "CC",\n    "label": "IKEA_PVL_IKANO_TEMP",\n    "brand": "IKEA_PVL_IKANO_TEMP"\n  },\n  "CHEQUE_VACANCES": {\n    "render": "VA",\n    "label": "Cheque Vacances",\n    "brand": "CHEQUE_VACANCES"\n  },\n  "IKEA_PVL_AGOS_OTL": {\n    "render": "CC",\n    "label": "IKEA_PVL_AGOS_OTL",\n    "brand": "IKEA_PVL_AGOS_OTL"\n  },\n  "PREPAYMENT_VRP": {\n    "render": "PP",\n    "label": "Prepayment VRP",\n    "brand": "PREPAYMENT_VRP"\n  },\n  "TWINT": {\n    "render": "VA",\n    "label": "Twint",\n    "brand": "TWINT"\n  },\n  "CLICK_TO_PAY": {\n    "render": "VA",\n    "label": "Click to Pay",\n    "brand": "CLICK_TO_PAY"\n  },\n  "SCHEELS": {\n    "render": "CC",\n    "label": "Scheels",\n    "brand": "SCHEELS"\n  },\n  "ROCKETFUEL": {\n    "render": "VA",\n    "label": "RocketFuel",\n    "brand": "ROCKETFUEL"\n  },\n  "VIPPS": {\n    "render": "VA",\n    "label": "Vipps",\n    "brand": "VIPPS"\n  },\n  "HEB_GIFT_CARD": {\n    "render": "CC",\n    "label": "Heb Gift Card",\n    "brand": "HEB_GIFT_CARD",\n    "noExpiryDate": true\n  },\n  "ZOODPAY": {\n    "render": "VA",\n    "label": "ZoodPay",\n    "brand": "ZOODPAY"\n  },\n  "RL_PRIVATE_LABEL_VA": {\n    "render": "VA",\n    "label": "RL Private Label VA",\n    "brand": "RL_PRIVATE_LABEL_VA",\n    "noExpiryDate": true\n  },\n  "SEZZLE": {\n    "render": "VA",\n    "label": "Sezzle",\n    "brand": "SEZZLE"\n  }\n}\n';});
 
 
-define('text!module/json/brands-validation.json',[],function () { return '{\n  "AMEX": {\n    "number": "(^3[47]\\\\d{13}$)|(^311111111111117$)",\n    "detection": "^3[47]",\n    "luhn": true,\n    "pattern": "{{9999}} {{999999}} {{99999}}",\n    "cvvLength": 4\n  },\n  "BELK_GIFT_CARD": {\n    "number": "(^\\\\d{14,19}$)",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "cvvLength": 4,\n    "expiryDate": false\n  },\n  "CARTEBLEUE": {\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "DINERS": {\n    "number": "^(30[0-5]\\\\d{11,16})|(3095\\\\d{12,15})|(36\\\\d{12,17})|(3[89]\\\\d{14,17})|(60110[^4]\\\\d{10,13})|(6011[2-4]\\\\d{11,14})|(60117[4789]\\\\d{10,13})|(60118[6-9]\\\\d{10,13})|(60119\\\\d{11,14})|(64[4-9]\\\\d{13,16})|(650[0-5]\\\\d{12,15})|(65060[^0]\\\\d{10,13})|(65061[^0]\\\\d{10,13})|(6506[2-9]\\\\d{11,14})|(650[7-9]\\\\d{12,15})|(65[^0]\\\\d{13,16})$",\n    "detection": "^(?:30[0-5]|3095|36|3[89])",\n    "luhn": true,\n    "pattern": "{{9999}} {{999999}} {{999999999}}"\n  },\n  "DISCOVER": {\n    "number": "^(30[0-5]\\\\d{11,16})|(3095\\\\d{12,15})|(36\\\\d{12,17})|(3[89]\\\\d{14,17})|(60110[^4]\\\\d{10,13})|(6011[2-4]\\\\d{11,14})|(60117[4789]\\\\d{10,13})|(60118[6-9]\\\\d{10,13})|(60119\\\\d{11,14})|(64[4-9]\\\\d{13,16})|(650[0-5]\\\\d{12,15})|(65060[^0]\\\\d{10,13})|(65061[^0]\\\\d{10,13})|(6506[2-9]\\\\d{11,14})|(650[7-9]\\\\d{12,15})|(65[^0]\\\\d{13,16})$",\n    "detection": "^(?:60110[^4]|6011[2-4]|60117[4789]|60118[6-9]|60119|64[4-9]|650[0-5]|65060[^0]|65061[^0]|6506[2-9]|650[7-9]|65[^0])",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "ENROUTE": {\n    "number": "^(?:(?:2014)|(?:2149))\\\\d{11}$",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "JCB": {\n    "number": "^(?:(?:35(\\\\d{14}|\\\\d{17}))|(?:2131\\\\d{11})|(?:1800\\\\d{11}))$",\n    "detection": "^(?:35|2131|1800)",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "DANKORT": {\n    "number": "^(5019\\\\d{12}|4\\\\d{15})$",\n    "detection": "^(?:5019|4571)",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "BELK_PRIVATE_LABEL": {\n    "number": "(^604583\\\\d{10,13}$)",\n    "detection": "^604583",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "expiryDate": false\n  },\n  "IK_PRIVATE_LABEL": {\n    "detection": "^(601779101|603231067|603231065|633156008|924610151|600200)",\n    "optionalCvv": true\n  },\n  "IK_PRIVATE_LABEL_VA": {\n    "detection": "^(601779101|603231067|603231065|633156008|924610151|600200)",\n    "optionalCvv": true\n  },\n  "IKEA_PVL_IKANO_FAM": {\n    "number": "^(600405)\\\\d{10}$",\n    "detection": "^(600405)",\n    "luhn": true\n  },\n  "IKEA_PVL_IKANO_LOAN": {\n    "number": "^(555857)\\\\d{10}$",\n    "detection": "^(555857)",\n    "luhn": true\n  },\n  "IKEA_PVL_IKANO_TEMP": {\n    "number": "^(627598|928000)\\\\d{10}$",\n    "detection": "^(627598|928000)",\n    "luhn": true\n  },\n  "IKEA_VISA_ADS_FAMILY": {\n    "number": "^(406367)\\\\d{10}$",\n    "detection": "^(406367)",\n    "luhn": true\n  },\n  "IKEA_PVL_ADS_PROJEKT": {\n    "number": "^(456420)\\\\d{10}$",\n    "detection": "^(456420)",\n    "luhn": true\n  },\n  "IKEA_PVL_SOFINCO_RC": {\n    "number": "^(525778)\\\\d{10}$",\n    "detection": "^(525778)",\n    "luhn": true\n  },\n  "IKEA_MC_SOFINCO_RC": {\n    "number": "^(549538)\\\\d{10}$",\n    "detection": "^(549538)",\n    "luhn": true\n  },\n  "IKEA_MC_CEMBRA_RC": {\n    "number": "^(513659)\\\\d{10}$",\n    "detection": "^(513659)",\n    "luhn": true\n  },\n  "IKEA_PVL_AGOS_OTL": {\n    "number": "^(540890)\\\\d{10}$",\n    "detection": "^(540890)",\n    "luhn": true\n  },\n  "TCARD": {\n    "detection": "^(949625|949626|949627|949622|949623|949624|949610|949611|949612|949619|949620|949621|949628|949629|949630|949633|949634|949635|949636|949637|949638|949639|949640|949616|949617|949618|949613|949614|949615)"\n  },\n  "TCARDDEBIT": {\n    "detection": "^(949625|949626|949627|949622|949623|949624|949610|949611|949612|949619|949620|949621|949628|949629|949630|949633|949634|949635|949636|949637|949638|949639|949640|949616|949617|949618|949613|949614|949615)"\n  },\n  "MEEZA": {\n    "number": "^(507803[0-4][0-9]|50780350|50780362|507808[3-9][0-9]|507809[0-9][0-9]|507810[0-2][0-9])\\\\d{4,12}$",\n    "detection": "^(507803[0-4][0-9]|50780350|50780362|507808[3-9][0-9]|507809[0-9][0-9]|507810[0-2][0-9])",\n    "luhn": true\n  },\n  "MADA" : {\n    "number" : "^(242030|360705|362596|369989|403024|406136|406996|407197|407395|409201|410621|410685|412565|417633|419593|420132|421141|422817|422818|422819|428331|428671|428672|428673|431361|432328|434107|439954|440533|440647|440795|445564|446393|446404|446672|454097|455036|455708|457865|457997|458456|462220|468540|468541|468542|468543|474491|483010|483011|483012|484783|486094|486095|486096|489318|489319|504300|508160|513213|520058|521076|524130|524514|529415|529741|530060|530906|531095|531196|532013|535825|535989|536023|537767|543085|543357|549760|554180|558563|585265|588845|588846|588848|588849|588850|588982|588983|589005|589206|601149|604906|605141|636120|651000|968201|968202|968203|968204|968205|968206|968207|968208|968209|968211)(\\\\d{7,13})$",\n    "detection" : "^(?:242030|360705|362596|369989|403024|406136|406996|407197|407395|409201|410621|410685|412565|417633|419593|420132|421141|422817|422818|422819|428331|428671|428672|428673|431361|432328|434107|439954|440533|440647|440795|445564|446393|446404|446672|454097|455036|455708|457865|457997|458456|462220|468540|468541|468542|468543|474491|483010|483011|483012|484783|486094|486095|486096|489318|489319|504300|508160|513213|520058|521076|524130|524514|529415|529741|530060|530906|531095|531196|532013|535825|535989|536023|537767|543085|543357|549760|554180|558563|585265|588845|588846|588848|588849|588850|588982|588983|589005|589206|601149|604906|605141|636120|651000|968201|968202|968203|968204|968205|968206|968207|968208|968209|968211)",\n    "luhn" : true,\n    "pattern" : "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "expiryDate" : true\n  },\n  "MAESTRO": {\n    "number": "^(?!(53055|52816|515111|521662|530514|603231065|603231067))(((50)(\\\\d{10,17}$))|((5106)(\\\\d{8,15}$))|((511071)(\\\\d{6,13}$))|((511106)(\\\\d{6,13}$))|((51479)[23](\\\\d{6,13}$))|((5151)[12](\\\\d{7,14}$))|((515400)(\\\\d{6,13}$))|((5191)(\\\\d{8,15}$))|((5205)(\\\\d{8,15}$))|((5216)(\\\\d{8,15}$))|((5220)[89](\\\\d{7,14}$))|((5258)(\\\\d{8,15}$))|((5281)(\\\\d{8,15}$))|((529235)(\\\\d{6,13}$))|((53)[24](\\\\d{9,16}$))|((5305)(\\\\d{8,15}$))|((539043)(\\\\d{6,13}$))|((53905)[24](\\\\d{6,13}$))|((5407)(\\\\d{8,15}$))|((5435)(\\\\d{8,15}$))|((545391)(\\\\d{6,13}$))|((545433)(\\\\d{6,13}$))|((545729)(\\\\d{6,13}$))|((5464)(\\\\d{8,15}$))|((5464)(\\\\d{8,15}$))|((5509)(\\\\d{8,15}$))|((55310)[34](\\\\d{6,13}$))|((553725)(\\\\d{6,13}$))|((553783)(\\\\d{6,13}$))|((554563)(\\\\d{6,13}$))|((554587)(\\\\d{6,13}$))|((557205)(\\\\d{6,13}$))|((56)[0678](\\\\d{9,16}$))|((5610)(\\\\d{8,15}$))|((56119)(\\\\d{8,15}$))|((5612)(\\\\d{8,15}$))|((563)[235](\\\\d{8,15}$))|((564141)(\\\\d{6,13}$))|((564158)(\\\\d{6,13}$))|((5642)(\\\\d{8,15}$))|((5651)(\\\\d{8,15}$))((564076)(\\\\d{6,13}$))|((57)[0125789](\\\\d{9,16}$))|((573)[134](\\\\d{8,15}$))|((574)[25789](\\\\d{8,15}$))|((575)[234567](\\\\d{8,15}$))|((5768)(\\\\d{8,15}$))|((5817(?:02|07|15|21|24|[3][1,6-9]|[4][0,2-9]|50|51|56|66|69|73|78|84|87|90|91|97))(\\\\d{6,13}$))|((58)[34](\\\\d{9,16}$))|((581149|589242|589973|589785|589812|599032)(\\\\d{6,13}$))|((58980)(\\\\d{7,14}$))|((60)[1-6](\\\\d{9,16}$))|((600206)(\\\\d{6,13}$))|((600343|600452|603231|623020|627252)(\\\\d{6,13}$))|((60079)(\\\\d{7,14}$))|((6009)[0689](\\\\d{7,14}$))|(61\\\\d{10,17}$)|((621)[89](\\\\d{8,15}$))|((622)[01](\\\\d{8,15}$))|((627)(\\\\d{9,16}$))|((628)[01](\\\\d{8,15}$))|((6294)(\\\\d{8,15}$))|((630)[14](\\\\d{8,15}$))|((6338)(\\\\d{8,15}$))|((636)[0137](\\\\d{8,15}$))|((6371)(\\\\d{8,15}$))|((639)[0-7](\\\\d{8,15}$))|((640)[023468](\\\\d{8,15}$))|((641083)(\\\\d{6,13}$))|((641377)(\\\\d{6,13}$))|((641382)(\\\\d{6,13}$))|((641466)(\\\\d{6,13}$))|((641798)(\\\\d{6,13}$))|((641860)(\\\\d{6,13}$))|((642041)(\\\\d{6,13}$))|((642068)(\\\\d{6,13}$))|((642097)(\\\\d{6,13}$))|((642098)(\\\\d{6,13}$))|((6421)[4579](\\\\d{7,14}$))|((64211)[079](\\\\d{6,13}$))|((6422)[02456](\\\\d{7,14}$))|((642301)(\\\\d{6,13}$))|((642335)(\\\\d{6,13}$))|(67\\\\d{10,17}$)|((7083)(\\\\d{8,15}$))|((589004|589283|589311|589229|505874|505878|601073|504997|601030|560332)(\\\\d{6,13}$)))",\n    "detection": "^(?!(510658|515111|519123|519163|521662|52816|530514|53055|543556|543557|543560|603231065|603231067))(?=(5018|5020|5038|504997|505874|505878|5106|511071|511106|51479[23]|5151[12]|515400|5191|5205|5216|5220[89]5258|5281|529235|5305|539043|53905[24]|53[24]5407|5435|545391|545433|545729|5464|5464|5509|55310[34]553725|553783|554563|554587|557205|560332|5610|56119|5612|563[235]|564076|564141|564158|5642|5651|56[0678]573[134]|574[25789]|575[234567]|5768|57[0125789]|5817|581149|589004|589229|589242|589283|589311|589916|589973|589785|58980|589812|58[34]599032|600206|600343|600452|601030|601073|603231|60079|6009[0689]|60[1-6]|61|621[89]|622[01]|623020|627|628[01]|6294|630[14]|6338|636[137]|6371|639[0-7]|640[023468]641083|641377|641382|641466|641798|641860|642041|642068|642097|642098|64211[079]|6421[4579]|6422[02456]|642301|642335|67|7083))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true\n  },\n  "MASTER": {\n    "number": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|530514))((5[0-8]\\\\d{14}$)|((5396)(\\\\d{8,15}$))|((5410)(\\\\d{8,15}$))|((5471)(\\\\d{8,15}$))|(6[17]\\\\d{14}$)|(7[017]\\\\d{14}$)|(2[3-6]\\\\d{14}$)|(22[3-9]\\\\d{13}$)|(222[1-9]\\\\d{12}$)|(27[01]\\\\d{13}$)|(2720\\\\d{12}$))",\n    "detection": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|530514))(?=(5[0-8]|6[17]|7[017]|2[3-6]|22[3-9]|222[1-9]|27[01]|2720|5396|5410|5471))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "MASTERDEBIT": {\n    "number": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|521662))((5[0-8]\\\\d{14}$)|(53562)(\\\\d[6-9])(\\\\d{10})|(53563)(\\\\d[0,1])(\\\\d{10})|(53564)(\\\\d[7,8])(\\\\d{10})|()(535670)(\\\\d{10})|((5396)(\\\\d{8,15}$))|(6[17]\\\\d{14}$)|(7[017]\\\\d{14}$)|(2[3-6]\\\\d{14}$)|(22[3-9]\\\\d{13}$)|(222[1-9]\\\\d{12}$)|(27[01]\\\\d{13}$)|(2720\\\\d{12}$))",\n    "detection": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|521662))(?=(5[0-8]|6[17]|7[017]|2[3-6]|22[3-9]|222[1-9]|27[01]|2720|5396))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "VISA": {\n    "number": "^4(?:(?:\\\\d{12})|(?:\\\\d{15})|(?:\\\\d{16})|(?:\\\\d{17})|(?:\\\\d{18}))$",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "VISAELECTRON": {\n    "number": "^4(?:(?:\\\\d{12})|(?:\\\\d{15})|(?:\\\\d{16})|(?:\\\\d{17})|(?:\\\\d{18}))$",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "VISADEBIT": {\n    "number": "^4\\\\d*",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "POSTEPAY": {\n    "number": "^4\\\\d*",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "UNIONPAY": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "UNIONPAY_GENERIC": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "UNIONPAY_SMS": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "NARANJA": {\n    "luhn": false\n  },\n  "PRIVATE_LABEL": {\n    "number": "^\\\\d{10,21}$",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "ALIA": {\n    "detection": "^(504997|60103|601073|505874|505878)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": true\n  },\n  "ALIADEBIT": {\n    "detection": "^(504997|60103|601073|505874|505878)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": true\n  },\n  "AIRPLUS": {\n    "number": "^(1220|1920)\\\\d{11}$",\n    "detection": "^(1220|1920)",\n    "luhn": true,\n    "expiryDate": true\n  },\n  "ONEY_BANK_CARD": {\n    "number": "^(49715202|49716402)\\\\d*",\n    "detection": "^(49715202|49716402)",\n    "luhn": false\n  },\n  "ONEY_PRIVATE_CARD": {\n    "number": "^(50320202|50320222|50320226|50320260|50320261|50320262)\\\\d*",\n    "detection": "^(50320202|50320222|50320226|50320260|50320261|50320262)",\n    "luhn": false\n  },\n  "SISTEMACLAVE": {\n    "number": "^(588968\\\\d{3,}|601377\\\\d{3,})$",\n    "detection": "^(588968|601377)",\n    "luhn": false\n  },\n  "CARTEBANCAIRE": {\n    "number": "^[4-6]\\\\d*",\n    "detection": "^[4-6]",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "CREDISENSA": {\n    "number": "^(900010|960018|555067|910001|919901|920001|929901|000029200)\\\\d*",\n    "detection": "^(900010|960018|555067|910001|919901|920001|929901|000029200)",\n    "luhn": false\n  },\n  "CABAL": {\n    "number": "^(589657|(6042(0[2|6|7|8|9]))|(6042(1[1|2|3|5|6|9]))|604228|604233|(6042(4[4|5|9]))|(6042(5[0|1|4|6]]))|604265)|(60431[6|7|9])|604327|(60434[1|2|3|5|7|8])]\\\\d*",\n    "detection": "^(589657|(6042(0[2|6|7|8|9]))|(6042(1[1|2|3|5|6|9]))|604228|604233|(6042(4[4|5|9]))|(6042(5[0|1|4|6]]))|604265)|(60431[6|7|9])|604327|(60434[1|2|3|5|7|8])]",\n    "luhn": true\n  },\n  "CABALDEBIT": {\n    "number": "^(604201|604218|604246)\\\\d*",\n    "detection": "^(604201|604218|604246)",\n    "luhn": true\n  },\n  "CASHLINKMALTA": {\n    "number": "^(588731)\\\\d{11}$",\n    "detection": "^(588731)",\n    "luhn": true\n  },\n  "STAPLES": {\n    "number": "^(7972\\\\d{12}|6035517\\\\d{9}|6011100[02]\\\\d{8}|600649[19]\\\\d{9})$",\n    "detection": "^(7972|6035517|6011100[02]|600649[19])",\n    "luhn": true,\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "SCHEELS":{\n    "number": "^(441840\\\\d{10}|441855\\\\d{10}|469451\\\\d{10}|498865\\\\d{10}|441822\\\\d{10})$",\n    "detection": "^(441840|441855|469451|498865|441822})",\n    "luhn": true\n  },\n  "HEB_GIFT_CARD": {\n    "number": "^(6006496919|6006496920)\\\\d{9}",\n    "detection": "^(6006496919|6006496920)",\n    "luhn": false,\n    "cvvLength": 4,\n    "expiryDate": false\n  },\n  "RL_PRIVATE_LABEL_VA": {\n    "number": "^(60|61|62)\\\\d{14}",\n    "detection": "^(60|61|62)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": false\n  }\n}\n';});
+define('text!module/json/brands-validation.json',[],function () { return '{\n  "AMEX": {\n    "number": "(^3[47]\\\\d{13}$)|(^311111111111117$)",\n    "detection": "^3[47]",\n    "luhn": true,\n    "pattern": "{{9999}} {{999999}} {{99999}}",\n    "cvvLength": 4\n  },\n  "BELK_GIFT_CARD": {\n    "number": "(^\\\\d{14,19}$)",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "cvvLength": 4,\n    "expiryDate": false\n  },\n  "CARTEBLEUE": {\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "DINERS": {\n    "number": "^(30[0-5]\\\\d{11,16})|(3095\\\\d{12,15})|(36\\\\d{12,17})|(3[89]\\\\d{14,17})|(60110[^4]\\\\d{10,13})|(6011[2-4]\\\\d{11,14})|(60117[4789]\\\\d{10,13})|(60118[6-9]\\\\d{10,13})|(60119\\\\d{11,14})|(64[4-9]\\\\d{13,16})|(650[0-5]\\\\d{12,15})|(65060[^0]\\\\d{10,13})|(65061[^0]\\\\d{10,13})|(6506[2-9]\\\\d{11,14})|(650[7-9]\\\\d{12,15})|(65[^0]\\\\d{13,16})$",\n    "detection": "^(?:30[0-5]|3095|36|3[89])",\n    "luhn": true,\n    "pattern": "{{9999}} {{999999}} {{999999999}}"\n  },\n  "DISCOVER": {\n    "number": "^(30[0-5]\\\\d{11,16})|(3095\\\\d{12,15})|(36\\\\d{12,17})|(3[89]\\\\d{14,17})|(60110[^4]\\\\d{10,13})|(6011[2-4]\\\\d{11,14})|(60117[4789]\\\\d{10,13})|(60118[6-9]\\\\d{10,13})|(60119\\\\d{11,14})|(64[4-9]\\\\d{13,16})|(650[0-5]\\\\d{12,15})|(65060[^0]\\\\d{10,13})|(65061[^0]\\\\d{10,13})|(6506[2-9]\\\\d{11,14})|(650[7-9]\\\\d{12,15})|(65[^0]\\\\d{13,16})$",\n    "detection": "^(?:60110[^4]|6011[2-4]|60117[4789]|60118[6-9]|60119|64[4-9]|650[0-5]|65060[^0]|65061[^0]|6506[2-9]|650[7-9]|65[^0])",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "ENROUTE": {\n    "number": "^(?:(?:2014)|(?:2149))\\\\d{11}$",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "JCB": {\n    "number": "^(?:(?:35(\\\\d{14}|\\\\d{17}))|(?:2131\\\\d{11})|(?:1800\\\\d{11}))$",\n    "detection": "^(?:35|2131|1800)",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "DANKORT": {\n    "number": "^(5019\\\\d{12}|4\\\\d{15})$",\n    "detection": "^(?:5019|4571)",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "BELK_PRIVATE_LABEL": {\n    "number": "(^604583\\\\d{10,13}$)",\n    "detection": "^604583",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "expiryDate": false\n  },\n  "IK_PRIVATE_LABEL": {\n    "detection": "^(601779101|603231067|603231065|633156008|924610151|600200)",\n    "optionalCvv": true\n  },\n  "IK_PRIVATE_LABEL_VA": {\n    "detection": "^(601779101|603231067|603231065|633156008|924610151|600200)",\n    "optionalCvv": true\n  },\n  "IKEA_PVL_IKANO_FAM": {\n    "number": "^(600405)\\\\d{10}$",\n    "detection": "^(600405)",\n    "luhn": true\n  },\n  "IKEA_PVL_IKANO_LOAN": {\n    "number": "^(555857)\\\\d{10}$",\n    "detection": "^(555857)",\n    "luhn": true\n  },\n  "IKEA_PVL_IKANO_TEMP": {\n    "number": "^(627598|928000)\\\\d{10}$",\n    "detection": "^(627598|928000)",\n    "luhn": true\n  },\n  "IKEA_VISA_ADS_FAMILY": {\n    "number": "^(406367)\\\\d{10}$",\n    "detection": "^(406367)",\n    "luhn": true\n  },\n  "IKEA_PVL_ADS_PROJEKT": {\n    "number": "^(456420)\\\\d{10}$",\n    "detection": "^(456420)",\n    "luhn": true\n  },\n  "IKEA_PVL_SOFINCO_RC": {\n    "number": "^(525778)\\\\d{10}$",\n    "detection": "^(525778)",\n    "luhn": true\n  },\n  "IKEA_MC_SOFINCO_RC": {\n    "number": "^(549538)\\\\d{10}$",\n    "detection": "^(549538)",\n    "luhn": true\n  },\n  "IKEA_MC_CEMBRA_RC": {\n    "number": "^(513659)\\\\d{10}$",\n    "detection": "^(513659)",\n    "luhn": true\n  },\n  "IKEA_PVL_AGOS_OTL": {\n    "number": "^(540890)\\\\d{10}$",\n    "detection": "^(540890)",\n    "luhn": true\n  },\n  "TCARD": {\n    "detection": "^(949625|949626|949627|949622|949623|949624|949610|949611|949612|949619|949620|949621|949628|949629|949630|949633|949634|949635|949636|949637|949638|949639|949640|949616|949617|949618|949613|949614|949615)"\n  },\n  "TCARDDEBIT": {\n    "detection": "^(949625|949626|949627|949622|949623|949624|949610|949611|949612|949619|949620|949621|949628|949629|949630|949633|949634|949635|949636|949637|949638|949639|949640|949616|949617|949618|949613|949614|949615)"\n  },\n  "MEEZA": {\n    "number": "^(507803[0-4][0-9]|50780350|50780362|507808[3-9][0-9]|507809[0-9][0-9]|507810[0-2][0-9])\\\\d{4,12}$",\n    "detection": "^(507803[0-4][0-9]|50780350|50780362|507808[3-9][0-9]|507809[0-9][0-9]|507810[0-2][0-9])",\n    "luhn": true\n  },\n  "MADA" : {\n    "number" : "^(242030|360705|362596|369989|403024|406136|406996|407197|407395|409201|410621|410685|412565|417633|419593|420132|421141|422817|422818|422819|428331|428671|428672|428673|431361|432328|434107|439954|440533|440647|440795|445564|446393|446404|446672|454097|455036|455708|457865|457997|458456|462220|468540|468541|468542|468543|474491|483010|483011|483012|484783|486094|486095|486096|489318|489319|504300|508160|513213|520058|521076|524130|524514|529415|529741|530060|530906|531095|531196|532013|535825|535989|536023|537767|543085|543357|549760|554180|558563|585265|588845|588846|588848|588849|588850|588982|588983|589005|589206|601149|604906|605141|636120|651000|968201|968202|968203|968204|968205|968206|968207|968208|968209|968211)(\\\\d{7,13})$",\n    "detection" : "^(?:242030|360705|362596|369989|403024|406136|406996|407197|407395|409201|410621|410685|412565|417633|419593|420132|421141|422817|422818|422819|428331|428671|428672|428673|431361|432328|434107|439954|440533|440647|440795|445564|446393|446404|446672|454097|455036|455708|457865|457997|458456|462220|468540|468541|468542|468543|474491|483010|483011|483012|484783|486094|486095|486096|489318|489319|504300|508160|513213|520058|521076|524130|524514|529415|529741|530060|530906|531095|531196|532013|535825|535989|536023|537767|543085|543357|549760|554180|558563|585265|588845|588846|588848|588849|588850|588982|588983|589005|589206|601149|604906|605141|636120|651000|968201|968202|968203|968204|968205|968206|968207|968208|968209|968211)",\n    "luhn" : true,\n    "pattern" : "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "expiryDate" : true\n  },\n  "MAESTRO": {\n    "number": "^(?!(53055|52816|515111|521662|530514|603231065|603231067))(((50)(\\\\d{10,17}$))|((5106)(\\\\d{8,15}$))|((511071)(\\\\d{6,13}$))|((511106)(\\\\d{6,13}$))|((51479)[23](\\\\d{6,13}$))|((5151)[12](\\\\d{7,14}$))|((515400)(\\\\d{6,13}$))|((5191)(\\\\d{8,15}$))|((5205)(\\\\d{8,15}$))|((5216)(\\\\d{8,15}$))|((5220)[89](\\\\d{7,14}$))|((5258)(\\\\d{8,15}$))|((5281)(\\\\d{8,15}$))|((529235)(\\\\d{6,13}$))|((53)[24](\\\\d{9,16}$))|((5305)(\\\\d{8,15}$))|((539043)(\\\\d{6,13}$))|((53905)[24](\\\\d{6,13}$))|((5407)(\\\\d{8,15}$))|((5435)(\\\\d{8,15}$))|((545391)(\\\\d{6,13}$))|((545433)(\\\\d{6,13}$))|((545729)(\\\\d{6,13}$))|((5464)(\\\\d{8,15}$))|((5464)(\\\\d{8,15}$))|((5509)(\\\\d{8,15}$))|((55310)[34](\\\\d{6,13}$))|((553725)(\\\\d{6,13}$))|((553783)(\\\\d{6,13}$))|((554563)(\\\\d{6,13}$))|((554587)(\\\\d{6,13}$))|((557205)(\\\\d{6,13}$))|((56)[0678](\\\\d{9,16}$))|((5610)(\\\\d{8,15}$))|((56119)(\\\\d{8,15}$))|((5612)(\\\\d{8,15}$))|((563)[235](\\\\d{8,15}$))|((564141)(\\\\d{6,13}$))|((564158)(\\\\d{6,13}$))|((5642)(\\\\d{8,15}$))|((5651)(\\\\d{8,15}$))((564076)(\\\\d{6,13}$))|((57)[0125789](\\\\d{9,16}$))|((573)[134](\\\\d{8,15}$))|((574)[25789](\\\\d{8,15}$))|((575)[234567](\\\\d{8,15}$))|((5768)(\\\\d{8,15}$))|((5817(?:02|07|15|21|24|[3][1,6-9]|[4][0,2-9]|50|51|56|66|69|73|78|84|87|90|91|97))(\\\\d{6,13}$))|((58)[34](\\\\d{9,16}$))|((581149|589242|589973|589785|589812|599032)(\\\\d{6,13}$))|((58980)(\\\\d{7,14}$))|((60)[1-6](\\\\d{9,16}$))|((600206)(\\\\d{6,13}$))|((600343|600452|603231|623020|627252)(\\\\d{6,13}$))|((60079)(\\\\d{7,14}$))|((6009)[0689](\\\\d{7,14}$))|(61\\\\d{10,17}$)|((621)[89](\\\\d{8,15}$))|((622)[01](\\\\d{8,15}$))|((627)(\\\\d{9,16}$))|((628)[01](\\\\d{8,15}$))|((6294)(\\\\d{8,15}$))|((630)[14](\\\\d{8,15}$))|((6338)(\\\\d{8,15}$))|((636)[0137](\\\\d{8,15}$))|((6371)(\\\\d{8,15}$))|((639)[0-7](\\\\d{8,15}$))|((640)[023468](\\\\d{8,15}$))|((641083)(\\\\d{6,13}$))|((641377)(\\\\d{6,13}$))|((641382)(\\\\d{6,13}$))|((641466)(\\\\d{6,13}$))|((641798)(\\\\d{6,13}$))|((641860)(\\\\d{6,13}$))|((642041)(\\\\d{6,13}$))|((642068)(\\\\d{6,13}$))|((642097)(\\\\d{6,13}$))|((642098)(\\\\d{6,13}$))|((6421)[4579](\\\\d{7,14}$))|((64211)[079](\\\\d{6,13}$))|((6422)[02456](\\\\d{7,14}$))|((642301)(\\\\d{6,13}$))|((642335)(\\\\d{6,13}$))|(67\\\\d{10,17}$)|((7083)(\\\\d{8,15}$))|((589004|589283|589311|589229|505874|505878|601073|504997|601030|560332)(\\\\d{6,13}$)))",\n    "detection": "^(?!(510658|515111|519123|519163|521662|52816|530514|53055|543556|543557|543560|603231065|603231067))(?=(5018|5020|5038|504997|505874|505878|5106|511071|511106|51479[23]|5151[12]|515400|5191|5205|5216|5220[89]5258|5281|529235|5305|539043|53905[24]|53[24]5407|5435|545391|545433|545729|5464|5464|5509|55310[34]553725|553783|554563|554587|557205|560332|5610|56119|5612|563[235]|564076|564141|564158|5642|5651|56[0678]573[134]|574[25789]|575[234567]|5768|57[0125789]|5817|581149|589004|589229|589242|589283|589311|589916|589973|589785|58980|589812|58[34]599032|600206|600343|600452|601030|601073|603231|60079|6009[0689]|60[1-6]|61|621[89]|622[01]|623020|627|628[01]|6294|630[14]|6338|636[137]|6371|639[0-7]|640[023468]641083|641377|641382|641466|641798|641860|642041|642068|642097|642098|64211[079]|6421[4579]|6422[02456]|642301|642335|67|7083))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true\n  },\n  "MASTER": {\n    "number": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|530514))((5[0-8]\\\\d{14}$)|((5396)(\\\\d{8,15}$))|((5410)(\\\\d{8,15}$))|((5471)(\\\\d{8,15}$))|(6[17]\\\\d{14}$)|(7[017]\\\\d{14}$)|(2[3-6]\\\\d{14}$)|(22[3-9]\\\\d{13}$)|(222[1-9]\\\\d{12}$)|(27[01]\\\\d{13}$)|(2720\\\\d{12}$))",\n    "detection": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|530514))(?=(5[0-8]|6[17]|7[017]|2[3-6]|22[3-9]|222[1-9]|27[01]|2720|5396|5410|5471))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "MASTERDEBIT": {\n    "number": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|521662))((5[0-8]\\\\d{14}$)|(53562)(\\\\d[6-9])(\\\\d{10})|(53563)(\\\\d[0,1])(\\\\d{10})|(53564)(\\\\d[7,8])(\\\\d{10})|()(535670)(\\\\d{10})|((5396)(\\\\d{8,15}$))|(6[17]\\\\d{14}$)|(7[017]\\\\d{14}$)|(2[3-6]\\\\d{14}$)|(22[3-9]\\\\d{13}$)|(222[1-9]\\\\d{12}$)|(27[01]\\\\d{13}$)|(2720\\\\d{12}$))",\n    "detection": "^(?!(589004|589283|589311|589229|561257|505874|505878|601073|504997|601030|560332|521662))(?=(5[0-8]|6[17]|7[017]|2[3-6]|22[3-9]|222[1-9]|27[01]|2720|5396))",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "VISA": {\n    "number": "^4(?:(?:\\\\d{12})|(?:\\\\d{15})|(?:\\\\d{16})|(?:\\\\d{17})|(?:\\\\d{18}))$",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "VISAELECTRON": {\n    "number": "^4(?:(?:\\\\d{12})|(?:\\\\d{15})|(?:\\\\d{16})|(?:\\\\d{17})|(?:\\\\d{18}))$",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "VISADEBIT": {\n    "number": "^4\\\\d*",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "POSTEPAY": {\n    "number": "^4\\\\d*",\n    "detection": "^4",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}} {{9999}}"\n  },\n  "UNIONPAY": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "UNIONPAY_GENERIC": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "UNIONPAY_SMS": {\n    "number": "^\\\\d{8,}$",\n    "luhn": false,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}",\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "NARANJA": {\n    "luhn": false\n  },\n  "PRIVATE_LABEL": {\n    "number": "^\\\\d{10,21}$",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "ALIA": {\n    "detection": "^(504997|60103|601073|505874|505878)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": true\n  },\n  "ALIADEBIT": {\n    "detection": "^(504997|60103|601073|505874|505878)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": true\n  },\n  "AIRPLUS": {\n    "number": "^(1220|1920)\\\\d{11}$",\n    "detection": "^(1220|1920)",\n    "luhn": true,\n    "expiryDate": true\n  },\n  "ONEY_BANK_CARD": {\n    "number": "^(49715202|49716402)\\\\d*",\n    "detection": "^(49715202|49716402)",\n    "luhn": false\n  },\n  "ONEY_PRIVATE_CARD": {\n    "number": "^(50320202|50320222|50320226|50320260|50320261|50320262)\\\\d*",\n    "detection": "^(50320202|50320222|50320226|50320260|50320261|50320262)",\n    "luhn": false\n  },\n  "SISTEMACLAVE": {\n    "number": "^(588968\\\\d{3,}|601377\\\\d{3,})$",\n    "detection": "^(588968|601377)",\n    "luhn": false\n  },\n  "CARTEBANCAIRE": {\n    "number": "^[4-6]\\\\d*",\n    "detection": "^[4-6]",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}} {{999}}"\n  },\n  "CREDISENSA": {\n    "number": "^(900010|960018|555067|910001|919901|920001|929901|000029200)\\\\d*",\n    "detection": "^(900010|960018|555067|910001|919901|920001|929901|000029200)",\n    "luhn": false\n  },\n  "CABAL": {\n    "number": "^(589657|(6042(0[2|6|7|8|9]))|(6042(1[1|2|3|5|6|9]))|604228|604233|(6042(4[4|5|9]))|(6042(5[0|1|4|6]]))|604265)|(60431[6|7|9])|604327|(60434[1|2|3|5|7|8])]\\\\d*",\n    "detection": "^(589657|(6042(0[2|6|7|8|9]))|(6042(1[1|2|3|5|6|9]))|604228|604233|(6042(4[4|5|9]))|(6042(5[0|1|4|6]]))|604265)|(60431[6|7|9])|604327|(60434[1|2|3|5|7|8])]",\n    "luhn": true\n  },\n  "CABALDEBIT": {\n    "number": "^(604201|604218|604246)\\\\d*",\n    "detection": "^(604201|604218|604246)",\n    "luhn": true\n  },\n  "CASHLINKMALTA": {\n    "number": "^(588731)\\\\d{11}$",\n    "detection": "^(588731)",\n    "luhn": true\n  },\n  "STAPLES": {\n    "number": "^(7972\\\\d{12}|6035517\\\\d{9}|6011100[02]\\\\d{8}|600649[19]\\\\d{9})$",\n    "detection": "^(7972|6035517|6011100[02]|600649[19])",\n    "luhn": true,\n    "pattern": "{{9999}} {{9999}} {{9999}} {{9999}}",\n    "optionalCvv": true,\n    "expiryDate": false\n  },\n  "SCHEELS":{\n    "number": "^(441840\\\\d{10}|441855\\\\d{10}|469451\\\\d{10}|498865\\\\d{10}|441822\\\\d{10})$",\n    "detection": "^(441840|441855|469451|498865|441822})",\n    "luhn": true\n  },\n  "HEB_GIFT_CARD": {\n    "number": "^(6006496919|6006496920)\\\\d{9}",\n    "detection": "^(6006496919|6006496920)",\n    "luhn": false,\n    "cvvLength": 4,\n    "expiryDate": false\n  },\n  "RL_PRIVATE_LABEL_VA": {\n    "number": "^(60|61|62)\\\\d{14}",\n    "detection": "^(60|61|62)",\n    "luhn": false,\n    "optionalCvv": true,\n    "expiryDate": false\n  }\n}\n';});
 
 
 define('text!module/json/pin-validation.json',[],function () { return '{\n  "live" : {\n    "RL_PRIVATE_LABEL_VA": [\n      {\n        "number": "^(614543544444174[0-9]|61454354444417[5-9][0-9]|6145435444441[89][0-9]{2}|614543544444[2-9][0-9]{3}|61454354444[5-9][0-9]{4}|6145435444[5-9][0-9]{5}|614543544[5-9][0-9]{6}|61454354[5-9][0-9]{7}|61454355[0-5][0-9]{7}|614543556[0-3][0-9]{6}|6145435564[0-3][0-9]{5}|61454355644[0-2][0-9]{4}|614543556443[0-6][0-9]{3}|6145435564437[0-3][0-9]{2}|61454355644374[0-6][0-9]|6145435564437470)|(614543556444250[0-9]|61454355644425[1-9][0-9]|6145435564442[6-9][0-9]{2}|614543556444[3-9][0-9]{3}|61454355644[5-9][0-9]{4}|6145435564[5-9][0-9]{5}|614543556[5-9][0-9]{6}|61454355[7-9][0-9]{7}|6145435[67][0-9]{8}|61454358[01][0-9]{7}|614543582[0-5][0-9]{6}|6145435826[0-3][0-9]{5}|61454358264[0-2][0-9]{4}|614543582643[0-7][0-9]{3}|6145435826438[0-6][0-9]{2}|61454358264387[0-8][0-9]|6145435826438790)|(614543582644266[0-9]|61454358264426[7-9][0-9]|6145435826442[7-9][0-9]{2}|614543582644[3-9][0-9]{3}|61454358264[5-9][0-9]{4}|6145435826[5-9][0-9]{5}|614543582[7-9][0-9]{6}|61454358[3-9][0-9]{7}|61454359[0-9]{8}|6145436[01][0-9]{8}|61454362[0-8][0-9]{7}|614543629[0-4][0-9]{6}|6145436295[0-3][0-9]{5}|61454362954[0-2][0-9]{4}|614543629543[0-7][0-9]{3}|61454362954380[0-9]{2}|61454362954381[0-4][0-9]|6145436295438150)|(614632709176054[0-9]|61463270917605[5-9][0-9]|6146327091760[6-9][0-9]{2}|614632709176[1-9][0-9]{3}|61463270917[7-9][0-9]{4}|6146327091[89][0-9]{5}|614632709[2-9][0-9]{6}|61463271[0-9]{8}|61463272[0-3][0-9]{7}|6146327240[0-9]{6}|6146327241[0-6][0-9]{5}|61463272417[0-4][0-9]{4}|614632724175[0-2][0-9]{3}|6146327241753[0-4][0-9]{2}|61463272417535[0-7][0-9]|6146327241753580)|(614732576687790[4-9]|61473257668779[1-9][0-9]|614732576687[89][0-9]{3}|61473257668[89][0-9]{4}|61473257669[0-9]{5}|614732576[7-9][0-9]{6}|61473257[7-9][0-9]{7}|61473258[0-5][0-9]{7}|614732586[0-5][0-9]{6}|6147325866[0-7][0-9]{5}|61473258668[0-5][0-9]{4}|614732586686[0-4][0-9]{3}|6147325866865[01][0-9]{2}|61473258668652[01][0-9]|6147325866865220)|(614763457998703[5-9]|61476345799870[4-9][0-9]|6147634579987[1-9][0-9]{2}|614763457998[89][0-9]{3}|614763457999[0-9]{4}|61476345[89][0-9]{7}|61476346[0-6][0-9]{7}|614763467[0-8][0-9]{6}|6147634679[0-8][0-9]{5}|61476346799[0-6][0-9]{4}|6147634679970[0-2][0-9]{2}|61476346799703[0-6][0-9]|614763467997037[0-8])|(614803341513061[6-9]|61480334151306[2-9][0-9]|6148033415130[7-9][0-9]{2}|614803341513[1-9][0-9]{3}|61480334151[4-9][0-9]{4}|6148033415[2-9][0-9]{5}|614803341[6-9][0-9]{6}|61480334[2-5][0-9]{7}|614803346[0-4][0-9]{6}|61480334650[0-9]{5}|61480334651[0-6][0-9]{4}|614803346517[01][0-9]{3}|6148033465172[0-8][0-9]{2}|61480334651729[0-6][0-9]|614803346517297[01])",\n        "detection": "(614543544444174[0-9]|61454354444417[5-9][0-9]|6145435444441[89][0-9]{2}|614543544444[2-9][0-9]{3}|61454354444[5-9][0-9]{4}|6145435444[5-9][0-9]{5}|614543544[5-9][0-9]{6}|61454354[5-9][0-9]{7}|61454355[0-5][0-9]{7}|614543556[0-3][0-9]{6}|6145435564[0-3][0-9]{5}|61454355644[0-2][0-9]{4}|614543556443[0-6][0-9]{3}|6145435564437[0-3][0-9]{2}|61454355644374[0-6][0-9]|6145435564437470)|(614543556444250[0-9]|61454355644425[1-9][0-9]|6145435564442[6-9][0-9]{2}|614543556444[3-9][0-9]{3}|61454355644[5-9][0-9]{4}|6145435564[5-9][0-9]{5}|614543556[5-9][0-9]{6}|61454355[7-9][0-9]{7}|6145435[67][0-9]{8}|61454358[01][0-9]{7}|614543582[0-5][0-9]{6}|6145435826[0-3][0-9]{5}|61454358264[0-2][0-9]{4}|614543582643[0-7][0-9]{3}|6145435826438[0-6][0-9]{2}|61454358264387[0-8][0-9]|6145435826438790)|(614543582644266[0-9]|61454358264426[7-9][0-9]|6145435826442[7-9][0-9]{2}|614543582644[3-9][0-9]{3}|61454358264[5-9][0-9]{4}|6145435826[5-9][0-9]{5}|614543582[7-9][0-9]{6}|61454358[3-9][0-9]{7}|61454359[0-9]{8}|6145436[01][0-9]{8}|61454362[0-8][0-9]{7}|614543629[0-4][0-9]{6}|6145436295[0-3][0-9]{5}|61454362954[0-2][0-9]{4}|614543629543[0-7][0-9]{3}|61454362954380[0-9]{2}|61454362954381[0-4][0-9]|6145436295438150)|(614632709176054[0-9]|61463270917605[5-9][0-9]|6146327091760[6-9][0-9]{2}|614632709176[1-9][0-9]{3}|61463270917[7-9][0-9]{4}|6146327091[89][0-9]{5}|614632709[2-9][0-9]{6}|61463271[0-9]{8}|61463272[0-3][0-9]{7}|6146327240[0-9]{6}|6146327241[0-6][0-9]{5}|61463272417[0-4][0-9]{4}|614632724175[0-2][0-9]{3}|6146327241753[0-4][0-9]{2}|61463272417535[0-7][0-9]|6146327241753580)|(614732576687790[4-9]|61473257668779[1-9][0-9]|614732576687[89][0-9]{3}|61473257668[89][0-9]{4}|61473257669[0-9]{5}|614732576[7-9][0-9]{6}|61473257[7-9][0-9]{7}|61473258[0-5][0-9]{7}|614732586[0-5][0-9]{6}|6147325866[0-7][0-9]{5}|61473258668[0-5][0-9]{4}|614732586686[0-4][0-9]{3}|6147325866865[01][0-9]{2}|61473258668652[01][0-9]|6147325866865220)|(614763457998703[5-9]|61476345799870[4-9][0-9]|6147634579987[1-9][0-9]{2}|614763457998[89][0-9]{3}|614763457999[0-9]{4}|61476345[89][0-9]{7}|61476346[0-6][0-9]{7}|614763467[0-8][0-9]{6}|6147634679[0-8][0-9]{5}|61476346799[0-6][0-9]{4}|6147634679970[0-2][0-9]{2}|61476346799703[0-6][0-9]|614763467997037[0-8])|(614803341513061[6-9]|61480334151306[2-9][0-9]|6148033415130[7-9][0-9]{2}|614803341513[1-9][0-9]{3}|61480334151[4-9][0-9]{4}|6148033415[2-9][0-9]{5}|614803341[6-9][0-9]{6}|61480334[2-5][0-9]{7}|614803346[0-4][0-9]{6}|61480334650[0-9]{5}|61480334651[0-6][0-9]{4}|614803346517[01][0-9]{3}|6148033465172[0-8][0-9]{2}|61480334651729[0-6][0-9]|614803346517297[01])",\n        "hasPin": true\n      }\n    ]\n  },\n  "test" : {\n    "RL_PRIVATE_LABEL_VA": [\n      {\n        "number": "^(707772892513600[0-9]|70777289251360[1-9][0-9]|7077728925136[1-9][0-9]{2}|707772892513[7-9][0-9]{3}|7077728925140000)|(707772892514600[0-9]|70777289251460[1-9][0-9]|7077728925146[1-9][0-9]{2}|707772892514[7-9][0-9]{3}|7077728925150000)",\n        "detection": "(707772892513600[0-9]|70777289251360[1-9][0-9]|7077728925136[1-9][0-9]{2}|707772892513[7-9][0-9]{3}|7077728925140000)|(707772892514600[0-9]|70777289251460[1-9][0-9]|7077728925146[1-9][0-9]{2}|707772892514[7-9][0-9]{3}|7077728925150000)",\n        "hasPin": true\n      }\n    ]\n  }\n}';});
@@ -17139,6 +17142,125 @@ define('module/Locale',['require','module/Options'],function(require){
 	return Locale;
 });
 
+/**
+ * I18n holds only the set language.
+ * This is more memory efficient and faster to look up.
+ */
+define('module/I18n',['require','jquery','module/Language','module/Locale','module/Options'],function(require){
+    var $ = require("jquery");
+    var Language = require("module/Language");
+    var Locale = require("module/Locale");
+    var Options = require("module/Options");
+
+    // merchant can specify any locale.language. we fall back to en if specified lang is not found
+    var lang = Language[Locale.language] ? Language[Locale.language] : Language.en;
+
+    var deep = true;
+    var target = {};
+    // merge english with lang, so languages with missing keys will fall back to the english values
+    var I18n = $.extend(deep, target, Language.en, lang);
+
+    // merge custom labels, placeholder and error messages. This are set up in wpwlOptions
+    I18n = $.extend(deep, I18n, Options.labels, Options.errorMessages, Options.placeholders);
+
+    I18n.translate = function(key, paramsMap) {
+        var text = I18n[key];
+        if (text && paramsMap) {
+            try {
+                Object.keys(paramsMap).forEach(function(key){
+                    text = text.replace(new RegExp('{{'+key+'}}', 'gm'), paramsMap[key]);
+                });
+            } catch(e) {
+                console.log("failed to translate " + key);
+            }
+        }
+
+        return text;
+    };
+
+    return I18n;
+});
+
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define('dompurify',t):e.DOMPurify=t()}(this,function(){"use strict";function e(e,t){for(var n=t.length;n--;)"string"==typeof t[n]&&(t[n]=t[n].toLowerCase()),e[t[n]]=!0;return e}function t(e){var t={},n=void 0;for(n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n]);return t}function n(e){if(Array.isArray(e)){for(var t=0,n=Array(e.length);t<e.length;t++)n[t]=e[t];return n}return Array.from(e)}function o(){var x=arguments.length>0&&void 0!==arguments[0]?arguments[0]:A(),S=function(e){return o(e)};if(S.version="1.0.5",S.removed=[],!x||!x.document||9!==x.document.nodeType)return S.isSupported=!1,S;var k=x.document,w=!1,E=x.document,L=x.DocumentFragment,O=x.HTMLTemplateElement,M=x.Node,D=x.NodeFilter,N=x.NamedNodeMap,_=void 0===N?x.NamedNodeMap||x.MozNamedAttrMap:N,R=x.Text,C=x.Comment,F=x.DOMParser;if("function"==typeof O){var z=E.createElement("template");z.content&&z.content.ownerDocument&&(E=z.content.ownerDocument)}var H=E,I=H.implementation,j=H.createNodeIterator,P=H.getElementsByTagName,W=H.createDocumentFragment,U=k.importNode,B={};S.isSupported=I&&void 0!==I.createHTMLDocument&&9!==E.documentMode;var G=f,q=p,V=h,Y=g,K=v,X=b,$=y,J=null,Q=e({},[].concat(n(r),n(i),n(a),n(l),n(s))),Z=null,ee=e({},[].concat(n(c),n(d),n(u),n(m))),te=null,ne=null,oe=!0,re=!0,ie=!1,ae=!1,le=!1,se=!1,ce=!1,de=!1,ue=!1,me=!1,fe=!1,pe=!0,he=!0,ge={},ye=e({},["audio","head","math","script","style","template","svg","video"]),ve=e({},["audio","video","img","source","image"]),be=e({},["alt","class","for","id","label","name","pattern","placeholder","summary","title","value","style","xmlns"]),Te=null,Ae=E.createElement("form"),xe=function(o){"object"!==(void 0===o?"undefined":T(o))&&(o={}),J="ALLOWED_TAGS"in o?e({},o.ALLOWED_TAGS):Q,Z="ALLOWED_ATTR"in o?e({},o.ALLOWED_ATTR):ee,te="FORBID_TAGS"in o?e({},o.FORBID_TAGS):{},ne="FORBID_ATTR"in o?e({},o.FORBID_ATTR):{},ge="USE_PROFILES"in o&&o.USE_PROFILES,oe=!1!==o.ALLOW_ARIA_ATTR,re=!1!==o.ALLOW_DATA_ATTR,ie=o.ALLOW_UNKNOWN_PROTOCOLS||!1,ae=o.SAFE_FOR_JQUERY||!1,le=o.SAFE_FOR_TEMPLATES||!1,se=o.WHOLE_DOCUMENT||!1,ue=o.RETURN_DOM||!1,me=o.RETURN_DOM_FRAGMENT||!1,fe=o.RETURN_DOM_IMPORT||!1,de=o.FORCE_BODY||!1,pe=!1!==o.SANITIZE_DOM,he=!1!==o.KEEP_CONTENT,$=o.ALLOWED_URI_REGEXP||$,le&&(re=!1),me&&(ue=!0),ge&&(J=e({},[].concat(n(s))),Z=[],!0===ge.html&&(e(J,r),e(Z,c)),!0===ge.svg&&(e(J,i),e(Z,d),e(Z,m)),!0===ge.svgFilters&&(e(J,a),e(Z,d),e(Z,m)),!0===ge.mathMl&&(e(J,l),e(Z,u),e(Z,m))),o.ADD_TAGS&&(J===Q&&(J=t(J)),e(J,o.ADD_TAGS)),o.ADD_ATTR&&(Z===ee&&(Z=t(Z)),e(Z,o.ADD_ATTR)),o.ADD_URI_SAFE_ATTR&&e(be,o.ADD_URI_SAFE_ATTR),he&&(J["#text"]=!0),se&&e(J,["html","head","body"]),Object&&"freeze"in Object&&Object.freeze(o),Te=o},Se=function(e){S.removed.push({element:e});try{e.parentNode.removeChild(e)}catch(t){e.outerHTML=""}},ke=function(e,t){try{S.removed.push({attribute:t.getAttributeNode(e),from:t})}catch(e){S.removed.push({attribute:null,from:t})}t.removeAttribute(e)},we=function(e){var t=void 0;if(de&&(e="<remove></remove>"+e),w)try{t=(new F).parseFromString(e,"text/html")}catch(e){}if(!t||!t.documentElement){var n=(t=I.createHTMLDocument("")).body;n.parentNode.removeChild(n.parentNode.firstElementChild),n.outerHTML=e}return P.call(t,se?"html":"body")[0]};S.isSupported&&function(){try{we('<svg><p><style><img src="</style><img src=x onerror=alert(1)//">').querySelector("svg img")&&(w=!0)}catch(e){}}();var Ee=function(e){return j.call(e.ownerDocument||e,e,D.SHOW_ELEMENT|D.SHOW_COMMENT|D.SHOW_TEXT,function(){return D.FILTER_ACCEPT},!1)},Le=function(e){return!(e instanceof R||e instanceof C)&&!("string"==typeof e.nodeName&&"string"==typeof e.textContent&&"function"==typeof e.removeChild&&e.attributes instanceof _&&"function"==typeof e.removeAttribute&&"function"==typeof e.setAttribute)},Oe=function(e){return"object"===(void 0===M?"undefined":T(M))?e instanceof M:e&&"object"===(void 0===e?"undefined":T(e))&&"number"==typeof e.nodeType&&"string"==typeof e.nodeName},Me=function(e,t,n){B[e]&&B[e].forEach(function(e){e.call(S,t,n,Te)})},De=function(e){var t=void 0;if(Me("beforeSanitizeElements",e,null),Le(e))return Se(e),!0;var n=e.nodeName.toLowerCase();if(Me("uponSanitizeElement",e,{tagName:n,allowedTags:J}),!J[n]||te[n]){if(he&&!ye[n]&&"function"==typeof e.insertAdjacentHTML)try{e.insertAdjacentHTML("AfterEnd",e.innerHTML)}catch(e){}return Se(e),!0}return!ae||e.firstElementChild||e.content&&e.content.firstElementChild||!/</g.test(e.textContent)||(S.removed.push({element:e.cloneNode()}),e.innerHTML?e.innerHTML=e.innerHTML.replace(/</g,"&lt;"):e.innerHTML=e.textContent.replace(/</g,"&lt;")),le&&3===e.nodeType&&(t=(t=(t=e.textContent).replace(G," ")).replace(q," "),e.textContent!==t&&(S.removed.push({element:e.cloneNode()}),e.textContent=t)),Me("afterSanitizeElements",e,null),!1},Ne=function(e){var t=void 0,n=void 0,o=void 0,r=void 0,i=void 0;Me("beforeSanitizeAttributes",e,null);var a=e.attributes;if(a){var l={attrName:"",attrValue:"",keepAttr:!0,allowedAttributes:Z};for(i=a.length;i--;){var s=(t=a[i]).name;if(n=t.value.trim(),o=s.toLowerCase(),l.attrName=o,l.attrValue=n,l.keepAttr=!0,Me("uponSanitizeAttribute",e,l),n=l.attrValue,"name"===o&&"IMG"===e.nodeName&&a.id)r=a.id,a=Array.prototype.slice.apply(a),ke("id",e),ke(s,e),a.indexOf(r)>i&&e.setAttribute("id",r.value);else{if("INPUT"===e.nodeName&&"type"===o&&"file"===n&&(Z[o]||!ne[o]))continue;"id"===s&&e.setAttribute(s,""),ke(s,e)}if(l.keepAttr&&(!pe||"id"!==o&&"name"!==o||!(n in E||n in Ae))){if(le&&(n=(n=n.replace(G," ")).replace(q," ")),re&&V.test(o));else if(oe&&Y.test(o));else{if(!Z[o]||ne[o])continue;if(be[o]);else if($.test(n.replace(X,"")));else if("src"!==o&&"xlink:href"!==o||0!==n.indexOf("data:")||!ve[e.nodeName.toLowerCase()]){if(ie&&!K.test(n.replace(X,"")));else if(n)continue}else;}try{e.setAttribute(s,n),S.removed.pop()}catch(e){}}}Me("afterSanitizeAttributes",e,null)}},_e=function e(t){var n=void 0,o=Ee(t);for(Me("beforeSanitizeShadowDOM",t,null);n=o.nextNode();)Me("uponSanitizeShadowNode",n,null),De(n)||(n.content instanceof L&&e(n.content),Ne(n));Me("afterSanitizeShadowDOM",t,null)};return S.sanitize=function(e,t){var n=void 0,o=void 0,r=void 0,i=void 0,a=void 0;if(e||(e="\x3c!--\x3e"),"string"!=typeof e&&!Oe(e)){if("function"!=typeof e.toString)throw new TypeError("toString is not a function");if("string"!=typeof(e=e.toString()))throw new TypeError("dirty is not a string, aborting")}if(!S.isSupported){if("object"===T(x.toStaticHTML)||"function"==typeof x.toStaticHTML){if("string"==typeof e)return x.toStaticHTML(e);if(Oe(e))return x.toStaticHTML(e.outerHTML)}return e}if(ce||xe(t),S.removed=[],e instanceof M)1===(o=(n=we("\x3c!--\x3e")).ownerDocument.importNode(e,!0)).nodeType&&"BODY"===o.nodeName?n=o:n.appendChild(o);else{if(!ue&&!se&&-1===e.indexOf("<"))return e;if(!(n=we(e)))return ue?null:""}de&&Se(n.firstChild);for(var l=Ee(n);r=l.nextNode();)3===r.nodeType&&r===i||De(r)||(r.content instanceof L&&_e(r.content),Ne(r),i=r);if(ue){if(me)for(a=W.call(n.ownerDocument);n.firstChild;)a.appendChild(n.firstChild);else a=n;return fe&&(a=U.call(k,a,!0)),a}return se?n.outerHTML:n.innerHTML},S.setConfig=function(e){xe(e),ce=!0},S.clearConfig=function(){Te=null,ce=!1},S.addHook=function(e,t){"function"==typeof t&&(B[e]=B[e]||[],B[e].push(t))},S.removeHook=function(e){B[e]&&B[e].pop()},S.removeHooks=function(e){B[e]&&(B[e]=[])},S.removeAllHooks=function(){B={}},S}var r=["a","abbr","acronym","address","area","article","aside","audio","b","bdi","bdo","big","blink","blockquote","body","br","button","canvas","caption","center","cite","code","col","colgroup","content","data","datalist","dd","decorator","del","details","dfn","dir","div","dl","dt","element","em","fieldset","figcaption","figure","font","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","img","input","ins","kbd","label","legend","li","main","map","mark","marquee","menu","menuitem","meter","nav","nobr","ol","optgroup","option","output","p","pre","progress","q","rp","rt","ruby","s","samp","section","select","shadow","small","source","spacer","span","strike","strong","style","sub","summary","sup","table","tbody","td","template","textarea","tfoot","th","thead","time","tr","track","tt","u","ul","var","video","wbr"],i=["svg","a","altglyph","altglyphdef","altglyphitem","animatecolor","animatemotion","animatetransform","audio","canvas","circle","clippath","defs","desc","ellipse","filter","font","g","glyph","glyphref","hkern","image","line","lineargradient","marker","mask","metadata","mpath","path","pattern","polygon","polyline","radialgradient","rect","stop","style","switch","symbol","text","textpath","title","tref","tspan","video","view","vkern"],a=["feBlend","feColorMatrix","feComponentTransfer","feComposite","feConvolveMatrix","feDiffuseLighting","feDisplacementMap","feDistantLight","feFlood","feFuncA","feFuncB","feFuncG","feFuncR","feGaussianBlur","feMerge","feMergeNode","feMorphology","feOffset","fePointLight","feSpecularLighting","feSpotLight","feTile","feTurbulence"],l=["math","menclose","merror","mfenced","mfrac","mglyph","mi","mlabeledtr","mmuliscripts","mn","mo","mover","mpadded","mphantom","mroot","mrow","ms","mpspace","msqrt","mystyle","msub","msup","msubsup","mtable","mtd","mtext","mtr","munder","munderover"],s=["#text"],c=["accept","action","align","alt","autocomplete","background","bgcolor","border","cellpadding","cellspacing","checked","cite","class","clear","color","cols","colspan","coords","crossorigin","datetime","default","dir","disabled","download","enctype","face","for","headers","height","hidden","high","href","hreflang","id","integrity","ismap","label","lang","list","loop","low","max","maxlength","media","method","min","multiple","name","noshade","novalidate","nowrap","open","optimum","pattern","placeholder","poster","preload","pubdate","radiogroup","readonly","rel","required","rev","reversed","role","rows","rowspan","spellcheck","scope","selected","shape","size","sizes","span","srclang","start","src","srcset","step","style","summary","tabindex","title","type","usemap","valign","value","width","xmlns"],d=["accent-height","accumulate","additivive","alignment-baseline","ascent","attributename","attributetype","azimuth","basefrequency","baseline-shift","begin","bias","by","class","clip","clip-path","clip-rule","color","color-interpolation","color-interpolation-filters","color-profile","color-rendering","cx","cy","d","dx","dy","diffuseconstant","direction","display","divisor","dur","edgemode","elevation","end","fill","fill-opacity","fill-rule","filter","flood-color","flood-opacity","font-family","font-size","font-size-adjust","font-stretch","font-style","font-variant","font-weight","fx","fy","g1","g2","glyph-name","glyphref","gradientunits","gradienttransform","height","href","id","image-rendering","in","in2","k","k1","k2","k3","k4","kerning","keypoints","keysplines","keytimes","lang","lengthadjust","letter-spacing","kernelmatrix","kernelunitlength","lighting-color","local","marker-end","marker-mid","marker-start","markerheight","markerunits","markerwidth","maskcontentunits","maskunits","max","mask","media","method","mode","min","name","numoctaves","offset","operator","opacity","order","orient","orientation","origin","overflow","paint-order","path","pathlength","patterncontentunits","patterntransform","patternunits","points","preservealpha","preserveaspectratio","r","rx","ry","radius","refx","refy","repeatcount","repeatdur","restart","result","rotate","scale","seed","shape-rendering","specularconstant","specularexponent","spreadmethod","stddeviation","stitchtiles","stop-color","stop-opacity","stroke-dasharray","stroke-dashoffset","stroke-linecap","stroke-linejoin","stroke-miterlimit","stroke-opacity","stroke","stroke-width","style","surfacescale","tabindex","targetx","targety","transform","text-anchor","text-decoration","text-rendering","textlength","type","u1","u2","unicode","values","viewbox","visibility","vert-adv-y","vert-origin-x","vert-origin-y","width","word-spacing","wrap","writing-mode","xchannelselector","ychannelselector","x","x1","x2","xmlns","y","y1","y2","z","zoomandpan"],u=["accent","accentunder","align","bevelled","close","columnsalign","columnlines","columnspan","denomalign","depth","dir","display","displaystyle","fence","frame","height","href","id","largeop","length","linethickness","lspace","lquote","mathbackground","mathcolor","mathsize","mathvariant","maxsize","minsize","movablelimits","notation","numalign","open","rowalign","rowlines","rowspacing","rowspan","rspace","rquote","scriptlevel","scriptminsize","scriptsizemultiplier","selection","separator","separators","stretchy","subscriptshift","supscriptshift","symmetric","voffset","width","xmlns"],m=["xlink:href","xml:id","xlink:title","xml:space","xmlns:xlink"],f=/\{\{[\s\S]*|[\s\S]*\}\}/gm,p=/<%[\s\S]*|[\s\S]*%>/gm,h=/^data-[\-\w.\u00B7-\uFFFF]/,g=/^aria-[\-\w]+$/,y=/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,v=/^(?:\w+script|data):/i,b=/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205f\u3000]/g,T="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},A=function(){return"undefined"==typeof window?null:window};return o()});
+//# sourceMappingURL=purify.min.js.map
+;
+define('module/Browser',['require','module/Parameter','module/Options'],function(require) {
+
+    var Parameter = require('module/Parameter');
+    var Options = require('module/Options');
+
+    var defaultChallengeWindow = 5;
+    
+    // Please refer to EMV 3-D secure protocol and core functions spec V2.1.0 PDF
+    var challengeWindow = 
+        [
+            { "width": 600, "result": 4 },
+            { "width": 500, "result": 3 },
+            { "width": 390, "result": 2 },
+            { "width": 250, "result": 1 }
+        ];
+    
+	var Browser = {};
+		
+	Browser.asFields = function($container) {
+	    var resultFields = {};
+
+	    asParam(Parameter.BROWSER_JAVASCRIPT_ENABLED, true, resultFields );
+	    
+	    if (navigator) {	    	    
+            asParam(Parameter.BROWSER_LANGUAGE, navigator.language, resultFields );
+            asParam(Parameter.BROWSER_USERAGENT, navigator.userAgent, resultFields ); 
+            asParam(Parameter.BROWSER_JAVAENABLED, navigator.javaEnabled(), resultFields ); 
+        }
+        
+        if (screen) {        
+            asParam(Parameter.BROWSER_SCREEN_HEIGHT, screen.height, resultFields );
+            asParam(Parameter.BROWSER_SCREEN_WIDTH, screen.width, resultFields );
+            asParam(Parameter.BROWSER_SCREEN_COLOR_DEPTH, screen.colorDepth, resultFields );
+        }    
+
+        if ($container) {        
+            var cw = calculateChallengeWindow($container);
+            asParam(Parameter.BROWSER_CHALLENGE_WINDOW, cw, resultFields );
+        }
+
+        asParam(Parameter.BROWSER_TIMEZONE, calculateTimezone(), resultFields );         
+	    return resultFields;
+	};
+		
+	function asParam(paramKey, paramValue, map) {
+	    if (paramValue != null) {
+	        map[paramKey] = paramValue;
+	    }
+	}
+	
+	function calculateTimezone() {
+	    var d = new Date();
+	    return d.getTimezoneOffset();
+	}
+	
+	function calculateChallengeWindow($container) {
+
+        // Return merchant's challenge window if it is valid and available
+        if (Options.browser && Options.browser.threeDChallengeWindow &&
+            Options.browser.threeDChallengeWindow >= 1 && Options.browser.threeDChallengeWindow <=5) {
+            return Options.browser.threeDChallengeWindow;     
+        } 
+       
+        // Calculate best fit
+	    var width = $container.width();
+	    for (var i=0; i < challengeWindow.length; i++) {
+	        if (width >= challengeWindow[i].width)
+            	return challengeWindow[i].result;
+	    }
+	    
+	    // Not able to determine the challenge window, use default
+	    return defaultChallengeWindow;
+	}
+	
+	return Browser;
+});
+
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -18425,66 +18547,6 @@ define('module/Locale',['require','module/Options'],function(require){
     return '\\' + escapes[match];
   };
 
-  // JavaScript micro-templating, similar to John Resig's implementation.
-  // Underscore templating handles arbitrary delimiters, preserves whitespace,
-  // and correctly escapes quotes within interpolated code.
-  // NB: `oldSettings` only exists for backwards compatibility.
-  _.template = function(text, settings, oldSettings) {
-    if (!settings && oldSettings) settings = oldSettings;
-    settings = _.defaults({}, settings, _.templateSettings);
-
-    // Combine delimiters into one regular expression via alternation.
-    var matcher = RegExp([
-      (settings.escape || noMatch).source,
-      (settings.interpolate || noMatch).source,
-      (settings.evaluate || noMatch).source
-    ].join('|') + '|$', 'g');
-
-    // Compile the template source, escaping string literals appropriately.
-    var index = 0;
-    var source = "__p+='";
-    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
-      source += text.slice(index, offset).replace(escaper, escapeChar);
-      index = offset + match.length;
-
-      if (escape) {
-        source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
-      } else if (interpolate) {
-        source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
-      } else if (evaluate) {
-        source += "';\n" + evaluate + "\n__p+='";
-      }
-
-      // Adobe VMs need the match returned to produce the correct offest.
-      return match;
-    });
-    source += "';\n";
-
-    // If a variable is not specified, place data values in local scope.
-    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
-
-    source = "var __t,__p='',__j=Array.prototype.join," +
-      "print=function(){__p+=__j.call(arguments,'');};\n" +
-      source + 'return __p;\n';
-
-    try {
-      var render = new Function(settings.variable || 'obj', '_', source);
-    } catch (e) {
-      e.source = source;
-      throw e;
-    }
-
-    var template = function(data) {
-      return render.call(this, data, _);
-    };
-
-    // Provide the compiled source as a convenience for precompilation.
-    var argument = settings.variable || 'obj';
-    template.source = 'function(' + argument + '){\n' + source + '}';
-
-    return template;
-  };
-
   // Add a "chain" function. Start chaining a wrapped Underscore object.
   _.chain = function(obj) {
     var instance = _(obj);
@@ -18757,125 +18819,6 @@ define('module/Util',['require','jquery','underscore'],function(require){
     Util = $.extend(Util, underscore);
     
     return Util;
-});
-
-/**
- * I18n holds only the set language.
- * This is more memory efficient and faster to look up.
- */
-define('module/I18n',['require','jquery','module/Language','module/Locale','module/Options','module/Util'],function(require){
-    var $ = require("jquery");
-    var Language = require("module/Language");
-    var Locale = require("module/Locale");
-    var Options = require("module/Options");
-    var Util = require("module/Util");
-
-    // merchant can specify any locale.language. we fall back to en if specified lang is not found
-    var lang = Language[Locale.language] ? Language[Locale.language] : Language.en;
-
-    var deep = true;
-    var target = {};
-    // merge english with lang, so languages with missing keys will fall back to the english values
-    var I18n = $.extend(deep, target, Language.en, lang);
-
-    // merge custom labels, placeholder and error messages. This are set up in wpwlOptions
-    I18n = $.extend(deep, I18n, Options.labels, Options.errorMessages, Options.placeholders);
-
-    I18n.translate = function(key, paramsMap) {
-        var text = I18n[key];
-        if (text && paramsMap) {
-            try {
-                var compiledTemplate = Util.template(text,  {interpolate: /\{\{(.+?)\}\}/g, variable:''});
-                text = compiledTemplate(paramsMap);
-            } catch(e) {
-                console.log("failed to translate " + key);
-            }
-        }
-
-        return text;
-    };
-
-    return I18n;
-});
-
-!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define('dompurify',t):e.DOMPurify=t()}(this,function(){"use strict";function e(e,t){for(var n=t.length;n--;)"string"==typeof t[n]&&(t[n]=t[n].toLowerCase()),e[t[n]]=!0;return e}function t(e){var t={},n=void 0;for(n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n]);return t}function n(e){if(Array.isArray(e)){for(var t=0,n=Array(e.length);t<e.length;t++)n[t]=e[t];return n}return Array.from(e)}function o(){var x=arguments.length>0&&void 0!==arguments[0]?arguments[0]:A(),S=function(e){return o(e)};if(S.version="1.0.5",S.removed=[],!x||!x.document||9!==x.document.nodeType)return S.isSupported=!1,S;var k=x.document,w=!1,E=x.document,L=x.DocumentFragment,O=x.HTMLTemplateElement,M=x.Node,D=x.NodeFilter,N=x.NamedNodeMap,_=void 0===N?x.NamedNodeMap||x.MozNamedAttrMap:N,R=x.Text,C=x.Comment,F=x.DOMParser;if("function"==typeof O){var z=E.createElement("template");z.content&&z.content.ownerDocument&&(E=z.content.ownerDocument)}var H=E,I=H.implementation,j=H.createNodeIterator,P=H.getElementsByTagName,W=H.createDocumentFragment,U=k.importNode,B={};S.isSupported=I&&void 0!==I.createHTMLDocument&&9!==E.documentMode;var G=f,q=p,V=h,Y=g,K=v,X=b,$=y,J=null,Q=e({},[].concat(n(r),n(i),n(a),n(l),n(s))),Z=null,ee=e({},[].concat(n(c),n(d),n(u),n(m))),te=null,ne=null,oe=!0,re=!0,ie=!1,ae=!1,le=!1,se=!1,ce=!1,de=!1,ue=!1,me=!1,fe=!1,pe=!0,he=!0,ge={},ye=e({},["audio","head","math","script","style","template","svg","video"]),ve=e({},["audio","video","img","source","image"]),be=e({},["alt","class","for","id","label","name","pattern","placeholder","summary","title","value","style","xmlns"]),Te=null,Ae=E.createElement("form"),xe=function(o){"object"!==(void 0===o?"undefined":T(o))&&(o={}),J="ALLOWED_TAGS"in o?e({},o.ALLOWED_TAGS):Q,Z="ALLOWED_ATTR"in o?e({},o.ALLOWED_ATTR):ee,te="FORBID_TAGS"in o?e({},o.FORBID_TAGS):{},ne="FORBID_ATTR"in o?e({},o.FORBID_ATTR):{},ge="USE_PROFILES"in o&&o.USE_PROFILES,oe=!1!==o.ALLOW_ARIA_ATTR,re=!1!==o.ALLOW_DATA_ATTR,ie=o.ALLOW_UNKNOWN_PROTOCOLS||!1,ae=o.SAFE_FOR_JQUERY||!1,le=o.SAFE_FOR_TEMPLATES||!1,se=o.WHOLE_DOCUMENT||!1,ue=o.RETURN_DOM||!1,me=o.RETURN_DOM_FRAGMENT||!1,fe=o.RETURN_DOM_IMPORT||!1,de=o.FORCE_BODY||!1,pe=!1!==o.SANITIZE_DOM,he=!1!==o.KEEP_CONTENT,$=o.ALLOWED_URI_REGEXP||$,le&&(re=!1),me&&(ue=!0),ge&&(J=e({},[].concat(n(s))),Z=[],!0===ge.html&&(e(J,r),e(Z,c)),!0===ge.svg&&(e(J,i),e(Z,d),e(Z,m)),!0===ge.svgFilters&&(e(J,a),e(Z,d),e(Z,m)),!0===ge.mathMl&&(e(J,l),e(Z,u),e(Z,m))),o.ADD_TAGS&&(J===Q&&(J=t(J)),e(J,o.ADD_TAGS)),o.ADD_ATTR&&(Z===ee&&(Z=t(Z)),e(Z,o.ADD_ATTR)),o.ADD_URI_SAFE_ATTR&&e(be,o.ADD_URI_SAFE_ATTR),he&&(J["#text"]=!0),se&&e(J,["html","head","body"]),Object&&"freeze"in Object&&Object.freeze(o),Te=o},Se=function(e){S.removed.push({element:e});try{e.parentNode.removeChild(e)}catch(t){e.outerHTML=""}},ke=function(e,t){try{S.removed.push({attribute:t.getAttributeNode(e),from:t})}catch(e){S.removed.push({attribute:null,from:t})}t.removeAttribute(e)},we=function(e){var t=void 0;if(de&&(e="<remove></remove>"+e),w)try{t=(new F).parseFromString(e,"text/html")}catch(e){}if(!t||!t.documentElement){var n=(t=I.createHTMLDocument("")).body;n.parentNode.removeChild(n.parentNode.firstElementChild),n.outerHTML=e}return P.call(t,se?"html":"body")[0]};S.isSupported&&function(){try{we('<svg><p><style><img src="</style><img src=x onerror=alert(1)//">').querySelector("svg img")&&(w=!0)}catch(e){}}();var Ee=function(e){return j.call(e.ownerDocument||e,e,D.SHOW_ELEMENT|D.SHOW_COMMENT|D.SHOW_TEXT,function(){return D.FILTER_ACCEPT},!1)},Le=function(e){return!(e instanceof R||e instanceof C)&&!("string"==typeof e.nodeName&&"string"==typeof e.textContent&&"function"==typeof e.removeChild&&e.attributes instanceof _&&"function"==typeof e.removeAttribute&&"function"==typeof e.setAttribute)},Oe=function(e){return"object"===(void 0===M?"undefined":T(M))?e instanceof M:e&&"object"===(void 0===e?"undefined":T(e))&&"number"==typeof e.nodeType&&"string"==typeof e.nodeName},Me=function(e,t,n){B[e]&&B[e].forEach(function(e){e.call(S,t,n,Te)})},De=function(e){var t=void 0;if(Me("beforeSanitizeElements",e,null),Le(e))return Se(e),!0;var n=e.nodeName.toLowerCase();if(Me("uponSanitizeElement",e,{tagName:n,allowedTags:J}),!J[n]||te[n]){if(he&&!ye[n]&&"function"==typeof e.insertAdjacentHTML)try{e.insertAdjacentHTML("AfterEnd",e.innerHTML)}catch(e){}return Se(e),!0}return!ae||e.firstElementChild||e.content&&e.content.firstElementChild||!/</g.test(e.textContent)||(S.removed.push({element:e.cloneNode()}),e.innerHTML?e.innerHTML=e.innerHTML.replace(/</g,"&lt;"):e.innerHTML=e.textContent.replace(/</g,"&lt;")),le&&3===e.nodeType&&(t=(t=(t=e.textContent).replace(G," ")).replace(q," "),e.textContent!==t&&(S.removed.push({element:e.cloneNode()}),e.textContent=t)),Me("afterSanitizeElements",e,null),!1},Ne=function(e){var t=void 0,n=void 0,o=void 0,r=void 0,i=void 0;Me("beforeSanitizeAttributes",e,null);var a=e.attributes;if(a){var l={attrName:"",attrValue:"",keepAttr:!0,allowedAttributes:Z};for(i=a.length;i--;){var s=(t=a[i]).name;if(n=t.value.trim(),o=s.toLowerCase(),l.attrName=o,l.attrValue=n,l.keepAttr=!0,Me("uponSanitizeAttribute",e,l),n=l.attrValue,"name"===o&&"IMG"===e.nodeName&&a.id)r=a.id,a=Array.prototype.slice.apply(a),ke("id",e),ke(s,e),a.indexOf(r)>i&&e.setAttribute("id",r.value);else{if("INPUT"===e.nodeName&&"type"===o&&"file"===n&&(Z[o]||!ne[o]))continue;"id"===s&&e.setAttribute(s,""),ke(s,e)}if(l.keepAttr&&(!pe||"id"!==o&&"name"!==o||!(n in E||n in Ae))){if(le&&(n=(n=n.replace(G," ")).replace(q," ")),re&&V.test(o));else if(oe&&Y.test(o));else{if(!Z[o]||ne[o])continue;if(be[o]);else if($.test(n.replace(X,"")));else if("src"!==o&&"xlink:href"!==o||0!==n.indexOf("data:")||!ve[e.nodeName.toLowerCase()]){if(ie&&!K.test(n.replace(X,"")));else if(n)continue}else;}try{e.setAttribute(s,n),S.removed.pop()}catch(e){}}}Me("afterSanitizeAttributes",e,null)}},_e=function e(t){var n=void 0,o=Ee(t);for(Me("beforeSanitizeShadowDOM",t,null);n=o.nextNode();)Me("uponSanitizeShadowNode",n,null),De(n)||(n.content instanceof L&&e(n.content),Ne(n));Me("afterSanitizeShadowDOM",t,null)};return S.sanitize=function(e,t){var n=void 0,o=void 0,r=void 0,i=void 0,a=void 0;if(e||(e="\x3c!--\x3e"),"string"!=typeof e&&!Oe(e)){if("function"!=typeof e.toString)throw new TypeError("toString is not a function");if("string"!=typeof(e=e.toString()))throw new TypeError("dirty is not a string, aborting")}if(!S.isSupported){if("object"===T(x.toStaticHTML)||"function"==typeof x.toStaticHTML){if("string"==typeof e)return x.toStaticHTML(e);if(Oe(e))return x.toStaticHTML(e.outerHTML)}return e}if(ce||xe(t),S.removed=[],e instanceof M)1===(o=(n=we("\x3c!--\x3e")).ownerDocument.importNode(e,!0)).nodeType&&"BODY"===o.nodeName?n=o:n.appendChild(o);else{if(!ue&&!se&&-1===e.indexOf("<"))return e;if(!(n=we(e)))return ue?null:""}de&&Se(n.firstChild);for(var l=Ee(n);r=l.nextNode();)3===r.nodeType&&r===i||De(r)||(r.content instanceof L&&_e(r.content),Ne(r),i=r);if(ue){if(me)for(a=W.call(n.ownerDocument);n.firstChild;)a.appendChild(n.firstChild);else a=n;return fe&&(a=U.call(k,a,!0)),a}return se?n.outerHTML:n.innerHTML},S.setConfig=function(e){xe(e),ce=!0},S.clearConfig=function(){Te=null,ce=!1},S.addHook=function(e,t){"function"==typeof t&&(B[e]=B[e]||[],B[e].push(t))},S.removeHook=function(e){B[e]&&B[e].pop()},S.removeHooks=function(e){B[e]&&(B[e]=[])},S.removeAllHooks=function(){B={}},S}var r=["a","abbr","acronym","address","area","article","aside","audio","b","bdi","bdo","big","blink","blockquote","body","br","button","canvas","caption","center","cite","code","col","colgroup","content","data","datalist","dd","decorator","del","details","dfn","dir","div","dl","dt","element","em","fieldset","figcaption","figure","font","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","img","input","ins","kbd","label","legend","li","main","map","mark","marquee","menu","menuitem","meter","nav","nobr","ol","optgroup","option","output","p","pre","progress","q","rp","rt","ruby","s","samp","section","select","shadow","small","source","spacer","span","strike","strong","style","sub","summary","sup","table","tbody","td","template","textarea","tfoot","th","thead","time","tr","track","tt","u","ul","var","video","wbr"],i=["svg","a","altglyph","altglyphdef","altglyphitem","animatecolor","animatemotion","animatetransform","audio","canvas","circle","clippath","defs","desc","ellipse","filter","font","g","glyph","glyphref","hkern","image","line","lineargradient","marker","mask","metadata","mpath","path","pattern","polygon","polyline","radialgradient","rect","stop","style","switch","symbol","text","textpath","title","tref","tspan","video","view","vkern"],a=["feBlend","feColorMatrix","feComponentTransfer","feComposite","feConvolveMatrix","feDiffuseLighting","feDisplacementMap","feDistantLight","feFlood","feFuncA","feFuncB","feFuncG","feFuncR","feGaussianBlur","feMerge","feMergeNode","feMorphology","feOffset","fePointLight","feSpecularLighting","feSpotLight","feTile","feTurbulence"],l=["math","menclose","merror","mfenced","mfrac","mglyph","mi","mlabeledtr","mmuliscripts","mn","mo","mover","mpadded","mphantom","mroot","mrow","ms","mpspace","msqrt","mystyle","msub","msup","msubsup","mtable","mtd","mtext","mtr","munder","munderover"],s=["#text"],c=["accept","action","align","alt","autocomplete","background","bgcolor","border","cellpadding","cellspacing","checked","cite","class","clear","color","cols","colspan","coords","crossorigin","datetime","default","dir","disabled","download","enctype","face","for","headers","height","hidden","high","href","hreflang","id","integrity","ismap","label","lang","list","loop","low","max","maxlength","media","method","min","multiple","name","noshade","novalidate","nowrap","open","optimum","pattern","placeholder","poster","preload","pubdate","radiogroup","readonly","rel","required","rev","reversed","role","rows","rowspan","spellcheck","scope","selected","shape","size","sizes","span","srclang","start","src","srcset","step","style","summary","tabindex","title","type","usemap","valign","value","width","xmlns"],d=["accent-height","accumulate","additivive","alignment-baseline","ascent","attributename","attributetype","azimuth","basefrequency","baseline-shift","begin","bias","by","class","clip","clip-path","clip-rule","color","color-interpolation","color-interpolation-filters","color-profile","color-rendering","cx","cy","d","dx","dy","diffuseconstant","direction","display","divisor","dur","edgemode","elevation","end","fill","fill-opacity","fill-rule","filter","flood-color","flood-opacity","font-family","font-size","font-size-adjust","font-stretch","font-style","font-variant","font-weight","fx","fy","g1","g2","glyph-name","glyphref","gradientunits","gradienttransform","height","href","id","image-rendering","in","in2","k","k1","k2","k3","k4","kerning","keypoints","keysplines","keytimes","lang","lengthadjust","letter-spacing","kernelmatrix","kernelunitlength","lighting-color","local","marker-end","marker-mid","marker-start","markerheight","markerunits","markerwidth","maskcontentunits","maskunits","max","mask","media","method","mode","min","name","numoctaves","offset","operator","opacity","order","orient","orientation","origin","overflow","paint-order","path","pathlength","patterncontentunits","patterntransform","patternunits","points","preservealpha","preserveaspectratio","r","rx","ry","radius","refx","refy","repeatcount","repeatdur","restart","result","rotate","scale","seed","shape-rendering","specularconstant","specularexponent","spreadmethod","stddeviation","stitchtiles","stop-color","stop-opacity","stroke-dasharray","stroke-dashoffset","stroke-linecap","stroke-linejoin","stroke-miterlimit","stroke-opacity","stroke","stroke-width","style","surfacescale","tabindex","targetx","targety","transform","text-anchor","text-decoration","text-rendering","textlength","type","u1","u2","unicode","values","viewbox","visibility","vert-adv-y","vert-origin-x","vert-origin-y","width","word-spacing","wrap","writing-mode","xchannelselector","ychannelselector","x","x1","x2","xmlns","y","y1","y2","z","zoomandpan"],u=["accent","accentunder","align","bevelled","close","columnsalign","columnlines","columnspan","denomalign","depth","dir","display","displaystyle","fence","frame","height","href","id","largeop","length","linethickness","lspace","lquote","mathbackground","mathcolor","mathsize","mathvariant","maxsize","minsize","movablelimits","notation","numalign","open","rowalign","rowlines","rowspacing","rowspan","rspace","rquote","scriptlevel","scriptminsize","scriptsizemultiplier","selection","separator","separators","stretchy","subscriptshift","supscriptshift","symmetric","voffset","width","xmlns"],m=["xlink:href","xml:id","xlink:title","xml:space","xmlns:xlink"],f=/\{\{[\s\S]*|[\s\S]*\}\}/gm,p=/<%[\s\S]*|[\s\S]*%>/gm,h=/^data-[\-\w.\u00B7-\uFFFF]/,g=/^aria-[\-\w]+$/,y=/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,v=/^(?:\w+script|data):/i,b=/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205f\u3000]/g,T="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},A=function(){return"undefined"==typeof window?null:window};return o()});
-//# sourceMappingURL=purify.min.js.map
-;
-define('module/Browser',['require','module/Parameter','module/Options'],function(require) {
-
-    var Parameter = require('module/Parameter');
-    var Options = require('module/Options');
-
-    var defaultChallengeWindow = 5;
-    
-    // Please refer to EMV 3-D secure protocol and core functions spec V2.1.0 PDF
-    var challengeWindow = 
-        [
-            { "width": 600, "result": 4 },
-            { "width": 500, "result": 3 },
-            { "width": 390, "result": 2 },
-            { "width": 250, "result": 1 }
-        ];
-    
-	var Browser = {};
-		
-	Browser.asFields = function($container) {
-	    var resultFields = {};
-
-	    asParam(Parameter.BROWSER_JAVASCRIPT_ENABLED, true, resultFields );
-	    
-	    if (navigator) {	    	    
-            asParam(Parameter.BROWSER_LANGUAGE, navigator.language, resultFields );
-            asParam(Parameter.BROWSER_USERAGENT, navigator.userAgent, resultFields ); 
-            asParam(Parameter.BROWSER_JAVAENABLED, navigator.javaEnabled(), resultFields ); 
-        }
-        
-        if (screen) {        
-            asParam(Parameter.BROWSER_SCREEN_HEIGHT, screen.height, resultFields );
-            asParam(Parameter.BROWSER_SCREEN_WIDTH, screen.width, resultFields );
-            asParam(Parameter.BROWSER_SCREEN_COLOR_DEPTH, screen.colorDepth, resultFields );
-        }    
-
-        if ($container) {        
-            var cw = calculateChallengeWindow($container);
-            asParam(Parameter.BROWSER_CHALLENGE_WINDOW, cw, resultFields );
-        }
-
-        asParam(Parameter.BROWSER_TIMEZONE, calculateTimezone(), resultFields );         
-	    return resultFields;
-	};
-		
-	function asParam(paramKey, paramValue, map) {
-	    if (paramValue != null) {
-	        map[paramKey] = paramValue;
-	    }
-	}
-	
-	function calculateTimezone() {
-	    var d = new Date();
-	    return d.getTimezoneOffset();
-	}
-	
-	function calculateChallengeWindow($container) {
-
-        // Return merchant's challenge window if it is valid and available
-        if (Options.browser && Options.browser.threeDChallengeWindow &&
-            Options.browser.threeDChallengeWindow >= 1 && Options.browser.threeDChallengeWindow <=5) {
-            return Options.browser.threeDChallengeWindow;     
-        } 
-       
-        // Calculate best fit
-	    var width = $container.width();
-	    for (var i=0; i < challengeWindow.length; i++) {
-	        if (width >= challengeWindow[i].width)
-            	return challengeWindow[i].result;
-	    }
-	    
-	    // Not able to determine the challenge window, use default
-	    return defaultChallengeWindow;
-	}
-	
-	return Browser;
 });
 
 define('module/Wpwl',[],function(){
@@ -26590,28 +26533,6 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
   return Spinner
 
 }));
-define('module/Template',['require','module/Util'],function(require){
-    var Util = require("module/Util");
-
-    var Template = function(html, data){
-        this.html = html || "";
-        this.data = data || {};
-
-        this._compiled = Util.template(this.html);
-    };
-
-    Template.prototype.addObject = function(object){
-        Util.extend(this.data, object);
-        return this;
-    };
-
-    Template.prototype.render = function(){
-        return this._compiled(this.data);
-    };
-
-    return Template;
-});
-
 define('module/forms/VirtualAccountPaymentForm',['require','shim/ObjectCreate','module/forms/PaymentForm','module/Parameter'],function(require){
 	var ObjectCreate = require('shim/ObjectCreate');
 	var PaymentForm = require('module/forms/PaymentForm');
@@ -27660,19 +27581,149 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	return Validate;
 });
 
+define('template/TemplateBase',['require','module/Util'],function(require){
+    var Util = require("module/Util");
 
-define('text!template/oneclickpayment/main.html',[],function () { return '<form class="wpwl-form wpwl-form-registrations wpwl-form-has-inputs wpwl-clearfix" action="<%- obj.registrations[0].endpoint %>" method="POST" target="<%- obj.registrations[0].paymentTarget %>" lang="en" accept-charset="UTF-8" data-action="submit-registration">\n    <% _.forEach(obj.registrations, function(registration, index){ %>\n    <div class="wpwl-group wpwl-group-registration <% if (registration.isCardAndCvvRequired) { %>wpwl-has-cvv<% } %> wpwl-clearfix <% if (index === 0) { %>wpwl-selected<% } %> ">\n        <label class="wpwl-registration">\n            <div class="wpwl-wrapper-registration wpwl-wrapper-registration-registrationId">\n                <input type="radio" name="registrationId" value="<%- registration.id %>" <% if (index === 0) { %>checked="checked"<% } %> data-action="change-registration">\n            </div>\n            <div class="wpwl-wrapper-registration  wpwl-wrapper-registration-brand">\n                <div class="wpwl-brand wpwl-brand-<%- registration.paymentBrand %> wpwl-brand-inline"></div>\n            </div>\n            <div class="wpwl-wrapper-registration  wpwl-wrapper-registration-details">\n                <% if (registration.number) { %>\n                <div class="wpwl-wrapper-registration wpwl-wrapper-registration-number">\n                    <%- registration.number %>\n                </div>\n                <% } %>\n                <% if (registration.expiry) { %>\n                <div class="wpwl-wrapper-registration wpwl-wrapper-registration-expiry">\n                    <%- registration.expiry %>\n                </div>\n                <% } %>\n                <% if (registration.holder) { %>\n                <div class="wpwl-wrapper-registration wpwl-wrapper-registration-holder">\n                    <%- registration.holder %>\n                </div>\n                <% } %>\n                <% if (registration.isHolderRequired && !registration.holder) { %>\n                <div class="wpwl-wrapper-registration wpwl-wrapper-required-registration-holder">\n                </div>\n                <% } %>\n                <% if (registration.displayVirtualAccountId) { %>\n                <div class="wpwl-wrapper-registration wpwl-wrapper-registration-virtualAccountId">\n                    <%- registration.virtualAccount.accountId %>\n                </div>\n                <% } %>\n            </div>\n            <div class="wpwl-wrapper wpwl-wrapper-registration wpwl-wrapper-registration-cvv">\n                <% if (registration.isCardAndCvvRequired && index === 0) { %>\n                <%= obj.iframeTemplate.addObject({registration: registration}).render() %>\n                <% } %>\n            </div>\n            <% if (registration.isBirthDateRequired) { %>\n                <div class="wpwl-wrapper-registration wpwl-wrapper-birthdate">\n                </div>\n            <% } %>\n        </label>\n    </div>\n    <% }) %>\n    <div class="wpwl-group wpwl-group-submit wpwl-clearfix">\n        <div class="wpwl-wrapper wpwl-wrapper-submit">\n            <% if (obj.registrations[0].options.useSummaryPage) { %>\n           <button type="submit" class="wpwl-button wpwl-button-pay" aria-label="<%- obj.registrations[0].lang.nextStep %>"><%- obj.registrations[0].lang.nextStep %></button>\n            <% }\n            else { %>\n           <button type="submit" class="wpwl-button wpwl-button-pay" aria-label="<%- obj.registrations[0].lang.submit %>"><%- obj.registrations[0].lang.submit %></button>\n            <% } %> \n        </div>\n    </div>\n    <input type="hidden" name="paymentBrand" value="<%- obj.registrations[0].paymentBrand %>">\n    <input type="hidden" name="shopperResultUrl" value="<%- obj.registrations[0].options.shopperResultUrl %>">\n    <% if (obj.registrations[0].options.shopperResultTarget) { %>\n    <input type="hidden" name="shopperResultTarget" value="<%- obj.registrations[0].options.shopperResultTarget %>">\n    <% } %>\n    <input type="hidden" name="forceUtf8" value="☠">\n    <% if (obj.shopOrigin) { %>\n    <input type="hidden" name="shopOrigin" value="<%- obj.shopOrigin %>">\n    <% } %>\n</form>\n<iframe name="registrations-target" class="wpwl-target" src="about:blank" frameborder="0"></iframe>\n';});
+    var TemplateBase = function(renderFunction, initialData){
+        var obj = initialData || {};
+        var func = renderFunction || function(){ return ""};
+        var tpl = {
+            addObject: function(_rObj){
+                Object.keys(_rObj).forEach(function(key){
+                    obj[key] = _rObj[key];
+                });
+                return tpl;
+            },
+            render: function(){
+                return func(obj, Util.escape);
+            },
+        };
+        return tpl;
+    };
+    return TemplateBase
+});
+
+define('template/oneclickpayment/MainTemplate',['require','template/TemplateBase'],function(require){
+    var TemplateBase = require("template/TemplateBase");
+    return function MainTemplate(){
+        return new TemplateBase(function(obj, escape)
+        {
+            var ret = '<form class="wpwl-form wpwl-form-registrations wpwl-form-has-inputs wpwl-clearfix" action="<%- obj.registrations[0].endpoint %>" method="POST" target="<%- obj.registrations[0].paymentTarget %>" lang="en" accept-charset="UTF-8" data-action="submit-registration">';
+            (obj.registrations || []).forEach(function(registration, index){
+                ret = ret + '    <div class="wpwl-group wpwl-group-registration '+(registration.isCardAndCvvRequired ? 'wpwl-has-cvv' : '')+' wpwl-clearfix '+(index === 0 ? 'wpwl-selected' : '')+'">'
+                 + '        <label class="wpwl-registration">'
+                 + '            <div class="wpwl-wrapper-registration wpwl-wrapper-registration-registrationId">'
+                 + '                <input type="radio" name="registrationId" value="'+ escape(registration.id) +'" '+(index === 0?'checked="checked"':'')+' data-action="change-registration">'
+                 + '            </div>'
+                 + '            <div class="wpwl-wrapper-registration  wpwl-wrapper-registration-brand">'
+                 + '                <div class="wpwl-brand wpwl-brand-'+ escape(registration.paymentBrand) +' wpwl-brand-inline"></div>'
+                 + '            </div>'
+                 + '            <div class="wpwl-wrapper-registration  wpwl-wrapper-registration-details">';
+                if(registration.number){
+                    ret = ret + '                <div class="wpwl-wrapper-registration wpwl-wrapper-registration-number">'
+                     + '                    '+ escape(registration.number)
+                     + '                </div>'
+                }
+                if(registration.expiry){
+                    ret = ret + '                <div class="wpwl-wrapper-registration wpwl-wrapper-registration-expiry">'
+                     + '                    '+  escape(registration.expiry)
+                     + '                </div>'
+                }
+                if(registration.holder){
+                    ret = ret + '                <div class="wpwl-wrapper-registration wpwl-wrapper-registration-holder">'
+                     + '                    '+  escape(registration.holder)
+                     + '                </div>'
+                }
+                if(registration.isHolderRequired && !registration.holder){
+                    ret = ret + '                <div class="wpwl-wrapper-registration wpwl-wrapper-required-registration-holder">'
+                     + '                </div>'
+                }
+                if(registration.displayVirtualAccountId){
+                    ret = ret + '                <div class="wpwl-wrapper-registration wpwl-wrapper-registration-virtualAccountId">'
+                     + '                    '+  escape(registration.virtualAccount.accountId) 
+                     + '                </div>'
+                }
+                ret = ret + '            </div>'
+                 + '            <div class="wpwl-wrapper wpwl-wrapper-registration wpwl-wrapper-registration-cvv">'
+                if(registration.isCardAndCvvRequired && index === 0){
+                    ret = ret + '                '+ obj.iframeTemplate.addObject({registration: registration}).render()
+                }
+                ret = ret + '            </div>'
+                if(registration.isBirthDateRequired){
+                    ret = ret + '                <div class="wpwl-wrapper-registration wpwl-wrapper-birthdate">'
+                     + '                </div>'
+                }
+                ret = ret + '        </label>'
+                 + '    </div>'
+            });
+            ret = ret + '    <div class="wpwl-group wpwl-group-submit wpwl-clearfix">'
+            + '        <div class="wpwl-wrapper wpwl-wrapper-submit">'
+            if(obj.registrations[0].options.useSummaryPage){
+                ret = ret + '           <button type="submit" class="wpwl-button wpwl-button-pay" aria-label="'+ escape(obj.registrations[0].lang.nextStep) +'">'+ escape(obj.registrations[0].lang.nextStep) +'</button>'
+            }
+            else 
+            {
+                ret = ret + '           <button type="submit" class="wpwl-button wpwl-button-pay" aria-label="'+ escape(obj.registrations[0].lang.submit) +'">'+ escape(obj.registrations[0].lang.submit) +'</button>'
+            }
+            ret = ret + '        </div>'
+            + '    </div>'
+            + '    <input type="hidden" name="paymentBrand" value="'+ escape(obj.registrations[0].paymentBrand) +'">'
+            + '    <input type="hidden" name="shopperResultUrl" value="'+ escape(obj.registrations[0].options.shopperResultUrl) +'">'
+            if(obj.registrations[0].options.shopperResultTarget){
+                ret = ret + '    <input type="hidden" name="shopperResultTarget" value="'+ escape(obj.registrations[0].options.shopperResultTarget) +'">'
+            }
+            ret = ret + '    <input type="hidden" name="forceUtf8" value="☠">'
+            if(obj.shopOrigin){
+                ret = ret + '    <input type="hidden" name="shopOrigin" value="'+ escape(obj.shopOrigin) +'">'
+            }
+            ret = ret + '</form>'
+            + '<iframe name="registrations-target" class="wpwl-target" src="about:blank" frameborder="0"></iframe>';
+            return ret;
+        });
+    };
+});
 
 
-define('text!template/oneclickpayment/iframe.html',[],function () { return '<iframe class="wpwl-control wpwl-control-iframe wpwl-control-cvv disabled" src="<%- obj.registration.pciIframeSrc %>" name="card.cvv" placeholder="<%= obj.registration.lang.cvv  %>" aria-label="<%= obj.registration.lang.cvv  %>" scrolling="no" frameborder="0"></iframe>\n';});
 
 
-define('text!template/oneclickpayment/paypalRestFraudNetJs.html',[],function () { return '<script type="application/json" fncls="fnparams-dede7cc5-15fd-4c75-a9f4-36c430ee3a99">\n    {\n        "f": "<%- obj.guid %>",\n        "s": "<%- obj.flowId %>"\n    }\n</script>\n<script type="text/javascript" src="https://c.paypal.com/da/r/fb.js"></script>';});
+define('template/oneclickpayment/IframeTemplate',['require','template/TemplateBase'],function(require){
+    var TemplateBase = require("template/TemplateBase");
+    return function IframeTemplate(){
+        return new TemplateBase(function(obj, escape)
+        {
+            return '<iframe class="wpwl-control wpwl-control-iframe wpwl-control-cvv disabled" src="'+ escape(obj.registration.pciIframeSrc) +'" name="card.cvv" placeholder="'+ escape(obj.registration.lang.cvv) +'" aria-label="'+ obj.registration.lang.cvv +'" scrolling="no" frameborder="0"></iframe>';
+        });
+    };
+});
+
+define('template/oneclickpayment/PaypalRestFraudNetJsTemplate',['require','template/TemplateBase'],function(require){
+    var TemplateBase = require("template/TemplateBase");
+    return function PaypalRestFraudNetJsTemplate(data){
+        return new TemplateBase(function(obj, escape)
+        {
+            return '<script type="application/json" fncls="fnparams-dede7cc5-15fd-4c75-a9f4-36c430ee3a99">'
+            + '    {'
+            + '        "f": "'+ escape(obj.guid) +'",'
+            + '        "s": "'+ escape(obj.flowId) +'"'
+            + '    }'
+            + '</script>'
+            + '<script type="text/javascript" src="https://c.paypal.com/da/r/fb.js"></script>';
+        }, data);
+    };
+});
 
 
-define('text!template/oneclickpayment/holderIframe.html',[],function () { return '<iframe class="wpwl-control wpwl-control-iframe wpwl-control-cardHolder disabled" src="<%- obj.registration.pciIframeSrc %>" name="card.holder" placeholder="<%= obj.registration.lang.cardHolder  %>" aria-label="<%= obj.registration.lang.cardHolder  %>" scrolling="no" frameborder="0"></iframe>';});
+define('template/oneclickpayment/HolderIFrameTemplate',['require','template/TemplateBase'],function(require){
+    var TemplateBase = require("template/TemplateBase");
+    return function HolderIFrameTemplate(){
+        return new TemplateBase(function(obj, escape)
+        {
+            return '<iframe class="wpwl-control wpwl-control-iframe wpwl-control-cardHolder disabled" src="'+ escape(obj.registration.pciIframeSrc) +'" name="card.holder" placeholder="'+ obj.registration.lang.cardHolder +'" aria-label="'+ obj.registration.lang.cardHolder +'" scrolling="no" frameborder="0"></iframe>';
+        });
+    };
+});
 
-define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentUtil','module/Options','module/PaymentView','module/AutoFocus','module/ParentToIframeCommunication','module/RegistrationType','lib/Spinner','module/Template','module/Tracking','module/Generate','module/Validate','module/Util','module/I18n','module/DateFormatter','module/SaqaUtil','text!template/oneclickpayment/main.html','text!template/oneclickpayment/iframe.html','text!template/oneclickpayment/paypalRestFraudNetJs.html','text!template/oneclickpayment/holderIframe.html'],function(require){
+define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentUtil','module/Options','module/PaymentView','module/AutoFocus','module/ParentToIframeCommunication','module/RegistrationType','lib/Spinner','module/Tracking','module/Generate','module/Validate','module/Util','module/I18n','module/DateFormatter','module/SaqaUtil','template/oneclickpayment/MainTemplate','template/oneclickpayment/IframeTemplate','template/oneclickpayment/PaypalRestFraudNetJsTemplate','template/oneclickpayment/HolderIFrameTemplate'],function(require){
     var $ = require("jquery");
     var OneClickPaymentUtil = require("module/OneClickPaymentUtil");
     var Options = require("module/Options");
@@ -27681,7 +27732,6 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
     var ParentToIframeCommunication = require('module/ParentToIframeCommunication');
     var RegistrationType = require("module/RegistrationType");
     var Spinner = require("lib/Spinner");
-    var Template = require("module/Template");
     var Tracking = require("module/Tracking");
     var Generate = require("module/Generate");
     var Validate = require("module/Validate");
@@ -27690,10 +27740,10 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
     var DateFormatter = require('module/DateFormatter');
     var SaqaUtil = require('module/SaqaUtil');
 
-    var mainTemplateHtml = require("text!template/oneclickpayment/main.html");
-    var iframeTemplateHtml = require("text!template/oneclickpayment/iframe.html");
-    var fraudNetJsTemplateHtml = require("text!template/oneclickpayment/paypalRestFraudNetJs.html");
-    var holderIframeTemplateHtml = require("text!template/oneclickpayment/holderIframe.html");
+    var MainTemplate = require("template/oneclickpayment/MainTemplate");
+    var IframeTemplate = require("template/oneclickpayment/IframeTemplate");
+    var PaypalRestFraudNetJsTemplate = require("template/oneclickpayment/PaypalRestFraudNetJsTemplate");
+    var HolderIFrameTemplate = require("template/oneclickpayment/HolderIFrameTemplate");
 
     var OneClickPaymentView = function(registrations, merchantInfo){
         this.registrations = registrations;
@@ -27721,11 +27771,11 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
 
     OneClickPaymentView.prototype.$container = $("<div class=\"wpwl-container wpwl-container-registration wpwl-clearfix\">");
 
-    OneClickPaymentView.prototype.template = new Template(mainTemplateHtml);
+    OneClickPaymentView.prototype.template = new MainTemplate();
 
-    OneClickPaymentView.prototype.iframeTemplate = new Template(iframeTemplateHtml);
+    OneClickPaymentView.prototype.iframeTemplate = new IframeTemplate();
 
-    OneClickPaymentView.prototype.holderIframeTemplate = new Template(holderIframeTemplateHtml);
+    OneClickPaymentView.prototype.holderIframeTemplate = new HolderIFrameTemplate();
 
     OneClickPaymentView.prototype.initFormatter = function() {
         new DateFormatter({
@@ -27977,7 +28027,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
                 flowId: this.merchantInfo.websiteId
             };
 
-            this.$container.append(new Template(fraudNetJsTemplateHtml, fraudNetJsTemplateData).render());
+            this.$container.append(new PaypalRestFraudNetJsTemplate(fraudNetJsTemplateData).render());
         }
     };
 
@@ -32053,9 +32103,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	ClickToPayPaymentWidget.checkoutOfCard = function(id) {
-		var srcWindow = window.open('', '_blank', 'popup');
-		srcWindow.moveTo(500, 100);
-		srcWindow.resizeTo(550, 650);
+		var srcWindow = window.open('', '_blank', 'popup,left=500,top=100,width=550,height=650');
 		window.childSrcWindow = srcWindow;
 
 		var checkoutRequestParams = {
@@ -32090,6 +32138,46 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		});
 	};
 
+	ClickToPayPaymentWidget.checkoutOfNewCard = function($cardForm, encryptedCardData, brand) {
+		ClickToPayPaymentWidget.$form = $cardForm;
+		var srcWindow = window.open('', '_blank', 'popup,left=500,top=100,width=550,height=650');
+		window.childSrcWindow = srcWindow;
+
+		var checkoutRequestParams = {
+			encryptedCard : encryptedCardData,
+			cardBrand : brand,
+			windowRef: srcWindow
+		};
+
+		var checkoutPromise = new Promise(function (resolve) {
+			resolve(clickToPay.checkoutWithNewCard(checkoutRequestParams));
+		});
+
+		checkoutPromise
+		.then(function(result) {
+			srcWindow.close();
+			if (result.checkoutActionCode === "COMPLETE") {
+				ClickToPayPaymentWidget.$form.append($.parseHTML(Generate.hiddenInput(Parameter.C2P_NEW_USER, "true")));
+				ClickToPayPaymentWidget.$form.append($.parseHTML(Generate.hiddenInput(Parameter.C2P_NEW_USER_CARD_BRAND, brand)));
+				ClickToPayPaymentWidget.addCustomParametersForRequest(result);
+				if (ClickToPayPaymentWidget.$form.offsetParent) {
+					ClickToPayPaymentWidget.parentDivClassSelector = ClickToPayPaymentWidget.returnClassSelector($(ClickToPayPaymentWidget.$form.offsetParent).attr('class'));
+				} else {
+					ClickToPayPaymentWidget.parentDivClassSelector = "";
+				}
+				ClickToPayPaymentWidget.submitAjaxRequest(ClickToPayPaymentWidget.$form);
+			} else if (result.checkoutActionCode === "ERROR") {
+				Options.onError(new WidgetError("CLICK_TO_PAY", "checkout_with_new_card", "Error occurred while checkout with new card, cannot proceed."));
+				return;
+			}
+		}).catch(function(error) {
+			srcWindow.close();
+			logger.error("Exception occurred while checkout with card: " + error);
+			Options.onError(new WidgetError("CLICK_TO_PAY", "checkout_with_card", "Error occurred, cannot proceed."));
+			return;
+		});
+	};
+
 	ClickToPayPaymentWidget.addCustomParametersForRequest = function(result) {
 		ClickToPayPaymentWidget.$form.append($.parseHTML(Generate.hiddenInput(Parameter.C2P_MERCHANT_TX_ID, result.headers["merchant-transaction-id"])));
 		ClickToPayPaymentWidget.$form.append($.parseHTML(Generate.hiddenInput(Parameter.C2P_FLOW_ID, result.headers["x-src-cx-flow-id"])));
@@ -32106,9 +32194,9 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var formClassSelector = ClickToPayPaymentWidget.returnClassSelector($(selectedPaymentForm).attr('class'));
 		ClickToPayPaymentWidget.$form = $(formClassSelector);
 		if (selectedPaymentForm.offsetParent){
-			this.parentDivClassSelector = ClickToPayPaymentWidget.returnClassSelector($(selectedPaymentForm.offsetParent).attr('class'));
+			ClickToPayPaymentWidget.parentDivClassSelector = ClickToPayPaymentWidget.returnClassSelector($(selectedPaymentForm.offsetParent).attr('class'));
 		} else {
-			this.parentDivClassSelector = "";
+			ClickToPayPaymentWidget.parentDivClassSelector = "";
 		}
 
 		if (ClickToPayPaymentWidget.isCardsFromCookies) {
@@ -32160,7 +32248,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	ClickToPayPaymentWidget.redirect = function(url) {
 		var formHtml = '<form id=\"clickToPayForm\" action=' + url + ' lang="' + Generate.language.toLowerCase() + '" accept-charset=\"UTF-8\"  method=GET target=\"' + "_top" + '\"></form>';
 		var submitForm = $(formHtml);
-		$(this.parentDivClassSelector).append(submitForm);
+		ClickToPayPaymentWidget.$form.before(submitForm);
 		submitForm.submit();
 	};
 
@@ -32181,7 +32269,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			});
 		});
 	}
-//"brandDetectionPriority":["MASTERDEBIT", "MASTER"]
+
 	function notifyError(reason) {
 		logger.error("Exception occurred while submitting the form via an Ajax call. Reason: " + reason);
 		if (SessionError.isSessionTimeout(reason)) {
@@ -32254,7 +32342,7 @@ define('module/FastCheckout',['require','jquery','module/Generate','module/Track
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -32277,6 +32365,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var Wpwl = require('module/Wpwl');
 	var AutoFocus = require('module/AutoFocus');
 	var ApplePay = require('module/ApplePay');
+	var InternalRequestCommunication = require('module/InternalRequestCommunication');
 	var SaqaUtil = require('module/SaqaUtil');
 	var KlarnaPaymentsInlineWidget = require('module/integrations/KlarnaPaymentsInlineWidget');
     var YandexCheckoutPaymentWidget = require('module/integrations/YandexCheckoutPaymentWidget');
@@ -32285,6 +32374,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var TrustlyInlineWidget = require('module/integrations/TrustlyInlineWidget');
 	var UpgMobilePaymentWidget = require('module/integrations/UpgMobilePaymentWidget');
 	var ClickToPayPaymentWidget = require('module/integrations/ClickToPayPaymentWidget');
+	var WidgetError = require("module/error/WidgetError");
     var FastCheckout = require('module/FastCheckout');
 	var ForterUtils = require('module/ForterUtils');
 	var LoggerFactory = require('module/logging/LoggerFactory');
@@ -32634,6 +32724,45 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
         PaymentView.updateFieldGiropayBic();
 	};
 
+    Payment.updateClickToPayForm = function($form) {
+        var spinner = new Spinner(Options.spinner).spin($(".wpwl-container-virtualAccount-CLICK_YO_PAY").get(0));
+        var paymentUrl = Wpwl.url + "/v1/checkouts/" + Wpwl.checkout.id + "/clickToPay/encryptCard";
+        InternalRequestCommunication.getSender().then(function (sender) {
+            return sender.send({
+                method: "POST",
+                url: paymentUrl,
+                dataType: "json",
+                data: $form.serialize()
+            });
+        })
+        .then(function (response) {
+            spinner.stop();
+            Payment.processEncryptCardResponse(response, $form);
+        })
+        .fail(function(error) {
+            logger.error("Error occurred while fetching encrypted card details. " + error);
+            Options.onError(new WidgetError("CLICK_TO_PAY", "encrypt_card_fail", "Error occurred while fetching encrypted card details for Click to Pay, cannot proceed."));
+            spinner.stop();
+        });
+    };
+
+    Payment.processEncryptCardResponse = function(response, $form) {
+        if (response !== undefined && response !== "" && response.encryptedCard !== undefined && response.cardBrand !== undefined)
+        {
+            ClickToPayPaymentWidget.checkoutOfNewCard($form, response.encryptedCard, response.cardBrand);
+        }
+        else if (response !== undefined && response !== "")
+        {
+            logger.error("encryptCard call for CLICK_TO_PAY returned errorCode: " + response.errorCode + " and errorMessage: " + response.errorMessage);
+            Options.onError(new WidgetError("CLICK_TO_PAY", "error_response", "Error response received for Click to Pay encrypt card, cannot proceed. errorCode: " + response.errorCode + " and errorMessage: " + response.errorMessage));
+        }
+        else
+        {
+            logger.error("No response received for CLICK_TO_PAY encrypt card");
+            Options.onError(new WidgetError("CLICK_TO_PAY", "no_response", "No response received for Click to Pay encrypt card, cannot proceed."));
+        }
+    };
+
 	function updateSEPAForm() {
         var displayBic = Options.displayBic;
         //check for displayBic option which is optional
@@ -32958,23 +33087,21 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 			Payment.unbindCardSubmitEventAndSubmitForm = function(){
 				var $form = $(this);
-				$(document).off('submit.wpwlEvent','[data-action="submit-payment-card"]');
-
 				var paymentForm = new CardPaymentForm($form);
 				var $clickToPayConfirmation = paymentForm.getClickToPayConfirmationCheckbox();
 				var isChecked = $clickToPayConfirmation.is(":checked");
 				if (isChecked && Options.isClickToPayInitSuccess) {
 					var brand = getBrand($form);
 					if (Options.clickToPayInitializedBrands.indexOf(brand) > -1) {
-						// TODO : Further Click to Pay Integration and Mastercard JS method calls for New User Flow
 						console.log("Click To Pay checkbox is checked. Click to Pay flow will be used for the request");
-						// submitting form for now to keep the flow working, later will be updated with new user flow
-						$form.submit();
+						Payment.updateClickToPayForm($form);
 					} else {
 						console.log("Click To Pay checkbox is checked but the brand is not initialized for Click to Pay, card flow will be used.");
+						$(document).off('submit.wpwlEvent','[data-action="submit-payment-card"]');
 						$form.submit();
 					}
 				} else {
+				    $(document).off('submit.wpwlEvent','[data-action="submit-payment-card"]');
 					$form.submit();
 				}
 			};
@@ -34332,15 +34459,28 @@ define('module/integrations/CyberSourceRiskDeviceId',['require','module/Wpwl','m
     };
     return CyberSourceRiskDeviceId;
 });
+define('template/LoadKountClientTemplate',['require','template/TemplateBase'],function(require){
+    var TemplateBase = require("template/TemplateBase");
+    return function LoadKountClientTemplate(){
+        return new TemplateBase(function(obj, escape)
+        {
+            return '<script id="loadKtClient" type="text/javascript">'
+            + " var srcUrl = '"+ escape(obj.baseUrl) +"collect/sdk?m="+ escape(obj.merchantId) +"&s="+ escape(obj.sessionId) +"';"
+            + " var wpwlKaClient;"
+            + " $.getScript(srcUrl, function () {"
+            + "    wpwlKaClient = new ka.ClientSDK();"
+            + "    wpwlKaClient.autoLoadEvents();"
+            + " });"
+            + "</script>";
+        });
+    };
+});
 
-define('text!template/loadKountClient.html',[],function () { return '<script id="loadKtClient" type=\'text/javascript\'>\n    var srcUrl = \'<%- obj.baseUrl %>collect/sdk?m=<%- obj.merchantId %>&s=<%- obj.sessionId %>\';\n    var wpwlKaClient;\n    $.getScript(srcUrl, function () {\n        wpwlKaClient = new ka.ClientSDK();\n        wpwlKaClient.autoLoadEvents();\n    });\n</script>';});
-
-define('module/integrations/KountIntegration',['require','jquery','module/Template','module/Payment','text!template/loadKountClient.html'],function(require) {
+/*global define */
+define('module/integrations/KountIntegration',['require','jquery','template/LoadKountClientTemplate','module/Payment'],function(require) {
   var $ = require("jquery");
-  var Template = require("module/Template");
+  var JSTemplate = require("template/LoadKountClientTemplate");
   var Payment = require("module/Payment");
-
-  var javascriptTemplate = require("text!template/loadKountClient.html");
 
   var KountIntegration = {};
 
@@ -34349,7 +34489,8 @@ define('module/integrations/KountIntegration',['require','jquery','module/Templa
         return;
     }
 
-    var template = new Template(javascriptTemplate);
+    var template = JSTemplate();
+    
     template.addObject({ baseUrl: Payment.kountBaseUrl });
     template.addObject({ merchantId: Payment.kountMerchantId });
     template.addObject({ sessionId: Payment.kountSessionId });
