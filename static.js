@@ -27608,7 +27608,7 @@ define('template/oneclickpayment/MainTemplate',['require','template/TemplateBase
     return function MainTemplate(){
         return new TemplateBase(function(obj, escape)
         {
-            var ret = '<form class="wpwl-form wpwl-form-registrations wpwl-form-has-inputs wpwl-clearfix" action="<%- obj.registrations[0].endpoint %>" method="POST" target="<%- obj.registrations[0].paymentTarget %>" lang="en" accept-charset="UTF-8" data-action="submit-registration">';
+            var ret = '<form class="wpwl-form wpwl-form-registrations wpwl-form-has-inputs wpwl-clearfix" action="'+ escape(obj.registrations[0].endpoint) +'" method="POST" target="'+ escape(obj.registrations[0].paymentTarget) +'" lang="en" accept-charset="UTF-8" data-action="submit-registration">';
             (obj.registrations || []).forEach(function(registration, index){
                 ret = ret + '    <div class="wpwl-group wpwl-group-registration '+(registration.isCardAndCvvRequired ? 'wpwl-has-cvv' : '')+' wpwl-clearfix '+(index === 0 ? 'wpwl-selected' : '')+'">'
                  + '        <label class="wpwl-registration">'
