@@ -34695,7 +34695,12 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
             this.normalCheckout() : this.fastCheckout();
 
         if(Wpwl.checkout.config.createRegistration) {
-            return Generate.string(PAYPAL_SDK_URL, "?client-id=", checkoutData.clientId, "&vault=true&commit=false&components=buttons,funding-eligibility");
+            return Generate.string(PAYPAL_SDK_URL,
+             "?client-id=", checkoutData.clientId,
+              "&vault=true&commit=false",
+              "&components=",
+              checkoutData.components,
+              checkoutData.extraSdkParams);
         } else {
             return Generate.string(PAYPAL_SDK_URL,
                 "?integration-date=2019-09-10", // for backward compatibility with PayPal
@@ -34704,8 +34709,33 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
                 (currency ? "&currency=" + currency : ""),
                 "&intent=", checkoutData.intent,
                 "&commit=", checkoutData.commit,
-                "&components=buttons,funding-eligibility");        }
+                "&components=", checkoutData.components,
+                checkoutData.extraSdkParams);
+        }
     };
+
+    function getComponents() {
+       var paypalConfig = Options.paypal;
+        return []
+          .concat((paypalConfig && paypalConfig.sdkParams && paypalConfig.sdkParams.components) || "buttons")
+          .concat(Options.fundingSources && "funding-eligibility")
+          .filter(Boolean)
+          .join(",");
+    }
+
+    function getExtraSdkParams() {
+        var paypalConfig = Options.paypal;
+        if(paypalConfig === undefined) return "";
+        var extra = Object.keys(paypalConfig.sdkParams || [])
+          .filter(function (key) {
+            return key !== "components";
+          })
+          .map(function (key) {
+            return key + "=" + paypalConfig.sdkParams[key];
+          });
+
+        return extra.length ? "&" + extra.join("&") : "";
+    }
 
     PaypalRestPaymentForm.prototype.fastCheckout = function () {
         var clientId = Wpwl.isTestSystem ?
@@ -34715,7 +34745,9 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
             clientId: Options.paypal.clientId || clientId,
             merchantId: Options.paypal.merchantId,
             intent: Options.paypal.intent, // default is authorize
-            commit: false //Paypal continue = true
+            commit: false, //Paypal continue = true
+            extraSdkParams: getExtraSdkParams(),
+            components: getComponents()
         };
     };
 
@@ -34725,7 +34757,9 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
             clientId: Wpwl.checkout.config.paypalRestConfig.clientId,
             merchantId: Wpwl.checkout.config.paypalRestConfig.merchantId,
             intent: this.getIntent(),
-            commit: this.isPayNow()
+            commit: this.isPayNow(),
+            extraSdkParams: getExtraSdkParams(),
+            components: getComponents()
         };
     };
 
