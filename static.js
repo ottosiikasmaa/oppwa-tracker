@@ -28855,8 +28855,7 @@ define('module/integrations/Affirm',['require','jquery','module/Generate','modul
         if (vcnFlag === 'no') {
             jsonToSend.data = {
                 "shopperResultUrl": $form.find('[name="shopperResultUrl"]').val(),
-                "shopperResultTarget": $form.find('[name="shopperResultUrl"]').val(),
-                "shopOrigin": $form.find('[name="shopOrigin"]').val()
+                "shopperResultTarget": $form.find('[name="shopperResultUrl"]').val()
             };
         }
         return jsonToSend;
