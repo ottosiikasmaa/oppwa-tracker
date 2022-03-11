@@ -16124,9 +16124,9 @@ define('module/Language',[],function(){
 			submit:"立即支付",
 			nextStep:"继续",
 			moreBrands:     "更多",
-			givenName:      "给定的名称",
+			givenName:      "名",
 			surname:        "姓",
-			billingAgreement:"发票条款和条件",
+			billingAgreement:"账单条款和条件",
 			accountBankError:"无效的银行代码",
 			accountHolderError:"请输入开户人姓名",
 			accountNumberError:"无效账号或银行代码",
@@ -16138,14 +16138,14 @@ define('module/Language',[],function(){
 			expiryMonthError:"无效的有效期",
 			expiryYearError:"无效的有效期",
             taxNumberError:     "无效税号",
-			generalTermsAndConditionsError:"请接受数据传输同意书",
+			generalTermsAndConditionsError:"请阅读并勾选同意数据传输协议",
 			emailOrAccountId:	"电子邮件或账户ID",
 			secureId:			"安全标识",
 			learnMore:			"了解更多信息",
 			mmyy:				"月 / 年",
-			ddmmyyyy:			"日期 / 月份 / 年月日",
+			ddmmyyyy:			"日日/月月/年年年年",
 			customerMobile:				"手机号码  (+78000001774)",
-			countryCodePhone:   "国家代号",
+			countryCodePhone:   "国际电话区号",
 			mobile:				"移动电话",
 			qrcode: 			"二维码",
 			paymentMode:		"请选择您喜欢的付款方式:",
@@ -18482,7 +18482,7 @@ define('module/Util',['require','jquery','underscore'],function(require){
      * numeric value. Ex: 5105 1051 0510 5100 will become 5105105105105100.
      * */
     Util.stripRawCardNumber = function(val)  {
-        val = (val + "").replace(/-/g, "");
+        val = (val + "").replace(/[-●]/g, "");
         return Util.parseEasternNumber(val);
     };
 
@@ -19508,7 +19508,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 	};
 
 	Generate.getPciIframeSrc = function(){
-		return Generate.string(Wpwl.url, "/v", Wpwl.apiVersion, "/pciIframe.html?checkoutId=", Wpwl.checkout.id, !Wpwl.minified ? "&minified=false" : "");
+        return Generate.string(Wpwl.url, "/v", Wpwl.apiVersion, "/pciIframe.html?checkoutId=", Wpwl.checkout.id, !Wpwl.minified ? "&minified=false" : "");
 	};
 	
 	//special functions for configuring the form
@@ -24834,6 +24834,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			.then(PaymentView.enableBrandDetection)
 			.then(PaymentView.setUpIframeInputPropertiesAndCheckoutId)
 			.then(PaymentView.setUpIframeStyles)
+			.then(PaymentView.setUpAutofill)
 			.then(function () {
 				if (iframeCommunication.$iframe.hasClass("wpwl-control-cvv")) {
 					new CVVHint(iframeCommunication.$form).init();
@@ -24915,6 +24916,17 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 		).then(function(){
 			return iframeCommunication;
 		});
+	};
+
+	PaymentView.setUpAutofill = function(iframeCommunication){
+	    var promises = [];
+	    if (SaqaUtil.isSAQACompliance()) {
+	        promises.push(iframeCommunication.setUpAutofill());
+	    }
+
+	    return $.when.apply($, promises).then(function() {
+	        return iframeCommunication;
+	    });
 	};
 	
 	PaymentView.setUpIframeInputProperties = function(iframeCommunication){
@@ -25931,6 +25943,15 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 	ParentToIframeCommunication.prototype.applyIframeStyles = function(stylesObject) {
         return createSendMessageOnChannelPromise.call(this, "applyIframeStyles", stylesObject);
     };
+
+    ParentToIframeCommunication.prototype.setUpAutofill = function() {
+        var iframeIndices = {
+            number: this.findFrameIndex('iframe[name="card.number"]'),
+            exp: this.findFrameIndex('iframe#ccexp'),
+            holder: this.findFrameIndex('iframe[name="card.holder"]'),
+        };
+        return createSendMessageOnChannelPromise.call(this, "setUpAutofill", iframeIndices);
+    };
 	
 	ParentToIframeCommunication.prototype.submitFormAndGetToken = function(){
 		return createSendMessageOnChannelPromise.call(this, "submitFormAndGetToken");
@@ -25997,6 +26018,21 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 		
 		return deferred.promise();
 	}
+
+	ParentToIframeCommunication.prototype.findFrameIndex = function(selector) {
+	    var $iframe = this.$form.find(selector);
+	    if (!$iframe || !$iframe.length) {
+	        return -1;
+	    }
+
+	    var cw = $iframe.get(0).contentWindow;
+        for (var i = 0; i < window.frames.length; i++) {
+            if (window.frames[i] === cw) {
+                return i;
+            }
+        }
+        return -1;
+    };
 
 	return ParentToIframeCommunication;
 }); 
@@ -32638,7 +32674,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	Payment.getStyleLink = function(){
 	    var staticResourcesUrl = Generate.string(Payment.url, "/v1/static/", Payment.cacheVersion);
 	    var cssResourceUrl = Generate.string(staticResourcesUrl , "/css/", Payment.style,
-	            Payment.isRTLExtension(Payment.locale), Payment.minified ? ".min" : "", ".css");
+                Payment.isRTLExtension(Payment.locale), Payment.minified ? ".min" : "", ".css");
 	    var cssLink = Generate.string("<link rel='stylesheet' id='wpwl-style' href='", cssResourceUrl ,"'/>");
 	    if (Options.imageStyle === "svg"){
 	        var svgCssResourceUrl = Generate.string(staticResourcesUrl, "/css/svg",
@@ -36578,7 +36614,320 @@ define('module/ExpiryDate',['require','jquery','module/Parameter','module/Paymen
 	return ExpiryDate;
 });
 
-define('module/IframeToParentCommunication',['require','jquery','lib/Channel','module/Detection','module/Setting','module/InputFormatter','module/NumberOnlyFormatter','module/Validate','module/IframeStylesLoader','module/Parameter','module/Util','module/Options','module/Generate','module/ExpiryDate','module/PaymentView','module/SaqaUtil'],function(require){
+define('module/BinService',['require','jquery','module/Options','module/Util'],function(require) {
+	var $ = require('jquery');
+	var Options = require('module/Options');
+	var Util = require('module/Util');
+
+    var EMPTY_VALUE = 'empty';
+
+    var BinService = {};
+    BinService.cache = {};
+
+    BinService.detect = function(binUrl, number) {
+        var bin = BinService.computeBin(number);
+        if (!bin) {
+            return;
+        }
+
+        if (BinService.containsBin(bin)) {
+            return BinService.cache[bin];
+        }
+
+        return BinService.send(binUrl, bin);
+    };
+
+    BinService.send = function(binUrl, bin) {
+        BinService.cache[bin] = $.Deferred();
+        $.ajax({
+            method: "POST",
+            url: binUrl,
+            dataType: "json",
+            data: {
+                "bin": bin
+            },
+            success: function(response) {
+                var brands = response.brands;
+                BinService.cache[bin].resolve(brands);
+            },
+            error: function(xhr){
+                BinService.cache[bin].reject(xhr);
+            }
+        });
+        return BinService.cache[bin];
+    };
+
+    BinService.isActive = function() {
+        return "binlist" === Options.brandDetectionType;
+    };
+
+    // Returns the prefix with 8 or 6 digits, or undefined if number has length < 6
+    BinService.computeBin = function(number) {
+        if (number && number.length >= 6) {
+            if (number.length < 8) {
+                return number.substring(0, 6);
+            } else {
+                return number.substring(0, 8);
+            }
+        }
+    };
+
+    BinService.containsBin = function(bin) {
+        return BinService.cache.hasOwnProperty(bin);
+    };
+
+    // Returns 'empty' if number has length < 6 to distinguish the case where nothing was found.
+    BinService.readCache = function (number) {
+        number = Util.stripRawCardNumber(number);
+        var bin = BinService.computeBin(number);
+        if (bin) {
+            return BinService.cache[bin];
+        } else {
+            return EMPTY_VALUE;
+        }
+    };
+
+    BinService.brandMatchesDetectedBrands = function(brand, binDetectedBrands) {
+        // 'empty' means there was no brand detection so far
+        if (binDetectedBrands === EMPTY_VALUE) {
+            return true;
+        }
+
+        return binDetectedBrands != null &&
+            binDetectedBrands.length > 0 &&
+            binDetectedBrands.indexOf(brand) !== -1;
+    };
+
+    return BinService;
+});
+define('module/Autofill',['require','jquery','lib/Channel','module/BinService','module/Detection','module/Parameter'],function(require) {
+	var $ = require('jquery');
+	var Channel = require('lib/Channel');
+	var BinService = require('module/BinService');
+	var Detection = require('module/Detection');
+	var Parameter = require("module/Parameter");
+
+	var NUMBER_SELECTOR = 'input[name="' + Parameter.CARD_NUMBER + '"]';
+    var HOLDER_SELECTOR = 'input[name="' + Parameter.CARD_HOLDER + '"]';
+    var EXP_SELECTOR = '#ccexp';
+
+	var NUMBER_ATTR = "cc-number";
+    var HOLDER_ATTR = "cc-name";
+    var EXP_ATTR = "cc-exp";
+
+    var NUMBER_TO_HOLDER_CHANNEL = "numberToHolderChannel";
+    var NUMBER_TO_EXP_CHANNEL = "numberToExpChannel";
+    var HOLDER_TO_NUMBER_CHANNEL = "holderToNumberChannel";
+    var HOLDER_TO_EXP_CHANNEL = "holderToExpChannel";
+
+    var RESET_NUMBER = "resetNumber";
+    var SET_NUMBER = "setNumber";
+    var SET_HOLDER = "setHolder";
+    var SET_EXP = "setExp";
+
+	var Autofill = function(props) {
+	    this.$form = props.$form;
+        this.$input = props.$input;
+        this.frameIndices = props.frameIndices;
+        this.url = props.url;
+        this.binUrl = props.binUrl;
+
+        this.setup();
+    };
+
+    Autofill.prototype.setup = function() {
+        if (this.$input.is(NUMBER_SELECTOR)) {
+            this.setupNumber();
+        } else if (this.$input.is(EXP_SELECTOR)) {
+            this.setupExp();
+        } else if (this.$input.is(HOLDER_SELECTOR)) {
+            this.setupHolder();
+        }
+    };
+
+    Autofill.prototype.setupNumber = function() {
+        // Adds inputs: cc-name and cc-exp
+        this.addAutofillInput({
+            attr: HOLDER_ATTR,
+            channel: NUMBER_TO_HOLDER_CHANNEL,
+            setter: SET_HOLDER,
+            frameIndex: this.frameIndices.holder
+        });
+        this.addAutofillInput({
+            attr: EXP_ATTR,
+            channel: NUMBER_TO_EXP_CHANNEL,
+            setter: SET_EXP,
+            frameIndex: this.frameIndices.exp,
+            preprocess: formatExp
+        });
+
+        // Adds receiver from holder iframe
+        this.addReceiver({
+            channel: HOLDER_TO_NUMBER_CHANNEL,
+            senderFrameIndex: this.frameIndices.holder,
+            methods: [{ name: SET_NUMBER, func: function(trans, value) {
+                this.brands = value.brands;
+                setVal.call(this, trans, value.val);
+            }.bind(this)}]
+        });
+    };
+
+    Autofill.prototype.setupExp = function() {
+        // Adds receivers from number and holder iframes
+        this.addReceiver({
+            channel: NUMBER_TO_EXP_CHANNEL,
+            senderFrameIndex: this.frameIndices.number,
+            methods: [{ name: SET_EXP, func: setVal.bind(this) }]
+        });
+        this.addReceiver({
+            channel: HOLDER_TO_EXP_CHANNEL,
+            senderFrameIndex: this.frameIndices.holder,
+            methods: [{ name: SET_EXP, func: setVal.bind(this) }]
+        });
+    };
+
+    Autofill.prototype.setupHolder = function() {
+        // Adds inputs: cc-number and cc-exp
+        this.addAutofillInput({
+            attr: NUMBER_ATTR,
+            channel: HOLDER_TO_NUMBER_CHANNEL,
+            setter: SET_NUMBER,
+            frameIndex: this.frameIndices.number,
+            preprocess: function (val, autofill) {
+                // Sets the name attr of the number input so that it will be submitted with holder
+                autofill.$form
+                    .children("input[autocomplete='" + NUMBER_ATTR + "']")
+                    .attr("name", Parameter.CARD_NUMBER);
+
+                // Detects brands
+                return BinService.detect(this.binUrl, val).then(function(brands) {
+                    return {
+                        val: formatNumber(val),
+                        brands: brands
+                    };
+                }, function() {
+                    return {
+                        val: formatNumber(val),
+                        brands: Detection.getBrandsByNumber(val)
+                    };
+                });
+            }.bind(this)
+        });
+        this.addAutofillInput({
+            attr: EXP_ATTR,
+            channel: HOLDER_TO_EXP_CHANNEL,
+            setter: SET_EXP,
+            frameIndex: this.frameIndices.exp,
+            preprocess: formatExp
+        });
+
+        // Adds receiver from number iframe
+        this.addReceiver({
+            channel: NUMBER_TO_HOLDER_CHANNEL,
+            senderFrameIndex: this.frameIndices.number,
+            methods: [
+                { name: SET_HOLDER, func: setVal.bind(this) },
+                { name: RESET_NUMBER, func: function() {
+                    this.$form.children("input[autocomplete='" + NUMBER_ATTR + "']")
+                        .removeAttr("name").val(""); }.bind(this) }
+            ]
+        });
+
+    };
+
+    function formatExp(raw) {
+        if (!raw) {
+            return null;
+        }
+        var splitted = raw.split(/[/.]/).map(function(item) {
+            var trimmed = item.trim();
+            return (trimmed.length > 2) ?
+                trimmed.substring(trimmed.length - 2, trimmed.length) : trimmed;
+        });
+        return $.Deferred().resolve((splitted.length === 2) ? splitted.join('/') : null);
+    }
+
+    function formatNumber(raw) {
+        if (!raw) {
+            return null;
+        }
+        var length = raw.length;
+        return (length < 4) ? raw : Array(length - 3).join("●") + raw.substring(length - 4, length);
+    }
+
+    function setVal(trans, value) {
+        this.autofilled = true;
+        this.$input.val(value);
+        this.$input.trigger("forcedBlur");
+    }
+
+    Autofill.prototype.addAutofillInput = function(input) {
+        if (input.frameIndex === -1) {
+            return;
+        }
+
+        // Creates input and attaches it to the form
+        var $autofillInput = $('<input autocomplete="' + input.attr + '" tabindex="-1">');
+        this.$form.append($autofillInput);
+
+        // Binds the change event to call the receiver frame
+        var autofill = this;
+        $autofillInput.change(function() {
+            var promise = (input.preprocess) ? input.preprocess($(this).val(), autofill)
+                    : $.Deferred().resolve($(this).val());
+            promise.then(function(val) {
+                autofill[input.channel].call({
+                    method: input.setter,
+                    params: val,
+                    success: function() {}
+                });
+            });
+        });
+
+        // Creates a channel to the receiver frame
+        this[input.channel] = Channel.build({
+            window: window.parent.frames[input.frameIndex],
+            origin: this.url,
+            scope: input.channel,
+        });
+    };
+
+    Autofill.prototype.addReceiver = function(receiver) {
+        this[receiver.channel] = Channel.build({
+            window: window.parent.frames[receiver.senderFrameIndex],
+            origin: this.url,
+            scope: receiver.channel,
+            onReady: function() {
+                for (var i = 0; i < receiver.methods.length; i++) {
+                   this[receiver.channel].bind(receiver.methods[i].name, receiver.methods[i].func);
+                }
+
+            }.bind(this)
+        });
+    };
+
+    Autofill.prototype.isAutofilledNumber = function() {
+        return this.autofilled && this.$input.is(NUMBER_SELECTOR);
+    };
+
+    Autofill.prototype.resetNumberInHolderFrame = function() {
+        this[NUMBER_TO_HOLDER_CHANNEL].call({
+            method: RESET_NUMBER,
+            success: function() {}
+        });
+    };
+
+    Autofill.prototype.reset = function() {
+        this.autofilled = false;
+    };
+
+    Autofill.prototype.getBrands = function() {
+        return this.brands;
+    };
+
+    return Autofill;
+});
+define('module/IframeToParentCommunication',['require','jquery','lib/Channel','module/Detection','module/Setting','module/InputFormatter','module/NumberOnlyFormatter','module/Validate','module/IframeStylesLoader','module/Parameter','module/Util','module/Options','module/Generate','module/ExpiryDate','module/PaymentView','module/SaqaUtil','module/Autofill','module/BinService'],function(require){
 	var $ = require('jquery');
 	var Channel = require('lib/Channel');
 	var Detection = require('module/Detection');
@@ -36601,9 +36950,11 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	var ExpiryDate = require('module/ExpiryDate');
 	var PaymentView = require('module/PaymentView');
 	var SaqaUtil = require('module/SaqaUtil');
+	var Autofill = require('module/Autofill');
+	var BinService = require('module/BinService');
 
 	var autocompleteAttributes = {};
-	autocompleteAttributes[Parameter.CARD_NUMBER] = 'cc-number';
+	autocompleteAttributes[Parameter.CARD_NUMBER] = "cc-number";
 	autocompleteAttributes[Parameter.CARD_HOLDER] = "cc-name";
 	autocompleteAttributes[Parameter.CARD_CVV] = "cc-csc";
 
@@ -36704,6 +37055,10 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			iframeToParentCommunication.applyIframeStyles.call(iframeToParentCommunication, styleObject);
 		});
 
+		this.channel.bind('setUpAutofill', function(trans, iframeIndices) {
+			iframeToParentCommunication.setUpAutofill.call(iframeToParentCommunication, iframeIndices);
+		});
+
 		this.channel.bind('resetSubmitStatus', function() {
 			iframeToParentCommunication.resetSubmitStatus.call(iframeToParentCommunication);
 		});
@@ -36721,7 +37076,11 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			var eventName = typeof params.eventName !== 'undefined' ? params.eventName : 'submit';
 
 			var event = $.Event(eventName);
-			var validateInputPromise = iframeToParentCommunication.validateInput(event, allowEmptyValue);
+			var validateInputPromise = iframeToParentCommunication.validateInput(event, allowEmptyValue)
+			.then(function(isValid) {
+                iframeToParentCommunication.setIsValid(event, isValid);
+                return isValid;
+            });
 
 			convertPromiseToTransAndDelayReturn(trans, validateInputPromise);
 		});
@@ -36739,11 +37098,29 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			iframeToParentCommunication.onBlur(event);
 		});
 
-		this.$input.on("focus", function(event){
+		this.$input.on("focus", function(event) {
+		    if (iframeToParentCommunication.autofill &&
+		            iframeToParentCommunication.autofill.isAutofilledNumber()) {
+		        $(this).select();
+		    }
 			iframeToParentCommunication.onFocus(event);
 		});
 
+		this.$input.on("mouseup", function(event) {
+		    if (iframeToParentCommunication.autofill &&
+		            iframeToParentCommunication.autofill.isAutofilledNumber()) {
+		        event.preventDefault();
+		    }
+		});
+
 		this.$input.on('keydown', function(event) {
+		    if (iframeToParentCommunication.autofill) {
+		        if (iframeToParentCommunication.autofill.isAutofilledNumber()) {
+		            iframeToParentCommunication.autofill.resetNumberInHolderFrame();
+		        }
+		        iframeToParentCommunication.autofill.reset();
+		    }
+
 			iframeToParentCommunication.setIsValid(event, true);
 		});
 
@@ -36753,55 +37130,11 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		});
 	};
 
-	 // A cache containing the card brands identified by BINs
-	IframeToParentCommunication.prototype.binCache = {
-
-		EMPTY_VALUE: 'empty',
-
-		isBinDetectionActive: function() {
-			return "binlist" === Options.brandDetectionType;
-		},
-
-		computeBinFromCardNumber: function(val) {
-			if (val && val.length >= 6) {
-				if (val.length < 8) {
-					return val.substring(0, 6);
-				} else {
-					return val.substring(0, 8);
-				}
-			}
-		},
-
-		containsBin: function(bin) {
-			return this.hasOwnProperty(bin);
-		},
-
-		// when our input value is not yet a valid BIN (at least 6 chars) we will return an empty placeholder to distinguish
-		// the cases when we haven't yet send the request to the binlist query service vs when nothing was found
-		getValueByCardNumber: function (val) {
-			val = Util.stripRawCardNumber(val);
-			var bin = this.computeBinFromCardNumber(val);
-			if (bin) {
-				return this[bin];
-			} else {
-				return this.EMPTY_VALUE;
-			}
-		},
-
-		brandMatchesBinDetectedBrands: function(brand, binDetectedBrands) {
-			if (binDetectedBrands === this.EMPTY_VALUE) {
-				return true;
-			}
-			return binDetectedBrands &&
-				binDetectedBrands.length > 0 &&
-				binDetectedBrands.indexOf(brand) !== -1;
-		}
-	};
-
 	IframeToParentCommunication.prototype.sendWpwlOptions = function (wpwl){
 		Options.setWpwlOptions(wpwl.wpwlOptions);
 		this.binUrl = Generate.string(wpwl.url, "/v", wpwl.apiVersion,
 									"/checkouts/", wpwl.checkout.id, "/bins");
+		this.url = wpwl.url;
 	};
 
 	IframeToParentCommunication.prototype.applyInputPlaceholder = function(placeholder){
@@ -36830,6 +37163,16 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		
 	};
 
+	IframeToParentCommunication.prototype.setUpAutofill = function(frameIndices) {
+	    this.autofill = new Autofill({
+	        $form: this.$form,
+	        $input: this.$input,
+	        frameIndices: frameIndices,
+	        url: this.url,
+	        binUrl: this.binUrl
+	    });
+	};
+
 	IframeToParentCommunication.prototype.canSubmit = function() {
 		if (this.$input.attr('submitStatus') === 'submitting') {
 			return false;
@@ -36851,6 +37194,11 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			return deferred.promise();
 		}
 
+        // Autofilled card number is submitted from the card holder iframe
+		if (this.autofill && this.autofill.isAutofilledNumber()) {
+		    return $.when();
+		}
+
 		if(this.$input.is(CARD_HOLDER_SELECTOR)) {
 			this.$input.val( Util.trim(this.$input.val()) );
 		} else {
@@ -36859,39 +37207,94 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		return $.post(this.$form.attr("action"), this.$form.serialize());
 	};
 
-	IframeToParentCommunication.prototype.validateInput = function(event, allowEmptyValue){
-		var iframeToParentCommunication = this;
-		var binCache = this.binCache;
+	IframeToParentCommunication.prototype.validateInputWithoutBrand = function(allowEmptyValue) {
+    	var val = this.$input.val();
+        if (this.$input.is(CARD_HOLDER_SELECTOR)) {
+            if (!allowEmptyValue && val === "") {
+                return false;
+            }
+            return Validate.validateAccountHolder( val );
+        } else if (this.$input.is(EXPIRY_DATE_SELECTOR)) {
+            var splittedMonthYear = PaymentView.splitMonthYear( val );
+            $('input[name="' + Parameter.CARD_EXPIRY_MONTH + '"]').val(splittedMonthYear.month);
+            $('input[name="' + Parameter.CARD_EXPIRY_YEAR + '"]').val(splittedMonthYear.year);
+            return Validate.validateExpiry( splittedMonthYear.month, splittedMonthYear.year );
+        }
 
-		return $.when(iframeToParentCommunication.getBrand(),
-			iframeToParentCommunication.onBinDetectionCompletion())
-
-		.then(function(brand, binDetectedBrands) {
-			if (!iframeToParentCommunication.$input.is(CARD_HOLDER_SELECTOR) && // Don't check binCache for card holder field
-				binCache.isBinDetectionActive() &&
-				!binCache.brandMatchesBinDetectedBrands(brand, binDetectedBrands)) {
-					return false;
-			}
-			return iframeToParentCommunication.validateInputValue(brand, allowEmptyValue);
-
-		}).then(function(isValid) {
-			iframeToParentCommunication.setIsValid(event, isValid);
-			return isValid;
-		});
+        return false;
 	};
 
-	IframeToParentCommunication.prototype.onBinDetectionCompletion = function() {
-		if (this.binCache.isBinDetectionActive()) {
-		    var bin = this.binCache.computeBinFromCardNumber(Util.parseEasternNumber(this.$input.val()));
-		    if(this.binCache[bin] === undefined) {
-		        this.updateEnhancedBinBrands(Util.parseEasternNumber(this.$input.val()));
-		    }
-			return this.binCache.getValueByCardNumber(this.$input.val());
+	IframeToParentCommunication.prototype.validateInputWithBrand = function(brand) {
+    	var val = this.$input.val();
+        if (this.$input.is(CARD_NUMBER_SELECTOR)) {
+            return this.autofill && this.autofill.isAutofilledNumber() ||
+                    Validate.validateCardNumber(val, brand);
+        } else if (this.$input.is(CARD_CVV_SELECTOR)) {
+            return Validate.validateCVC(val, brand);
+        }
+	};
+
+	IframeToParentCommunication.prototype.validateInput = function(event, allowEmptyValue){
+	    // Empty value
+	    var val = this.$input.val();
+        if (allowEmptyValue && val === "") {
+		    return $.when().then(function() {
+		        return true;
+		    });
+        }
+
+        // Validates input which does not require brand
+		var iframeToParentCommunication = this;
+		if (this.$input.is(CARD_HOLDER_SELECTOR) || this.$input.is(EXPIRY_DATE_SELECTOR)) {
+		    return $.when().then(function() {
+                return iframeToParentCommunication.validateInputWithoutBrand(allowEmptyValue);
+		    });
 		}
+
+        // Validates input which requires brand
+        var isValidPromise;
+        var getBrandPromise = iframeToParentCommunication.getBrand();
+        if (this.$input.is(CARD_NUMBER_SELECTOR) && BinService.isActive()) {
+            // If binlist is used, number is considered valid
+            // only if the selected brand is also a detected brand
+            var detectBrandPromise = iframeToParentCommunication.detectAndProcessBrands();
+            isValidPromise = $.when(getBrandPromise, detectBrandPromise).then(
+            function(brand, detectedBrands) {
+                if (!BinService.brandMatchesDetectedBrands(brand, detectedBrands)) {
+                    return false;
+                }
+			    return iframeToParentCommunication.validateInputWithBrand(brand);
+            });
+        } else {
+            isValidPromise = getBrandPromise.then(function(brand) {
+			    return iframeToParentCommunication.validateInputWithBrand(brand);
+            });
+        }
+        return isValidPromise;
+	};
+
+	IframeToParentCommunication.prototype.detectAndProcessBrands = function() {
+	    var number = Util.parseEasternNumber(this.$input.val());
+	    if (this.autofill && this.autofill.isAutofilledNumber()) {
+	        var brands = this.autofill.getBrands();
+	        this.processEnhancedBrands(number, brands);
+	        return $.Deferred().resolve(brands);
+	    }
+
+        if (BinService.isActive()) {
+            var bin = BinService.computeBin(number);
+            if (!BinService.containsBin(bin)) {
+                this.updateEnhancedBinBrands(number);
+            }
+            return BinService.readCache(number);
+        }
 	};
 
 	IframeToParentCommunication.prototype.onBlur = function(event){
-		this.validateInput(event, true);
+		this.validateInput(event, true).then(function(isValid) {
+            this.setIsValid(event, isValid);
+            return isValid;
+        }.bind(this));
 
 		this.notify("onBlur", this.$input.val() === '');
 	};
@@ -36915,40 +37318,18 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		this.processRegExpBrands(inputVal, brands);
 	};
 
-	IframeToParentCommunication.prototype.updateEnhancedBinBrands = function(val) {
-		var bin = this.binCache.computeBinFromCardNumber(val);
-		if (!bin) {
-			return;
-		}
-		if (this.binCache.containsBin(bin)) {
-			this.binCache[bin]
-			.then(function(brands) {
-				this.processEnhancedBrands(val, brands);
-			}.bind(this))
-			.fail(function() {
-			    this.updateRegExpBrands(bin);
-			}.bind(this));
-		} else {
-			this.binCache[bin] = $.Deferred();
-			$.ajax({
-				method: "POST",
-				url: this.binUrl,
-				dataType: "json",
-				data: {
-					"bin": bin
-				},
-				success: function(response) {
-					var brands = response.brands;
-					this.binCache[bin].resolve(brands);
-					this.processEnhancedBrands(val, brands);
-				}.bind(this),
-				error: function(xhr){
-					this.binCache[bin].reject(xhr);
-					// Error retrieving EBM brands, fallback to regexp
-					this.updateRegExpBrands(bin);
-				}.bind(this)
-			});
-		}
+	IframeToParentCommunication.prototype.updateEnhancedBinBrands = function(number) {
+        var promise = BinService.detect(this.binUrl, number);
+        if (!promise) {
+            return;
+        }
+
+        promise.then(function(brands) {
+            this.processEnhancedBrands(number, brands);
+        }.bind(this))
+        .fail(function() {
+            this.updateRegExpBrands(number);
+        }.bind(this));
 	};
 
 	IframeToParentCommunication.prototype.processRegExpBrands = function(inputVal, brands){
@@ -36970,6 +37351,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		this.onSetDetectedBrands(brands, inputVal);
 	};
 
+    // Formats number and calls setDetectedBrands()
 	IframeToParentCommunication.prototype.processEnhancedBrands = function(inputVal, brands){
 		if (brands != null && brands.length === 0){
 			// We want to show error if no brands detected
@@ -36986,7 +37368,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 	IframeToParentCommunication.prototype.onKeyUp = function(){
 		if (this.$input.is(CARD_NUMBER_SELECTOR)){
-			if (this.binCache.isBinDetectionActive()){
+			if (BinService.isActive()){
 				var bin = this.$input.val();
 				var cleanBin = Util.parseEasternNumber(bin);
 				if (cleanBin !== undefined){
@@ -37100,36 +37482,6 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 	IframeToParentCommunication.prototype.applyCheckoutId = function(checkoutId) {
 		this.$form.attr('action', this.$form.attr('action') + checkoutId);
-	};
-
-	IframeToParentCommunication.prototype.validateInputValue = function(brand, allowEmptyValue) {
-		var val = this.$input.val();
-
-		if (allowEmptyValue && val === "") {
-			return true;
-		} else if (brand === null) {
-			return false;
-
-		} 
-		
-		if (this.$input.is(CARD_NUMBER_SELECTOR)) {
-			return Validate.validateCardNumber(val, brand);
-
-		} else if (this.$input.is(CARD_CVV_SELECTOR)) {
-			return Validate.validateCVC(val, brand);
-		} else if (this.$input.is(CARD_HOLDER_SELECTOR)) {
-			if (!allowEmptyValue && val === "") {
-				return false;
-			}
-			return Validate.validateAccountHolder( val );
-		} else if (this.$input.is(EXPIRY_DATE_SELECTOR)) {
-			var splittedMonthYear = PaymentView.splitMonthYear( val );
-			$('input[name="' + Parameter.CARD_EXPIRY_MONTH + '"]').val(splittedMonthYear.month);
-			$('input[name="' + Parameter.CARD_EXPIRY_YEAR + '"]').val(splittedMonthYear.year);
-			return Validate.validateExpiry( splittedMonthYear.month, splittedMonthYear.year );
-		}
-		
-		return false;
 	};
 
 	IframeToParentCommunication.prototype.formatInput = function(properties) {
