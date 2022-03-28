@@ -35220,8 +35220,6 @@ define('module/FrameMessenger',['require','module/Wpwl','module/logging/LoggerFa
 
 	var FrameMessenger = function(observers) {
 
-        console.log('FrameMessenger created for:', window.location.protocol + "//" + window.location.host);
-
 	    this.isListening = false;
 	    this.attachEventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
         this.detachEventMethod = window.removeEventListener ? "removeEventListener" : "detachEvent";
@@ -35245,9 +35243,6 @@ define('module/FrameMessenger',['require','module/Wpwl','module/logging/LoggerFa
         // Listen to message from child window
         eventer(this.messageEvent, this.bindedHandler);
         this.isListening = true;
-
-        console.log('listenToRedirectMessage', this.attachEventMethod, this.messageEvent );
-        logger.info('listenToRedirectMessage: ' + this.attachEventMethod +',  '+ this.messageEvent);
 	};
 
     FrameMessenger.prototype.stopListening = function () {
@@ -35257,9 +35252,6 @@ define('module/FrameMessenger',['require','module/Wpwl','module/logging/LoggerFa
             return;
         }
 
-        console.log('stopListening', this.attachEventMethod, this.messageEvent );
-        logger.info('stopListening: ' + this.attachEventMethod +',  '+ this.messageEvent);
-
         var eventer = window[this.detachEventMethod];
         eventer(this.messageEvent, this.bindedHandler);
         this.isListening = false;
@@ -35267,14 +35259,9 @@ define('module/FrameMessenger',['require','module/Wpwl','module/logging/LoggerFa
 
     FrameMessenger.prototype.handleMessage = function(message) {
 
-        console.log('Frame messenger recieved', message );
-        logger.info('Frame messenger recieved: ' + JSON.stringify(message));
-
         if (this.isMessageSecure(message)) {
             this.observers.forEach(function(observer) {
                 if (observer.validate(message)) {
-                    console.log('--- sending to observer', observer );
-                    logger.info('--- sending to observer');
                     observer.notify(message);
                 }
             });
@@ -35291,17 +35278,13 @@ define('module/FrameMessenger',['require','module/Wpwl','module/logging/LoggerFa
             return true;
         } else {
             // Send log message
-            console.log('isMessageSecure failed for:', Wpwl.checkout.config.environmentConfig.url);
             if(JSON && JSON.stringify){
-                console.log('Insecure message: ', message);
                 logger.error('Insecure message: '+ JSON.stringify(message) );
             } else {
                 if (message.origin) {
-                    console.log('Invalid origin: ', message.origin);
                     logger.error('Invalid origin: '+ message.origin );
                 }
                 else if (message.isTrusted !== undefined) {
-                    console.log('Invalid isTrusted: ', message.isTrusted );
                     logger.error('Invalid isTrusted: '+ message.isTrusted );
                 }
                 else {
@@ -35309,7 +35292,6 @@ define('module/FrameMessenger',['require','module/Wpwl','module/logging/LoggerFa
                     Object.keys(message || {}).forEach( function(key){
                         logMessage.push( key + ':' + message[key] );
                     });
-                    console.log('Invalid isTrusted:', logMessage );
                     logger.error('Invalid isTrusted: { '+ logMessage.join(', ') + ' }' );
                 }
             }
@@ -35345,7 +35327,7 @@ define('module/framemessaging/PreconditionIframe',['require','jquery','module/lo
 
     PreconditionIframe.prototype.notify = function(message) {
 
-        console.log("Received message to render hidden precondition iframe", message);
+        console.log("Received message to render hidden precondition iframe");
 
         this.counter++;
         render(message);
@@ -35575,7 +35557,6 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	var ccBrandsForClickToPay = [];
 
 	var PaymentWidget = function(forms){
-		console.log('Created payment widget', window.location.protocol + "//" + window.location.host);
 		this.forms = forms;
 		this.frameMessenger = new FrameMessenger([new Redirect(), new PreconditionIframe(), new SessionTimeoutErrorHandler()]);
 		this.onReadyPromise = $.when();
@@ -35621,8 +35602,6 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	};
 
 	PaymentWidget.prototype.unload = function () {
-		console.log('UNLOAD payment widget', window.location.protocol + "//" + window.location.host);
-		console.error(new Error('UNLOAD payment widget: '+ window.location.protocol + "//" + window.location.host));
 		Payment.unload();
         $('.wpwl-container').remove();
         InternalRequestCommunication.unloadSender();
@@ -36074,7 +36053,6 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
         hiddenParameters.add(Parameter.FORCE_UTF8, "&#9760;");
 
         var origin = Util.getOrigin();
-		console.log('payment widget shop origin', origin);
         if (origin) {
             hiddenParameters.add(Parameter.SHOP_ORIGIN, Util.getOrigin());
         }
