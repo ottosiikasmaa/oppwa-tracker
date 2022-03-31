@@ -33519,11 +33519,11 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 	Payment.appendBrowserInfo = function($form) {
 
-	    if (($form.hasClass('wpwl-form-card') || isCardRegistration($form)) && isThreeDV2Enabled($form))
+	    if (($form.hasClass('wpwl-form-card') || isCardRegistration($form)) && (isThreeDV2Enabled($form) || populateBrowserParams()))
 	    {
             var browserInfoFields = Generate.generateBrowserFields($form);
             $form.append(browserInfoFields);
-        }
+	    }
 	};
 
 	function isCardRegistration($form) {
@@ -33537,6 +33537,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	    return false;
 	}
 
+    function populateBrowserParams() {
+        return Wpwl.checkout.config.threeDSecureV2Config.populateBrowserParams;
+    }
+    
     function isThreeDV2Enabled($form) {
         var brand = getBrand($form);
         if (brand != null) {
