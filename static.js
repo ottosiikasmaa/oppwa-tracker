@@ -24832,6 +24832,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 		PaymentView.setUpIframeCommunication(iframeCommunication)
 			.then(PaymentView.initIframeListeners)
 			.then(PaymentView.enableBrandDetection)
+			.then(PaymentView.setUpIframeBrandList)
 			.then(PaymentView.setUpIframeInputPropertiesAndCheckoutId)
 			.then(PaymentView.setUpIframeStyles)
 			.then(PaymentView.setUpAutofill)
@@ -24908,7 +24909,17 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			return iframeCommunication;
 		});
 	};
-	
+
+	PaymentView.setUpIframeBrandList = function(iframeCommunication) {
+		if (SaqaUtil.isSAQACompliance()) {
+			var $form = $('form.wpwl-form-card');
+			var brandlist = PaymentView.getCardBrands($form);
+			iframeCommunication.setUpBrandList(brandlist);
+		}
+
+		return iframeCommunication;
+	};
+
 	PaymentView.setUpIframeStyles = function(iframeCommunication){
 		return $.when(
 			PaymentView.setUpIframeInputPlaceholder(iframeCommunication),
@@ -25940,9 +25951,18 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 		return createSendMessageOnChannelPromise.call(this, "applyInputStyles", stylesObject);
 	};
 
+	ParentToIframeCommunication.prototype.setUpBrandList = function(brandList) {
+		return createSendMessageOnChannelPromise.call(this, "setUpBrandList", brandList);
+	};
+
 	ParentToIframeCommunication.prototype.applyIframeStyles = function(stylesObject) {
         return createSendMessageOnChannelPromise.call(this, "applyIframeStyles", stylesObject);
     };
+
+	ParentToIframeCommunication.prototype.updateCardBrand = function(brand) {
+		return createSendMessageOnChannelPromise.call(this, "updateCardBrand", brand);
+	};
+
 
     ParentToIframeCommunication.prototype.setUpAutofill = function() {
         var iframeIndices = {
@@ -25952,7 +25972,7 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
         };
         return createSendMessageOnChannelPromise.call(this, "setUpAutofill", iframeIndices);
     };
-	
+
 	ParentToIframeCommunication.prototype.submitFormAndGetToken = function(){
 		return createSendMessageOnChannelPromise.call(this, "submitFormAndGetToken");
 	};
@@ -29954,6 +29974,27 @@ define('module/StyleLoader',['require','jquery'],function(require) {
 
     return StyleLoader;
 });
+define('module/StyleLink',['require','module/Generate'],function(require) {
+    var Generate = require('module/Generate');
+
+    var StyleLink = function() {};
+
+    StyleLink.generateLink = function(params) {
+        var staticResourcesUrl = Generate.string(params.url, "/v1/static/", params.cacheVersion);
+        var cssResourceUrl = Generate.string(staticResourcesUrl , "/css/", params.style,
+            params.rtlExtension, params.minified ? ".min" : "", ".css");
+        var cssLink = Generate.string("<link rel='stylesheet' id='wpwl-style' href='", cssResourceUrl ,"'/>");
+        if (params.imageStyle === "svg")
+        {
+            var svgCssResourceUrl = Generate.string(staticResourcesUrl, "/css/svg",
+                params.minified ? ".min" : "", ".css");
+            cssLink = Generate.string(cssLink, "<link rel='stylesheet' href='", svgCssResourceUrl, "'/>");
+        }
+        return cssLink;
+    };
+
+    return StyleLink;
+});
 define('module/InlineFlow',['require','module/Options'],function(require) {
 
     var Options = require('module/Options');
@@ -32240,7 +32281,7 @@ define('module/FastCheckout',['require','jquery','module/Generate','module/Track
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -32252,6 +32293,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var Setting = require('module/Setting');
 	var Spinner = require('lib/Spinner');
 	var StyleLoader = require('module/StyleLoader');
+	var StyleLink = require('module/StyleLink');
 	var PaymentView = require('module/PaymentView');
 	var PaymentForm = require('module/forms/PaymentForm');
 	var ParentToIframeCommunication = require('module/ParentToIframeCommunication');
@@ -32688,17 +32730,16 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		return deferred.promise();
 	};
 
-	Payment.getStyleLink = function(){
-	    var staticResourcesUrl = Generate.string(Payment.url, "/v1/static/", Payment.cacheVersion);
-	    var cssResourceUrl = Generate.string(staticResourcesUrl , "/css/", Payment.style,
-                Payment.isRTLExtension(Payment.locale), Payment.minified ? ".min" : "", ".css");
-	    var cssLink = Generate.string("<link rel='stylesheet' id='wpwl-style' href='", cssResourceUrl ,"'/>");
-	    if (Options.imageStyle === "svg"){
-	        var svgCssResourceUrl = Generate.string(staticResourcesUrl, "/css/svg",
-	                Payment.minified ? ".min" : "", ".css");
-	        cssLink = Generate.string(cssLink, "<link rel='stylesheet' href='", svgCssResourceUrl, "'/>");
-	    }
-		return cssLink;
+	Payment.getStyleLink = function() {
+
+		return StyleLink.generateLink({
+			url : Payment.url,
+			cacheVersion : Payment.cacheVersion,
+			style : Payment.style,
+			minified : Payment.minified,
+			rtlExtension : Payment.isRTLExtension(Payment.locale),
+			imageStyle : Options.imageStyle
+		});
 	};
 
 	Payment.isRTLExtension = function(paymentLocale){
@@ -32745,10 +32786,21 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		}
 
 		//set the brand icon, depends on the selection
-		$(document).on('change.wpwlEvent', 'select[name="' + Parameter.PAYMENT_BRAND + '"]', function(){
+		$(document).on('change.wpwlEvent', 'select[name="' + Parameter.PAYMENT_BRAND + '"]', function() {
 			var brand = this.value;
 			PaymentView.onUpdateCardBrand.call(this, this, brand, true);
+
+			if (SaqaUtil.isSAQACompliance()) {
+				Payment.updateIFrameCardBrand.call(this, brand);
+			}
 		});
+
+		Payment.updateIFrameCardBrand = function(brand) {
+			if (Payment.iframeCommunications && Payment.iframeCommunications.number)
+			{
+				Payment.iframeCommunications.number.updateCardBrand(brand);
+			}
+		};
 
 		//adjust DD paymentBrand, e.g. change DIRECTDEBIT to DIRECTDEBIT_DE
 		$(document).on('change.wpwlEvent', 'form.wpwl-form-directDebit select[name="' + Parameter.BANKACCOUNT_COUNTRY + '"]', function(){
@@ -36949,7 +37001,7 @@ define('module/Autofill',['require','jquery','lib/Channel','module/BinService','
 
     return Autofill;
 });
-define('module/IframeToParentCommunication',['require','jquery','lib/Channel','module/Detection','module/Setting','module/InputFormatter','module/NumberOnlyFormatter','module/Validate','module/IframeStylesLoader','module/Parameter','module/Util','module/Options','module/Generate','module/ExpiryDate','module/PaymentView','module/SaqaUtil','module/Autofill','module/BinService'],function(require){
+define('module/IframeToParentCommunication',['require','jquery','lib/Channel','module/Detection','module/Setting','module/InputFormatter','module/NumberOnlyFormatter','module/Validate','module/IframeStylesLoader','module/Parameter','module/Util','module/Options','module/StyleLink','module/Generate','module/ExpiryDate','module/PaymentView','module/SaqaUtil','module/Autofill','module/BinService'],function(require){
 	var $ = require('jquery');
 	var Channel = require('lib/Channel');
 	var Detection = require('module/Detection');
@@ -36968,6 +37020,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	var COMMUNICATION_TIMEOUT = 60000;
 	var Util = require('module/Util');
 	var Options = require('module/Options');
+	var StyleLink = require('module/StyleLink');
 	var Generate = require('module/Generate');
 	var ExpiryDate = require('module/ExpiryDate');
 	var PaymentView = require('module/PaymentView');
@@ -36976,7 +37029,9 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	var BinService = require('module/BinService');
 
 	var autocompleteAttributes = {};
+	var cardLogoId = 'cardLogoId';
 	autocompleteAttributes[Parameter.CARD_NUMBER] = "cc-number";
+	autocompleteAttributes[Parameter.CARD_NUMBER] = 'cc-number';
 	autocompleteAttributes[Parameter.CARD_HOLDER] = "cc-name";
 	autocompleteAttributes[Parameter.CARD_CVV] = "cc-csc";
 
@@ -37085,6 +37140,15 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			iframeToParentCommunication.resetSubmitStatus.call(iframeToParentCommunication);
 		});
 
+		this.channel.bind('updateCardBrand', function(trans, brand) {
+			iframeToParentCommunication.updateCardBrand.call(iframeToParentCommunication, brand);
+		});
+
+		this.channel.bind('setUpBrandList', function(trans, brandList) {
+			iframeToParentCommunication.setUpBrandList.call(iframeToParentCommunication, brandList);
+		});
+
+
 		// async bindings
 		this.channel.bind("submitFormAndGetToken", function(trans){
 			var submitFormAndGetTokenPromise = iframeToParentCommunication.submitFormAndGetToken.call(iframeToParentCommunication);
@@ -37157,6 +37221,12 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		this.binUrl = Generate.string(wpwl.url, "/v", wpwl.apiVersion,
 									"/checkouts/", wpwl.checkout.id, "/bins");
 		this.url = wpwl.url;
+		this.styleUrl = StyleLink.generateLink({
+			cacheVersion : wpwl.cacheVersion,
+			style : Options.style,
+			minified : wpwl.minified,
+			imageStyle : Options.imageStyle
+		});
 	};
 
 	IframeToParentCommunication.prototype.applyInputPlaceholder = function(placeholder){
@@ -37205,6 +37275,18 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 	IframeToParentCommunication.prototype.resetSubmitStatus = function() {
 		this.$input.attr('submitStatus', 'none');
+	};
+
+	IframeToParentCommunication.prototype.updateCardBrand = function(brand) {
+		if (brand) {
+			this.updateCardLogo(brand);
+		}
+	};
+
+	IframeToParentCommunication.prototype.setUpBrandList = function(brandList) {
+		if (brandList) {
+			this.setUpBrandList(brandList);
+		}
 	};
 
 	IframeToParentCommunication.prototype.submitFormAndGetToken = function(){
@@ -37332,7 +37414,9 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	};
 
 	IframeToParentCommunication.prototype.onSetDetectedBrands = function(brands, inputVal){
-		this.notify("setDetectedBrands", {brands: brands, inputLength: inputVal.length});
+		var params = {brands: brands, inputLength: inputVal.length};
+		this.notify("setDetectedBrands", params);
+		this.updateCardLogo(brands);
 	};
 
 	IframeToParentCommunication.prototype.updateRegExpBrands = function(inputVal){
@@ -37485,7 +37569,14 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			this.$input.prop("autocomplete", 'off');
 		}
 
+		if (this.isCardLogoActivated()) {
+
+			this.loadCardLogoStyle(this.styleUrl);
+			this.addCardLogoElement();
+		}
+
         if (Parameter.CARD_CVV === properties.name) {
+
 		    // mask cvv
 		    if (properties.maskCvv){
                 this.$input.attr('type', 'password');
@@ -37535,6 +37626,94 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			this.$input.data("pattern", resolvedPattern);
 		}
 	};
+
+	IframeToParentCommunication.prototype.isCardLogoActivated = function() {
+		return SaqaUtil.isSAQACompliance() && this.$input.is(CARD_NUMBER_SELECTOR);
+	};
+
+	IframeToParentCommunication.prototype.updateCardLogo = function(brands) {
+		if (this.isCardLogoActivated() && brands) {
+			var $logoLayer = $('#' + cardLogoId);
+
+			var detectedBrand = brands;
+			if (Array.isArray(brands)) {
+				if (brands.length > 0) {
+					detectedBrand = brands[0];
+				}
+				else {
+					detectedBrand = undefined;
+				}
+			}
+
+			resetCardLogoLayer($logoLayer,
+				getActiveBrandIfPresentInCardForm(detectedBrand, this.brandList));
+		}
+	};
+
+	function getActiveBrandIfPresentInCardForm(activeBrand, brandsInForm) {
+
+		var result;
+		if (brandsInForm.length > 0 && activeBrand !== undefined) {
+			$.each(brandsInForm, function(index, optionValue) {
+				if(optionValue === activeBrand) {
+					result = activeBrand;
+					return;
+				}
+			});
+		}
+		return result;
+	}
+
+
+	IframeToParentCommunication.prototype.setUpBrandList = function(brandList) {
+
+		this.brandList = brandList;
+	};
+
+	IframeToParentCommunication.prototype.isCardLogoStyleInjected = function() {
+
+		return this.$form.find('#' + cardLogoId).length !== 0;
+	};
+
+	IframeToParentCommunication.prototype.loadCardLogoStyle = function(styleUrl) {
+
+		if (styleUrl) {
+			if (!this.isCardLogoStyleInjected()){
+				this.$head.prepend(styleUrl);
+			}
+		}
+	};
+
+	IframeToParentCommunication.prototype.addCardLogoElement = function() {
+
+		if (!this.isCardLogoStyleInjected()) {
+
+			var $logoLayer = $('<div/>').attr("id", cardLogoId);
+			this.$form.append($logoLayer);
+
+			var firstBrand = '';
+			if (this.brandList && this.brandList.length > 0) {
+				firstBrand = this.brandList[0];
+			}
+
+			resetCardLogoLayer($logoLayer, firstBrand);
+
+			this.$input.css('width', 'auto');
+			this.$input.resize();
+		}
+	};
+
+	function resetCardLogoLayer($logoLayer, brand) {
+		if (brand !== undefined) {
+			$logoLayer.removeClass();
+			$logoLayer.addClass("wpwl-brand-card wpwl-brand wpwl-brand-" + brand);
+			$logoLayer.css({
+				'-moz-transform': 'scale(0.5)',
+				'zoom': '0.5',
+				'margin-top': '-5px'
+			});
+		}
+	}
 
 	function createSendMessageOnChannelPromise(method, params){
 		var deferred = $.Deferred();
