@@ -24588,7 +24588,11 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 
         var activeBrand = PaymentView.getActiveBrandIfPresentInCardForm($form, detectedBrands);
 
-		Options.onDetectBrand(getDetectedConfiguredBrands($form, detectedBrands), activeBrand);
+		if (inputLength === 0) {
+          Options.onDetectBrand([]);
+        } else {
+          Options.onDetectBrand(getDetectedConfiguredBrands($form, detectedBrands), activeBrand);
+        }
 
 		if (isCardLogoBrandDisplayMode()) {
 			detectedBrands = getDisplayedLogos($form, brands, inputLength);
@@ -24597,6 +24601,9 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			PaymentView.adjustCardLogosPaymentBrands();
 		}
 		var brand = getBrandFromDetectedBrands(detectedBrands, inputLength);
+		if(inputLength === 0){
+		    brand = "";
+		}
 		PaymentView.updateCardBrand(brand);
 	};
 
