@@ -12275,6 +12275,11 @@ define('module/Setting',['require','jquery','module/Parameter','module/forms/Car
             		mobilePhone: {
             			name: "customer.mobile"
             		}
+			},
+            CLICK_TO_PAY: {
+                    func: {
+                        method: "renderClickToPay"
+                    }
             }
 		}
 	},
@@ -12721,6 +12726,8 @@ define('module/Language',[],function(){
 			expiryMonthError:	"Invalid expiry date",
 			expiryYearError:	"Invalid expiry date",
 			taxNumberError:     "Invalid Tax Identification Number",
+			customerEmailError:     "Invalid email address",
+			clickToPayInitializationError:     "Click to Pay SDK not initialized",
 			generalTermsAndConditionsError:			"Please accept the consent for data transmission",
 			emailOrAccountId:	"Email or Account Id",
 			secureId:			"Secure Id",
@@ -13116,6 +13123,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
 		ar: {
@@ -13215,6 +13224,8 @@ define('module/Language',[],function(){
 			meezaQrLabel: "ادفع من خلال تطبيق ميزة باستخدام مسح كود QR",
 			meezaLinkLabel: "ادفع من خلال تطبيق ميزة باستخدام الإشعارات",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			countryCodes: [
                     {"value": "" , "label": "الرجاء الإختيار"},
                     {"value":"AF", "label":"أفغانستان"},
@@ -13545,6 +13556,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
 		de: {
@@ -13635,6 +13648,8 @@ define('module/Language',[],function(){
 			afterpayTermsAndCondition: "Allgemeine Geschäftsbedingungen",
 			afterpayAccept: "Ich stimme den AGBs von AfterPay zu.",
 			afterpayAcceptError: "Bitte akzeptieren Sie die Allgemeinen Geschäftsbedingungen.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
 			countryCodes : [
 			        {"value": "" , "label": "Bitte auswählen"},
@@ -13969,7 +13984,9 @@ define('module/Language',[],function(){
         			afterpayTermsAndCondition: "AfterPay Termes et Conditions",
         			afterpayAccept: "J'ai lu et accepté les termes et conditions du consommateur AfterPay.",
         			afterpayAcceptError: "Veuillez accepter les termes et conditions.",
-        			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
+        			customerEmailError: "Invalid email address",
+					clickToPayInitializationError: "Click to Pay SDK not initialized",
+					clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
         			countryCodes: [
                         {"value": "", "label": "Veuillez sélectionner"},
                         {"value": "AF", "label": "Afghanistan"},
@@ -14301,6 +14318,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
 			countryCodes: [
                 {"value": "", "label": "Por favor, seleccione"},
@@ -14635,6 +14654,8 @@ define('module/Language',[],function(){
 			afterpayTermsAndCondition: "Termini e condizioni per i consumatori AfterPay",
 			afterpayAccept: "Ho letto e accettato Termini e Condizioni per i consumatori AfterPay.",
 			afterpayAcceptError: "Si prega di accettare i Termini e Condizioni.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		nl: {
@@ -14717,6 +14738,8 @@ define('module/Language',[],function(){
 			afterpayTermsAndCondition: "Betalingsvoorwaarden",
 			afterpayAccept: "Ik ga akkoord met de betalings-voorwaarden van AfterPay.",
 			afterpayAcceptError: "Accepteer de algemene voorwaarden a.u.b.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		da: {
@@ -14799,6 +14822,8 @@ define('module/Language',[],function(){
 			afterpayTermsAndCondition: "Vilkaar og betingelser",
 			afterpayAccept: "Jeg har læst og accepteret AfterPay kunde betingelser og vilkår.",
 			afterpayAcceptError: "Accepter venligst vilkårene og betingelserne.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
 		},
 		fi: {
@@ -14881,6 +14906,8 @@ define('module/Language',[],function(){
 			afterpayTermsAndCondition: "AfterPay -ehdot",
 			afterpayAccept: "Olen lukenut ja hyväksynyt AfterPay:n ehdot.",
 			afterpayAcceptError: "Hyväksy käyttöehdot.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		sv: {
@@ -14963,6 +14990,8 @@ define('module/Language',[],function(){
 			afterpayTermsAndCondition: "Avtalsvillkor för AfterPay",
 			afterpayAccept: "Jag godkänner betalvillkoren och förhands-informationen för AfterPay.",
 			afterpayAcceptError: "Godkänn villkoren.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		tr: {
@@ -15042,6 +15071,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		ja: {
@@ -15121,6 +15152,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		sl: {
@@ -15200,6 +15233,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		pt: {
@@ -15285,6 +15320,8 @@ define('module/Language',[],function(){
              mandateEntitlement: "Como parte dos meus direitos, tenho direito a um reembolso do meu banco de acordo com os termos e condições do meu contrato com o meu banco. O reembolso deve ser solicitado dentro de 8 semanas a partir da data na qual minha conta foi debitada.",
              mandateConfirmation: "Confirmo que estou autorizado a assinar um mandato para a referida conta. Eu concordo com o período reduzido de pré-notificação de débito direto de 1 dia de calendário. Certifico que as informações fornecidas no mandato são completas e precisas.",
              mandateConfirmationError: "Por favor, concorde com todos os termos e condições antes de continuar.",
+             customerEmailError: "Invalid email address",
+             clickToPayInitializationError: "Click to Pay SDK not initialized",
              clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		pl: {
@@ -15364,6 +15401,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		cz: {
@@ -15443,6 +15482,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		hu: {
@@ -15522,6 +15563,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
         hr: {
@@ -15615,6 +15658,8 @@ define('module/Language',[],function(){
                 mandateEntitlement: "Kao dio svojih prava, imam pravo na povrat novca od moje banke pod uvjetima i odredbama mog sporazuma s mojom bankom. Povrat novca mora se zatražiti u roku od 8 tjedana, počevši od datuma zaduženja mog računa.",
                 mandateConfirmation: "Potvrđujem da sam ovlašten za gore spomenuti račun za potpisivanje ovlaštenja. Pristajem na smanjeno razdoblje prethodne najave izravnog zaduženja od 1 kalendarskog dana. Potvrđujem da su navedeni podaci o ovlaštenju cjeloviti i točni.",
                 mandateConfirmationError: "Dajte suglasnost sa svim uvjetima i odredbama prije nastavka.",
+                customerEmailError: "Invalid email address",
+                clickToPayInitializationError: "Click to Pay SDK not initialized",
                 clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
                 countryCodes: [
                     {"value": "" , "label": "Izaberite"},
@@ -15946,6 +15991,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		ro: {
@@ -16025,6 +16072,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		ru: {
@@ -16104,6 +16153,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		cn: {
@@ -16265,6 +16316,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		no: {
@@ -16347,6 +16400,8 @@ define('module/Language',[],function(){
 			afterpayTermsAndCondition: "Vilkår for å betale med AfterPay - Forbruker",
 			afterpayAccept: "Jeg godkjenner vilkårene for AfterPay.",
 			afterpayAcceptError: "Godta vilkårene.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		sk: {
@@ -16426,6 +16481,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		et: {
@@ -16519,6 +16576,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
         lv: {
@@ -16612,6 +16671,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
         lt: {
@@ -16705,6 +16766,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
         ca: {
@@ -16797,6 +16860,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
         eu: {
@@ -16889,6 +16954,8 @@ define('module/Language',[],function(){
 			mandateEntitlement: "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.",
 			mandateConfirmation: "I confirm to be authorized for the aforementioned account to sign a mandate. I agree to the reduced direct debit pre-notification period of 1 calendar day. I certify that the mandate information provided is complete and accurate.",
 			mandateConfirmationError: "Please agree to all the terms and conditions before continuing.",
+			customerEmailError: "Invalid email address",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
       id:   {
@@ -19721,6 +19788,21 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 		var link = Generate.string("<div><a href='http://www.mastercard.com/mc_us/wallet/learnmore/", availableLearnMoreLang, "/' target='_blank'>", I18n.learnMore, "</a></div>");
 
 		return Generate.string(buttonWithLogoHtml, link, hiddenFieldsHtml);
+	};
+
+	Generate.renderClickToPay = function() {
+		var buttonWithLogoHtml = Generate.string(Generate.groupStart("button"), Generate.buttonWithLogo("CLICK_TO_PAY"), Generate.groupEnd());
+		var customerEmail = generateInputElement({setup:"customerEmail", inputName:Parameter.EMAIL});
+		var submitButton = Generate.string(Generate.outerHtml(
+								$("<button/>", {
+									"class": "wpwl-button-continue",
+									"text": I18n.nextStep,
+									"type": "button",
+									"aria-label": I18n.nextStep,
+									"id": "wpwl-button-c2pAccessCards"
+								})
+							));
+		return Generate.string(buttonWithLogoHtml, customerEmail, submitButton);
 	};
 	
 	Generate.templateEngine = function(template, data){
@@ -31556,7 +31638,7 @@ define('module/integrations/UpgMobilePaymentWidget',['require','jquery','module/
 
 /*jshint camelcase: false */
 /*global Promise*/
-define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module/logging/LoggerFactory','module/Wpwl','module/Generate','module/Options','module/error/WidgetError','module/error/SessionError','module/InternalRequestCommunication','lib/Spinner','module/Parameter'],function(require) {
+define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module/logging/LoggerFactory','module/Wpwl','module/Generate','module/Options','module/error/WidgetError','module/error/SessionError','module/InternalRequestCommunication','lib/Spinner','module/Parameter','module/Util','module/PaymentView'],function(require) {
 	var $ = require("jquery");
 	var LoggerFactory = require('module/logging/LoggerFactory');
 	var Wpwl = require('module/Wpwl');
@@ -31568,6 +31650,8 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	var logger = LoggerFactory.getLogger('ClickToPayPaymentWidget');
 	var Spinner = require('lib/Spinner');
 	var Parameter = require('module/Parameter');
+	var Util = require('module/Util');
+	var PaymentView = require('module/PaymentView');
 	var ClickToPayPaymentWidget = {};
 
 	ClickToPayPaymentWidget.isCardsFromCookies = false;
@@ -31583,6 +31667,35 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	/** checks if CLICK_TO_PAY brand */
 	ClickToPayPaymentWidget.isClickToPayBrand = function(brand) {
 		return brand === "CLICK_TO_PAY";
+	};
+
+	/** This is for unrecognized returning user - either when no customer.email address added in the checkout request or
+	* when shopper want's to use different email address enrolled with Click to Pay
+	*/
+	ClickToPayPaymentWidget.addEventListerForEmailContinue = function() {
+		$('#wpwl-button-c2pAccessCards').click(function() {
+			 var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
+			 var $emailInput = clickToPayForm[0].getElementsByClassName('wpwl-control wpwl-control-customerEmail');
+			 var formClassSelector = ClickToPayPaymentWidget.returnClassSelector($(clickToPayForm).attr('class'));
+			 ClickToPayPaymentWidget.$form = $(formClassSelector);
+			 var email = $emailInput[0].value;
+			 var regexEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			 var validationErrors = {};
+			 if (Options.isClickToPayInitSuccess) {
+				 if (Util.isBlank(email) || !regexEmail.test(email)) {
+					 logger.error("Entered email not in valid format : " + email);
+					 validationErrors = Util.extend(validationErrors, {customerEmailError: $emailInput});
+					 PaymentView.generateErrorRow(validationErrors);
+				 } else {
+					 PaymentView.removeErrorClassAndMessage($emailInput);
+					 ClickToPayPaymentWidget.emailIdLookup(email, true);
+				 }
+			 } else {
+				 logger.error("SDK not initialized, please try again later.");
+				 validationErrors = Util.extend(validationErrors, {clickToPayInitializationError: clickToPayForm});
+				 PaymentView.generateErrorRow(validationErrors);
+			 }
+		});
 	};
 
 	/** UI components are used later in Click to Pay recognized users and email lookup flow
@@ -31627,7 +31740,8 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			return;
 		}
 
-		$(clickToPayForm).find("button").html('<src-mark card-brands=' + brands + '></src-mark>');
+		var b = $(clickToPayForm).find("button");
+		$(b[0]).html('<src-mark card-brands=' + brands + '></src-mark>');
 		ClickToPayPaymentWidget.loadClickToPayLibrary(brands, clickToPayForm);
 	};
 
@@ -31659,7 +31773,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	ClickToPayPaymentWidget.afterLibraryLoad = function(brands, clickToPayForm) {
-		/** calling init at the time of widget loading to initialize Click to Pay SDK only when required DPA data from merchant account is present */
+		/** calling init at the time of widget loading to initialize Click to Pay SDK only when required DPA data from BIP RIRO setting is present */
 		var isRequiredDataPresent = ClickToPayPaymentWidget.isRequiredDataPresent();
 		if (isRequiredDataPresent) {
 			ClickToPayPaymentWidget.initializeClickToPay(brands, clickToPayForm);
@@ -31686,9 +31800,14 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				ClickToPayPaymentWidget.button.removeAttribute("disabled");
 				ClickToPayPaymentWidget.initializedBrands = result.availableCardBrands;
 				ClickToPayPaymentWidget.updateInitializedBrandsForNewUserFlow(result.availableCardBrands);
-				$(clickToPayForm).find("button").html('<src-mark card-brands=' + ClickToPayPaymentWidget.initializedBrands + '></src-mark>');
+				var b = $(clickToPayForm).find("button");
+				$(b[0]).html('<src-mark card-brands=' + ClickToPayPaymentWidget.initializedBrands + '></src-mark>');
 				logger.info('Mastercard Click To Pay available brands:' + ClickToPayPaymentWidget.initializedBrands);
-				ClickToPayPaymentWidget.callGetCards();
+
+				// remove ERROR_CLASS if any; when shopper continues with access my cards option and SDK is not initialized
+				var errorClassForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
+				PaymentView.removeErrorClassAndMessage(errorClassForm);
+				ClickToPayPaymentWidget.callGetCards(false);
 			}).catch(function(error) {
 				logger.error('Initialization of Click To Pay is not successful');
 				if (error.details !== undefined && error.details.length > 0) {
@@ -31776,7 +31895,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	* Rendered cards will be then added to src card list when CLICK_TO_PAY is selected.
 	* Cannot be rendered as after successful operation, request needs to be sent to backend, payment form is required for the purpose.
 	*/
-	ClickToPayPaymentWidget.callGetCards = function() {
+	ClickToPayPaymentWidget.callGetCards = function(isRefreshRequest) {
 		var getCardsPromise = new Promise(function (resolve) {
 					resolve(clickToPay.getCards());
 				});
@@ -31785,15 +31904,19 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		.then(function(result) {
 			if (result.length > 0) {
 				logger.info('Get cards from cookies is success.');
-				ClickToPayPaymentWidget.spinner.stop();
-				ClickToPayPaymentWidget.isCardsFromCookies = true;
 				ClickToPayPaymentWidget.cards = result;
+				if (!isRefreshRequest) {
+					ClickToPayPaymentWidget.spinner.stop();
+					ClickToPayPaymentWidget.isCardsFromCookies = true;
+				} else {
+					ClickToPayPaymentWidget.displayCards();
+				}
 			} else {
 				logger.info("No cards received from cookies.");
-				ClickToPayPaymentWidget.emailIdLookup();
+				ClickToPayPaymentWidget.emailIdLookup(Wpwl.checkout.customerEmail, false);
 			}
 		}).catch(function(error) {
-			ClickToPayPaymentWidget.emailIdLookup();
+			ClickToPayPaymentWidget.emailIdLookup(Wpwl.checkout.customerEmail, false);
 			logger.error("Get cards error");
 			if (error.details !== undefined && error.details.length > 0) {
 				var i;
@@ -31805,8 +31928,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	/** checks if emailId received in checkout request is enrolled with Click to Pay or not */
-	ClickToPayPaymentWidget.emailIdLookup = function() {
-		var customerEmailAddress = Wpwl.checkout.customerEmail;
+	ClickToPayPaymentWidget.emailIdLookup = function(customerEmailAddress, isAccessCardsOptionUsed) {
 		if (customerEmailAddress !== undefined && customerEmailAddress !== null) {
 			var emailId = {
 						"email": customerEmailAddress
@@ -31818,19 +31940,27 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 
 			idLookupPromise
 			.then(function(result) {
-				ClickToPayPaymentWidget.spinner.stop();
 				if (result.consumerPresent) {
-					ClickToPayPaymentWidget.isClickToPayEnrolled = true;
+					if (!isAccessCardsOptionUsed) {
+						ClickToPayPaymentWidget.spinner.stop();
+						ClickToPayPaymentWidget.isClickToPayEnrolled = true;
+					} else {
+						ClickToPayPaymentWidget.requestOtp(true, null);
+					}
 				} else {
 					logger.info("Customer is not enrolled for Click to Pay.");
 				}
 			}).catch(function(error) {
-				ClickToPayPaymentWidget.spinner.stop();
+				if (!isAccessCardsOptionUsed) {
+					ClickToPayPaymentWidget.spinner.stop();
+				}
 				logger.error('Error occurred while email lookup: ' + error.message);
 				Options.onError(new WidgetError("CLICK_TO_PAY", "emailIdLookup", "Error occurred while email lookup"));
 			});
 		} else {
-			ClickToPayPaymentWidget.spinner.stop();
+			if (!isAccessCardsOptionUsed) {
+				ClickToPayPaymentWidget.spinner.stop();
+			}
 			logger.info("Customer email address not provided in the checkout request.");
 			Options.onError(new WidgetError("CLICK_TO_PAY", "no_emailId", "Email ID not provided in the request"));
 		}
@@ -32024,8 +32154,6 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				ClickToPayPaymentWidget.addCustomParametersForRequest(result);
 				ClickToPayPaymentWidget.submitAjaxRequest(ClickToPayPaymentWidget.$form);
 			} else {
-				var srcCardList = document.querySelector('src-card-list');
-				srcCardList.setAttribute("style", "display: none;");
 				ClickToPayPaymentWidget.handleCheckoutActionCode(result.checkoutActionCode);
 			}
 		}).catch(function(error) {
@@ -32038,22 +32166,30 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		});
 	};
 
+	/**
+	* 1. COMPLETE - continue with the payment flow
+	* 2. CHANGE_CARD - refresh the card list displayed to shopper
+	* 3. SWITCH_CONSUMER - remove the existing card list and go with email lookup flow
+	* 4. ADD_CARD - to be handled by merchant to show card form
+	* 5. CANCEL - keep the payment widget as is for shopper to choose other card or different payment options
+	* 6. ERROR - remove the existing card list and log an error
+	*/
 	ClickToPayPaymentWidget.handleCheckoutActionCode = function(checkoutActionCode) {
 		if (checkoutActionCode === "CHANGE_CARD") {
 			ClickToPayPaymentWidget.isCardsFromCookies = false;
-			ClickToPayPaymentWidget.callGetCards();
-			if (ClickToPayPaymentWidget.isCardsFromCookies) {
-				ClickToPayPaymentWidget.displayCards();
-			}
+			ClickToPayPaymentWidget.callGetCards(true);
 		} else if (checkoutActionCode === "SWITCH_CONSUMER") {
 			ClickToPayPaymentWidget.isCardsFromCookies = false;
-			ClickToPayPaymentWidget.emailIdLookup();
-			if (ClickToPayPaymentWidget.isClickToPayEnrolled) {
-				ClickToPayPaymentWidget.requestOtp(true, null);
-			}
+			var srcCardList = document.querySelector('src-card-list');
+			$(srcCardList).remove();
+			ClickToPayPaymentWidget.emailIdLookup(Wpwl.checkout.customerEmail, true);
 		}  else if (checkoutActionCode === "ADD_CARD") {
+			logger.error("Shopper opted for ADD_CARD feature for CLICK_TO_PAY.");
 			Options.onError(new WidgetError("CLICK_TO_PAY", "add_new_card", "Shopper requested to add new card."));
 		} else if (checkoutActionCode === "ERROR") {
+			var cardList = document.querySelector('src-card-list');
+			$(cardList).remove();
+			logger.error("ERROR checkoutActionCode received for CLICK_TO_PAY, cannot proceed");
 			Options.onError(new WidgetError("CLICK_TO_PAY", "click_to_pay_checkout_error", "Error checkout action code received, cannot proceed."));
 		}
 	};
@@ -32067,15 +32203,9 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var srcWindow = window.open('', '_blank', 'popup,left=500,top=100,width=550,height=650');
 		window.childSrcWindow = srcWindow;
 
-		var consumerData = {
-			emailAddress : Wpwl.checkout.customerEmail,
-			mobileNumber : Number(Wpwl.checkout.customerMobile)
-		};
-
 		var checkoutRequestParams = {
 			encryptedCard : encryptedCardData,
 			cardBrand : network,
-			consumer : consumerData,
 			windowRef: srcWindow
 		};
 
@@ -32172,7 +32302,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		}
 	};
 
-	/** DPA data is fetched from merchant account using complex and mandatory to initialize Click to Pay SDK*/
+	/** DPA data is fetched from BIP RIRO settings using complex query and mandatory to initialize Click to Pay SDK */
 	ClickToPayPaymentWidget.isRequiredDataPresent = function() {
 		var dpaId = Wpwl.checkout.config.clickToPayConfig.dpaId;
 		var dpaPresentationName = Wpwl.checkout.config.clickToPayConfig.dpaPresentationName;
@@ -36197,6 +36327,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
             }
 
             if (brand === "CLICK_TO_PAY") {
+                ClickToPayPaymentWidget.addEventListerForEmailContinue();
                 ClickToPayPaymentWidget.loadClickToPayUIKit(ccBrandsForClickToPay);
             }
 
