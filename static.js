@@ -31450,6 +31450,197 @@ define('module/integrations/TrustlyInlineWidget',['require','jquery','module/Inl
     return TrustlyInlineWidget;
 });
 
+define('module/integrations/RocketFuelInlineWidget',['require','jquery','module/InlineFlow','module/forms/PaymentForm','module/Generate','module/InternalRequestCommunication','module/Options','module/error/WidgetError','module/error/SessionError','module/logging/LoggerFactory','lib/Spinner','module/Wpwl'],function(require) {
+
+    var $ = require('jquery');
+    var InlineFlow = require('module/InlineFlow');
+    var PaymentForm = require('module/forms/PaymentForm');
+    var Generate = require('module/Generate');
+    var InternalRequestCommunication = require('module/InternalRequestCommunication');
+    var Options = require("module/Options");
+    var WidgetError = require('module/error/WidgetError');
+    var SessionError = require('module/error/SessionError');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var Spinner = require('lib/Spinner');
+    var Wpwl = require('module/Wpwl');
+    var logger = LoggerFactory.getLogger('RocketFuelInlineWidget');
+    var RocketFuelInlineWidget = {};
+
+    RocketFuelInlineWidget.isRocketFuelInlineFlow = function(brand) {
+        return InlineFlow.isInlineFlow(brand) && brand === "ROCKETFUEL";
+    };
+
+    RocketFuelInlineWidget.loadRocketFuelPaymentsLibrary = function() {
+        logger.info("loadRocketFuelPaymentsLibrary START");
+        var script = "https://d3rpjm0wf8u2co.cloudfront.net/static/rkfl.js";
+        this.rocketFuelJsLoaded = $.getScript(script)
+            .fail(function() {
+                logger.error("Failed to download rkfl script");
+            })
+            .then(function (__, successStatus, jqXhr) {
+                return jqXhr;
+            });
+        logger.info("loadRocketFuelPaymentsLibrary END");
+        return this.rocketFuelJsLoaded;
+    };
+
+    RocketFuelInlineWidget.authorizePaymentAndLoadData = function (selectedPaymentForm) {
+        var formContainer = $(selectedPaymentForm)[0].parentElement;
+        RocketFuelInlineWidget.spinner = new Spinner(Options.spinner).spin(formContainer);
+
+        var $form = $(selectedPaymentForm);
+        var paymentForm = new PaymentForm($form);
+        this.paymentBrand = paymentForm.getBrand();
+
+        if (InlineFlow.isInlineFlow(this.paymentBrand)) {
+            var parent = selectedPaymentForm.offsetParent;
+            if (parent) {
+                this.parentDivClassSelector = this.returnClassSelector($(parent).attr('class'));
+                this.prepareAndSendTransaction($form);
+
+            } else {
+                RocketFuelInlineWidget.spinner.stop();
+                logger.error('Cannot identify the parent widget div!');
+                Options.onError(new WidgetError('UConnect-'+this.paymentBrand, 'cannot_insert_widget', 'Parent container undefined'));
+            }
+            return false;
+        }
+        return true;
+    };
+
+    RocketFuelInlineWidget.returnClassSelector = function (classList) {
+        if (classList) {
+            return "." + classList.replace(/\s/g, ".");
+        }
+        return "";
+    };
+
+    RocketFuelInlineWidget.prepareAndSendTransaction = function ($form) {
+        logger.info("prepareAndSendTransaction start");
+        $form.append($.parseHTML(Generate.generateInlineFlowHiddenCustomParam($form)));
+        $form.append($.parseHTML(Generate.generateIsSourceBrowserHiddenParam($form)));
+
+        $.when(this.rocketFuelJsLoaded
+                .fail(function (e) {
+                    logger.error("RocketFuel SDK was not downloaded: " + toLoggableValue(e));
+                    Options.onError(new WidgetError("ROCKETFUEL", "sdk_not_downloaded", "RocketFuel SDK was not downloaded: " + toLoggableValue(e)));
+                }),
+            ajaxSubmitForm($form)
+                .fail(function (reason) {
+                    RocketFuelInlineWidget.spinner.stop();
+                    notifyError(reason);
+                })
+        ).then(this.onPendingTransactionCreated);
+        logger.info("prepareAndSendTransaction end");
+    };
+
+    RocketFuelInlineWidget.onPendingTransactionCreated = function (scriptLoadedStatus, response) {
+        RocketFuelInlineWidget.spinner.stop();
+        if (response && response.redirect && response.redirect.url) {
+            try {
+                createWidgetContainer(this.parentDivClassSelector);
+                RocketFuelInlineWidget.loadRocketFuelJsSDK(response);
+            }
+            catch (e) {
+                console.error('Could not initialize and load RocketFuel inline widget: ' + toLoggableValue(e));
+            }
+        } else {
+            logger.error("No valid response received from RocketFuel, cannot proceed.");
+            Options.onError(new WidgetError("ROCKETFUEL", "no_response", "No valid response received from RocketFuel, cannot proceed."));
+        }
+    };
+
+    RocketFuelInlineWidget.loadRocketFuelJsSDK = function (response) {
+        try {
+                logger.info("Loading the RocketFuel Payments inline widget.");
+                var uuid = RocketFuelInlineWidget.getUuidFromResponse(response);
+                var environment = RocketFuelInlineWidget.getEnvironmentIndicator();
+
+                var rkfl = new RocketFuel({ uuid: uuid, callback: RocketFuelInlineWidget.callBackFunc, environment: environment });// jshint ignore:line
+                rkfl.initPayment();
+                disablePayButton(true);
+                RocketFuelInlineWidget.spinner.stop();
+        } catch (e) {
+            logger.error("Exception was thrown while loading the RocketFuel Payments inline widget: " + toLoggableValue(e));
+            Options.onError(new WidgetError("ROCKETFUEL", "widget_error", "Exception was thrown while loading the " +
+                "RocketFuel Payments inline widget, cannot proceed."));
+            RocketFuelInlineWidget.spinner.stop();
+        }
+    };
+
+    function createWidgetContainer(parentDivSelector) {
+        var parentDiv = $(parentDivSelector);
+        parentDiv.append($.parseHTML("<div id=\"iframeWrapper\" class=\"rocketfuel-iframeWrapper\"></div>"));
+        parentDiv.append($.parseHTML("<div id=\"iframeWrapperHeader\"></div>"));
+        if (parentDiv.length === 0) {
+            logger.error('Could not add the container for the widget as we cannot identify a parent! Selector: [' + parentDivSelector + ']');
+            Options.onError(new WidgetError('ROCKETFUEL', 'cannot_insert_widget', 'Parent container not found! [' + parentDivSelector + ']'));
+        }
+    }
+
+    function ajaxSubmitForm($form) {
+        return InternalRequestCommunication.getSender()
+        .then(function(sender) {
+            return sender.send({
+                url: $form.attr("action"),
+                method: $form.attr("method"),
+                headers: {
+                    Accept: "application/json; charset=utf-8"
+                },
+                data: $form.serialize()
+            });
+        });
+    }
+
+    function notifyError(reason) {
+        logger.error("Exception occurred while submitting the form via an Ajax call. Reason: " + reason);
+        if (SessionError.isSessionTimeout(reason)) {
+            SessionError.onTimeoutError();
+        } else {
+            Options.onError(new WidgetError("ROCKETFUEL", "ajax_submit_fail", "Exception occurred while submitting the"+
+                "form via an Ajax call. Reason: " + reason));
+        }
+    }
+
+    RocketFuelInlineWidget.callBackFunc = function (resp) {
+        logger.info("callback function with payload : " + JSON.stringify(resp));
+    };
+
+    RocketFuelInlineWidget.getEnvironmentIndicator = function() {
+        var environmentDetected = Wpwl.isTestSystem ? "dev" : "prod" ;
+        logger.info("Environment detected : " + environmentDetected);
+        return Wpwl.isTestSystem ? "dev" : "prod" ;
+    };
+
+    RocketFuelInlineWidget.getUuidFromResponse = function(response) {
+        // format of the url for dev environment : https://dev-payment.rocketdemo.net/hostedPage/<uuid>
+        if(response && response.redirect && response.redirect.url) {
+            var  urlArr = response.redirect.url.split("/");
+            return urlArr[urlArr.length - 1];
+        }
+        var widgetError = new WidgetError("ROCKETFUEL", "ajax_response_error", "uuid is not found in response");
+        Options.onError(widgetError);
+    };
+
+    function toLoggableValue(param) {
+        if (typeof param === 'object') {
+            // object toString will return [object Object] so we must stringify, but not errors which stringified return {}
+            return (param instanceof Error) ? param.toString() : JSON.stringify(param);
+
+        } else if (typeof param === 'function') {
+            return param.toString();
+
+        } else {
+            return param;
+        }
+    }
+
+    function disablePayButton(status) {
+        $(".wpwl-button-brand").prop("disabled", status);
+    }
+    return RocketFuelInlineWidget;
+});
+
 /**
  * This module contains the logic specific for Upg Mobile Payment brand i.e., MEEZA_QR and MEEZA_LINK
  * This is used to load QR in iframe for MEEZA_QR and MEEZA_LINK brand
@@ -32056,7 +32247,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			$(srcChannel).remove();
 			if (obj.detail !== undefined && obj.detail !== null) {
 				if (obj.detail.identityType === "EMAIL" || obj.detail.identityType === "SMS") {
-					ClickToPayPaymentWidget.requestOtp(false, obj.detail.identityType);
+					ClickToPayPaymentWidget.requestOtp(false, obj.detail.validationChannelId);
 				} else {
 					logger.error("Please try to enroll new card or use EMAIL or SMS validation.");
 					Options.onError(new WidgetError("CLICK_TO_PAY", "otp_channel_invalid", "Please try to enroll new card or use EMAIL or SMS validation."));
@@ -32429,7 +32620,7 @@ define('module/FastCheckout',['require','jquery','module/Generate','module/Track
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -32460,6 +32651,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
 	var BancontactMobilePaymentWidget = require('module/integrations/BancontactMobilePaymentWidget');
 	var TrustlyInlineWidget = require('module/integrations/TrustlyInlineWidget');
+	var RocketFuelInlineWidget = require('module/integrations/RocketFuelInlineWidget');
 	var UpgMobilePaymentWidget = require('module/integrations/UpgMobilePaymentWidget');
 	var ClickToPayPaymentWidget = require('module/integrations/ClickToPayPaymentWidget');
 	var WidgetError = require("module/error/WidgetError");
@@ -33395,6 +33587,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
                     }
                     else if (TrustlyInlineWidget.isTrustlyInlineFlow(brand)) {
                         return TrustlyInlineWidget.authorizePaymentAndLoadData(this);
+                    }
+                    else if (RocketFuelInlineWidget.isRocketFuelInlineFlow(brand)) {
+                        logger.info("Initiating RocketFuel inline flow");
+                        return RocketFuelInlineWidget.authorizePaymentAndLoadData(this);
                     }
                     else {
                         return true;
@@ -35867,7 +36063,7 @@ define('module/framemessaging/SessionTimeoutErrorHandler',['require','module/Opt
 	return SessionTimeoutErrorNotification;
 });
 /*jshint camelcase: false */
-define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','module/ApplePay','module/GooglePay','module/Console','lib/Spinner','module/Options','module/error/OppError','module/CountDownLatch','module/Message','module/MessageView','module/Parameter','module/Parameters','module/Payment','module/Setting','module/SpecForm','module/Wpwl','module/Billing','module/CardHolder','module/Util','module/SaqaUtil','module/integrations/RedShieldDeviceId','module/integrations/CyberSourceRiskDeviceId','module/integrations/KountIntegration','module/Generate','module/InternalRequestCommunication','module/IdealPaymentWidget','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/forms/PaypalRestPaymentForm','module/InlineFlow','module/integrations/AmazonPayWidget','module/integrations/ClickToPayPaymentWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/SezzleInlineWidget','module/FrameMessenger','module/integrations/forter','module/ForterUtils','module/framemessaging/PreconditionIframe','module/framemessaging/Redirect','module/framemessaging/SessionTimeoutErrorHandler','module/error/WidgetError','module/logging/LoggerFactory','shim/ObjectCreate'],function(require){
+define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','module/ApplePay','module/GooglePay','module/Console','lib/Spinner','module/Options','module/error/OppError','module/CountDownLatch','module/Message','module/MessageView','module/Parameter','module/Parameters','module/Payment','module/Setting','module/SpecForm','module/Wpwl','module/Billing','module/CardHolder','module/Util','module/SaqaUtil','module/integrations/RedShieldDeviceId','module/integrations/CyberSourceRiskDeviceId','module/integrations/KountIntegration','module/Generate','module/InternalRequestCommunication','module/IdealPaymentWidget','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/forms/PaypalRestPaymentForm','module/InlineFlow','module/integrations/AmazonPayWidget','module/integrations/ClickToPayPaymentWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/SezzleInlineWidget','module/FrameMessenger','module/integrations/forter','module/ForterUtils','module/framemessaging/PreconditionIframe','module/framemessaging/Redirect','module/framemessaging/SessionTimeoutErrorHandler','module/error/WidgetError','module/logging/LoggerFactory','shim/ObjectCreate'],function(require){
 	var $ = require('jquery');
 	var Affirm = require('module/integrations/Affirm');
 	var ApplePay = require('module/ApplePay');
@@ -35896,6 +36092,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
     var InternalRequestCommunication = require('module/InternalRequestCommunication');
     var IdealPaymentWidget = require('module/IdealPaymentWidget');
     var KlarnaPaymentsInlineWidget = require('module/integrations/KlarnaPaymentsInlineWidget');
+    var RocketFuelInlineWidget = require('module/integrations/RocketFuelInlineWidget');
     var YandexCheckoutPaymentWidget = require('module/integrations/YandexCheckoutPaymentWidget');
     var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
     var PaypalRestPaymentForm = require('module/forms/PaypalRestPaymentForm');
@@ -36215,6 +36412,10 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 		    ((paymentMethods.indexOf("KLARNA_PAYMENTS_SLICEIT") > -1) && InlineFlow.isInlineFlow("KLARNA_PAYMENTS_SLICEIT"))) {
 		    KlarnaPaymentsInlineWidget.loadKlarnaPaymentsLibrary();
 		}
+
+		if((paymentMethods.indexOf("ROCKETFUEL") > -1) && InlineFlow.isInlineFlow("ROCKETFUEL")) {
+		    RocketFuelInlineWidget.loadRocketFuelPaymentsLibrary();
+        }
 
 		if (paymentMethods.indexOf("YANDEX_CHECKOUT") > -1) {
 		    YandexCheckoutPaymentWidget.loadYandexCheckoutPaymentsLibrary();
