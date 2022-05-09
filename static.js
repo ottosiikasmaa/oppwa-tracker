@@ -24868,7 +24868,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 
 	PaymentView.updateCardBrands = function(brands, inputLength, parentToIframeCommunication) {
 		var detectedBrands = brands;
-		var $form = parentToIframeCommunication.$form; //Test this
+		var $form = parentToIframeCommunication.$form;
 
         var activeBrand = PaymentView.getActiveBrandIfPresentInCardForm($form, detectedBrands);
         var cardClassParameter = "wpwl-container-" + $form.attr('target');
@@ -25322,6 +25322,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	        //Don't enable if we are paying!
 	        return;
 	    }
+
 	    $form.find("button[type=\"submit\"]").attr("disabled", disabled);
         if(disableOtherCardForms === true) {
             $(GroupCardUtil.DIV_ID_CARD).each(function(index) {
@@ -34359,6 +34360,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		if (!$(GroupCardUtil.DIV_ID_CARD).length) {
 			return;
 		}
+
 		Payment.iframeCommunications = {};
 		var setupPromises =[];
 
@@ -34386,22 +34388,21 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
                 setupPromises.push(setupPciIframeOnLoad("cvv_" + uniqueDivId, $cardForm, $cvvIframe, PaymentView.setCardCvvIsValid));
             }
 
-            var spinner = new Spinner(Options.spinner).spin($cardForm.parent().get(0));
+		var spinner = new Spinner(Options.spinner).spin($cardForm.parent().get(0));
 
-            $.when.apply($, setupPromises)
-                .always(function () {
-                    spinner.stop();
-                    Payment.disableNonPciInputsAndSubmitButton($cardForm, false);
-                    AutoFocus.checkAutoFocus([document]);
+		$.when.apply($, setupPromises)
+			.always(function () {
+				spinner.stop();
+				Payment.disableNonPciInputsAndSubmitButton($cardForm, false);
+				AutoFocus.checkAutoFocus([document]);
 
                     Payment.prepareCardLogosPaymentBrands($cardForm);
-                })
-                .fail(function (reason) {
-                    PaymentView.showPleaseTryAgainMessage($cardForm);
-                    Tracking.exception("preparePciCompliance failed because: " + reason);
-                });
+			})
+			.fail(function (reason) {
+				PaymentView.showPleaseTryAgainMessage($cardForm);
+				Tracking.exception("preparePciCompliance failed because: " + reason);
+			});
         });
-
 	};
 
 	Payment.prepareCardLogosPaymentBrands = function($cardForm) {
@@ -34869,20 +34870,20 @@ define('module/CardHolder',['require','jquery','module/Options','module/Paramete
 
             $(GroupCardUtil.DIV_ID_CARD).each(function(index) {
                 var $cardForm = GroupCardUtil.getIndividualCardForm(index);
+			var input = $('<input autocomplete="off" type="text" name="" class="wpwl-control wpwl-control-empty" placeholder="">');
 
-                var input = $('<input autocomplete="off" type="text" name="" class="wpwl-control wpwl-control-empty" placeholder="">');
-
+			// hide cardHolder and add billing first name/last name
                 $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]').attr('disabled', 'disabled').hide();
-                var surNameInput = input.clone().addClass('wpwl-control-surName').attr('name', Parameter.SUR_NAME).attr('placeholder', I18n.surname).attr('maxlength', '50');
-                var givenNameInput = input.clone().addClass('wpwl-control-givenName').attr('name', Parameter.GIVEN_NAME).attr('placeholder', I18n.givenName).attr('maxlength', '50');
+			var surNameInput = input.clone().addClass('wpwl-control-surName').attr('name', Parameter.SUR_NAME).attr('placeholder', I18n.surname).attr('maxlength', '50');
+			var givenNameInput = input.clone().addClass('wpwl-control-givenName').attr('name', Parameter.GIVEN_NAME).attr('placeholder', I18n.givenName).attr('maxlength', '50');
 
                 $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]')
-                    .before( givenNameInput )
-                    .before( surNameInput );
+			.before( givenNameInput )
+			.before( surNameInput );
 
                 $cardForm.find('.wpwl-control-surName, .wpwl-control-givenName').on('change', function(){
                     $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]').val( [$cardForm.find('.wpwl-control-givenName').val(), $cardForm.find('.wpwl-control-surName').val()].join(' '));
-                });
+			});
             });
 		}
 	};
@@ -37073,7 +37074,6 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	
 	return PaymentWidget;
 });
-
 define('module/SpecFormUtil',['require','jquery','module/MessageView','module/SpecForm','module/SupportMessage','module/Util','module/Wpwl'],function(require){
 	var $ = require('jquery');
 	var MessageView = require('module/MessageView');
