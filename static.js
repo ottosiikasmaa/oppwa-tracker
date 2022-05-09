@@ -20902,7 +20902,7 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
             return;
         }
 
-        var lastValue = $this.val();
+        var lastValue = $(this).closest('form').find($this).val();
 
         // whether the cursor is within the range of the separator
         function inSeparator(cursorPos) {
@@ -20955,7 +20955,7 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
             if (!NUMBER_PATTERN.test(charCode)) {
                 // only allow numbers to be typed
                 e.preventDefault();
-            } else if (PATTERN.test($this.val()) && $this.get(0).selectionStart >= MAX_LENGTH) {
+            } else if (PATTERN.test($(this).closest('form').find($this).val()) && $(this).closest('form').find($this).get(0).selectionStart >= MAX_LENGTH) {
                 // if at the end of the completely typed date, do not allow any additional characters anymore
                 e.preventDefault();
             }
@@ -20964,8 +20964,8 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
 
         $this.keyup(function () {
 
-            var data = $this.val();
-            var cursor = $this.get(0).selectionStart;
+            var data = $(this).closest('form').find($this).val();
+            var cursor = $(this).closest('form').find($this).get(0).selectionStart;
 
             // if nothing has changed we do not have to do anything
             if (lastValue === data) {
@@ -20983,8 +20983,8 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
 
             if (SINGLE_NUMBER_OR_EMPTY_PATTERN.test(stripped) ||
                 (TWO_NUMBERS_PATTERN.test(stripped) && data.length < lastValue.length)) {
-                $this.val(stripped);
-                $this.get(0).setSelectionRange(cursor, cursor);
+                    $(this).closest('form').find($this).val(stripped);
+                    $(this).closest('form').find($this).get(0).setSelectionRange(cursor, cursor);
             } else {
                 var newValue;
                 if(stripped.length <= DATE_LENGTH){
@@ -20993,17 +20993,17 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
                      newValue = stripped.substring(0, 2) + SEPARATOR + stripped.substring(4, 6);
                 }
 
-                $this.val(newValue);
+                $(this).closest('form').find($this).val(newValue);
 
                 // restore cursor position, move it after the separator if needed
                 var newCursor = strippedBefore.length;
                 if (newCursor >= BEGIN_OF_SEPARATOR) {
                     newCursor = newCursor + SEPARATOR_LENGTH;
                 }
-                $this.get(0).setSelectionRange(newCursor, newCursor);
+                $(this).closest('form').find($this).get(0).setSelectionRange(newCursor, newCursor);
             }
 
-            lastValue = $this.val();
+            lastValue = $(this).closest('form').find($this).val();
         });
     };
 
@@ -21397,6 +21397,22 @@ define('module/SaqaUtil',['require','module/Wpwl','module/Options'],function(req
     };
 
     return SaqaUtil;
+});
+
+define('module/GroupCardUtil',['require','jquery'],function(require) {
+
+    var $ = require('jquery');
+    var GroupCardUtil = {};
+
+    GroupCardUtil.DIV_ID_CARD = "div[id^='card_']";
+
+    GroupCardUtil.getIndividualCardForm = function (index) {
+        var divId = $(GroupCardUtil.DIV_ID_CARD)[index].id;
+        var targetFormTag = 'target=' + '"' + divId + '"';
+        return $('[' + targetFormTag + ']');
+    };
+
+    return GroupCardUtil;
 });
 
 ( function( factory ) {
@@ -24144,7 +24160,7 @@ return $.ui.autocomplete;
 
 } ) );
 
-define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','module/SaqaUtil','jquery-ui/widgets/autocomplete'],function(require){
+define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','module/SaqaUtil','module/GroupCardUtil','jquery-ui/widgets/autocomplete'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var CVVHint = require('module/CVVHint');
@@ -24167,6 +24183,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	var Setting = require('module/Setting');
 	var Detection = require('module/Detection');
 	var SaqaUtil = require('module/SaqaUtil');
+	var GroupCardUtil = require('module/GroupCardUtil');
     require('jquery-ui/widgets/autocomplete');
 
 	var HAS_ERROR_CLASS = "wpwl-has-error";
@@ -24651,23 +24668,22 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	// Shows/hides vertical logos. The div-structure is as follows:
 	// wpwl-group-card-logos-vertical -> wpwl-button-more
 	//                                -> wpwl-group-card-logos-selected-box -> wpwl-brand-...
-	PaymentView.adjustCardLogosPaymentBrands = function() {
+	PaymentView.adjustCardLogosPaymentBrands = function(formObj) {
 		// Hides vertical logos by default
-		$('.wpwl-group-card-logos-horizontal').removeClass('wpwl-group-card-logos-horizontal-with-more-button');
-		$('.wpwl-group-card-logos-vertical').css('display', 'none');
-		$('.wpwl-group-card-logos-selected-box div').css('display', 'none');
+		formObj.find('.wpwl-group-card-logos-horizontal').removeClass('wpwl-group-card-logos-horizontal-with-more-button');
+		formObj.find('.wpwl-group-card-logos-vertical').css('display', 'none');
+		formObj.find('.wpwl-group-card-logos-selected-box div').css('display', 'none');
 
 		// Selects all non-hidden logos
-		var horizontalLogos = $('.wpwl-group-card-logos-horizontal div:not(.wpwl-hidden)');
+		var horizontalLogos = formObj.find('.wpwl-group-card-logos-horizontal div:not(.wpwl-hidden)');
 		if (!horizontalLogos.length) {
 			return;
 		}
 
 		// If there are logos to be shown, adds the more button so that the width can be calculated
-		var $form = $('form.wpwl-form-card');
-		var maxWidth = $form.offset().left + $form.outerWidth();
-		$('.wpwl-group-card-logos-horizontal').addClass('wpwl-group-card-logos-horizontal-with-more-button');
-		var rightPadding = parseInt($('.wpwl-group-card-logos-horizontal').css('padding-right'));
+		var maxWidth = formObj.offset().left + formObj.outerWidth();
+		formObj.find('.wpwl-group-card-logos-horizontal').addClass('wpwl-group-card-logos-horizontal-with-more-button');
+		var rightPadding = parseInt(formObj.find('.wpwl-group-card-logos-horizontal').css('padding-right'));
 		maxWidth = maxWidth - rightPadding;
 
 		var isVertical = false;
@@ -24678,23 +24694,23 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			// If the logo is outside the card form, hides it and shows the vertical one
 			if (!isCardLogoBrandPositionValid($this, maxWidth)) {
 				$this.addClass('wpwl-invisible');
-				$('.wpwl-group-card-logos-selected-box div:eq('+$this.index()+')').css('display', 'flex');
+				formObj.find('.wpwl-group-card-logos-selected-box div:eq('+$this.index()+')').css('display', 'flex');
 				isVertical = true;
 			}
 		});
 
 		// If from the previous computation there are vertical logos, shows the parent div too
 		if (isVertical) {
-			$('.wpwl-group-card-logos-vertical').css('display', 'flex');
+			formObj.find('.wpwl-group-card-logos-vertical').css('display', 'flex');
 		} else {
-			$('.wpwl-group-card-logos-horizontal').removeClass('wpwl-group-card-logos-horizontal-with-more-button');
-			$('.wpwl-group-card-logos-vertical').css('display', 'none');
+			formObj.find('.wpwl-group-card-logos-horizontal').removeClass('wpwl-group-card-logos-horizontal-with-more-button');
+			formObj.find('.wpwl-group-card-logos-vertical').css('display', 'none');
 		}
 	};
 
 	// Shows/hides horizontal logos
-	PaymentView.adjustHorizontalLogos = function(detectedBrands) {
-		var horizontalLogos = $('.wpwl-group-card-logos-horizontal div');
+	PaymentView.adjustHorizontalLogos = function(detectedBrands, formObj) {
+		var horizontalLogos = formObj.find('.wpwl-group-card-logos-horizontal div');
 		horizontalLogos.each(function() {
 			var $this = $(this);
 			var brand = $this.attr("value");
@@ -24826,8 +24842,14 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	};
 
 	// Updates <select> with the given brand. Note: it is possible that the brand is not in <select>
-    PaymentView.updateCardBrand = function(brand) {
-        var $brandElement = $('form.wpwl-form-card').find('[name="' + Parameter.PAYMENT_BRAND + '"]');
+    PaymentView.updateCardBrand = function(brand, form) {
+        var $brandElement;
+        if(form) {
+            $brandElement = form.find('[name="' + Parameter.PAYMENT_BRAND + '"]');
+        }
+        else {
+            $brandElement = $('form.wpwl-form-card').find('[name="' + Parameter.PAYMENT_BRAND + '"]');
+        }
         if (!$brandElement.length) {
             return;
         }
@@ -24844,29 +24866,32 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 		PaymentView.onUpdateCardBrand(select, brand, brandIsInSelect);
     };
 
-	PaymentView.updateCardBrands = function(brands, inputLength) {
+	PaymentView.updateCardBrands = function(brands, inputLength, parentToIframeCommunication) {
 		var detectedBrands = brands;
-		var $form = $('form.wpwl-form-card');
+		var $form = parentToIframeCommunication.$form; //Test this
 
         var activeBrand = PaymentView.getActiveBrandIfPresentInCardForm($form, detectedBrands);
+        var cardClassParameter = "wpwl-container-" + $form.attr('target');
+        cardClassParameter = cardClassParameter.replace('_', '-');
 
 		if (inputLength === 0) {
           Options.onDetectBrand([]);
         } else {
-          Options.onDetectBrand(getDetectedConfiguredBrands($form, detectedBrands), activeBrand);
+          Options.onDetectBrand(getDetectedConfiguredBrands($form, detectedBrands), activeBrand, cardClassParameter);
         }
 
 		if (isCardLogoBrandDisplayMode()) {
 			detectedBrands = getDisplayedLogos($form, brands, inputLength);
 			logoDetected = detectedBrands.length > 0;
-			PaymentView.adjustHorizontalLogos(detectedBrands);
-			PaymentView.adjustCardLogosPaymentBrands();
+			PaymentView.adjustHorizontalLogos(detectedBrands, $form);
+			PaymentView.adjustCardLogosPaymentBrands($form);
 		}
-		var brand = getBrandFromDetectedBrands(detectedBrands, inputLength);
-		if(inputLength === 0){
-		    brand = "";
-		}
-		PaymentView.updateCardBrand(brand);
+		var brand = getBrandFromDetectedBrands(detectedBrands, inputLength, $form);
+        if(inputLength === 0){
+            brand = "";
+        }
+		PaymentView.updateCardBrand(brand, $form);
+
 	};
 
     PaymentView.onSelectCardLogoBrand = function() {
@@ -24930,18 +24955,17 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
         return (logo.offset().left + logo.outerWidth() <= maxWidth);
     }
 
-	function getBrandFromDetectedBrands(detectedBrands, inputLength) {
+	function getBrandFromDetectedBrands(detectedBrands, inputLength, form) {
 		// For non-logos style
 		if (!isCardLogoBrandDisplayMode()) {
 			return Detection.getBrandFromBrands(detectedBrands);
 		}
 
-		var $form = $('form.wpwl-form-card');
 		if (logoClicked) {
-			return PaymentView.getSelectedBrand($form);
+			return PaymentView.getSelectedBrand(form);
 		}
 
-		var brands = PaymentView.getCardBrands($form);
+		var brands = PaymentView.getCardBrands(form);
 		if (inputLength < PaymentView.MIN_BRAND_DETECTION_LENGTH || detectedBrands === null) {
 			return brands[0];
 		} else {
@@ -25111,6 +25135,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			.then(PaymentView.setUpIframeInputPropertiesAndCheckoutId)
 			.then(PaymentView.setUpIframeStyles)
 			.then(PaymentView.setUpAutofill)
+			.then(PaymentView.setUpFormTargets)
 			.then(function () {
 				if (iframeCommunication.$iframe.hasClass("wpwl-control-cvv")) {
 					new CVVHint(iframeCommunication.$form).init();
@@ -25176,6 +25201,15 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 		return iframeCommunication;
 	};
 
+    PaymentView.setUpFormTargets = function(iframeCommunication){
+        if (Options.paymentTarget) {
+            iframeCommunication.$form.attr('target', Options.paymentTarget);
+        }
+
+        return iframeCommunication;
+    };
+
+
 	PaymentView.setUpIframeInputPropertiesAndCheckoutId = function(iframeCommunication){
 		return $.when(
 			PaymentView.setUpIframeInputProperties(iframeCommunication),
@@ -25187,7 +25221,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 
 	PaymentView.setUpIframeBrandList = function(iframeCommunication) {
 		if (SaqaUtil.isSAQACompliance()) {
-			var $form = $('form.wpwl-form-card');
+			var $form = iframeCommunication.$form;
 			var brandlist = PaymentView.getCardBrands($form);
 			iframeCommunication.setUpBrandList(brandlist);
 		}
@@ -25283,13 +25317,18 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 		new MessageView({elem: elem, method: 'before', message: new Message({message:message, type:'error'})}).inject();
 	};
 
-	PaymentView.disableSubmitButton = function($form, disabled){
+	PaymentView.disableSubmitButton = function($form, disabled, disableOtherCardForms){
 	    if (PaymentView.isPaying && !disabled){
 	        //Don't enable if we are paying!
 	        return;
 	    }
-
 	    $form.find("button[type=\"submit\"]").attr("disabled", disabled);
+        if(disableOtherCardForms === true) {
+            $(GroupCardUtil.DIV_ID_CARD).each(function(index) {
+                var $cardForm = GroupCardUtil.getIndividualCardForm(index);
+                $cardForm.find("button[type=\"submit\"]").attr("disabled", disabled);
+            });
+        }
 	};
 
     PaymentView.submitPciIframeFailed = function(error, reason, $form) {
@@ -26200,7 +26239,7 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 	};
 
 	ParentToIframeCommunication.prototype.updateBrands = function(brands, inputLength) {
-		return PaymentView.updateCardBrands(brands, inputLength);
+		return PaymentView.updateCardBrands(brands, inputLength, this);
 	};
 		
 	ParentToIframeCommunication.prototype.onBlur = function(isEmpty){
@@ -27180,7 +27219,16 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
     };
 
 	Validate.validateAccountHolder = function(t) {
-		return t = (t + ""), (Util.trim(t).length > 2 || Util.trim(t).length === 0) && !Validate.validateCVVSize(t) && !Validate.validateAccountNumberSize(t);
+
+		return t = (t + ""), Validate.validateHolder(t) && !Validate.validateCVVSize(t) && !Validate.validateAccountNumberSize(t);
+	};
+
+	Validate.validateHolder = function(t) {
+
+		if (Options.onValidate && typeof Options.onValidate === 'function') {
+			return Options.onValidate('CardHolder', t);
+		}
+		return (Util.trim(t).length > 2 || Util.trim(t).length === 0);
 	};
 
 	Validate.validateAccountHolderSepa = function(t) {
@@ -32834,7 +32882,7 @@ define('module/FastCheckout',['require','jquery','module/Generate','module/Track
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -32873,6 +32921,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
     var FastCheckout = require('module/FastCheckout');
 	var ForterUtils = require('module/ForterUtils');
 	var LoggerFactory = require('module/logging/LoggerFactory');
+	var GroupCardUtil = require('module/GroupCardUtil');
     var logger = LoggerFactory.getLogger('Payment');
 	var HAS_ERROR_CLASS = "wpwl-has-error";
 	var ENTER_KEY = 13;
@@ -33022,7 +33071,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			"<form class='wpwl-form wpwl-form-", paymentName, " wpwl-clearfix'",
 			" action='", Payment.endPoint, "'",
 			" method='POST'",
-			" target='", Options.paymentTarget ? Options.paymentTarget : id, "'",
+			" target='", id, "'",
 			" lang='", Locale.language, "'",
 			" accept-charset='UTF-8'",
 			" data-action='submit-payment-", paymentName, "'",
@@ -33128,7 +33177,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
             "<form class='wpwl-form wpwl-form-", cssClass, " wpwl-form-", cssClass, "-", obj.subType, " wpwl-clearfix'",
             " action='", Payment.endPoint, "'",
             " method='POST'",
-            " target='", Options.paymentTarget ? Options.paymentTarget : obj.id, "'",
+            " target='", obj.id, "'",
             " lang='", Locale.language, "'",
             " accept-charset='UTF-8'",
             " data-action='submit-payment-", obj.subType, "'",
@@ -33408,7 +33457,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
         if (Payment.style === 'logos') {
             $(window).on("resize.wpwlEvent", function() {
-                PaymentView.adjustCardLogosPaymentBrands();
+                $(GroupCardUtil.DIV_ID_CARD).each(function(index) {
+                    var $cardForm = GroupCardUtil.getIndividualCardForm(index);
+                    PaymentView.adjustCardLogosPaymentBrands($cardForm);
+                });
             });
         }
 
@@ -33442,7 +33494,8 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 				// user changed dropdown
 				if (userClicked && brandChanged) {
-					Payment.iframeCommunications.number.disableBrandDetection();
+                    var uniqueDivId = getUniqueDivIdOfForm($(this).closest('form'));
+					Payment.iframeCommunications['number_' + uniqueDivId].disableBrandDetection();
 					$(document).off('click.wpwlEvent change.wpwlEvent', '[name="' + Parameter.PAYMENT_BRAND + '"]');
 				}
 			};
@@ -33555,13 +33608,13 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			Payment.onChangeBrand = function(){
 				var $form = $(this).closest('form');
 				var paymentForm = new CardPaymentForm($form);
-
+                var uniqueDivId = getUniqueDivIdOfForm($form);
 
 				if (State.pciIframeCommunicationReady){
 					// no need to wait for the validation response here as the iframe calls back with the validation status
-					Payment.iframeCommunications.number.validateInput(true, 'onChange');
+					Payment.iframeCommunications['number_' + uniqueDivId].validateInput(true, 'onChange');
 					if(Options.requireCvv){
-					    Payment.iframeCommunications.cvv.validateInput(true, 'onChange');
+					    Payment.iframeCommunications['cvv_' + uniqueDivId].validateInput(true, 'onChange');
 					}
 				}
 				else {
@@ -33580,9 +33633,9 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					}
 				}
 
-				if ( Payment.iframeCommunications && Payment.iframeCommunications.number )
+				if ( Payment.iframeCommunications && Payment.iframeCommunications['number_' + uniqueDivId] )
 				{
-					Payment.iframeCommunications.number.updateCardFormatting();
+					Payment.iframeCommunications['number_' + uniqueDivId].updateCardFormatting();
 				}
 
 				PaymentView.triggerFormValidationStatus($form);
@@ -33611,12 +33664,15 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 			Payment.submitPciIframes = function(){
 				var form = this;
+				var uniqueDivId = getUniqueDivIdOfForm($(form));
 
 				var promises = [];
 				var iframeCommunications = Payment.iframeCommunications || {};
 				Object.keys(iframeCommunications).forEach(
 					function(key){
-						promises.push( Payment.iframeCommunications[key].submitFormAndGetToken() );
+					    if (key.indexOf(uniqueDivId) !== -1) {
+						    promises.push( Payment.iframeCommunications[key].submitFormAndGetToken() );
+					    }
 					}
 				);
 
@@ -33634,22 +33690,26 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 			Payment.validatePciIframes = function(event){
 				var form = this;
+				var uniqueDivId = getUniqueDivIdOfForm($(form));
 
 				var promises = [];
 				var iframeCommunications = Payment.iframeCommunications || {};
 				Object.keys(iframeCommunications).forEach(
-					function(key){
-						if (key==='holder' && window.wpwl.checkout.config.createRegistration) {
-							promises.push(Payment.iframeCommunications[key].validateInput(true));
-						}
-						else if (key!=='cvv') {
-							promises.push(Payment.iframeCommunications[key].validateInput(false));
-						}
+					function(key) {
+					    var toCheckUniqueDivId = key.split("_")[1];
+					    if (uniqueDivId === toCheckUniqueDivId) {
+                            if (key === ('holder_' + uniqueDivId) && window.wpwl.checkout.config.createRegistration) {
+                                promises.push(Payment.iframeCommunications[key].validateInput(true));
+                            }
+                            else if (key !== ('cvv_' + uniqueDivId)) {
+                                promises.push(Payment.iframeCommunications[key].validateInput(false));
+                            }
+					    }
 					}
 				);
 
 				if (Options.requireCvv) {
-					promises.push(Payment.iframeCommunications.cvv.validateInput(!!(Options.allowEmptyCvv)));
+					promises.push(Payment.iframeCommunications['cvv_' + uniqueDivId].validateInput(!!(Options.allowEmptyCvv)));
 				}
 
 				var validatePromise = $.when.apply($, promises);
@@ -34043,7 +34103,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 			if (showInPopup === false) {
 				// disable submit button, submit should not be triggered twice
-				PaymentView.disableSubmitButton($form, true);
+				PaymentView.disableSubmitButton($form, true, true);
 				PaymentView.isPaying = true;
 			}
 
@@ -34296,58 +34356,60 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	}
 
 	Payment.preparePciCompliance = function () {
-		var $cardForm = $('[data-action="submit-payment-card"]');
-
-		if (!$cardForm.length) {
+		if (!$(GroupCardUtil.DIV_ID_CARD).length) {
 			return;
 		}
-
 		Payment.iframeCommunications = {};
 		var setupPromises =[];
 
-		var $numberIframe = $cardForm.find('[name="' + Parameter.CARD_NUMBER + '"]');
+		$(GroupCardUtil.DIV_ID_CARD).each(function(index) {
+            var $cardForm = GroupCardUtil.getIndividualCardForm(index);
+		    // id = card_1357900414869. split with '_'
+		    var uniqueDivId = $(GroupCardUtil.DIV_ID_CARD)[index].id.split("_")[1];
+            var $numberIframe = $cardForm.find('[name="' + Parameter.CARD_NUMBER + '"]');
 
-		//set up the card number iframe
-		setupPromises.push(setupPciIframeOnLoad("number", $cardForm, $numberIframe, PaymentView.setCardNumberIsValid));
+            //set up the card number iframe
+            setupPromises.push(setupPciIframeOnLoad("number_" + uniqueDivId, $cardForm, $numberIframe, PaymentView.setCardNumberIsValid));
+            if (SaqaUtil.isSAQACompliance()) {
+                var $holderIframe = $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]');
+                //set up the card holder iframe
+                setupPromises.push(setupPciIframeOnLoad("holder_" + uniqueDivId, $cardForm, $holderIframe, PaymentView.setCardHolderIsValid));
+                var $expiryIframe = $cardForm.find('#ccexp');
+                //set up the card expiry iframe
+                setupPromises.push(setupPciIframeOnLoad("expire_" + uniqueDivId, $cardForm, $expiryIframe, PaymentView.setExpiryIsValid));
+            }
 
-		if (SaqaUtil.isSAQACompliance()) {
-			var $holderIframe = $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]');
-			//set up the card holder iframe
-			setupPromises.push(setupPciIframeOnLoad("holder", $cardForm, $holderIframe, PaymentView.setCardHolderIsValid));
-			var $expiryIframe = $cardForm.find('#ccexp');
-			//set up the card expiry iframe
-			setupPromises.push(setupPciIframeOnLoad("expire", $cardForm, $expiryIframe, PaymentView.setExpiryIsValid));
-		}
 
+            if (Options.requireCvv) {
+                var $cvvIframe = $cardForm.find('[name="' + Parameter.CARD_CVV + '"]');
+                //set up the card cvv iframe
+                setupPromises.push(setupPciIframeOnLoad("cvv_" + uniqueDivId, $cardForm, $cvvIframe, PaymentView.setCardCvvIsValid));
+            }
 
-		if (Options.requireCvv) {
-			var $cvvIframe = $cardForm.find('[name="' + Parameter.CARD_CVV + '"]');
-			//set up the card cvv iframe
-			setupPromises.push(setupPciIframeOnLoad("cvv", $cardForm, $cvvIframe, PaymentView.setCardCvvIsValid));
-		}
+            var spinner = new Spinner(Options.spinner).spin($cardForm.parent().get(0));
 
-		var spinner = new Spinner(Options.spinner).spin($cardForm.parent().get(0));
+            $.when.apply($, setupPromises)
+                .always(function () {
+                    spinner.stop();
+                    Payment.disableNonPciInputsAndSubmitButton($cardForm, false);
+                    AutoFocus.checkAutoFocus([document]);
 
-		$.when.apply($, setupPromises)
-			.always(function () {
-				spinner.stop();
-				Payment.disableNonPciInputsAndSubmitButton($cardForm, false);
-				AutoFocus.checkAutoFocus([document]);
+                    Payment.prepareCardLogosPaymentBrands($cardForm);
+                })
+                .fail(function (reason) {
+                    PaymentView.showPleaseTryAgainMessage($cardForm);
+                    Tracking.exception("preparePciCompliance failed because: " + reason);
+                });
+        });
 
-				Payment.prepareCardLogosPaymentBrands();
-			})
-			.fail(function (reason) {
-				PaymentView.showPleaseTryAgainMessage($cardForm);
-				Tracking.exception("preparePciCompliance failed because: " + reason);
-			});
 	};
 
-	Payment.prepareCardLogosPaymentBrands = function() {
+	Payment.prepareCardLogosPaymentBrands = function($cardForm) {
 		if (Payment.style === 'logos') {
 			if (Options.brandDisplay !== 'all') {
-				PaymentView.adjustHorizontalLogos([]);
+				PaymentView.adjustHorizontalLogos([], $cardForm);
 			}
-			PaymentView.adjustCardLogosPaymentBrands();
+			PaymentView.adjustCardLogosPaymentBrands($cardForm);
 			PaymentView.setUpOnClickCardLogoBrands();
 		}
 	};
@@ -34492,6 +34554,14 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		);
 		Payment.iframeCommunications = undefined;
     };
+
+    function getUniqueDivIdOfForm(formObj) {
+        if (Options.paymentTarget) {
+            return formObj.parent().get(0).id.split("_")[1];
+        }
+        var uniqueDivId = formObj.attr('target').split("_")[1];
+        return uniqueDivId;
+    }
 
 	return Payment;
 });
@@ -34780,31 +34850,40 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
 	return Billing;
 });
 
-define('module/CardHolder',['require','jquery','module/Options','module/Parameter','module/I18n'],function(require) {
+define('module/CardHolder',['require','jquery','module/Options','module/Parameter','module/I18n','module/GroupCardUtil'],function(require) {
 	var $ = require('jquery');
 	var Options = require('module/Options');
 	var Parameter = require('module/Parameter');
 	var I18n = require('module/I18n');
+    var GroupCardUtil = require('module/GroupCardUtil');
+
 	
 	var CardHolder = {};	
 	CardHolder.initCardHolder  = function(){
 		
 		if ( Options.forceCardHolderEqualsBillingName )
 		{
-			var input = $('<input autocomplete="off" type="text" name="" class="wpwl-control wpwl-control-empty" placeholder="">');
+            if (!$(GroupCardUtil.DIV_ID_CARD).length) {
+                return;
+            }
 
-			// hide cardHolder and add billing first name/last name
-			$('input[name="' + Parameter.CARD_HOLDER + '"]').attr('disabled', 'disabled').hide();
-			var surNameInput = input.clone().addClass('wpwl-control-surName').attr('name', Parameter.SUR_NAME).attr('placeholder', I18n.surname).attr('maxlength', '50');
-			var givenNameInput = input.clone().addClass('wpwl-control-givenName').attr('name', Parameter.GIVEN_NAME).attr('placeholder', I18n.givenName).attr('maxlength', '50');
+            $(GroupCardUtil.DIV_ID_CARD).each(function(index) {
+                var $cardForm = GroupCardUtil.getIndividualCardForm(index);
 
-			$('input[name="' + Parameter.CARD_HOLDER + '"]')
-			.before( givenNameInput )
-			.before( surNameInput );
+                var input = $('<input autocomplete="off" type="text" name="" class="wpwl-control wpwl-control-empty" placeholder="">');
 
-			$('.wpwl-control-surName, .wpwl-control-givenName').on('change', function(){
-				$('input[name="' + Parameter.CARD_HOLDER + '"]').val( [$('.wpwl-control-givenName').val(), $('.wpwl-control-surName').val()].join(' '));
-			});
+                $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]').attr('disabled', 'disabled').hide();
+                var surNameInput = input.clone().addClass('wpwl-control-surName').attr('name', Parameter.SUR_NAME).attr('placeholder', I18n.surname).attr('maxlength', '50');
+                var givenNameInput = input.clone().addClass('wpwl-control-givenName').attr('name', Parameter.GIVEN_NAME).attr('placeholder', I18n.givenName).attr('maxlength', '50');
+
+                $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]')
+                    .before( givenNameInput )
+                    .before( surNameInput );
+
+                $cardForm.find('.wpwl-control-surName, .wpwl-control-givenName').on('change', function(){
+                    $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]').val( [$cardForm.find('.wpwl-control-givenName').val(), $cardForm.find('.wpwl-control-surName').val()].join(' '));
+                });
+            });
 		}
 	};
 	return CardHolder;
@@ -35628,7 +35707,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
 });
 
 /*global Promise*/
-define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','module/Generate','module/Options','module/error/SessionError','module/error/WidgetError','module/Tracking','lib/Spinner','module/InternalRequestCommunication','module/ForterUtils','module/logging/LoggerFactory'],function (require) {
+define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','module/Generate','module/Options','module/error/SessionError','module/error/WidgetError','module/Tracking','lib/Spinner','module/InternalRequestCommunication','module/ForterUtils','module/PaymentView','module/logging/LoggerFactory'],function (require) {
 
     var $ = require('jquery');
     var Wpwl = require('module/Wpwl');
@@ -35640,6 +35719,7 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
     var Spinner = require('lib/Spinner');
     var InternalRequestCommunication = require('module/InternalRequestCommunication');
     var ForterUtils = require('module/ForterUtils');
+    var PaymentView = require('module/PaymentView');
     var LoggerFactory = require('module/logging/LoggerFactory');
     var logger = LoggerFactory.getLogger('AmazonPayWidget');
 
@@ -35749,6 +35829,12 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
 
     AmazonPay.createCheckoutWithPaymentAndSubmit = function($form) {
         logger.info("createCheckoutWithPaymentAndSubmit called ");
+        if (typeof Options.createCheckout !== "function") {
+            var info = "Checkout ID and createCheckout not found";
+            PaymentView.showSupportMessage(info, $form);
+            Tracking.exception(info);
+            return;
+        }
         // Calling the callback function to create checkout and then begin session
         var createCheckoutResult = Options.createCheckout({brand:BRAND});
         var promise = Promise.resolve(createCheckoutResult);
@@ -36350,6 +36436,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	var WPWL_CONTAINER = "wpwl-container";
 	var WPWL_CLEARFIX = "wpwl-clearfix";
 	var ccBrandsForClickToPay = [];
+	var uniqueDivIdArray = [];
 
 	var PaymentWidget = function(forms){
 		this.forms = forms;
@@ -36369,7 +36456,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			prepareCardHolderBilling();
 			prepareBillingWidget();
 			self.getOnReadyPromise().then(function() {
-			    Options.onReady.call(window);
+			    Options.onReady.call(window, uniqueDivIdArray);
 			});
 		});
 
@@ -36559,10 +36646,11 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	function renderCC(specForm, paymentMethods, shopperResultUrl) {
 		var className = 'card';
 		var id = randomizeId(className + '_');
+		var wpwlContainerCard = [WPWL_CONTAINER, "-", className].join("");
 		// 1st add divs
 		var paymentBlock = $('<div />', {
 			id: id,
-			'class': [WPWL_CONTAINER, " ", WPWL_CONTAINER, "-", className, " ", WPWL_CLEARFIX].join("")
+			'class': [WPWL_CONTAINER, " ", wpwlContainerCard, " ", wpwlContainerCard, "-", id.split("_")[1], " ", WPWL_CLEARFIX].join("")
 		});
 		specForm.after( paymentBlock );
 
@@ -36888,6 +36976,12 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 		ccBrandsForClickToPay = ccMethods;
 		if ( ccMethods.length > 0 ) {
 			lastElement = renderCC(lastElement, ccMethods, shopperResultUrl);
+			if (lastElement) {
+			    var containerKey = WPWL_CONTAINER + "-card-" + lastElement[0].id.split("_")[1];
+			    var payLoad = { "containerKey" : containerKey,
+			                    "ccMethods" : ccMethods };
+			    uniqueDivIdArray.push(payLoad);
+			}
 		}
 		var ddMethods = paymentsToRender.DD;
 		var ddSepaMethods = [];
@@ -36979,6 +37073,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	
 	return PaymentWidget;
 });
+
 define('module/SpecFormUtil',['require','jquery','module/MessageView','module/SpecForm','module/SupportMessage','module/Util','module/Wpwl'],function(require){
 	var $ = require('jquery');
 	var MessageView = require('module/MessageView');
@@ -37808,9 +37903,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	var Wpwl = require('module/Wpwl');
 
 	var autocompleteAttributes = {};
-	var cardLogoId = 'cardLogoId';
 	autocompleteAttributes[Parameter.CARD_NUMBER] = "cc-number";
-	autocompleteAttributes[Parameter.CARD_NUMBER] = 'cc-number';
 	autocompleteAttributes[Parameter.CARD_HOLDER] = "cc-name";
 	autocompleteAttributes[Parameter.CARD_CVV] = "cc-csc";
 
@@ -38412,7 +38505,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 	IframeToParentCommunication.prototype.updateCardLogo = function(brands) {
 		if (this.isCardLogoActivated() && brands) {
-			var $logoLayer = $('#' + cardLogoId);
+			var $logoLayer = $('#cardLogoId');
 
 			var detectedBrand = brands;
 			if (Array.isArray(brands)) {
@@ -38451,7 +38544,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 	IframeToParentCommunication.prototype.isCardLogoStyleInjected = function() {
 
-		return this.$form.find('#' + cardLogoId).length !== 0;
+		return this.$form.find('#cardLogoId').length !== 0;
 	};
 
 	IframeToParentCommunication.prototype.loadCardLogoStyle = function(styleUrl) {
@@ -38467,7 +38560,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 		if (!this.isCardLogoStyleInjected()) {
 
-			var $logoLayer = $('<div/>').attr("id", cardLogoId);
+			var $logoLayer = $('<div/>').attr("id", 'cardLogoId');
 			this.$form.append($logoLayer);
 
 			var firstBrand = '';
