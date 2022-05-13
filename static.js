@@ -12489,6 +12489,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 
 	Options.onChangeBrand = function(){};
 	Options.onDetectBrand = function(){};
+	Options.onDetectBin = function(){};
 
 	//SAQA compliance
 	Options.enableSAQACompliance = false;
@@ -26227,6 +26228,10 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 			parentToIframeCommunication.setIsValid(parentToIframeCommunication, obj);
 		});
 
+		this.channel.bind("onDetectBin", function(context, binInfo){
+			parentToIframeCommunication.onDetectBin(binInfo);
+		});
+
 		return this;
 	};
 	
@@ -26251,6 +26256,10 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 	ParentToIframeCommunication.prototype.onFocus = function(isEmpty){
         this.isEmpty = isEmpty;
         Options.onFocusIframeCommunication.call(this);
+	};
+
+	ParentToIframeCommunication.prototype.onDetectBin = function(binInfo){
+        Options.onDetectBin(binInfo);
 	};
 
 	ParentToIframeCommunication.prototype.iframeTriggeredSubmit = function($form) {
@@ -37548,6 +37557,10 @@ define('module/BinService',['require','jquery','module/Options','module/Util'],f
     var BinService = {};
     BinService.cache = {};
 
+    BinService.registerIframeCommunication = function(iframeCommunication) {
+        BinService.iframeCommunication = iframeCommunication;
+    };
+
     BinService.detect = function(binUrl, number) {
         var bin = BinService.computeBin(number);
         if (!bin) {
@@ -37573,12 +37586,20 @@ define('module/BinService',['require','jquery','module/Options','module/Util'],f
             success: function(response) {
                 var brands = response.brands;
                 BinService.cache[bin].resolve(brands);
+                BinService.onDetectBin(response);
             },
             error: function(xhr){
                 BinService.cache[bin].reject(xhr);
             }
         });
         return BinService.cache[bin];
+    };
+
+    BinService.onDetectBin = function(binInfo) {
+        if (BinService.iframeCommunication && BinService.iframeCommunication.onDetectBin) {
+            BinService.iframeCommunication.onDetectBin.call(
+                BinService.iframeCommunication, binInfo);
+        }
     };
 
     BinService.isActive = function() {
@@ -37950,6 +37971,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	IframeToParentCommunication.prototype.initComponentOnReady = function() {
 		this.initListeners();
 		this.enableInput();
+		BinService.registerIframeCommunication(this);
 	};
 
 	// should be private and called only on ready
@@ -38369,6 +38391,10 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	
 	IframeToParentCommunication.prototype.getBrand = function(){
 		return createSendMessageOnChannelPromise.call(this, "getBrand");
+	};
+
+	IframeToParentCommunication.prototype.onDetectBin = function(binInfo){
+		return createSendMessageOnChannelPromise.call(this, "onDetectBin", binInfo);
 	};
 
 	IframeToParentCommunication.prototype.setIsValid = function(event, isValid){
