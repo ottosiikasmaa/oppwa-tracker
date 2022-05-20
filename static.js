@@ -31838,9 +31838,9 @@ define('module/integrations/RocketFuelInlineWidget',['require','jquery','module/
     };
 
     RocketFuelInlineWidget.getEnvironmentIndicator = function() {
-        var environmentDetected = Wpwl.isTestSystem ? "dev" : "prod" ;
+        var environmentDetected = Wpwl.isTestSystem ? "sandbox" : "prod" ;
         logger.info("Environment detected : " + environmentDetected);
-        return Wpwl.isTestSystem ? "dev" : "prod" ;
+        return Wpwl.isTestSystem ? "sandbox" : "prod" ;
     };
 
     RocketFuelInlineWidget.getUuidFromResponse = function(response) {
@@ -38224,7 +38224,6 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	IframeToParentCommunication.prototype.onSetDetectedBrands = function(brands, inputVal){
 		var params = {brands: brands, inputLength: inputVal.length};
 		this.notify("setDetectedBrands", params);
-		this.updateCardLogo(brands);
 	};
 
 	IframeToParentCommunication.prototype.updateRegExpBrands = function(inputVal){
@@ -38248,7 +38247,6 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 	IframeToParentCommunication.prototype.processRegExpBrands = function(inputVal, brands){
 		var brand = Detection.getBrandFromBrands(brands);
-
 		this.setUpCardFormatting(brand);
 
 		//brands that don't have detection pattern also should be shown as logos on card form
@@ -38263,6 +38261,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 		// we want to notify always, even if no brands was detected
 		this.onSetDetectedBrands(brands, inputVal);
+		this.updateCardLogo(brand);
 	};
 
     // Formats number and calls setDetectedBrands()
@@ -38270,10 +38269,13 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 		if (brands != null && brands.length === 0){
 			// We want to show error if no brands detected
 			this.notify("setIsValid", {eventType: "1", isValid: false, isEmpty: false});
-		}else{
+		}
+		else
+		{
 			var brand = Detection.getBrandFromBrands(brands);
 
 			this.setUpCardFormatting(brand);
+			this.updateCardLogo(brand);
 		}
 
 		// we want to notify always, even if no brands was detected
@@ -38502,13 +38504,6 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 			var $logoLayer = $('<div/>').attr("id", 'cardLogoId');
 			this.$form.append($logoLayer);
-
-			var firstBrand = '';
-			if (this.brandList && this.brandList.length > 0) {
-				firstBrand = this.brandList[0];
-			}
-
-			resetCardLogoLayer($logoLayer, firstBrand);
 
 			this.$input.css('width', 'auto');
 			this.$input.resize();
