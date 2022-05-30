@@ -38021,7 +38021,7 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
             return;
         }
 
-        var lastValue = $this.val();
+        var lastValue = $(this).closest('form').find($this).val();
 
         // whether the cursor is within the range of the separator
         function inSeparator(cursorPos) {
@@ -38074,7 +38074,7 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
             if (!NUMBER_PATTERN.test(charCode)) {
                 // only allow numbers to be typed
                 e.preventDefault();
-            } else if (PATTERN.test($this.val()) && $this.get(0).selectionStart >= MAX_LENGTH) {
+            } else if (PATTERN.test($(this).closest('form').find($this).val()) && $(this).closest('form').find($this).get(0).selectionStart >= MAX_LENGTH) {
                 // if at the end of the completely typed date, do not allow any additional characters anymore
                 e.preventDefault();
             }
@@ -38083,8 +38083,8 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
 
         $this.keyup(function () {
 
-            var data = $this.val();
-            var cursor = $this.get(0).selectionStart;
+            var data = $(this).closest('form').find($this).val();
+            var cursor = $(this).closest('form').find($this).get(0).selectionStart;
 
             // if nothing has changed we do not have to do anything
             if (lastValue === data) {
@@ -38102,8 +38102,8 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
 
             if (SINGLE_NUMBER_OR_EMPTY_PATTERN.test(stripped) ||
                 (TWO_NUMBERS_PATTERN.test(stripped) && data.length < lastValue.length)) {
-                $this.val(stripped);
-                $this.get(0).setSelectionRange(cursor, cursor);
+                    $(this).closest('form').find($this).val(stripped);
+                    $(this).closest('form').find($this).get(0).setSelectionRange(cursor, cursor);
             } else {
                 var newValue;
                 if(stripped.length <= DATE_LENGTH){
@@ -38112,17 +38112,17 @@ define('module/InputDateFormatter',['jquery', 'module/EventUtil'], function ($, 
                      newValue = stripped.substring(0, 2) + SEPARATOR + stripped.substring(4, 6);
                 }
 
-                $this.val(newValue);
+                $(this).closest('form').find($this).val(newValue);
 
                 // restore cursor position, move it after the separator if needed
                 var newCursor = strippedBefore.length;
                 if (newCursor >= BEGIN_OF_SEPARATOR) {
                     newCursor = newCursor + SEPARATOR_LENGTH;
                 }
-                $this.get(0).setSelectionRange(newCursor, newCursor);
+                $(this).closest('form').find($this).get(0).setSelectionRange(newCursor, newCursor);
             }
 
-            lastValue = $this.val();
+            lastValue = $(this).closest('form').find($this).val();
         });
     };
 
@@ -38516,6 +38516,35 @@ define('module/SaqaUtil',['require','module/Wpwl','module/Options'],function(req
     };
 
     return SaqaUtil;
+});
+
+define('module/GroupCardUtil',['require','jquery','module/Options'],function(require) {
+
+    var $ = require('jquery');
+	var Options = require('module/Options');
+
+    var GroupCardUtil = {};
+
+    GroupCardUtil.DIV_ID_CARD = "div[class*='wpwl-container-card-']";
+
+    GroupCardUtil.getIndividualCardForm = function (index) {
+        var div = $(GroupCardUtil.DIV_ID_CARD)[index];
+        if (Options.paymentTarget) {
+            return $(div).find('form');
+        }
+        var targetFormTag = 'target=' + '"' + div.id + '"';
+        return $('[' + targetFormTag + ']');
+    };
+
+    GroupCardUtil.getUniqueDivIdOfForm = function (formObj) {
+        if (Options.paymentTarget) {
+            return formObj.parent().get(0).id.split("_")[1];
+        }
+        var uniqueDivId = formObj.attr('target').split("_")[1];
+        return uniqueDivId;
+    };
+
+    return GroupCardUtil;
 });
 
 ( function( factory ) {
@@ -41263,7 +41292,7 @@ return $.ui.autocomplete;
 
 } ) );
 
-define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','module/SaqaUtil','jquery-ui/widgets/autocomplete'],function(require){
+define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','module/SaqaUtil','module/GroupCardUtil','jquery-ui/widgets/autocomplete'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var CVVHint = require('module/CVVHint');
@@ -41286,6 +41315,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	var Setting = require('module/Setting');
 	var Detection = require('module/Detection');
 	var SaqaUtil = require('module/SaqaUtil');
+	var GroupCardUtil = require('module/GroupCardUtil');
     require('jquery-ui/widgets/autocomplete');
 
 	var HAS_ERROR_CLASS = "wpwl-has-error";
@@ -41770,23 +41800,22 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	// Shows/hides vertical logos. The div-structure is as follows:
 	// wpwl-group-card-logos-vertical -> wpwl-button-more
 	//                                -> wpwl-group-card-logos-selected-box -> wpwl-brand-...
-	PaymentView.adjustCardLogosPaymentBrands = function() {
+	PaymentView.adjustCardLogosPaymentBrands = function(formObj) {
 		// Hides vertical logos by default
-		$('.wpwl-group-card-logos-horizontal').removeClass('wpwl-group-card-logos-horizontal-with-more-button');
-		$('.wpwl-group-card-logos-vertical').css('display', 'none');
-		$('.wpwl-group-card-logos-selected-box div').css('display', 'none');
+		formObj.find('.wpwl-group-card-logos-horizontal').removeClass('wpwl-group-card-logos-horizontal-with-more-button');
+		formObj.find('.wpwl-group-card-logos-vertical').css('display', 'none');
+		formObj.find('.wpwl-group-card-logos-selected-box div').css('display', 'none');
 
 		// Selects all non-hidden logos
-		var horizontalLogos = $('.wpwl-group-card-logos-horizontal div:not(.wpwl-hidden)');
+		var horizontalLogos = formObj.find('.wpwl-group-card-logos-horizontal div:not(.wpwl-hidden)');
 		if (!horizontalLogos.length) {
 			return;
 		}
 
 		// If there are logos to be shown, adds the more button so that the width can be calculated
-		var $form = $('form.wpwl-form-card');
-		var maxWidth = $form.offset().left + $form.outerWidth();
-		$('.wpwl-group-card-logos-horizontal').addClass('wpwl-group-card-logos-horizontal-with-more-button');
-		var rightPadding = parseInt($('.wpwl-group-card-logos-horizontal').css('padding-right'));
+		var maxWidth = formObj.offset().left + formObj.outerWidth();
+		formObj.find('.wpwl-group-card-logos-horizontal').addClass('wpwl-group-card-logos-horizontal-with-more-button');
+		var rightPadding = parseInt(formObj.find('.wpwl-group-card-logos-horizontal').css('padding-right'));
 		maxWidth = maxWidth - rightPadding;
 
 		var isVertical = false;
@@ -41797,23 +41826,23 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			// If the logo is outside the card form, hides it and shows the vertical one
 			if (!isCardLogoBrandPositionValid($this, maxWidth)) {
 				$this.addClass('wpwl-invisible');
-				$('.wpwl-group-card-logos-selected-box div:eq('+$this.index()+')').css('display', 'flex');
+				formObj.find('.wpwl-group-card-logos-selected-box div:eq('+$this.index()+')').css('display', 'flex');
 				isVertical = true;
 			}
 		});
 
 		// If from the previous computation there are vertical logos, shows the parent div too
 		if (isVertical) {
-			$('.wpwl-group-card-logos-vertical').css('display', 'flex');
+			formObj.find('.wpwl-group-card-logos-vertical').css('display', 'flex');
 		} else {
-			$('.wpwl-group-card-logos-horizontal').removeClass('wpwl-group-card-logos-horizontal-with-more-button');
-			$('.wpwl-group-card-logos-vertical').css('display', 'none');
+			formObj.find('.wpwl-group-card-logos-horizontal').removeClass('wpwl-group-card-logos-horizontal-with-more-button');
+			formObj.find('.wpwl-group-card-logos-vertical').css('display', 'none');
 		}
 	};
 
 	// Shows/hides horizontal logos
-	PaymentView.adjustHorizontalLogos = function(detectedBrands) {
-		var horizontalLogos = $('.wpwl-group-card-logos-horizontal div');
+	PaymentView.adjustHorizontalLogos = function(detectedBrands, formObj) {
+		var horizontalLogos = formObj.find('.wpwl-group-card-logos-horizontal div');
 		horizontalLogos.each(function() {
 			var $this = $(this);
 			var brand = $this.attr("value");
@@ -41945,8 +41974,14 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	};
 
 	// Updates <select> with the given brand. Note: it is possible that the brand is not in <select>
-    PaymentView.updateCardBrand = function(brand) {
-        var $brandElement = $('form.wpwl-form-card').find('[name="' + Parameter.PAYMENT_BRAND + '"]');
+    PaymentView.updateCardBrand = function(brand, form) {
+        var $brandElement;
+        if(form) {
+            $brandElement = form.find('[name="' + Parameter.PAYMENT_BRAND + '"]');
+        }
+        else {
+            $brandElement = $('form.wpwl-form-card').find('[name="' + Parameter.PAYMENT_BRAND + '"]');
+        }
         if (!$brandElement.length) {
             return;
         }
@@ -41963,29 +41998,31 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 		PaymentView.onUpdateCardBrand(select, brand, brandIsInSelect);
     };
 
-	PaymentView.updateCardBrands = function(brands, inputLength) {
+	PaymentView.updateCardBrands = function(brands, inputLength, parentToIframeCommunication) {
 		var detectedBrands = brands;
-		var $form = $('form.wpwl-form-card');
+		var $form = parentToIframeCommunication.$form;
 
         var activeBrand = PaymentView.getActiveBrandIfPresentInCardForm($form, detectedBrands);
+        var cardClassParameter = "wpwl-container-card-" + GroupCardUtil.getUniqueDivIdOfForm($form);
 
 		if (inputLength === 0) {
           Options.onDetectBrand([]);
         } else {
-          Options.onDetectBrand(getDetectedConfiguredBrands($form, detectedBrands), activeBrand);
+          Options.onDetectBrand(getDetectedConfiguredBrands($form, detectedBrands), activeBrand, cardClassParameter);
         }
 
 		if (isCardLogoBrandDisplayMode()) {
 			detectedBrands = getDisplayedLogos($form, brands, inputLength);
 			logoDetected = detectedBrands.length > 0;
-			PaymentView.adjustHorizontalLogos(detectedBrands);
-			PaymentView.adjustCardLogosPaymentBrands();
+			PaymentView.adjustHorizontalLogos(detectedBrands, $form);
+			PaymentView.adjustCardLogosPaymentBrands($form);
 		}
-		var brand = getBrandFromDetectedBrands(detectedBrands, inputLength);
-		if(inputLength === 0){
-		    brand = "";
-		}
-		PaymentView.updateCardBrand(brand);
+		var brand = getBrandFromDetectedBrands(detectedBrands, inputLength, $form);
+        if(inputLength === 0){
+            brand = "";
+        }
+		PaymentView.updateCardBrand(brand, $form);
+
 	};
 
     PaymentView.onSelectCardLogoBrand = function() {
@@ -42049,18 +42086,17 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
         return (logo.offset().left + logo.outerWidth() <= maxWidth);
     }
 
-	function getBrandFromDetectedBrands(detectedBrands, inputLength) {
+	function getBrandFromDetectedBrands(detectedBrands, inputLength, form) {
 		// For non-logos style
 		if (!isCardLogoBrandDisplayMode()) {
 			return Detection.getBrandFromBrands(detectedBrands);
 		}
 
-		var $form = $('form.wpwl-form-card');
 		if (logoClicked) {
-			return PaymentView.getSelectedBrand($form);
+			return PaymentView.getSelectedBrand(form);
 		}
 
-		var brands = PaymentView.getCardBrands($form);
+		var brands = PaymentView.getCardBrands(form);
 		if (inputLength < PaymentView.MIN_BRAND_DETECTION_LENGTH || detectedBrands === null) {
 			return brands[0];
 		} else {
@@ -42230,6 +42266,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			.then(PaymentView.setUpIframeInputPropertiesAndCheckoutId)
 			.then(PaymentView.setUpIframeStyles)
 			.then(PaymentView.setUpAutofill)
+			.then(PaymentView.setUpFormTargets)
 			.then(function () {
 				if (iframeCommunication.$iframe.hasClass("wpwl-control-cvv")) {
 					new CVVHint(iframeCommunication.$form).init();
@@ -42295,6 +42332,15 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 		return iframeCommunication;
 	};
 
+    PaymentView.setUpFormTargets = function(iframeCommunication){
+        if (Options.paymentTarget) {
+            iframeCommunication.$form.attr('target', Options.paymentTarget);
+        }
+
+        return iframeCommunication;
+    };
+
+
 	PaymentView.setUpIframeInputPropertiesAndCheckoutId = function(iframeCommunication){
 		return $.when(
 			PaymentView.setUpIframeInputProperties(iframeCommunication),
@@ -42306,7 +42352,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 
 	PaymentView.setUpIframeBrandList = function(iframeCommunication) {
 		if (SaqaUtil.isSAQACompliance()) {
-			var $form = $('form.wpwl-form-card');
+			var $form = iframeCommunication.$form;
 			var brandlist = PaymentView.getCardBrands($form);
 			iframeCommunication.setUpBrandList(brandlist);
 		}
@@ -42402,13 +42448,19 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 		new MessageView({elem: elem, method: 'before', message: new Message({message:message, type:'error'})}).inject();
 	};
 
-	PaymentView.disableSubmitButton = function($form, disabled){
+	PaymentView.disableSubmitButton = function($form, disabled, disableOtherCardForms){
 	    if (PaymentView.isPaying && !disabled){
 	        //Don't enable if we are paying!
 	        return;
 	    }
 
 	    $form.find("button[type=\"submit\"]").attr("disabled", disabled);
+        if(disableOtherCardForms === true) {
+            $(GroupCardUtil.DIV_ID_CARD).each(function(index) {
+                var $cardForm = GroupCardUtil.getIndividualCardForm(index);
+                $cardForm.find("button[type=\"submit\"]").attr("disabled", disabled);
+            });
+        }
 	};
 
     PaymentView.submitPciIframeFailed = function(error, reason, $form) {
@@ -43323,7 +43375,7 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 	};
 
 	ParentToIframeCommunication.prototype.updateBrands = function(brands, inputLength) {
-		return PaymentView.updateCardBrands(brands, inputLength);
+		return PaymentView.updateCardBrands(brands, inputLength, this);
 	};
 		
 	ParentToIframeCommunication.prototype.onBlur = function(isEmpty){
@@ -49974,7 +50026,7 @@ define('module/FastCheckout',['require','jquery','module/Generate','module/Track
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -50002,7 +50054,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var InternalRequestCommunication = require('module/InternalRequestCommunication');
 	var SaqaUtil = require('module/SaqaUtil');
 	var KlarnaPaymentsInlineWidget = require('module/integrations/KlarnaPaymentsInlineWidget');
-    var YandexCheckoutPaymentWidget = require('module/integrations/YandexCheckoutPaymentWidget');
+	var YandexCheckoutPaymentWidget = require('module/integrations/YandexCheckoutPaymentWidget');
 	var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
 	var BancontactMobilePaymentWidget = require('module/integrations/BancontactMobilePaymentWidget');
 	var TrustlyInlineWidget = require('module/integrations/TrustlyInlineWidget');
@@ -50010,10 +50062,11 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var UpgMobilePaymentWidget = require('module/integrations/UpgMobilePaymentWidget');
 	var ClickToPayPaymentWidget = require('module/integrations/ClickToPayPaymentWidget');
 	var WidgetError = require("module/error/WidgetError");
-    var FastCheckout = require('module/FastCheckout');
+	var FastCheckout = require('module/FastCheckout');
 	var ForterUtils = require('module/ForterUtils');
 	var LoggerFactory = require('module/logging/LoggerFactory');
-    var logger = LoggerFactory.getLogger('Payment');
+	var GroupCardUtil = require('module/GroupCardUtil');
+	var logger = LoggerFactory.getLogger('Payment');
 	var HAS_ERROR_CLASS = "wpwl-has-error";
 	var ENTER_KEY = 13;
 
@@ -50028,22 +50081,22 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		Payment.validation = Options.validation;
 		Payment.checkoutId = Wpwl.checkout.id;
 		Payment.url = Wpwl.url;
-	    Payment.cacheVersion = Wpwl.cacheVersion;
+		Payment.cacheVersion = Wpwl.cacheVersion;
 		Payment.apiVersion = Wpwl.apiVersion;
 		Payment.minified = Wpwl.minified;
 
-        Payment.logBasicInfo();
+		Payment.logBasicInfo();
 		Payment.initPciCompliance();
 
 		Payment.initAliRiskDF(Wpwl.checkout.config.workflowSpecificConfig.aliRiskConfig);
 		Payment.initKount(Wpwl.checkout.config.workflowSpecificConfig.kountConfig);
 		Payment.initCyberSourceRiskConfig(Wpwl.checkout.config.workflowSpecificConfig.cyberSourceRiskManagementConfig);
-        ForterUtils.initForter(Wpwl.checkout.config.workflowSpecificConfig.forterConfig);
+		ForterUtils.initForter(Wpwl.checkout.config.workflowSpecificConfig.forterConfig);
 
 		//default values
 		Payment.style = Payment.style === undefined ? "none" : Payment.style;
 		if ("none" === Payment.style) {
-		    Payment.style = "critical";
+			Payment.style = "critical";
 		}
 		Payment.validation = Payment.validation === undefined ? true : Payment.validation;
 		//Payment.readable = Wpwl.readable;
@@ -50054,12 +50107,12 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	};
 
 	Payment.logBasicInfo = function(){
-	    logger.info("User-agent: " + navigator.userAgent);
-	    if(JSON && JSON.stringify){
-	        logger.info("WpwlOptions: " + JSON.stringify(WpwlOptions));
-	    }else{
-	        logger.info("Could not get wpwlOptions because of lack of stringify");
-	    }
+		logger.info("User-agent: " + navigator.userAgent);
+		if(JSON && JSON.stringify){
+			logger.info("WpwlOptions: " + JSON.stringify(WpwlOptions));
+		}else{
+			logger.info("Could not get wpwlOptions because of lack of stringify");
+		}
 	};
 
 	Payment.initPciCompliance = function(){
@@ -50067,20 +50120,20 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	};
 
 	Payment.initAliRiskDF = function(settings){
-        if (Util.isNullOrUndefined(settings) || !settings.active) return;
+		if (Util.isNullOrUndefined(settings) || !settings.active) return;
 
-        Payment.aliRiskActive = true;
+		Payment.aliRiskActive = true;
 
-        var params = settings.aliRiskParameters;
-        window.MERCHANT_USER_ID = params.merchantUserId || "";
-        window.MERCHANT_SESSION_ID = params.merchantSessionId || "";
-        window.EBUCKLER_API_KEY = params.ebucklerApiKey || "";
-        window.CLIENT_APP_NAME = params.clientAppName || "";
+		var params = settings.aliRiskParameters;
+		window.MERCHANT_USER_ID = params.merchantUserId || "";
+		window.MERCHANT_SESSION_ID = params.merchantSessionId || "";
+		window.EBUCKLER_API_KEY = params.ebucklerApiKey || "";
+		window.CLIENT_APP_NAME = params.clientAppName || "";
 
-        var script = Wpwl.isTestSystem ? "https://cdn10.ebuckler.com/ebuckler.widget.js"
-                : "https://stats.ebuckler.com/js/ebuckler.widget.js";
+		var script = Wpwl.isTestSystem ? "https://cdn10.ebuckler.com/ebuckler.widget.js"
+				: "https://stats.ebuckler.com/js/ebuckler.widget.js";
 
-        $.getScript(script)
+		$.getScript(script)
 			.catch(function() {
 				// This is a hack so the tests will work - the UAT URL for the widget is broken and now jquery will not create the
 				// script tag with the broken URL so we will insert it anyway (with async as attribute).
@@ -50099,39 +50152,39 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 	Payment.initKount = function(config){
 
-	    Payment.kountActive = false;
-        Payment.kountMerchantId = '';
-        Payment.kountSessionId = '';
-        Payment.kountBaseUrl = '';
+		Payment.kountActive = false;
+		Payment.kountMerchantId = '';
+		Payment.kountSessionId = '';
+		Payment.kountBaseUrl = '';
 
-	    if (Util.isNullOrUndefined(config) || !config.active ||
-	        Util.isNullOrUndefined(config.merchantId) ||
-	        Util.isNullOrUndefined(config.sessionId) ||
-	        Util.isBlank(config.merchantId) || Util.isBlank(config.sessionId)){
-	            return;
+		if (Util.isNullOrUndefined(config) || !config.active ||
+			Util.isNullOrUndefined(config.merchantId) ||
+			Util.isNullOrUndefined(config.sessionId) ||
+			Util.isBlank(config.merchantId) || Util.isBlank(config.sessionId)){
+				return;
 		}
 
-        Payment.kountMerchantId = config.merchantId;
+		Payment.kountMerchantId = config.merchantId;
 		Payment.kountSessionId = config.sessionId;
 		Payment.kountBaseUrl = config.baseUrl;
 		Payment.kountActive = config.active;
 	};
 
-    Payment.initCyberSourceRiskConfig = function(config){
-        Payment.cyberSourceRiskActive = false;
-        Payment.cyberSourceRiskCollectDeviceId = false;
-        Payment.cyberSourceRiskSessionId = '';
+	Payment.initCyberSourceRiskConfig = function(config){
+		Payment.cyberSourceRiskActive = false;
+		Payment.cyberSourceRiskCollectDeviceId = false;
+		Payment.cyberSourceRiskSessionId = '';
 
-        if (Util.isNullOrUndefined(config) || !config.active || !config.collectDeviceId){
-            return;
-        }
+		if (Util.isNullOrUndefined(config) || !config.active || !config.collectDeviceId){
+			return;
+		}
 
-        Payment.cyberSourceRiskActive = config.active;
-        Payment.cyberSourceRiskCollectDeviceId = config.collectDeviceId;
-        Payment.cyberSourceRiskSessionId = config.sessionId;
-    };
+		Payment.cyberSourceRiskActive = config.active;
+		Payment.cyberSourceRiskCollectDeviceId = config.collectDeviceId;
+		Payment.cyberSourceRiskSessionId = config.sessionId;
+	};
 
-    Payment.initPreparePaymentForm = function(data) {
+	Payment.initPreparePaymentForm = function(data) {
 		if (Util.isNullOrUndefined(data)) return;
 
 		Payment.preparePaymentFormEnabled = true;
@@ -50162,7 +50215,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			"<form class='wpwl-form wpwl-form-", paymentName, " wpwl-clearfix'",
 			" action='", Payment.endPoint, "'",
 			" method='POST'",
-			" target='", Options.paymentTarget ? Options.paymentTarget : id, "'",
+			" target='", id, "'",
 			" lang='", Locale.language, "'",
 			" accept-charset='UTF-8'",
 			" data-action='submit-payment-", paymentName, "'",
@@ -50190,11 +50243,11 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 	function getCardPaymentData() {
 		var paymentData;
-	    if (Payment.style === 'logos') {
-	        paymentData = Options.requireCvv ? Setting.cardPaymentDataLogoStyle : Setting.cardPaymentDataLogoStyleWithoutCvv;
-	    } else {
-	        paymentData = Options.requireCvv ? Setting.cardPaymentData : Setting.cardPaymentDataWithoutCvv;
-	    }
+		if (Payment.style === 'logos') {
+			paymentData = Options.requireCvv ? Setting.cardPaymentDataLogoStyle : Setting.cardPaymentDataLogoStyleWithoutCvv;
+		} else {
+			paymentData = Options.requireCvv ? Setting.cardPaymentData : Setting.cardPaymentDataWithoutCvv;
+		}
 		if (SaqaUtil.isSAQACompliance()) {
 			paymentData = $.extend({}, paymentData, Setting.cardPaymentBasicSAQA);
 			paymentData.brand.hidden=true;
@@ -50244,167 +50297,167 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		};
 
 		showPaymentForm(obj, "directDebit", paymentInputs, triggerEvents);
-        for (var index = 0; index < obj.subTypes.length; index++){
-            if (obj.subTypes[index] === "DIRECTDEBIT_SEPA"){
-                updateSEPAForm();
-            }
-        }
+		for (var index = 0; index < obj.subTypes.length; index++){
+			if (obj.subTypes[index] === "DIRECTDEBIT_SEPA"){
+				updateSEPAForm();
+			}
+		}
 
 	};
 
 	Payment.showPaymentWidgetsSummaryForm = function(obj) {
-        /*jshint unused:false */
-        var triggerEvents = function(form) {};
-        var summaryPageData = [];
+		/*jshint unused:false */
+		var triggerEvents = function(form) {};
+		var summaryPageData = [];
 
-    	showPaymentForm(obj, "summary", summaryPageData, triggerEvents);
+		showPaymentForm(obj, "summary", summaryPageData, triggerEvents);
 	};
 
 	function generateForm(obj) {
-        var render = Setting.subTypeLabelMap[obj.subType].render;
-        var cssClass = Setting.nonCardPaymentTypeClassMap[render];
+		var render = Setting.subTypeLabelMap[obj.subType].render;
+		var cssClass = Setting.nonCardPaymentTypeClassMap[render];
 
-        return $(Generate.string(
-            "<form class='wpwl-form wpwl-form-", cssClass, " wpwl-form-", cssClass, "-", obj.subType, " wpwl-clearfix'",
-            " action='", Payment.endPoint, "'",
-            " method='POST'",
-            " target='", Options.paymentTarget ? Options.paymentTarget : obj.id, "'",
-            " lang='", Locale.language, "'",
-            " accept-charset='UTF-8'",
-            " data-action='submit-payment-", obj.subType, "'",
-            "></form>"
-        ));
-    }
+		return $(Generate.string(
+			"<form class='wpwl-form wpwl-form-", cssClass, " wpwl-form-", cssClass, "-", obj.subType, " wpwl-clearfix'",
+			" action='", Payment.endPoint, "'",
+			" method='POST'",
+			" target='", obj.id, "'",
+			" lang='", Locale.language, "'",
+			" accept-charset='UTF-8'",
+			" data-action='submit-payment-", obj.subType, "'",
+			"></form>"
+		));
+	}
 
-    function addClassForNotHiddenInputElements($form, classValue) {
-        if ($form.find("input[type!='hidden']").length) {
-            $form.addClass(classValue);
-        }
-    }
+	function addClassForNotHiddenInputElements($form, classValue) {
+		if ($form.find("input[type!='hidden']").length) {
+			$form.addClass(classValue);
+		}
+	}
 
-    function appendElementsToForm(form, elements) {
-        for (var i = 0; i < elements.length; i++) {
-            form.append(elements[i]);
-        }
-    }
+	function appendElementsToForm(form, elements) {
+		for (var i = 0; i < elements.length; i++) {
+			form.append(elements[i]);
+		}
+	}
 
-    function buildPaymentAndReturnForm(obj, elements) {
-        var $container = $("#" + obj.id);
-        var $form = generateForm(obj);
-        var $targetIframe = $(Generate.targetIframe(obj.id));
+	function buildPaymentAndReturnForm(obj, elements) {
+		var $container = $("#" + obj.id);
+		var $form = generateForm(obj);
+		var $targetIframe = $(Generate.targetIframe(obj.id));
 
-        appendElementsToForm($form, elements);
-        addClassForNotHiddenInputElements($form, "wpwl-form-has-inputs");
+		appendElementsToForm($form, elements);
+		addClassForNotHiddenInputElements($form, "wpwl-form-has-inputs");
 
-        // build Payment
-        $container
-            .append($form)
-            .append($targetIframe);
-        return $form;
-    }
+		// build Payment
+		$container
+			.append($form)
+			.append($targetIframe);
+		return $form;
+	}
 
-    Payment.showInlineButtonForm = function(obj, customButtonFormIdArray) {
-        var elements = [Generate.getBrandAccountInput(Util.trim(obj.subType))];
-        if ($.isArray(customButtonFormIdArray)) {
-            for (var arrayIndex = 0; arrayIndex < customButtonFormIdArray.length; arrayIndex++) {
-                var value = customButtonFormIdArray[arrayIndex];
-                elements.push(Generate.generateButtonElement(value.divName));
-            }
-        }
+	Payment.showInlineButtonForm = function(obj, customButtonFormIdArray) {
+		var elements = [Generate.getBrandAccountInput(Util.trim(obj.subType))];
+		if ($.isArray(customButtonFormIdArray)) {
+			for (var arrayIndex = 0; arrayIndex < customButtonFormIdArray.length; arrayIndex++) {
+				var value = customButtonFormIdArray[arrayIndex];
+				elements.push(Generate.generateButtonElement(value.divName));
+			}
+		}
 		elements.push(Generate.generateHiddenFields(obj.hidden));
-        return buildPaymentAndReturnForm(obj, elements);
-    };
+		return buildPaymentAndReturnForm(obj, elements);
+	};
 
-    Payment.showButtonForm = function(obj) { //generate frontend html form for non-card payments
+	Payment.showButtonForm = function(obj) { //generate frontend html form for non-card payments
 		var row = Generate.generateNonCreditCardAccountRow({
 			brand: Util.trim(obj.subType),
 			label: Util.trim(Generate.generateSubTypesLabel(obj.subType))
 		});
 		var elements = [row, Generate.generateHiddenFields(obj.hidden)];
 
-        return buildPaymentAndReturnForm(obj, elements);
-    };
+		return buildPaymentAndReturnForm(obj, elements);
+	};
 
 	Payment.updateEntercashForm = function() {
-        var apiId = Options.entercashApiId;
-        console.log(apiId);
+		var apiId = Options.entercashApiId;
+		console.log(apiId);
 
-        if (apiId) {
-            var bankCountry = Options.entercashClearingHouse;
-            PaymentView.hideDefaultEntercashForm();
-            PaymentView.callEntercashApi(bankCountry);
-        }
-    };
+		if (apiId) {
+			var bankCountry = Options.entercashClearingHouse;
+			PaymentView.hideDefaultEntercashForm();
+			PaymentView.callEntercashApi(bankCountry);
+		}
+	};
 
-    Payment.updateAstroPayStreamlineForm = function(brands) {
-        var spinner = new Spinner(Options.spinner).spin($(".wpwl-container-virtualAccount-" + brands[0]).get(0));
+	Payment.updateAstroPayStreamlineForm = function(brands) {
+		var spinner = new Spinner(Options.spinner).spin($(".wpwl-container-virtualAccount-" + brands[0]).get(0));
 
-        $.getJSON(Wpwl.url + "/v1/astropaystreamline/banklist?checkoutId=" + Wpwl.checkout.id)
-        .done(function (response) {
-            PaymentView.fetchAstropayStreamlinePaymentConfig(response, brands);
-            spinner.stop();
-        })
-        .fail(function() {
-            spinner.stop();
-        });
-    };
+		$.getJSON(Wpwl.url + "/v1/astropaystreamline/banklist?checkoutId=" + Wpwl.checkout.id)
+		.done(function (response) {
+			PaymentView.fetchAstropayStreamlinePaymentConfig(response, brands);
+			spinner.stop();
+		})
+		.fail(function() {
+			spinner.stop();
+		});
+	};
 
 	Payment.updateGiropayForm = function () {
 
-        //check for displayIban option which is optional display
-        if (Options.displayIban === false) {
-            PaymentView.removeDefaultGiropayFormIban();
-        }
-        //add auto-complete function to BIC
-        PaymentView.updateFieldGiropayBic();
+		//check for displayIban option which is optional display
+		if (Options.displayIban === false) {
+			PaymentView.removeDefaultGiropayFormIban();
+		}
+		//add auto-complete function to BIC
+		PaymentView.updateFieldGiropayBic();
 	};
 
-    Payment.updateClickToPayForm = function($form) {
-        var spinner = new Spinner(Options.spinner).spin($(".wpwl-container-card").get(0));
-        var paymentUrl = Wpwl.url + "/v1/checkouts/" + Wpwl.checkout.id + "/clickToPay/encryptCard";
-        InternalRequestCommunication.getSender().then(function (sender) {
-            return sender.send({
-                method: "POST",
-                url: paymentUrl,
-                dataType: "json",
-                data: $form.serialize()
-            });
-        })
-        .then(function (response) {
-            spinner.stop();
-            Payment.processEncryptCardResponse(response, $form);
-        })
-        .fail(function(error) {
-            logger.error("Error occurred while fetching encrypted card details. " + error);
-            Options.onError(new WidgetError("CLICK_TO_PAY", "encrypt_card_fail", "Error occurred while fetching encrypted card details for Click to Pay, cannot proceed."));
-            spinner.stop();
-        });
-    };
+	Payment.updateClickToPayForm = function($form) {
+		var spinner = new Spinner(Options.spinner).spin($(".wpwl-container-card").get(0));
+		var paymentUrl = Wpwl.url + "/v1/checkouts/" + Wpwl.checkout.id + "/clickToPay/encryptCard";
+		InternalRequestCommunication.getSender().then(function (sender) {
+			return sender.send({
+				method: "POST",
+				url: paymentUrl,
+				dataType: "json",
+				data: $form.serialize()
+			});
+		})
+		.then(function (response) {
+			spinner.stop();
+			Payment.processEncryptCardResponse(response, $form);
+		})
+		.fail(function(error) {
+			logger.error("Error occurred while fetching encrypted card details. " + error);
+			Options.onError(new WidgetError("CLICK_TO_PAY", "encrypt_card_fail", "Error occurred while fetching encrypted card details for Click to Pay, cannot proceed."));
+			spinner.stop();
+		});
+	};
 
-    Payment.processEncryptCardResponse = function(response, $form) {
-        if (response !== undefined && response !== "" && response.encryptedCard !== null && response.cardBrand !== null && response.network !== null)
-        {
-            ClickToPayPaymentWidget.checkoutOfNewCard($form, response.encryptedCard, response.cardBrand, response.network);
-        }
-        else if (response !== undefined && response !== "" && response.errorCode !== null && response.errorMessage !== null)
-        {
-            logger.error("encryptCard call for CLICK_TO_PAY returned errorCode: " + response.errorCode + " and errorMessage: " + response.errorMessage);
-            Options.onError(new WidgetError("CLICK_TO_PAY", "error_response", "Error response received for Click to Pay encrypt card, cannot proceed. errorCode: " + response.errorCode + " and errorMessage: " + response.errorMessage));
-        }
-        else
-        {
-            logger.error("No response received for CLICK_TO_PAY encrypt card");
-            Options.onError(new WidgetError("CLICK_TO_PAY", "no_response", "No response received for Click to Pay encrypt card, cannot proceed."));
-        }
-    };
+	Payment.processEncryptCardResponse = function(response, $form) {
+		if (response !== undefined && response !== "" && response.encryptedCard !== null && response.cardBrand !== null && response.network !== null)
+		{
+			ClickToPayPaymentWidget.checkoutOfNewCard($form, response.encryptedCard, response.cardBrand, response.network);
+		}
+		else if (response !== undefined && response !== "" && response.errorCode !== null && response.errorMessage !== null)
+		{
+			logger.error("encryptCard call for CLICK_TO_PAY returned errorCode: " + response.errorCode + " and errorMessage: " + response.errorMessage);
+			Options.onError(new WidgetError("CLICK_TO_PAY", "error_response", "Error response received for Click to Pay encrypt card, cannot proceed. errorCode: " + response.errorCode + " and errorMessage: " + response.errorMessage));
+		}
+		else
+		{
+			logger.error("No response received for CLICK_TO_PAY encrypt card");
+			Options.onError(new WidgetError("CLICK_TO_PAY", "no_response", "No response received for Click to Pay encrypt card, cannot proceed."));
+		}
+	};
 
 	function updateSEPAForm() {
-        var displayBic = Options.displayBic;
-        //check for displayBic option which is optional
-        if (!displayBic) {
-           PaymentView.removeDefaultSepaFormBIC();
-        }
-    }
+		var displayBic = Options.displayBic;
+		//check for displayBic option which is optional
+		if (!displayBic) {
+		   PaymentView.removeDefaultSepaFormBIC();
+		}
+	}
 
 	//Layout functions
 	Payment.initStyle = function(style){
@@ -50420,7 +50473,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		.load(Payment.getStyleLink())
 		.always(Payment.showContainers)
 		.always(function(){
-		    deferred.resolve();
+			deferred.resolve();
 		});
 		return deferred.promise();
 	};
@@ -50530,44 +50583,47 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		});
 
 		$(document).on('keyup.wpwlEvent', 'input.wpwl-control-giftCardNumber', function(){
-		    var $form = $(this).closest("form");
-		    var $giftCardNumber = $form.find(".wpwl-control-giftCardNumber");
-		    var giftCard = Util.trimAll($giftCardNumber.val());
-		    var brand = getBrand($form);
+			var $form = $(this).closest("form");
+			var $giftCardNumber = $form.find(".wpwl-control-giftCardNumber");
+			var giftCard = Util.trimAll($giftCardNumber.val());
+			var brand = getBrand($form);
 
-		    if (giftCard.length === 16){
-		        if(Detection.isPin.call($form, brand, giftCard)){
-		            PaymentView.hideOrShowPin.call($form, false);
-		        } else {
-		            PaymentView.hideOrShowPin.call($form, true);
-		        }
-            } else {
-                PaymentView.hideOrShowPin.call($form, true);
-            }
-        });
+			if (giftCard.length === 16){
+				if(Detection.isPin.call($form, brand, giftCard)){
+					PaymentView.hideOrShowPin.call($form, false);
+				} else {
+					PaymentView.hideOrShowPin.call($form, true);
+				}
+			} else {
+				PaymentView.hideOrShowPin.call($form, true);
+			}
+		});
 
-        if (Payment.style === 'logos') {
-            $(window).on("resize.wpwlEvent", function() {
-                PaymentView.adjustCardLogosPaymentBrands();
-            });
-        }
+		if (Payment.style === 'logos') {
+			$(window).on("resize.wpwlEvent", function() {
+				$(GroupCardUtil.DIV_ID_CARD).each(function(index) {
+					var $cardForm = GroupCardUtil.getIndividualCardForm(index);
+					PaymentView.adjustCardLogosPaymentBrands($cardForm);
+				});
+			});
+		}
 
-        Payment.preventDefault = function(e){
-            //For testing purposes
-            e.preventDefault();
-        };
+		Payment.preventDefault = function(e){
+			//For testing purposes
+			e.preventDefault();
+		};
 
-        $(document).on('keydown.wpwlEvent',function(e) {
-            if(e.which === ENTER_KEY && Options.disableSubmitOnEnter ){
-                Payment.preventDefault(e);
-            }
-        });
+		$(document).on('keydown.wpwlEvent',function(e) {
+			if(e.which === ENTER_KEY && Options.disableSubmitOnEnter ){
+				Payment.preventDefault(e);
+			}
+		});
 
 		if (Options.brandDetection) {
 			// others trigger change on this element, but we are interested only in the ones triggered by a real user
 			var userClicked = false;
-            var brandChanged = false;
-            var waitingTime = 2000;
+			var brandChanged = false;
+			var waitingTime = 2000;
 
 			Payment.removeBrandDetectionEventListeners = function(event){
 				if (event.type === 'click') {
@@ -50575,14 +50631,15 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					setTimeout(function() { userClicked = false; }, waitingTime);
 				}
 
-                if (event.type === 'change') {
-                    brandChanged = true;
-                    setTimeout(function() { brandChanged = false; }, waitingTime);
-                }
+				if (event.type === 'change') {
+					brandChanged = true;
+					setTimeout(function() { brandChanged = false; }, waitingTime);
+				}
 
 				// user changed dropdown
 				if (userClicked && brandChanged) {
-					Payment.iframeCommunications.number.disableBrandDetection();
+					var uniqueDivId = GroupCardUtil.getUniqueDivIdOfForm($(this).closest('form'));
+					Payment.iframeCommunications['number_' + uniqueDivId].disableBrandDetection();
 					$(document).off('click.wpwlEvent change.wpwlEvent', '[name="' + Parameter.PAYMENT_BRAND + '"]');
 				}
 			};
@@ -50605,10 +50662,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				var paymentForm = new CardPaymentForm($form);
 
 				var validationErrors = Validate.validateCardPaymentElement( this , paymentForm.getBrandElement() );
-                PaymentView.executeDelayedIfNecessary(function() {
-                    PaymentView.generateErrorRow(validationErrors);
-                    PaymentView.triggerFormValidationStatus($form);
-                });
+				PaymentView.executeDelayedIfNecessary(function() {
+					PaymentView.generateErrorRow(validationErrors);
+					PaymentView.triggerFormValidationStatus($form);
+				});
 			};
 
 			Payment.blurInputCardExpiry = function(){
@@ -50623,10 +50680,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				var $accountBrand = paymentForm.getBrandElement();
 
 				var validationErrors = Validate.validateCardPaymentElement( $month, $year, $accountBrand );
-                PaymentView.executeDelayedIfNecessary(function() {
-                    PaymentView.generateErrorRow(validationErrors);
-                    PaymentView.triggerFormValidationStatus($form);
-                });
+				PaymentView.executeDelayedIfNecessary(function() {
+					PaymentView.generateErrorRow(validationErrors);
+					PaymentView.triggerFormValidationStatus($form);
+				});
 			};
 
 			Payment.blurGiftCardElement = function(){
@@ -50638,10 +50695,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				var paymentForm = new VirtualAccountPaymentForm($form);
 
 				var validationErrors = Validate.validateGiftCardElement($(this), paymentForm.getBrand());
-                PaymentView.executeDelayedIfNecessary(function() {
-                    PaymentView.generateErrorRow(validationErrors);
-                    PaymentView.triggerFormValidationStatus($form);
-                });
+				PaymentView.executeDelayedIfNecessary(function() {
+					PaymentView.generateErrorRow(validationErrors);
+					PaymentView.triggerFormValidationStatus($form);
+				});
 			};
 
 			Payment.blurInputsBankAccount = function(){
@@ -50673,35 +50730,35 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 			Payment.clickCheckboxBankAccount = function(checkbox) {
 				var $checkbox = $(checkbox);
-                var $form = $checkbox.closest('form');
+				var $form = $checkbox.closest('form');
 
-                var validationErrors;
-                if ($form.hasClass("wpwl-form-directDebit")) {
-                    validationErrors = Validate.validateDirectDebitPaymentCheckbox($checkbox);
-                }
+				var validationErrors;
+				if ($form.hasClass("wpwl-form-directDebit")) {
+					validationErrors = Validate.validateDirectDebitPaymentCheckbox($checkbox);
+				}
 
-                PaymentView.generateErrorRow(validationErrors);
-                PaymentView.triggerFormValidationStatus($form);
-            };
+				PaymentView.generateErrorRow(validationErrors);
+				PaymentView.triggerFormValidationStatus($form);
+			};
 
 			Payment.removeValidationError = function(){
 				var $input = $(this);
-                PaymentView.executeDelayedIfNecessary(function() {
-                    PaymentView.removeErrorClassAndMessage($input);
-                    PaymentView.triggerFormValidationStatus($input.closest("form"));
-                });
+				PaymentView.executeDelayedIfNecessary(function() {
+					PaymentView.removeErrorClassAndMessage($input);
+					PaymentView.triggerFormValidationStatus($input.closest("form"));
+				});
 			};
 
 			Payment.onChangeBrand = function(){
 				var $form = $(this).closest('form');
 				var paymentForm = new CardPaymentForm($form);
-
+				var uniqueDivId = GroupCardUtil.getUniqueDivIdOfForm($form);
 
 				if (State.pciIframeCommunicationReady){
 					// no need to wait for the validation response here as the iframe calls back with the validation status
-					Payment.iframeCommunications.number.validateInput(true, 'onChange');
+					Payment.iframeCommunications['number_' + uniqueDivId].validateInput(true, 'onChange');
 					if(Options.requireCvv){
-					    Payment.iframeCommunications.cvv.validateInput(true, 'onChange');
+						Payment.iframeCommunications['cvv_' + uniqueDivId].validateInput(true, 'onChange');
 					}
 				}
 				else {
@@ -50720,9 +50777,9 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					}
 				}
 
-				if ( Payment.iframeCommunications && Payment.iframeCommunications.number )
+				if ( Payment.iframeCommunications && Payment.iframeCommunications['number_' + uniqueDivId] )
 				{
-					Payment.iframeCommunications.number.updateCardFormatting();
+					Payment.iframeCommunications['number_' + uniqueDivId].updateCardFormatting();
 				}
 
 				PaymentView.triggerFormValidationStatus($form);
@@ -50744,19 +50801,22 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 						$form.submit();
 					}
 				} else {
-				    $(document).off('submit.wpwlEvent','[data-action="submit-payment-card"]');
+					$(document).off('submit.wpwlEvent','[data-action="submit-payment-card"]');
 					$form.submit();
 				}
 			};
 
 			Payment.submitPciIframes = function(){
 				var form = this;
+				var uniqueDivId = GroupCardUtil.getUniqueDivIdOfForm($(form));
 
 				var promises = [];
 				var iframeCommunications = Payment.iframeCommunications || {};
 				Object.keys(iframeCommunications).forEach(
 					function(key){
-						promises.push( Payment.iframeCommunications[key].submitFormAndGetToken() );
+						if (key.indexOf(uniqueDivId) !== -1) {
+							promises.push( Payment.iframeCommunications[key].submitFormAndGetToken() );
+						}
 					}
 				);
 
@@ -50767,29 +50827,33 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					Payment.unbindCardSubmitEventAndSubmitForm.call(form);
 				})
 				.fail(function(error, reason) {
-                    PaymentView.submitPciIframeFailed(error, reason, form);
+					PaymentView.submitPciIframeFailed(error, reason, form);
 					Payment.resetSubmitStatus();
 				});
 			};
 
 			Payment.validatePciIframes = function(event){
 				var form = this;
+				var uniqueDivId = GroupCardUtil.getUniqueDivIdOfForm($(form));
 
 				var promises = [];
 				var iframeCommunications = Payment.iframeCommunications || {};
 				Object.keys(iframeCommunications).forEach(
-					function(key){
-						if (key==='holder' && window.wpwl.checkout.config.createRegistration) {
-							promises.push(Payment.iframeCommunications[key].validateInput(true));
-						}
-						else if (key!=='cvv') {
-							promises.push(Payment.iframeCommunications[key].validateInput(false));
+					function(key) {
+						var toCheckUniqueDivId = key.split("_")[1];
+						if (uniqueDivId === toCheckUniqueDivId) {
+							if (key === ('holder_' + uniqueDivId) && window.wpwl.checkout.config.createRegistration) {
+								promises.push(Payment.iframeCommunications[key].validateInput(true));
+							}
+							else if (key !== ('cvv_' + uniqueDivId)) {
+								promises.push(Payment.iframeCommunications[key].validateInput(false));
+							}
 						}
 					}
 				);
 
 				if (Options.requireCvv) {
-					promises.push(Payment.iframeCommunications.cvv.validateInput(!!(Options.allowEmptyCvv)));
+					promises.push(Payment.iframeCommunications['cvv_' + uniqueDivId].validateInput(!!(Options.allowEmptyCvv)));
 				}
 
 				var validatePromise = $.when.apply($, promises);
@@ -50900,91 +50964,91 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					isValid = PaymentView.checkForValidationErrors(this);
 					if (!isValid)
 					{
-					    // update submit button state
-    					PaymentView.triggerFormValidationStatus(this);
+						// update submit button state
+						PaymentView.triggerFormValidationStatus(this);
 					}
 				}
 
 				if (isValid && obj.optionsOnBeforeSubmitFunc) {
-				    return obj.optionsOnBeforeSubmitFunc.call(this, obj.event);
+					return obj.optionsOnBeforeSubmitFunc.call(this, obj.event);
 				}
 
 				return isValid;
 			};
 
 			Payment.keyUpExpiryDate = function(){
-                PaymentView.populateExpiryMonthAndYearFields.call(this);
+				PaymentView.populateExpiryMonthAndYearFields.call(this);
 			};
 
-            $(document).on('focus.wpwlEvent', 'input', function() {
-                var name = $(this).attr("name");
+			$(document).on('focus.wpwlEvent', 'input', function() {
+				var name = $(this).attr("name");
 
-                // this is a security check to never store CVV and CARD NUMBER inputs
-                if (name !== Parameter.CARD_CVV && name !== Parameter.CARD_NUMBER) {
+				// this is a security check to never store CVV and CARD NUMBER inputs
+				if (name !== Parameter.CARD_CVV && name !== Parameter.CARD_NUMBER) {
 
-                    // due to a bug in iOS, we have to maintain the lastActiveInput ourselves
-                    if (Payment.lastActiveInput && Payment.lastActiveInput.get(0) !== $(this).get(0)) {
-                        if (!Payment.lastActiveInput.get(0).blurred) {
-                            Payment.lastActiveInput.trigger("forcedBlur");
-                        }
-                        Payment.lastActiveInput.get(0).blurred = false;
-                    }
-                    Payment.lastActiveInput = $(this);
-                    Payment.lastActiveInput.trigger("forcedFocus");
-                }
-            });
+					// due to a bug in iOS, we have to maintain the lastActiveInput ourselves
+					if (Payment.lastActiveInput && Payment.lastActiveInput.get(0) !== $(this).get(0)) {
+						if (!Payment.lastActiveInput.get(0).blurred) {
+							Payment.lastActiveInput.trigger("forcedBlur");
+						}
+						Payment.lastActiveInput.get(0).blurred = false;
+					}
+					Payment.lastActiveInput = $(this);
+					Payment.lastActiveInput.trigger("forcedFocus");
+				}
+			});
 
-            Payment.onBeforeSubmitVirtualAccountCheckInline = function(event) {
-                if(Options.onBeforeSubmitVirtualAccount.call(this, event) !== false && !(event.isDefaultPrevented())) {
+			Payment.onBeforeSubmitVirtualAccountCheckInline = function(event) {
+				if(Options.onBeforeSubmitVirtualAccount.call(this, event) !== false && !(event.isDefaultPrevented())) {
 
-                    var brand = PaymentView.getSelectedBrand($(this));
+					var brand = PaymentView.getSelectedBrand($(this));
 
-                    if (KlarnaPaymentsInlineWidget.isKlarnaBrand(brand)) {
-                        return KlarnaPaymentsInlineWidget.onBeforeSubmitVirtualAccountCheckInline(this);
-                    }
-                    else if (YandexCheckoutPaymentWidget.isYandexCheckoutBrand(brand)) {
-                        return YandexCheckoutPaymentWidget.onBeforeSubmitVirtualAccount(this);
-                    }
-                    else if (AfterPayPacificPaymentWidget.isAfterPayPacificBrand(brand)) {
-                        return AfterPayPacificPaymentWidget.onBeforeSubmitVirtualAccount(this);
-                    }
-                    else if (BancontactMobilePaymentWidget.isBancontactMobilePaymentBrand(brand)) {
-                        return BancontactMobilePaymentWidget.authorizePaymentAndLoadData(this);
-                    }
-                    else if (UpgMobilePaymentWidget.isUpgMobilePaymentBrand(brand)) {
-                        return UpgMobilePaymentWidget.authorizePaymentAndLoadData(this);
-                    }
-                    else if (ClickToPayPaymentWidget.isClickToPayBrand(brand)) {
-                        return  ClickToPayPaymentWidget.submitRequest(this);
-                    }
-                    else if (TrustlyInlineWidget.isTrustlyInlineFlow(brand)) {
-                        return TrustlyInlineWidget.authorizePaymentAndLoadData(this);
-                    }
-                    else if (RocketFuelInlineWidget.isRocketFuelInlineFlow(brand)) {
-                        logger.info("Initiating RocketFuel inline flow");
-                        return RocketFuelInlineWidget.authorizePaymentAndLoadData(this);
-                    }
-                    else {
-                        return true;
-                    }
-                }
-                return false;
-            };
+					if (KlarnaPaymentsInlineWidget.isKlarnaBrand(brand)) {
+						return KlarnaPaymentsInlineWidget.onBeforeSubmitVirtualAccountCheckInline(this);
+					}
+					else if (YandexCheckoutPaymentWidget.isYandexCheckoutBrand(brand)) {
+						return YandexCheckoutPaymentWidget.onBeforeSubmitVirtualAccount(this);
+					}
+					else if (AfterPayPacificPaymentWidget.isAfterPayPacificBrand(brand)) {
+						return AfterPayPacificPaymentWidget.onBeforeSubmitVirtualAccount(this);
+					}
+					else if (BancontactMobilePaymentWidget.isBancontactMobilePaymentBrand(brand)) {
+						return BancontactMobilePaymentWidget.authorizePaymentAndLoadData(this);
+					}
+					else if (UpgMobilePaymentWidget.isUpgMobilePaymentBrand(brand)) {
+						return UpgMobilePaymentWidget.authorizePaymentAndLoadData(this);
+					}
+					else if (ClickToPayPaymentWidget.isClickToPayBrand(brand)) {
+						return  ClickToPayPaymentWidget.submitRequest(this);
+					}
+					else if (TrustlyInlineWidget.isTrustlyInlineFlow(brand)) {
+						return TrustlyInlineWidget.authorizePaymentAndLoadData(this);
+					}
+					else if (RocketFuelInlineWidget.isRocketFuelInlineFlow(brand)) {
+						logger.info("Initiating RocketFuel inline flow");
+						return RocketFuelInlineWidget.authorizePaymentAndLoadData(this);
+					}
+					else {
+						return true;
+					}
+				}
+				return false;
+			};
 
-            $(document).on('focus.wpwlEvent', 'select', function() {
-                 $(this).trigger("forcedFocus");
-            });
+			$(document).on('focus.wpwlEvent', 'select', function() {
+				 $(this).trigger("forcedFocus");
+			});
 
-            // card inputs
+			// card inputs
 			$(document).on('forcedBlur.wpwlEvent', 'input[name="' + Parameter.CARD_HOLDER + '"]', function(){
 				Payment.blurInputCard.call(this);
 			});
 
-            $(document).on('blur.wpwlEvent', 'input[name="' + Parameter.CARD_HOLDER + '"]', function(){
-                Payment.blurInputCard.call(this);
+			$(document).on('blur.wpwlEvent', 'input[name="' + Parameter.CARD_HOLDER + '"]', function(){
+				Payment.blurInputCard.call(this);
 
-                this.blurred = true;
-            });
+				this.blurred = true;
+			});
 
 			$(document).on('forcedBlur.wpwlEvent', '[data-action=\"blur-card-expiry\"]', function(){
 				Payment.blurInputCardExpiry.call(this);
@@ -50996,75 +51060,75 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				});
 			}
 
-            $(document).on('blur.wpwlEvent', '[data-action=\"blur-card-expiry\"]', function(){
-                Payment.blurInputCardExpiry.call(this);
+			$(document).on('blur.wpwlEvent', '[data-action=\"blur-card-expiry\"]', function(){
+				Payment.blurInputCardExpiry.call(this);
 
-                this.blurred = true;
-            });
+				this.blurred = true;
+			});
 
 			$(document).on('forcedBlur.wpwlEvent', '[name="' + Parameter.GIFT_CARD_EXPIRY_DATE + '"]', function(){
 				Payment.blurGiftCardElement.call(this);
 			});
 
-            $(document).on('blur.wpwlEvent', '[name="' + Parameter.GIFT_CARD_EXPIRY_DATE + '"]', function(){
-                Payment.blurGiftCardElement.call(this);
-                this.blurred = true;
-            });
+			$(document).on('blur.wpwlEvent', '[name="' + Parameter.GIFT_CARD_EXPIRY_DATE + '"]', function(){
+				Payment.blurGiftCardElement.call(this);
+				this.blurred = true;
+			});
 
-            $(document).on('forcedBlur.wpwlEvent', '[name="' + Parameter.GIFT_CARD_NUMBER + '"]', function(){
-                Payment.blurGiftCardElement.call(this);
-            });
+			$(document).on('forcedBlur.wpwlEvent', '[name="' + Parameter.GIFT_CARD_NUMBER + '"]', function(){
+				Payment.blurGiftCardElement.call(this);
+			});
 
-            $(document).on('blur.wpwlEvent', '[name="' + Parameter.GIFT_CARD_NUMBER + '"]', function(){
-                Payment.blurGiftCardElement.call(this);
-                this.blurred = true;
-            });
+			$(document).on('blur.wpwlEvent', '[name="' + Parameter.GIFT_CARD_NUMBER + '"]', function(){
+				Payment.blurGiftCardElement.call(this);
+				this.blurred = true;
+			});
 
-            // bind keydown event to the following controls, then the error message can be cleared when typing.
-            [
-                Parameter.BANKACCOUNT_BANKCODE,
-                Parameter.BANKACCOUNT_BIC,
-                Parameter.BANKACCOUNT_HOLDER,
-                Parameter.BANKACCOUNT_IBAN,
-                Parameter.BANKACCOUNT_NUMBER,
+			// bind keydown event to the following controls, then the error message can be cleared when typing.
+			[
+				Parameter.BANKACCOUNT_BANKCODE,
+				Parameter.BANKACCOUNT_BIC,
+				Parameter.BANKACCOUNT_HOLDER,
+				Parameter.BANKACCOUNT_IBAN,
+				Parameter.BANKACCOUNT_NUMBER,
 
-                Parameter.CARD_HOLDER,
-                Parameter.VIRTUALACCOUNT_ACCOUNTID,
-                Parameter.VIRTUALACCOUNT_HOLDER,
-                Parameter.SUR_NAME,
-                Parameter.GIVEN_NAME,
+				Parameter.CARD_HOLDER,
+				Parameter.VIRTUALACCOUNT_ACCOUNTID,
+				Parameter.VIRTUALACCOUNT_HOLDER,
+				Parameter.SUR_NAME,
+				Parameter.GIVEN_NAME,
 
-                Parameter.BILLING_STATE,
-                Parameter.BILLING_CITY,
-                Parameter.BILLING_STREET1,
-                Parameter.BILLING_STREET2,
-                Parameter.BILLING_POST_CODE,
-                Parameter.GIFT_CARD_EXPIRY_DATE,
-                Parameter.GIFT_CARD_NUMBER
-            ].forEach(function(name) {
-                $(document).on('keydown.wpwlEvent', 'input[name="' + name + '"]', Payment.removeValidationError);
-            });
+				Parameter.BILLING_STATE,
+				Parameter.BILLING_CITY,
+				Parameter.BILLING_STREET1,
+				Parameter.BILLING_STREET2,
+				Parameter.BILLING_POST_CODE,
+				Parameter.GIFT_CARD_EXPIRY_DATE,
+				Parameter.GIFT_CARD_NUMBER
+			].forEach(function(name) {
+				$(document).on('keydown.wpwlEvent', 'input[name="' + name + '"]', Payment.removeValidationError);
+			});
 
-            // expiry date does not have a name, bind with attribute
-            $(document).on('keydown.wpwlEvent', '[data-action="blur-card-expiry"]', Payment.removeValidationError);
+			// expiry date does not have a name, bind with attribute
+			$(document).on('keydown.wpwlEvent', '[data-action="blur-card-expiry"]', Payment.removeValidationError);
 
-            $(window).on('focus.wpwlEvent', function() {
-                window.setTimeout(function() {
-                    if (Payment.lastActiveInput && Payment.lastActiveInput.get(0) === document.activeElement) {
-                        Payment.lastActiveInput.trigger("forcedFocus");
-                    }
-                }, 250);
-            });
+			$(window).on('focus.wpwlEvent', function() {
+				window.setTimeout(function() {
+					if (Payment.lastActiveInput && Payment.lastActiveInput.get(0) === document.activeElement) {
+						Payment.lastActiveInput.trigger("forcedFocus");
+					}
+				}, 250);
+			});
 
-            // Due to a bug in iOS we have to listen to the blur event of the
-            // window and not the input. See FL-53 for details.
-            $(window).on('blur.wpwlEvent', function(){
-                if (Payment.lastActiveInput) {
-                    if (!Payment.lastActiveInput.get(0).blurred) {
-                        Payment.lastActiveInput.trigger("forcedBlur");
-                    }
-                    Payment.lastActiveInput.get(0).blurred = false;
-                }
+			// Due to a bug in iOS we have to listen to the blur event of the
+			// window and not the input. See FL-53 for details.
+			$(window).on('blur.wpwlEvent', function(){
+				if (Payment.lastActiveInput) {
+					if (!Payment.lastActiveInput.get(0).blurred) {
+						Payment.lastActiveInput.trigger("forcedBlur");
+					}
+					Payment.lastActiveInput.get(0).blurred = false;
+				}
 			});
 
 			$(document).on('change.wpwlEvent', 'select[name="' + Parameter.PAYMENT_BRAND + '"]', function(){
@@ -51076,8 +51140,8 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				Payment.blurInputsBankAccount.call(this);
 			});
 			$(document).on('click.wpwlEvent', 'input.wpwl-checkbox', function(){
-                Payment.clickCheckboxBankAccount(this);
-            });
+				Payment.clickCheckboxBankAccount(this);
+			});
 
 			//divide card.holder by customer.surname and customer.givenName
 			if( !SaqaUtil.isSAQACompliance() && Options.forceCardHolderEqualsBillingName ){
@@ -51089,14 +51153,14 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			// billing data, seperated because of further improvements; TODO: add scope
 			if ( Options.billingAddress !== undefined ){
 				$(document).on('blur.wpwlEvent', 'input[name="' + Parameter.BILLING_STATE +
-				    '"], input[name="' + Parameter.BILLING_CITY +
-				    '"], input[name="' + Parameter.BILLING_STREET1 +
-				    '"], input[name="' + Parameter.BILLING_STREET2 +
-				    '"], input[name="' + Parameter.BILLING_POST_CODE + '"]', function(){
+					'"], input[name="' + Parameter.BILLING_CITY +
+					'"], input[name="' + Parameter.BILLING_STREET1 +
+					'"], input[name="' + Parameter.BILLING_STREET2 +
+					'"], input[name="' + Parameter.BILLING_POST_CODE + '"]', function(){
 					Payment.blurInputCard.call(this);
 				});
 				$(document).on('change.wpwlEvent', 'select[name="' + Parameter.BILLING_COUNTRY +
-				    '"], select[name="' + Parameter.BILLING_STATE + '"]', function(){
+					'"], select[name="' + Parameter.BILLING_STATE + '"]', function(){
 					Payment.blurInputCard.call(this);
 				});
 			}
@@ -51130,10 +51194,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			});
 
 			$(document).on('submit.wpwlEvent', 'form.wpwl-form-virtualAccount', function(event){
-                if (Wpwl.checkout.id) {
-                    return Payment.validateVirtualAccount.call(this, event);
-                }
-                return FastCheckout.submitForm.call(this, event, Payment.validateVirtualAccount);
+				if (Wpwl.checkout.id) {
+					return Payment.validateVirtualAccount.call(this, event);
+				}
+				return FastCheckout.submitForm.call(this, event, Payment.validateVirtualAccount);
 			});
 
 			$(document).on('submit.wpwlEvent', 'form.wpwl-form-prepayment', function(event){
@@ -51183,7 +51247,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 			if (showInPopup === false) {
 				// disable submit button, submit should not be triggered twice
-				PaymentView.disableSubmitButton($form, true);
+				PaymentView.disableSubmitButton($form, true, true);
 				PaymentView.isPaying = true;
 			}
 
@@ -51230,14 +51294,14 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					return;
 				}
 
-                setTimeout(function(){
-				    $form.hide();
-				    var dim = Options.threeDIframeSize;
-                    // width and height are initially set via css;
-                    $iframe.width(dim.width);
-                    $iframe.height(dim.height);
-                    $iframe.show();
-                    console.log('wait for 10 seconds');
+				setTimeout(function(){
+					$form.hide();
+					var dim = Options.threeDIframeSize;
+					// width and height are initially set via css;
+					$iframe.width(dim.width);
+					$iframe.height(dim.height);
+					$iframe.show();
+					console.log('wait for 10 seconds');
 				}, 10000);
 
 				// 2nd load is either merchant or 3rd party confirmation, but merchant will be _top
@@ -51287,120 +51351,120 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 	Payment.appendBrowserInfo = function($form) {
 
-	    if (($form.hasClass('wpwl-form-card') || isCardRegistration($form)) && (isThreeDV2Enabled($form) || populateBrowserParams()))
-	    {
-            var browserInfoFields = Generate.generateBrowserFields($form);
-            $form.append(browserInfoFields);
-	    }
+		if (($form.hasClass('wpwl-form-card') || isCardRegistration($form)) && (isThreeDV2Enabled($form) || populateBrowserParams()))
+		{
+			var browserInfoFields = Generate.generateBrowserFields($form);
+			$form.append(browserInfoFields);
+		}
 	};
 
 	function isCardRegistration($form) {
 
-	    var selectedBrand = $form.find('[name="'+Parameter.PAYMENT_BRAND+'"]');
-	    if ($form.hasClass('wpwl-form-registrations') && selectedBrand.length)
-	    {
-            var isCard = Setting.subTypeLabelMap[ selectedBrand.val() ];
-            return (isCard && isCard.render === 'CC');
-	    }
-	    return false;
+		var selectedBrand = $form.find('[name="'+Parameter.PAYMENT_BRAND+'"]');
+		if ($form.hasClass('wpwl-form-registrations') && selectedBrand.length)
+		{
+			var isCard = Setting.subTypeLabelMap[ selectedBrand.val() ];
+			return (isCard && isCard.render === 'CC');
+		}
+		return false;
 	}
 
-    function populateBrowserParams() {
-        return Wpwl.checkout.config.threeDSecureV2Config.populateBrowserParams;
-    }
-    
-    function isThreeDV2Enabled($form) {
-        var brand = getBrand($form);
-        if (brand != null) {
+	function populateBrowserParams() {
+		return Wpwl.checkout.config.threeDSecureV2Config.populateBrowserParams;
+	}
 
-            if (isVisaBrand(brand) && Wpwl.checkout.config.threeDSecureV2Config.visaThreeDV2) {
-                return true;
-            }
-            else if (isMastercardBrand(brand) && Wpwl.checkout.config.threeDSecureV2Config.masterThreeDV2) {
-                return true;
-            }
-            else if ("AMEX" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.amexThreeDV2) {
-                return true;
-            }
-            else if ("BCMC" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.bcmcThreeDV2) {
-                return true;
-            }
-            else if (isDinersBrand(brand) && Wpwl.checkout.config.threeDSecureV2Config.dinersThreeDV2) {
-                return true;
-            }
-            else if ("JCB" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.jcbThreeDV2) {
-                return true;
-            }
-            else if ("CARTEBANCAIRE" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.cartebancaireThreeDV2) {
-                return true;
-            }
-            else if ("DANKORT" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.dankortThreeDV2) {
-                return true;
-            }
-            else if ("CASHLINKMALTA" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.cashlinkmaltaThreeDV2) {
-                return true;
-            }
-            else if ("UNIONPAY" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.unionPayThreeDV2) {
-                return true;
-            }
-        }
-        return false;
-    }
+	function isThreeDV2Enabled($form) {
+		var brand = getBrand($form);
+		if (brand != null) {
 
-    function getBrand($form) {
-        if ($form) {
-            var $paymentBrand = $form.find('[name="' + Parameter.PAYMENT_BRAND + '"]');
-            if ($paymentBrand && $paymentBrand.length) {
-                return $paymentBrand.val();
-            }
-        }
-        return null;
-    }
+			if (isVisaBrand(brand) && Wpwl.checkout.config.threeDSecureV2Config.visaThreeDV2) {
+				return true;
+			}
+			else if (isMastercardBrand(brand) && Wpwl.checkout.config.threeDSecureV2Config.masterThreeDV2) {
+				return true;
+			}
+			else if ("AMEX" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.amexThreeDV2) {
+				return true;
+			}
+			else if ("BCMC" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.bcmcThreeDV2) {
+				return true;
+			}
+			else if (isDinersBrand(brand) && Wpwl.checkout.config.threeDSecureV2Config.dinersThreeDV2) {
+				return true;
+			}
+			else if ("JCB" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.jcbThreeDV2) {
+				return true;
+			}
+			else if ("CARTEBANCAIRE" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.cartebancaireThreeDV2) {
+				return true;
+			}
+			else if ("DANKORT" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.dankortThreeDV2) {
+				return true;
+			}
+			else if ("CASHLINKMALTA" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.cashlinkmaltaThreeDV2) {
+				return true;
+			}
+			else if ("UNIONPAY" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.unionPayThreeDV2) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    function isVisaBrand(brand){
-        return "VISA" ===  brand || "VISADEBIT" === brand || "VISAELECTRON" ===  brand || "VPAY" === brand;
-    }
+	function getBrand($form) {
+		if ($form) {
+			var $paymentBrand = $form.find('[name="' + Parameter.PAYMENT_BRAND + '"]');
+			if ($paymentBrand && $paymentBrand.length) {
+				return $paymentBrand.val();
+			}
+		}
+		return null;
+	}
 
-    function isMastercardBrand(brand){
-        return "MASTER" ===  brand || "MASTERDEBIT" === brand || "MAESTRO" ===  brand;
-    }
+	function isVisaBrand(brand){
+		return "VISA" ===  brand || "VISADEBIT" === brand || "VISAELECTRON" ===  brand || "VPAY" === brand;
+	}
 
-    function isDinersBrand(brand){
-        return "DINERS" ===  brand || "DISCOVER" === brand;
-    }
+	function isMastercardBrand(brand){
+		return "MASTER" ===  brand || "MASTERDEBIT" === brand || "MAESTRO" ===  brand;
+	}
+
+	function isDinersBrand(brand){
+		return "DINERS" ===  brand || "DISCOVER" === brand;
+	}
 
 	Payment.appendAliRiskToken = function($form){
 		if (Payment.aliRiskActive) {
-            $form
-                .find("[name=\"CRITERION.ALIRISK_extendProperties_ebucklerToken\"]" +
-                        ",[name=\"ebucklerToken\"]" +
-                        ",[name=\"customer.browserFingerprint.id\"]")
-                .attr("disabled", true);
+			$form
+				.find("[name=\"CRITERION.ALIRISK_extendProperties_ebucklerToken\"]" +
+						",[name=\"ebucklerToken\"]" +
+						",[name=\"customer.browserFingerprint.id\"]")
+				.attr("disabled", true);
 
-            var $ebucklerToken = $("[name=\"ebucklerToken\"]");
-            if ($ebucklerToken.length) {
-                var ebucklerInputField = Generate.generateHiddenFields({
-                    "customer.browserFingerprint.id" : Util.escape($ebucklerToken.val()) });
-                $form.append(ebucklerInputField);
-            }
+			var $ebucklerToken = $("[name=\"ebucklerToken\"]");
+			if ($ebucklerToken.length) {
+				var ebucklerInputField = Generate.generateHiddenFields({
+					"customer.browserFingerprint.id" : Util.escape($ebucklerToken.val()) });
+				$form.append(ebucklerInputField);
+			}
 		}
 	};
 
 	Payment.appendKountSessionId = function($form){
-	    if (Payment.kountActive) {
-            var kountSessionIdInputField = Generate.generateHiddenFields({
-                                "customer.browserFingerprint.id" : Payment.kountSessionId });
-                            $form.append(kountSessionIdInputField);
-	    }
+		if (Payment.kountActive) {
+			var kountSessionIdInputField = Generate.generateHiddenFields({
+								"customer.browserFingerprint.id" : Payment.kountSessionId });
+							$form.append(kountSessionIdInputField);
+		}
 	};
 
-    Payment.appendCyberSourceRiskSessionId = function($form){
-	    if (Payment.cyberSourceRiskActive && Payment.cyberSourceRiskCollectDeviceId) {
-	        var cyberSourceRiskSessionIdInputField = Generate.generateHiddenFields({
-	                            "risk.parameters[CS_SESSION_ID]" : Payment.cyberSourceRiskSessionId });
-	                        $form.append(cyberSourceRiskSessionIdInputField);
-	    }
-    };
+	Payment.appendCyberSourceRiskSessionId = function($form){
+		if (Payment.cyberSourceRiskActive && Payment.cyberSourceRiskCollectDeviceId) {
+			var cyberSourceRiskSessionIdInputField = Generate.generateHiddenFields({
+								"risk.parameters[CS_SESSION_ID]" : Payment.cyberSourceRiskSessionId });
+							$form.append(cyberSourceRiskSessionIdInputField);
+		}
+	};
 
 	Payment.saveTransactionData = function($form, onSaveTransactionDataCallback){
 		var url = $form.attr('action').replace("/payment", "");
@@ -51436,35 +51500,36 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	}
 
 	Payment.preparePciCompliance = function () {
-		var $cardForm = $('[data-action="submit-payment-card"]');
-
-		if (!$cardForm.length) {
+		if (!$(GroupCardUtil.DIV_ID_CARD).length) {
 			return;
 		}
 
 		Payment.iframeCommunications = {};
 		var setupPromises =[];
 
-		var $numberIframe = $cardForm.find('[name="' + Parameter.CARD_NUMBER + '"]');
+		$(GroupCardUtil.DIV_ID_CARD).each(function(index) {
+			var $cardForm = GroupCardUtil.getIndividualCardForm(index);
+			// id = card_1357900414869. split with '_'
+			var uniqueDivId = $(GroupCardUtil.DIV_ID_CARD)[index].id.split("_")[1];
+			var $numberIframe = $cardForm.find('[name="' + Parameter.CARD_NUMBER + '"]');
 
-		//set up the card number iframe
-		setupPromises.push(setupPciIframeOnLoad("number", $cardForm, $numberIframe, PaymentView.setCardNumberIsValid));
+			//set up the card number iframe
+			setupPromises.push(setupPciIframeOnLoad("number_" + uniqueDivId, $cardForm, $numberIframe, PaymentView.setCardNumberIsValid));
+			if (SaqaUtil.isSAQACompliance()) {
+				var $holderIframe = $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]');
+				//set up the card holder iframe
+				setupPromises.push(setupPciIframeOnLoad("holder_" + uniqueDivId, $cardForm, $holderIframe, PaymentView.setCardHolderIsValid));
+				var $expiryIframe = $cardForm.find('#ccexp');
+				//set up the card expiry iframe
+				setupPromises.push(setupPciIframeOnLoad("expire_" + uniqueDivId, $cardForm, $expiryIframe, PaymentView.setExpiryIsValid));
+			}
 
-		if (SaqaUtil.isSAQACompliance()) {
-			var $holderIframe = $cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]');
-			//set up the card holder iframe
-			setupPromises.push(setupPciIframeOnLoad("holder", $cardForm, $holderIframe, PaymentView.setCardHolderIsValid));
-			var $expiryIframe = $cardForm.find('#ccexp');
-			//set up the card expiry iframe
-			setupPromises.push(setupPciIframeOnLoad("expire", $cardForm, $expiryIframe, PaymentView.setExpiryIsValid));
-		}
 
-
-		if (Options.requireCvv) {
-			var $cvvIframe = $cardForm.find('[name="' + Parameter.CARD_CVV + '"]');
-			//set up the card cvv iframe
-			setupPromises.push(setupPciIframeOnLoad("cvv", $cardForm, $cvvIframe, PaymentView.setCardCvvIsValid));
-		}
+			if (Options.requireCvv) {
+				var $cvvIframe = $cardForm.find('[name="' + Parameter.CARD_CVV + '"]');
+				//set up the card cvv iframe
+				setupPromises.push(setupPciIframeOnLoad("cvv_" + uniqueDivId, $cardForm, $cvvIframe, PaymentView.setCardCvvIsValid));
+			}
 
 		var spinner = new Spinner(Options.spinner).spin($cardForm.parent().get(0));
 
@@ -51474,20 +51539,21 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				Payment.disableNonPciInputsAndSubmitButton($cardForm, false);
 				AutoFocus.checkAutoFocus([document]);
 
-				Payment.prepareCardLogosPaymentBrands();
+					Payment.prepareCardLogosPaymentBrands($cardForm);
 			})
 			.fail(function (reason) {
 				PaymentView.showPleaseTryAgainMessage($cardForm);
 				Tracking.exception("preparePciCompliance failed because: " + reason);
 			});
+		});
 	};
 
-	Payment.prepareCardLogosPaymentBrands = function() {
+	Payment.prepareCardLogosPaymentBrands = function($cardForm) {
 		if (Payment.style === 'logos') {
 			if (Options.brandDisplay !== 'all') {
-				PaymentView.adjustHorizontalLogos([]);
+				PaymentView.adjustHorizontalLogos([], $cardForm);
 			}
-			PaymentView.adjustCardLogosPaymentBrands();
+			PaymentView.adjustCardLogosPaymentBrands($cardForm);
 			PaymentView.setUpOnClickCardLogoBrands();
 		}
 	};
@@ -51506,15 +51572,15 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				"https://sandbox.masterpass.com/lightbox/Switch/integration/MasterPass.client.js" :
 				"https://www.masterpass.com/lightbox/Switch/integration/MasterPass.client.js";
 		return $.getScript(script);
-    };
+	};
 
-    Payment.setMasterPassMessageListener = function() {
-    		window.addEventListener("message", Payment.receiveMessage, false);
+	Payment.setMasterPassMessageListener = function() {
+			window.addEventListener("message", Payment.receiveMessage, false);
 	};
 
 	Payment.receiveMessage = function(event) {
 		if (event.origin !== Wpwl.url) {
-            return;
+			return;
 		}
 		var message;
 		try {
@@ -51526,23 +51592,23 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			return;
 		}
 
-        // because MasterPass library might not have loaded yet.
-        try
-        {
-            var callBacks =  {
-                // if successCallback and failureCallback are defined masterpass gives control over the redirection to the merchant page.
-                // we want to redirect the shopper to the shopperResultUrl and thus don't use success and failure callbacks.
-                cancelCallback: Options.onLightboxCancel
-            };
-            var extendedOptions = $.extend({}, message.json, callBacks);
+		// because MasterPass library might not have loaded yet.
+		try
+		{
+			var callBacks =  {
+				// if successCallback and failureCallback are defined masterpass gives control over the redirection to the merchant page.
+				// we want to redirect the shopper to the shopperResultUrl and thus don't use success and failure callbacks.
+				cancelCallback: Options.onLightboxCancel
+			};
+			var extendedOptions = $.extend({}, message.json, callBacks);
 
-            MasterPass.client.checkout(extendedOptions);
-        }
-        catch (e)
-        {
-            PaymentView.showPleaseTryAgainMessage($('.wpwl-form-virtualAccount-MASTERPASS'));
-            Tracking.exception("Unable to init masterpass, because: " + e.message);
-        }
+			MasterPass.client.checkout(extendedOptions);
+		}
+		catch (e)
+		{
+			PaymentView.showPleaseTryAgainMessage($('.wpwl-form-virtualAccount-MASTERPASS'));
+			Tracking.exception("Unable to init masterpass, because: " + e.message);
+		}
 	};
 
 	Payment.unload = function(){
@@ -51558,7 +51624,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					Payment.callKlarna();
 
 				} else if (containerClassName.indexOf('virtualAccount-YANDEX_CHECKOUT') > -1) {
-				    Payment.callYandexCheckout(container);
+					Payment.callYandexCheckout(container);
 
 				} else if (containerClassName.indexOf("virtualAccount-AFFIRM") > -1) {
 					Payment.callAffirm(container);
@@ -51592,8 +51658,8 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	};
 
 	Payment.callYandexCheckout = function(container) {
-	    var $button = container.find('button');
-        $button.click();
+		var $button = container.find('button');
+		$button.click();
 	};
 
 	Payment.callAfterPayPacific = function(container) {
@@ -51612,17 +51678,17 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	};
 
 	Payment.callApplePay = function(container) {
-	    var $form = container.find('form');
+		var $form = container.find('form');
 		ApplePay.start($form);
 	};
 
-    Payment.detachListeners = function(){
-        $(document).off('.wpwlEvent');
-        $(window).off(".wpwlEvent");
-        $(document).off('.isValid', 'form.wpwl-form');
-    };
+	Payment.detachListeners = function(){
+		$(document).off('.wpwlEvent');
+		$(window).off(".wpwlEvent");
+		$(document).off('.isValid', 'form.wpwl-form');
+	};
 
-    Payment.unsetIframeCommunication = function(){
+	Payment.unsetIframeCommunication = function(){
 		var iframeCommunications = Payment.iframeCommunications || {};
 		Object.keys(iframeCommunications).forEach(
 			function(key){
@@ -51631,7 +51697,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			}
 		);
 		Payment.iframeCommunications = undefined;
-    };
+	};
 
 	return Payment;
 });
@@ -51920,30 +51986,37 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
 	return Billing;
 });
 
-define('module/CardHolder',['require','jquery','module/Options','module/Parameter','module/I18n'],function(require) {
+define('module/CardHolder',['require','jquery','module/Options','module/Parameter','module/I18n','module/GroupCardUtil'],function(require) {
 	var $ = require('jquery');
 	var Options = require('module/Options');
 	var Parameter = require('module/Parameter');
 	var I18n = require('module/I18n');
-	
-	var CardHolder = {};	
-	CardHolder.initCardHolder  = function(){
-		
+	var GroupCardUtil = require('module/GroupCardUtil');
+
+	var CardHolder = {};
+	CardHolder.initCardHolder  = function() {
 		if ( Options.forceCardHolderEqualsBillingName )
 		{
-			var input = $('<input autocomplete="off" type="text" name="" class="wpwl-control wpwl-control-empty" placeholder="">');
+			if (!$(GroupCardUtil.DIV_ID_CARD).length) {
+				return;
+			}
 
-			// hide cardHolder and add billing first name/last name
-			$('input[name="' + Parameter.CARD_HOLDER + '"]').attr('disabled', 'disabled').hide();
-			var surNameInput = input.clone().addClass('wpwl-control-surName').attr('name', Parameter.SUR_NAME).attr('placeholder', I18n.surname).attr('maxlength', '50');
-			var givenNameInput = input.clone().addClass('wpwl-control-givenName').attr('name', Parameter.GIVEN_NAME).attr('placeholder', I18n.givenName).attr('maxlength', '50');
+			$(GroupCardUtil.DIV_ID_CARD).each(function(index) {
+				var $cardForm = GroupCardUtil.getIndividualCardForm(index);
+				var input = $('<input autocomplete="off" type="text" name="" class="wpwl-control wpwl-control-empty" placeholder="">');
 
-			$('input[name="' + Parameter.CARD_HOLDER + '"]')
-			.before( givenNameInput )
-			.before( surNameInput );
+				// hide cardHolder and add billing first name/last name
+					$cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]').attr('disabled', 'disabled').hide();
+				var surNameInput = input.clone().addClass('wpwl-control-surName').attr('name', Parameter.SUR_NAME).attr('placeholder', I18n.surname).attr('maxlength', '50');
+				var givenNameInput = input.clone().addClass('wpwl-control-givenName').attr('name', Parameter.GIVEN_NAME).attr('placeholder', I18n.givenName).attr('maxlength', '50');
 
-			$('.wpwl-control-surName, .wpwl-control-givenName').on('change', function(){
-				$('input[name="' + Parameter.CARD_HOLDER + '"]').val( [$('.wpwl-control-givenName').val(), $('.wpwl-control-surName').val()].join(' '));
+				$cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]')
+						.before( givenNameInput )
+						.before( surNameInput );
+
+				$cardForm.find('.wpwl-control-surName, .wpwl-control-givenName').on('change', function() {
+					$cardForm.find('[name="' + Parameter.CARD_HOLDER + '"]').val( [$cardForm.find('.wpwl-control-givenName').val(), $cardForm.find('.wpwl-control-surName').val()].join(' '));
+				});
 			});
 		}
 	};
@@ -52768,7 +52841,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
 });
 
 /*global Promise*/
-define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','module/Generate','module/Options','module/error/SessionError','module/error/WidgetError','module/Tracking','lib/Spinner','module/InternalRequestCommunication','module/ForterUtils','module/logging/LoggerFactory'],function (require) {
+define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','module/Generate','module/Options','module/error/SessionError','module/error/WidgetError','module/Tracking','lib/Spinner','module/InternalRequestCommunication','module/ForterUtils','module/PaymentView','module/logging/LoggerFactory'],function (require) {
 
     var $ = require('jquery');
     var Wpwl = require('module/Wpwl');
@@ -52780,6 +52853,7 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
     var Spinner = require('lib/Spinner');
     var InternalRequestCommunication = require('module/InternalRequestCommunication');
     var ForterUtils = require('module/ForterUtils');
+    var PaymentView = require('module/PaymentView');
     var LoggerFactory = require('module/logging/LoggerFactory');
     var logger = LoggerFactory.getLogger('AmazonPayWidget');
 
@@ -52889,6 +52963,12 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
 
     AmazonPay.createCheckoutWithPaymentAndSubmit = function($form) {
         logger.info("createCheckoutWithPaymentAndSubmit called ");
+        if (typeof Options.createCheckout !== "function") {
+            var info = "Checkout ID and createCheckout not found";
+            PaymentView.showSupportMessage(info, $form);
+            Tracking.exception(info);
+            return;
+        }
         // Calling the callback function to create checkout and then begin session
         var createCheckoutResult = Options.createCheckout({brand:BRAND});
         var promise = Promise.resolve(createCheckoutResult);
@@ -53490,6 +53570,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	var WPWL_CONTAINER = "wpwl-container";
 	var WPWL_CLEARFIX = "wpwl-clearfix";
 	var ccBrandsForClickToPay = [];
+	var uniqueDivIdArray = [];
 
 	var PaymentWidget = function(forms){
 		this.forms = forms;
@@ -53509,7 +53590,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			prepareCardHolderBilling();
 			prepareBillingWidget();
 			self.getOnReadyPromise().then(function() {
-			    Options.onReady.call(window);
+			    Options.onReady.call(window, uniqueDivIdArray);
 			});
 		});
 
@@ -53699,10 +53780,11 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	function renderCC(specForm, paymentMethods, shopperResultUrl) {
 		var className = 'card';
 		var id = randomizeId(className + '_');
+		var wpwlContainerCard = [WPWL_CONTAINER, "-", className].join("");
 		// 1st add divs
 		var paymentBlock = $('<div />', {
 			id: id,
-			'class': [WPWL_CONTAINER, " ", WPWL_CONTAINER, "-", className, " ", WPWL_CLEARFIX].join("")
+			'class': [WPWL_CONTAINER, " ", wpwlContainerCard, " ", wpwlContainerCard, "-", id.split("_")[1], " ", WPWL_CLEARFIX].join("")
 		});
 		specForm.after( paymentBlock );
 
@@ -54028,6 +54110,12 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 		ccBrandsForClickToPay = ccMethods;
 		if ( ccMethods.length > 0 ) {
 			lastElement = renderCC(lastElement, ccMethods, shopperResultUrl);
+			if (lastElement) {
+			    var containerKey = WPWL_CONTAINER + "-card-" + lastElement[0].id.split("_")[1];
+			    var payLoad = { "containerKey" : containerKey,
+			                    "ccMethods" : ccMethods };
+			    uniqueDivIdArray.push(payLoad);
+			}
 		}
 		var ddMethods = paymentsToRender.DD;
 		var ddSepaMethods = [];
