@@ -12494,11 +12494,21 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	//SAQA compliance
 	Options.enableSAQACompliance = false;
 
-	// Click To Pay
-	Options.loadClickToPay = false;
-	Options.isClickToPayInitSuccess = false;
-	Options.clickToPayBrands = ['VISA', 'VISADEBIT', 'VISAELECTRON', 'MASTER', 'MASTERDEBIT', 'AMEX', 'DISCOVER', 'DINERS'];
-	Options.clickToPayInitializedBrands = [];
+	//Click To Pay
+	Options.clickToPay = {
+		loadWidget: false,
+		isInitSuccess: false,
+		brands: ['VISA', 'VISADEBIT', 'VISAELECTRON', 'MASTER', 'MASTERDEBIT', 'AMEX', 'DISCOVER', 'DINERS'],
+		initializedBrands: [],
+		cardList: {
+			displayCancelOption: false,
+			displayAddCard: true,
+			displayPreferredCard: true,
+			displaySignOut: true,
+			displayHeader: true,
+			cardSelectionType: 'gridView'
+		}
+	};
 
 	// spinner
 	Options.spinner = {};
@@ -12749,6 +12759,7 @@ define('module/Language',[],function(){
 			customerEmailError:     "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError:     "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			generalTermsAndConditionsError:			"Please accept the consent for data transmission",
 			emailOrAccountId:	"Email or Account Id",
 			secureId:			"Secure Id",
@@ -13150,6 +13161,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
 		ar: {
@@ -13255,6 +13267,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			countryCodes: [
                     {"value": "" , "label": "الرجاء الإختيار"},
                     {"value":"AF", "label":"أفغانستان"},
@@ -13591,6 +13604,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
 		de: {
@@ -13687,6 +13701,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
 			countryCodes : [
 			        {"value": "" , "label": "Bitte auswählen"},
@@ -14027,6 +14042,7 @@ define('module/Language',[],function(){
         			customerEmailError: "Invalid email address",
         			clickToPayAccessMyCards: "To access your cards, enter your email",
 					clickToPayInitializationError: "Click to Pay SDK not initialized",
+					clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 					clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
         			countryCodes: [
                         {"value": "", "label": "Veuillez sélectionner"},
@@ -14365,6 +14381,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
 			countryCodes: [
                 {"value": "", "label": "Por favor, seleccione"},
@@ -14705,6 +14722,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		nl: {
@@ -14793,6 +14811,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		da: {
@@ -14881,6 +14900,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
 		},
 		fi: {
@@ -14969,6 +14989,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		sv: {
@@ -15057,6 +15078,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		tr: {
@@ -15142,6 +15164,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		ja: {
@@ -15227,6 +15250,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		sl: {
@@ -15312,6 +15336,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		pt: {
@@ -15403,6 +15428,7 @@ define('module/Language',[],function(){
              customerEmailError: "Invalid email address",
              clickToPayAccessMyCards: "To access your cards, enter your email",
              clickToPayInitializationError: "Click to Pay SDK not initialized",
+             clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
              clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		pl: {
@@ -15488,6 +15514,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		cz: {
@@ -15573,6 +15600,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		hu: {
@@ -15658,6 +15686,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
         hr: {
@@ -15757,6 +15786,7 @@ define('module/Language',[],function(){
                 customerEmailError: "Invalid email address",
                 clickToPayAccessMyCards: "To access your cards, enter your email",
                 clickToPayInitializationError: "Click to Pay SDK not initialized",
+                clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
                 clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
                 countryCodes: [
                     {"value": "" , "label": "Izaberite"},
@@ -16094,6 +16124,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		ro: {
@@ -16179,6 +16210,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		ru: {
@@ -16264,6 +16296,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		cn: {
@@ -16434,6 +16467,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		no: {
@@ -16522,6 +16556,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		sk: {
@@ -16607,6 +16642,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
 		et: {
@@ -16706,6 +16742,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
         lv: {
@@ -16805,6 +16842,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
         lt: {
@@ -16904,6 +16942,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
         ca: {
@@ -17002,6 +17041,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
         },
         eu: {
@@ -17100,6 +17140,7 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "To access your cards, enter your email",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
 		},
       id:   {
@@ -37255,6 +37296,9 @@ define('module/OneClickPaymentRegistration',['require','module/Generate','module
     }    
 
     function getTypeByPaymentBrand(){
+        if(Util.isNullOrUndefined(this.paymentBrand)) {
+            return RegistrationType.card;
+        }
         var render = Setting.subTypeLabelMap[this.paymentBrand].render;
         if (render === "CC" || render === "DC" || isPaypal(this.paymentBrand) )  {
             // we treat PAYPAL registration the same way as card registration from UI point of view
@@ -42047,7 +42091,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			PaymentView.hideOrShowMobile.call(select,  !Setting.subTypeLabelMap[brand].mobilePhone);
 			PaymentView.hideOrShowBirthDate.call(select, !Setting.subTypeLabelMap[brand].birthDate);
 			PaymentView.hideOrShowExpiryDate.call(select, !!Setting.subTypeLabelMap[brand].noExpiryDate);
-			if (!Options.loadClickToPay) {
+			if (!Options.clickToPay.loadWidget) {
 				PaymentView.hideOrShowClickToPayConfirmation.call(select, true);
 			} else {
 				PaymentView.updateClickToPayConfirmation(select, brand);
@@ -42067,7 +42111,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	};
 
 	PaymentView.updateClickToPayConfirmation = function(select, brand) {
-		if (Options.clickToPayBrands.indexOf(brand) < 0) {
+		if (Options.clickToPay.brands.indexOf(brand) < 0) {
 			PaymentView.hideOrShowClickToPayConfirmation.call(select, true);
 		} else {
 			PaymentView.hideOrShowClickToPayConfirmation.call(select, false);
@@ -49277,7 +49321,9 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			 var email = $emailInput[0].value;
 			 var regexEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 			 var validationErrors = {};
-			 if (Options.isClickToPayInitSuccess) {
+			 // remove ERROR_CLASS if any; when shopper continues with access my cards option and earlier there was some error
+			 PaymentView.removeErrorClassAndMessage(clickToPayForm);
+			 if (Options.clickToPay.isInitSuccess) {
 				 if (Util.isBlank(email) || !regexEmail.test(email)) {
 					 logger.error("Entered email not in valid format : " + email);
 					 validationErrors = Util.extend(validationErrors, {customerEmailError: $emailInput});
@@ -49392,7 +49438,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				* only initialized brands will be reflected and not the one ACI requested for initialization
 				*/
 				/** flag to be used to identify if Click to Pay flow shall be used or not */
-				Options.isClickToPayInitSuccess = true;
+				Options.clickToPay.isInitSuccess = true;
 				ClickToPayPaymentWidget.button.removeAttribute("disabled");
 				ClickToPayPaymentWidget.initializedBrands = result.availableCardBrands;
 				ClickToPayPaymentWidget.updateInitializedBrandsForNewUserFlow(result.availableCardBrands);
@@ -49484,7 +49530,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			brands.push("DISCOVER");
 			brands.push("DINERS");
 		}
-		Options.clickToPayInitializedBrands = brands;
+		Options.clickToPay.initializedBrands = brands;
 	};
 
 	/** Calling getCards() right after init() to save rendering time when CLICK_TO_PAY is selected.
@@ -49544,12 +49590,14 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 						ClickToPayPaymentWidget.requestOtp(true, null);
 					}
 				} else {
-					logger.info("Customer is not enrolled for Click to Pay.");
+					logger.info("Customer is not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address.");
+					ClickToPayPaymentWidget.displayEmailError(isAccessCardsOptionUsed);
 				}
 			}).catch(function(error) {
 				if (!isAccessCardsOptionUsed) {
 					ClickToPayPaymentWidget.spinner.stop();
 				}
+				ClickToPayPaymentWidget.displayEmailError(isAccessCardsOptionUsed);
 				logger.error('Error occurred while email lookup: ' + error.message);
 				Options.onError(new WidgetError("CLICK_TO_PAY", "emailIdLookup", "Error occurred while email lookup"));
 			});
@@ -49559,6 +49607,20 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			}
 			logger.info("Customer email address not provided in the checkout request.");
 			Options.onError(new WidgetError("CLICK_TO_PAY", "no_emailId", "Email ID not provided in the request"));
+		}
+	};
+
+	ClickToPayPaymentWidget.displayEmailError = function(isAccessCardsOptionUsed) {
+		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
+		var $emailInput = clickToPayForm[0].getElementsByClassName('wpwl-control wpwl-control-clickToPayAccessMyCards');
+		var validationErrors = {};
+		if (isAccessCardsOptionUsed) {
+			validationErrors = Util.extend(validationErrors, {clickToPayCustomerNotPresent: $emailInput});
+			PaymentView.generateErrorRow(validationErrors);
+		} else {
+			ClickToPayPaymentWidget.spinner.stop();
+			validationErrors = Util.extend(validationErrors, {clickToPayCustomerNotPresent: clickToPayForm});
+			PaymentView.generateErrorRow(validationErrors);
 		}
 	};
 
@@ -49702,7 +49764,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
 		var isCardListPresent = document.querySelector('src-card-list');
 		if (isCardListPresent === undefined || isCardListPresent === null) {
-			$(clickToPayForm).after('<src-card-list card-brands="' + ClickToPayPaymentWidget.initializedBrands + '" locale="' + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase() + '"></src-card-list>');
+			$(clickToPayForm).after(ClickToPayPaymentWidget.createCardListElement());
 		}
 		var srcCardList = document.querySelector('src-card-list');
 
@@ -49710,24 +49772,53 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var loadCardsPromise = new Promise(function (resolve) {
 			resolve(srcCardList.loadCards(ClickToPayPaymentWidget.cards));
 		});
-		 loadCardsPromise
-		 .then(function() {
-			 /** timeout used as Mastercard Click to Pay SDK Library takes a bit of time to load cards.
-			 * If the logic triggers before that, the script will fail and on click won't work.
-			 */
-			 setTimeout(function() {
-				 var s = srcCardList.shadowRoot;
-				 s.querySelectorAll('src-card').forEach(function(card) {
-					 card.addEventListener('click', function(obj) {
-						 var cardId = obj.target.getAttribute('src-digital-card-id');
-						 ClickToPayPaymentWidget.checkoutOfCard(cardId);
-					 });
-				 });
-			 }, 500);
-		 }).catch(function(error) {
-			 logger.error('Error occurred while loading cards: ' + error.message);
-			 Options.onError(new WidgetError("CLICK_TO_PAY", "load_cards", "Error occurred while loading cards"));
-		 });
+		loadCardsPromise
+		.then(function() {
+			/** timeout used as Mastercard Click to Pay SDK Library takes a bit of time to load cards.
+			* If the logic triggers before that, the script will fail and on click won't work.
+			*/
+			setTimeout(function() {
+				srcCardList.addEventListener('selectSrcDigitalCardId', function (event) {
+					logger.info('selectSrcDigitalCardId event is triggered for card id:' + event.detail);
+					ClickToPayPaymentWidget.checkoutOfCard(event.detail);
+				});
+
+				srcCardList.addEventListener('close', function () {
+					logger.info('close event is triggered');
+					$(srcCardList).remove();
+				});
+
+				srcCardList.addEventListener('clickAddCardLink', function () {
+					logger.info('clickAddCardLink event is triggered');
+					Options.onError(new WidgetError("CLICK_TO_PAY", "add_new_card", "Shopper clicked on add new card option"));
+				});
+
+				srcCardList.addEventListener("clickSignOutLink", function () {
+					logger.info('clickSignOutLink event is triggered');
+					ClickToPayPaymentWidget.isCardsFromCookies = false;
+					$(srcCardList).remove();
+					var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
+					var $emailInput = clickToPayForm[0].getElementsByClassName('wpwl-control wpwl-control-clickToPayAccessMyCards');
+					$emailInput[0].focus();
+				});
+			}, 500);
+		}).catch(function(error) {
+			logger.error('Error occurred while loading cards: ' + error.message);
+			Options.onError(new WidgetError("CLICK_TO_PAY", "load_cards", "Error occurred while loading cards"));
+		});
+	};
+
+	ClickToPayPaymentWidget.createCardListElement = function() {
+		return '<src-card-list' +
+			' card-brands="' + ClickToPayPaymentWidget.initializedBrands + '"' +
+			' locale="' + Generate.language.toLowerCase() + "_" + Generate.country.toUpperCase() + '"' +
+			' display-cancel-option="' + Options.clickToPay.cardList.displayCancelOption + '"' +
+			' display-add-card="' + Options.clickToPay.cardList.displayAddCard + '"' +
+			' display-preferred-card="' + Options.clickToPay.cardList.displayPreferredCard + '"' +
+			' card-selection-type="' + Options.clickToPay.cardList.cardSelectionType + '"' +
+			' display-header="' + Options.clickToPay.cardList.displayHeader + '"' +
+			' display-sign-out="' + Options.clickToPay.cardList.displaySignOut + '"' +
+			'></src-card-list>';
 	};
 
 	/** Click to Pay Recognized and Email Lookup flow */
@@ -50790,9 +50881,9 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				var paymentForm = new CardPaymentForm($form);
 				var $clickToPayConfirmation = paymentForm.getClickToPayConfirmationCheckbox();
 				var isChecked = $clickToPayConfirmation.is(":checked");
-				if (isChecked && Options.isClickToPayInitSuccess) {
+				if (isChecked && Options.clickToPay.isInitSuccess) {
 					var brand = getBrand($form);
-					if (Options.clickToPayInitializedBrands.indexOf(brand) > -1) {
+					if (Options.clickToPay.initializedBrands.indexOf(brand) > -1) {
 						console.log("Click To Pay checkbox is checked. Click to Pay flow will be used for the request");
 						Payment.updateClickToPayForm($form);
 					} else {
@@ -54103,7 +54194,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 
 		var virtualAccountMethods  = paymentsToRender.VA;
 		if (virtualAccountMethods.indexOf("CLICK_TO_PAY") > -1) {
-			Options.loadClickToPay = true;
+			Options.clickToPay.loadWidget = true;
 		}
 
 		var ccMethods = paymentsToRender.CC;
