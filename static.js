@@ -12733,6 +12733,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
 			giftCardNumberError:	"Invalid Gift Card Number",
 			pin:			"PIN",
+			pinError:		"Invalid PIN",
+			pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:		"Expiry Date",
 			taxNumber:      "Tax Identification Number",
 			submit:			"Pay now",
@@ -13091,6 +13093,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:		"유효기일",
             taxNumber:      "Tax Identification Number",
 			submit:			"지불",
@@ -13186,6 +13190,8 @@ define('module/Language',[],function(){
 			giftCardNumber:		"Gift Card Number",
 			giftCardNumberError:		"Invalid Gift Card Number",
 			pin:		"PIN",
+			pinError:		"دبوس غير صالح",
+			pinEmptyError:	"الرجاء إدخال رقم تعريف شخصي صالح",
 			expiryDate:		"تاريخ الإنتهاء",
             taxNumber:      "الرقم الضريبي",
 			submit:			"إدفع الأن",
@@ -13539,6 +13545,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			cvv:			"CVV",
 			expiryDate:		"Expire",
             taxNumber:      "Tax Identification Number",
@@ -13630,6 +13638,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinEmptyError:	"Please enter a valid PIN",
+            pinError:		"Invalid PIN",
 			cvv:			"CVV",
 			expiryDate:		"Gültig bis",
             taxNumber:      "Tax Identification Number",
@@ -13976,6 +13986,8 @@ define('module/Language',[],function(){
         			giftCardNumber:	"Gift Card Number",
                     giftCardNumberError:	"Invalid Gift Card Number",
                     pin:			"PIN",
+                    pinError:		"Invalid PIN",
+                    pinEmptyError:	"Please enter a valid PIN",
         			cvv:			"Cryptogramme visuel",
         			expiryDate:		"Date d´expiration",
                     taxNumber:      "Numéro d´identification fiscal",
@@ -14318,6 +14330,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			cvv:			"Código de control",
 			expiryDate:		"Expira",
             taxNumber:      "Tax Identification Number",
@@ -14658,6 +14672,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			cvv:			"Codice di Verifica (CVV)",
 			expiryDate:		"Scadenza",
             taxNumber:      "Tax Identification Number",
@@ -14748,6 +14764,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			cvv:			"Kaart verificatie code",
 			expiryDate:		"Vervalt",
             taxNumber:      "Tax Identification Number",
@@ -14838,6 +14856,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			cvv:			"Kontrolnummer",
 			expiryDate:		"Udløber",
             taxNumber:      "Tax Identification Number",
@@ -14928,6 +14948,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinEmptyError:	"Please enter a valid PIN",
+            pinError:		"Invalid PIN",
 			cvv:			"Tarkistusnumero",
 			expiryDate:		"Erääntymispäivä",
             taxNumber:      "Tax Identification Number",
@@ -15018,6 +15040,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinEmptyError:	"Please enter a valid PIN",
+            pinError:		"Invalid PIN",
 			cvv:			"CVV/CVC-kod",
 			expiryDate:		"Giltigt till",
             taxNumber:      "Tax Identification Number",
@@ -15109,6 +15133,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinEmptyError:	"Please enter a valid PIN",
+            pinError:		"Invalid PIN",
 			expiryDate:		"Son Kullanma Tarihi",
             taxNumber:      "Tax Identification Number",
 			submit:			"Öde",
@@ -15196,6 +15222,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:	"有効期限",
             taxNumber:      "Tax Identification Number",
 			submit:		"送信する",
@@ -15283,6 +15311,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:	"Datum veljavnosti",
             taxNumber:      "Tax Identification Number",
 			submit:		"Placaj",
@@ -15370,6 +15400,8 @@ define('module/Language',[],function(){
              giftCardNumber:	"Gift Card Number",
              giftCardNumberError:	"Invalid Gift Card Number",
              pin:			"PIN",
+             pinError:		"Invalid PIN",
+             pinEmptyError:	"Please enter a valid PIN",
              expiryDate:"Data de validade",
              taxNumber:"CPF",
              submit:"Pague agora",
@@ -15463,6 +15495,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:"Data ważności",
             taxNumber:"Tax Identification Number",
 			submit:"Zapłać teraz",
@@ -15550,6 +15584,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:"Platnost do",
             taxNumber:"Tax Identification Number",
 			submit:"Zaplatit",
@@ -15637,6 +15673,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate: "Lejárati dátum",
             taxNumber:"Tax Identification Number",
 			submit: "Fizetek most",
@@ -15728,6 +15766,8 @@ define('module/Language',[],function(){
                 giftCardNumber:	"Gift Card Number",
                 giftCardNumberError:	"Invalid Gift Card Number",
                 pin:			"PIN",
+                pinError:		"Invalid PIN",
+                pinEmptyError:	"Please enter a valid PIN",
                 expiryDate:		"Datum isteka",
                 taxNumber:	"Porezni identifikacijski broj",
                 submit:			"Plati sada",
@@ -16077,6 +16117,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:"Дата на валидност",
             taxNumber:"Tax Identification Number",
 			submit:"Плати сега",
@@ -16164,6 +16206,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:"Data de expirare a cardului",
             taxNumber:"Tax Identification Number",
 			submit:"Plateste acum",
@@ -16251,6 +16295,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:"Срок истечения карты",
             taxNumber:"ИНН",
 			submit:"Оплатить",
@@ -16339,6 +16385,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"礼品卡卡号",
             giftCardNumberError:	"无效的礼品卡卡号",
             pin:			"密码",
+            pinError:		"無效的引腳",
+            pinEmptyError:	"請輸入有效密碼",
 			expiryDate:"有效期限",
             taxNumber:"税号",
 			submit:"立即支付",
@@ -16422,6 +16470,8 @@ define('module/Language',[],function(){
 			country:"Χώρα",
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
             pin:			"PIN",
 			expiryDate:"Ημερομηνία λήξης",
             taxNumber:"Tax Identification Number",
@@ -16510,6 +16560,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:"Utløpsdato",
             taxNumber:"Tax Identification Number",
 			submit:"Betal nå",
@@ -16600,6 +16652,8 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:"Platnosť do",
             taxNumber:"Tax Identification Number",
 			submit:"Zaplatiť",
@@ -16691,6 +16745,8 @@ define('module/Language',[],function(){
         	giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
         	expiryDate:		"Kehtivusaja lõpp",
         	taxNumber:      "Maksukohustuslase number",
         	submit:			"Maksa kohe",
@@ -16792,6 +16848,8 @@ define('module/Language',[],function(){
         	giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
         	expiryDate:		"Derīguma termiņš",
         	taxNumber:      "Nodokļu maksātāja numurs",
         	submit:			"Maksāt tūlīt",
@@ -16893,6 +16951,8 @@ define('module/Language',[],function(){
         	giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
         	expiryDate:		"Galiojimo data",
         	taxNumber:      "Mokesčių mokėtojo identifikavimo kodas",
         	submit:			"Mokėti dabar",
@@ -16994,6 +17054,8 @@ define('module/Language',[],function(){
             giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
             expiryDate:		"Data de caducitat",
             taxNumber:      "Número d’identificació fiscal",
             submit:			"Paga ara",
@@ -17094,6 +17156,8 @@ define('module/Language',[],function(){
             giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
+            pinError:		"Invalid PIN",
+            pinEmptyError:	"Please enter a valid PIN",
             expiryDate:		"Iraungitze-data",
             taxNumber:      "Identifikazio fiskaleko zenbakia",
             submit:			"Ordaindu orain",
@@ -42608,6 +42672,16 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
     PaymentView.hideOrShowPin = function(hide){
             var $form = $(this).closest("form");
             PaymentView.hideOrShowElement($form, ".wpwl-group-pin", hide);
+            PaymentView.blankElement($form, ".wpwl-control-pin", hide);
+    };
+
+    PaymentView.blankElement = function(parentElement, selector, hide) {
+    	if (hide) {
+    		parentElement.find(selector).val('');
+    		parentElement.find("button[type=\"submit\"]").removeClass("wpwl-button-error");
+    		parentElement.find(".wpwl-button-pay").prop("disabled", false);
+    		PaymentView.removeErrorClassAndMessage(parentElement.find(".wpwl-control-pin"));
+    	}
     };
 
 	return PaymentView;
@@ -43980,7 +44054,7 @@ define('module/forms/VirtualAccountPaymentForm',['require','shim/ObjectCreate','
 
 	return VirtualAccountPaymentForm;
 });
-define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement','module/SaqaUtil','module/Wpwl'],function(require){
+define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement','module/SaqaUtil','module/Detection','module/Wpwl'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
@@ -43992,6 +44066,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	var Options = require('module/Options');
 	var BillingAgreement = require("module/BillingAgreement");
 	var SaqaUtil = require('module/SaqaUtil');
+	var Detection = require('module/Detection');
 
     var Wpwl = require('module/Wpwl');
 	var Validate = {};
@@ -44920,9 +44995,13 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 
     Validate.validateRLGiftCardForm = function(paymentForm){
         var brand = paymentForm.getBrand(paymentForm);
+        var giftCardNumber = Util.trimAll(paymentForm.getElement(Parameter.VIRTUALACCOUNT_ACCOUNTID).val());
+        var isPin = Detection.isPin.call(paymentForm, brand, giftCardNumber);
         var cardError = Validate.validateRLGiftCardElement(
             paymentForm.getElement(Parameter.VIRTUALACCOUNT_ACCOUNTID), brand);
-        return Util.extend({}, cardError);
+        var pinError= Validate.validateRLPinElement(
+            paymentForm.getElement(Parameter.VIRTUALACCOUNT_ACCOUNT_PIN), brand, isPin);
+        return Util.extend({}, cardError, pinError);
     };
 
     Validate.validateRLGiftCardElement = function($field, brand) {
@@ -44933,6 +45012,18 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
             !Validate.validateGiftCardNumber(brand, fieldValue)){
             return {giftCardNumberError: $field};
         }
+    };
+
+    Validate.validateRLPinElement = function($field, brand, isPin) {
+    	var fieldName = $field.attr("name");
+    	var fieldValue = $field.val();
+    	if(fieldName === Parameter.VIRTUALACCOUNT_ACCOUNT_PIN && isPin && fieldValue.length !== 8) {
+    		if(fieldValue.substring(1, 8)) {
+    			return {pinError: $field};
+    		} else {
+    			return {pinEmptyError: $field};
+    		}
+    	}
     };
 
     Validate.validateGiftCardElement = function($field, brand) {
