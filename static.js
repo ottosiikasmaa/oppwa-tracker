@@ -53110,6 +53110,15 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
 
     var BRAND = 'AMAZONPAY';
 
+    var CHECKOUT_URL_NA = "https://static-na.payments-amazon.com/checkout.js";
+    var CHECKOUT_URL_JP = "https://static-fe.payments-amazon.com/checkout.js";
+    var CHECKOUT_URL_EU = "https://static-eu.payments-amazon.com/checkout.js";
+
+    var USD = 'USD';
+    var EUR = 'EUR';
+    var JPY = 'JPY';
+
+
     /**
      * @param $form jquery object for the form inside which button is rendered
      * @constructor defines callbacks which will be triggered by AmazonPay
@@ -53120,13 +53129,28 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
     };
 
     AmazonPay.loadScript = function() {
-        if (Wpwl && Wpwl.checkout && Wpwl.checkout.currency === 'USD' ||
-            Options.amazonpay && Options.amazonpay.ledgerCurrency === 'USD') {
-            return $.getScript("https://static-na.payments-amazon.com/checkout.js");
+        if (detectCurrency() === USD) {
+            return $.getScript(CHECKOUT_URL_NA);
+        } else if (detectCurrency() === JPY) {
+            return $.getScript(CHECKOUT_URL_JP);
         } else {
-            return $.getScript("https://static-eu.payments-amazon.com/checkout.js");
+            return $.getScript(CHECKOUT_URL_EU);
         }
     };
+
+    function detectCurrency() {
+        if (Wpwl && Wpwl.checkout && Wpwl.checkout.currency === USD ||
+            Options.amazonpay && Options.amazonpay.ledgerCurrency === USD) {
+            return USD;
+        }
+
+        if (Wpwl && Wpwl.checkout && Wpwl.checkout.currency === JPY ||
+            Options.amazonpay && Options.amazonpay.ledgerCurrency === JPY) {
+            return JPY;
+        }
+
+        return EUR;
+    }
 
    AmazonPay.fastCheckout = function () {
         var merchantId = Wpwl.isTestSystem ?
