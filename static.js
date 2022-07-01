@@ -12495,6 +12495,9 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	//SAQA compliance
 	Options.enableSAQACompliance = false;
 
+	//Additional logs
+	Options.enableAdditionalLogs = false;
+
 	//Click To Pay
 	Options.clickToPay = {
 		loadWidget: false,
@@ -43431,7 +43434,140 @@ define('module/StylePropertiesFilter',['require','jquery'],function(require){
     return StylePropertiesFilter;
 });
 
-define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','module/Options','module/PaymentView','module/StylePropertiesFilter','module/Tracking','module/Wpwl','module/Util'],function(require){
+define('module/AdditionalLogs',['require','module/Options'],function (require) {
+    var Options = require('module/Options');
+
+    var AdditionalLogs = {};
+
+    AdditionalLogs.isAdditionalLogsEnabled = function () {
+        return Options.enableAdditionalLogs;
+    };
+
+    return AdditionalLogs;
+});
+
+define('module/logging/LoggerFactory',['require','jquery','module/Generate','module/Wpwl','module/AdditionalLogs'],function(require){
+    var $ = require('jquery');
+    var Generate = require('module/Generate');
+    var Wpwl = require('module/Wpwl');
+    var AdditionalLogs = require('module/AdditionalLogs');
+
+    var logsUrl;
+
+    var LogPusher = {
+        interval: null,
+        messageQueue: null,
+
+        /**
+         * Impure method, will remove from the messageQueue the messages that will be flushed.
+         */
+        getDataToFlush: function(){
+            var data = {};
+            var messagesToBeFlushed = this.messageQueue.length;
+            for (var i = 0; i < messagesToBeFlushed; i++) {
+                var message = this.messageQueue.shift();
+                var messagePrefix = 'messages[' + i + ']';
+                data[messagePrefix + '.logger'] = message.component;
+                data[messagePrefix + '.timestamp'] = message.timestamp;
+                data[messagePrefix + '.message'] = message.message;
+                data[messagePrefix + '.level'] = message.level;
+            }
+            return data;
+        },
+
+        isDirty: function(){
+            return !!this.messageQueue.length;
+        },
+        init: function(){
+            this.clean();
+        },
+        clean: function(){
+            this.messageQueue = [];
+        },
+        flush: function(){
+            if (!logsUrl && Wpwl.checkout.id){
+                logsUrl = Generate.string(Wpwl.url, "/v", Wpwl.apiVersion, "/checkouts/", Wpwl.checkout.id, "/logs");
+            }
+            if(logsUrl && this.isDirty()){
+                $.ajax({
+                    method: "POST",
+                    url: logsUrl,
+                    dataType: "json",
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log("Error sending ajax: " + textStatus + " - " + errorThrown);
+                    },
+                    data: this.getDataToFlush()
+                });
+            }
+        },
+        pushMessage: function(component, level, message){
+            this.messageQueue.push({component: component,
+                level: level,
+                timestamp: Date.now(),
+                message: message});
+        },
+        start : function(_window){
+            var callPush = function() {LogPusher.flush();};
+            $(_window).on('beforeunload.wpwlEvent', callPush);
+            if(this.interval){
+                clearInterval(this.interval);
+            }
+            this.interval = setInterval(callPush, 5000);
+        }
+
+    };
+
+    LogPusher.init();
+
+    var Logger = function(component){
+        this.component = component;
+        this.isAdditionalLogsEnabled = AdditionalLogs.isAdditionalLogsEnabled();
+    };
+
+    Logger.prototype.info = function(message){
+        this.logMessage("INFO", message);
+    };
+
+    Logger.prototype.debug = function(message){
+        this.logMessage("DEBUG", message);
+    };
+
+    Logger.prototype.error = function(message){
+        this.logMessage("ERROR", message);
+    };
+
+    Logger.prototype.additionalLog = function() {};
+
+    Logger.prototype.logMessage = function(level, message){
+        LogPusher.pushMessage(this.component, level, message);
+    };
+
+    var LoggerFactory = {};
+
+    LoggerFactory.getLogger = function(component){
+        var logger = new Logger(component);
+        if (logger.isAdditionalLogsEnabled === true) {
+            logger.additionalLog = function(level, message) {
+                console.log(level.toUpperCase() + '_ADDITIONAL_LOGS' + '\n' + message);
+                LogPusher.pushMessage(this.component, level.toUpperCase() + '_ADDITIONAL_LOGS', message);
+            };
+        }
+        return logger;
+    };
+
+    LoggerFactory.initFor = function(_window){
+        LogPusher.start(_window);
+    };
+
+    LoggerFactory.flush = function(){
+        LogPusher.flush();
+    };
+
+    return LoggerFactory;
+});
+
+
+define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','module/Options','module/PaymentView','module/StylePropertiesFilter','module/Tracking','module/Wpwl','module/Util','module/logging/LoggerFactory'],function(require){
 	var $ = require('jquery');
 	var Channel = require('lib/Channel');
 	var Options = require('module/Options');
@@ -43440,6 +43576,8 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 	var Tracking = require('module/Tracking');
 	var Wpwl = require('module/Wpwl');
 	var Util = require('module/Util');
+	var LoggerFactory = require('module/logging/LoggerFactory');
+	var logger = LoggerFactory.getLogger('ParentToIframeCommunication');
 
 	var COMMUNICATION_TIMEOUT = 60000;
 
@@ -43465,6 +43603,7 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 			});
 		}
 		catch (e) {
+			logger.additionalLog("ERROR", "Exception when setup channel:\n" + e);
 			this.rejectDeferred();
 		}
 		
@@ -45815,11 +45954,13 @@ define('module/InternalRequestCommunicationSettings',[],function() {
  * Upon initialization sender will setup communication channel with iframe window and will
  * be ready to send messages, which will be handled by its conterpart - InternalRequestListener.
  */
-define('module/InternalRequestSender',['require','jquery','lib/Channel','module/Wpwl','module/InternalRequestCommunicationSettings'],function(require) {
+define('module/InternalRequestSender',['require','jquery','lib/Channel','module/Wpwl','module/InternalRequestCommunicationSettings','module/logging/LoggerFactory'],function(require) {
     var $ = require('jquery');
     var Channel = require('lib/Channel');
     var Wpwl = require('module/Wpwl');
     var InternalRequestCommunicationSettings = require('module/InternalRequestCommunicationSettings');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var logger = LoggerFactory.getLogger('InternalRequestSender');
 
     var COMMUNICATION_TIMEOUT = 60000;
 
@@ -45857,6 +45998,7 @@ define('module/InternalRequestSender',['require','jquery','lib/Channel','module/
                 onReady: this.onChannelReady.bind(this)
             });
         } catch (e) {
+            logger.additionalLog("ERROR", "Exception when setup channel:\n" + e);
             this.rejectDeferred(e);
         }
 
@@ -45965,11 +46107,13 @@ define('module/IovationLoader',['require','jquery','lib/iovation'],function(requ
  * Upon initialization listener will setup communication channel with parent window and listen
  * for incoming messages from corresponding counterpart - InternalRequestSender.
  */
-define('module/InternalRequestListener',['require','jquery','lib/Channel','module/InternalRequestCommunicationSettings','module/IovationLoader'],function(require) {
+define('module/InternalRequestListener',['require','jquery','lib/Channel','module/InternalRequestCommunicationSettings','module/IovationLoader','module/logging/LoggerFactory'],function(require) {
     var $ = require('jquery');
     var Channel = require('lib/Channel');
     var InternalRequestCommunicationSettings = require('module/InternalRequestCommunicationSettings');
     var IovationLoader = require('module/IovationLoader');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var logger = LoggerFactory.getLogger('InternalRequestListener');
 
     var InternalRequestListener = function() {
         this.channelReadyDeferred = $.Deferred();
@@ -45989,6 +46133,7 @@ define('module/InternalRequestListener',['require','jquery','lib/Channel','modul
                 onReady: this.onChannelReady.bind(this)
             });
         } catch (e) {
+            logger.additionalLog("ERROR", "Exception when setup channel:\n" + e);
             this.channelReadyDeferred.reject(e);
         }
 
@@ -46177,117 +46322,6 @@ define('module/integrations/AffirmLoader',['require','module/Wpwl'],function(req
 	return AffirmLoader;
 });
 /* jshint ignore:end */;
-define('module/logging/LoggerFactory',['require','jquery','module/Generate','module/Wpwl'],function(require){
-    var $ = require('jquery');
-    var Generate = require('module/Generate');
-    var Wpwl = require('module/Wpwl');
-
-    var logsUrl;
-
-    var LogPusher = {
-        interval: null,
-        messageQueue: null,
-
-        /**
-         * Impure method, will remove from the messageQueue the messages that will be flushed.
-         */
-        getDataToFlush: function(){
-            var data = {};
-            var messagesToBeFlushed = this.messageQueue.length;
-            for (var i = 0; i < messagesToBeFlushed; i++) {
-                var message = this.messageQueue.shift();
-                var messagePrefix = 'messages[' + i + ']';
-                data[messagePrefix + '.logger'] = message.component;
-                data[messagePrefix + '.timestamp'] = message.timestamp;
-                data[messagePrefix + '.message'] = message.message;
-                data[messagePrefix + '.level'] = message.level;
-            }
-            return data;
-        },
-
-        isDirty: function(){
-            return !!this.messageQueue.length;
-        },
-        init: function(){
-            this.clean();
-        },
-        clean: function(){
-            this.messageQueue = [];
-        },
-        flush: function(){
-            if (!logsUrl && Wpwl.checkout.id){
-                logsUrl = Generate.string(Wpwl.url, "/v", Wpwl.apiVersion, "/checkouts/", Wpwl.checkout.id, "/logs");
-            }
-            if(logsUrl && this.isDirty()){
-                $.ajax({
-                    method: "POST",
-                    url: logsUrl,
-                    dataType: "json",
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log("Error sending ajax: " + textStatus + " - " + errorThrown);
-                    },
-                    data: this.getDataToFlush()
-                });
-            }
-        },
-        pushMessage: function(component, level, message){
-            this.messageQueue.push({component: component,
-                level: level,
-                timestamp: Date.now(),
-                message: message});
-        },
-        start : function(_window){
-            var callPush = function() {LogPusher.flush();};
-            $(_window).on('beforeunload.wpwlEvent', callPush);
-            if(this.interval){
-                clearInterval(this.interval);
-            }
-            this.interval = setInterval(callPush, 5000);
-        }
-
-    };
-
-    LogPusher.init();
-
-
-    var Logger = function(component){
-        this.component = component;
-    };
-
-    Logger.prototype.info = function(message){
-        this.logMessage("INFO", message);
-    };
-
-    Logger.prototype.debug = function(message){
-        this.logMessage("DEBUG", message);
-    };
-
-    Logger.prototype.error = function(message){
-        this.logMessage("ERROR", message);
-    };
-
-    Logger.prototype.logMessage = function(level, message){
-        LogPusher.pushMessage(this.component, level, message);
-    };
-
-    var LoggerFactory = {};
-
-    LoggerFactory.getLogger = function(component){
-        return new Logger(component);
-    };
-
-    LoggerFactory.initFor = function(_window){
-        LogPusher.start(_window);
-    };
-
-    LoggerFactory.flush = function(){
-        LogPusher.flush();
-    };
-
-    return LoggerFactory;
-});
-
-
 /**
  * Error that should be specifically used when we integrate external widgets to pass the error to our clients.
  */
@@ -46592,7 +46626,7 @@ define('module/ForterUtils',['require','jquery','module/Parameter','module/Util'
     return ForterUtils;
 });
 /*global ApplePaySession,ApplePayError,Promise*/
-define('module/ApplePay',['require','jquery','module/Generate','module/InternalRequestCommunication','module/Locale','module/Options','module/PaymentView','module/Tracking','module/Util','module/Wpwl','module/Parameter','module/error/WidgetError','module/ForterUtils'],function(require){
+define('module/ApplePay',['require','jquery','module/Generate','module/InternalRequestCommunication','module/Locale','module/Options','module/PaymentView','module/Tracking','module/Util','module/Wpwl','module/Parameter','module/error/WidgetError','module/ForterUtils','module/logging/LoggerFactory'],function(require){
 
 	var $ = require('jquery');
 	var Generate = require("module/Generate");
@@ -46606,6 +46640,8 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
     var Parameter = require('module/Parameter');
     var WidgetError = require('module/error/WidgetError');
     var ForterUtils = require('module/ForterUtils');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var logger = LoggerFactory.getLogger('ApplePay');
 
     // Options, defined in wpwlOptions.applePay, are copied to the Apple Pay payment request
     var REQUEST_OPTIONS = [
@@ -46904,12 +46940,14 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             } catch (error) {
                 // Do nothing. This error could happen when the merchant was successfully validated
                 // but the shopper canceled the payment and, as a result, invalidated the session.
-                Options.onError(new WidgetError(BRAND, 'onValidateMerchant-completeMerchantValidation',
-                'Error during ApplyPaySession.completeMerchantValidation ' + error));
+                var info = 'Error during ApplyPaySession.completeMerchantValidation ' + error;
+                logger.additionalLog("ERROR", info);
+                Options.onError(new WidgetError(BRAND, 'onValidateMerchant-completeMerchantValidation', info));
             }
         })
         .fail(function(response) {
             var info = "Starting Apple Pay session returned with status " + response.status;
+            logger.additionalLog("ERROR", info);
             Options.onError(new WidgetError(BRAND, 'onValidateMerchant-fail',
             'Failure reason - ' + info + ". Aborting Session."));
             session.abort();
@@ -47894,7 +47932,9 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
                 this.loadKlarnaJsSDK();
             }
             catch (e) {
-                console.error('Could not initialize and load Klarna inline widget: ' + toLoggableValue(e));
+                var info = 'Could not initialize and load Klarna inline widget: ' + toLoggableValue(e);
+                logger.additionalLog("ERROR", info);
+                console.error(info);
             }
 
         } else {
@@ -47917,6 +47957,8 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
                     logMessage: "Handling failure because the Klarna SDK couldn't be initialized. " + toLoggableValue(e),
                     onErrorEventName: 'sdk_not_initialized'
                 });
+                logger.additionalLog("ERROR",
+                    "Handling failure because the Klarna SDK couldn't be initialized. " + toLoggableValue(e));
                 throw e;
             }
         } else {
@@ -47940,6 +47982,7 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
                 logMessage: "Handling failure because an exception was thrown while loading the Klarna Payments inline widget: " + toLoggableValue(e),
                 onErrorEventName: 'widget_not_rendered'
             });
+            logger.additionalLog("INFO", "Handling failure because an exception was thrown while loading the Klarna Payments inline widget: " + toLoggableValue(e));
             throw e;
         }
     };
@@ -48206,7 +48249,9 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
         try {
             LoggerFactory.flush();
         } catch (e) {
-            console.error('Logger.flush: ' + toLoggableValue(e));
+            var info = 'Logger.flush: ' + toLoggableValue(e);
+            console.error(info);
+            logger.additionalLog("ERROR", info);
         }
 
         form.submit();
@@ -51139,6 +51184,8 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				})
 				.fail(function(error, message) {
 					PaymentView.validatePciIframeFailed(error, message, form);
+					logger.additionalLog("ERROR", "Exception when validate card sync or submit Pci iFrames:\n" +
+                        'error:' + error + "\n" + 'message:' + message);
 				});
 			};
 
@@ -51854,26 +51901,29 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				return;
 			}
 		} catch (e) {
+			logger.additionalLog("ERROR", "Error during parsing event in Payment.receiveMessage:\n" + e);
 			return;
 		}
 
-		// because MasterPass library might not have loaded yet.
-		try
-		{
-			var callBacks =  {
-				// if successCallback and failureCallback are defined masterpass gives control over the redirection to the merchant page.
-				// we want to redirect the shopper to the shopperResultUrl and thus don't use success and failure callbacks.
-				cancelCallback: Options.onLightboxCancel
-			};
-			var extendedOptions = $.extend({}, message.json, callBacks);
+        // because MasterPass library might not have loaded yet.
+        try
+        {
+            var callBacks =  {
+                // if successCallback and failureCallback are defined masterpass gives control over the redirection to the merchant page.
+                // we want to redirect the shopper to the shopperResultUrl and thus don't use success and failure callbacks.
+                cancelCallback: Options.onLightboxCancel
+            };
+            var extendedOptions = $.extend({}, message.json, callBacks);
 
-			MasterPass.client.checkout(extendedOptions);
-		}
-		catch (e)
-		{
+            MasterPass.client.checkout(extendedOptions);
+        }
+        catch (e)
+        {
+			var info = "Unable to init masterpass, because: " + e.message;
+			logger.additionalLog("ERROR", info);
 			PaymentView.showPleaseTryAgainMessage($('.wpwl-form-virtualAccount-MASTERPASS'));
-			Tracking.exception("Unable to init masterpass, because: " + e.message);
-		}
+			Tracking.exception(info);
+        }
 	};
 
 	Payment.unload = function(){
@@ -52502,7 +52552,7 @@ define('module/integrations/KountIntegration',['require','jquery','template/Load
 /**
  * Module contains logic specific for rendering of IDEAL payment widget only.
  */
-define('module/IdealPaymentWidget',['require','jquery','module/Util','module/Tracking','module/Options','module/error/OppError','lib/Spinner','module/InternalRequestCommunication'],function(require) {
+define('module/IdealPaymentWidget',['require','jquery','module/Util','module/Tracking','module/Options','module/error/OppError','lib/Spinner','module/InternalRequestCommunication','module/logging/LoggerFactory'],function(require) {
     var $ = require('jquery');
     var Util = require('module/Util');
     var Tracking = require("module/Tracking");
@@ -52510,6 +52560,8 @@ define('module/IdealPaymentWidget',['require','jquery','module/Util','module/Tra
 	var OppError = require("module/error/OppError");
     var Spinner = require('lib/Spinner');
     var InternalRequestCommunication = require('module/InternalRequestCommunication');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var logger = LoggerFactory.getLogger('IdealPaymentWidget');
 
     var IdealPaymentWidget = {};
 
@@ -52571,6 +52623,7 @@ define('module/IdealPaymentWidget',['require','jquery','module/Util','module/Tra
 
             deferred.resolve();
         } catch (e) {
+            logger.additionalLog("INFO", "Exception when populate dropdown:\n" + e);
             deferred.reject(e);
         }
 
@@ -52818,6 +52871,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
             .then(processCreatePaymentResponse)
             .catch(function(response) {
                 var info = "Creating checkout returned error: " + JSON.stringify(response);
+                logger.additionalLog("INFO", info);
                 notifyError(info);
                 return Promise.reject(response); // jshint ignore:line
             });
@@ -53333,6 +53387,7 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
         try {
             AmazonPay.amazon.Pay.initCheckout(initCheckoutData);
         }catch (e) {
+            logger.additionalLog("ERROR", "Error during AmazonPay.performInitCheckout\n" + e);
             console.log("error: " + e);
         }
     };
@@ -53562,6 +53617,7 @@ define('module/FrameMessenger',['require','module/Wpwl','module/logging/LoggerFa
         // Listen to message from child window
         eventer(this.messageEvent, this.bindedHandler);
         this.isListening = true;
+        logger.additionalLog('INFO', 'listenToRedirectMessage: ' + this.attachEventMethod + ',  ' + this.messageEvent);
 	};
 
     FrameMessenger.prototype.stopListening = function () {
@@ -53570,6 +53626,8 @@ define('module/FrameMessenger',['require','module/Wpwl','module/logging/LoggerFa
         if (!this.isListening){
             return;
         }
+
+        logger.additionalLog('INFO', 'stopListening: ' + this.attachEventMethod + ',  ' + this.messageEvent);
 
         var eventer = window[this.detachEventMethod];
         eventer(this.messageEvent, this.bindedHandler);
@@ -53581,6 +53639,7 @@ define('module/FrameMessenger',['require','module/Wpwl','module/logging/LoggerFa
         if (this.isMessageSecure(message)) {
             this.observers.forEach(function(observer) {
                 if (observer.validate(message)) {
+                    logger.additionalLog('INFO', '-> sending to observer ' + observer + '\nMessage:\n' + message);
                     observer.notify(message);
                 }
             });
@@ -53647,6 +53706,7 @@ define('module/framemessaging/PreconditionIframe',['require','jquery','module/lo
     PreconditionIframe.prototype.notify = function(message) {
 
         console.log("Received message to render hidden precondition iframe");
+        logger.additionalLog("INFO", "Received message to render hidden precondition iframe\n" + message);
 
         this.counter++;
         render(message);
@@ -54249,6 +54309,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 				self.addOnReadyPromise(
 					updateEpsBrandList()
 						.catch(function(oppError) {
+							logger.additionalLog("ERROR", "Error during updateEpsBrandList\n" + oppError);
 							Options.onError(oppError);
 						}));
 			}
@@ -54278,7 +54339,8 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
                 self.addOnReadyPromise(
                     IdealPaymentWidget.updateBanks(getCheckoutsConfigurationEndpoint('IDEAL_BANKS'))
                         .catch(function(oppError) {
-                            Options.onError(oppError);
+							logger.additionalLog("ERROR", "Error during IdealPaymentWidget.updateBanks\n" + oppError);
+							Options.onError(oppError);
                         }));
             }
 
@@ -54355,6 +54417,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 					});
 					deferred.resolve();
 				} catch (e) {
+					logger.additionalLog("ERROR", "Error during updateEpsBrandList\n" + e);
 					deferred.reject(e);
 				}
 				return deferred.promise();
@@ -55332,7 +55395,7 @@ define('module/Autofill',['require','jquery','lib/Channel','module/BinService','
 
     return Autofill;
 });
-define('module/IframeToParentCommunication',['require','jquery','lib/Channel','module/Detection','module/Setting','module/InputFormatter','module/NumberOnlyFormatter','module/Validate','module/IframeStylesLoader','module/Parameter','module/Util','module/Options','module/StyleLink','module/Generate','module/ExpiryDate','module/PaymentView','module/SaqaUtil','module/Autofill','module/BinService','module/Wpwl'],function(require){
+define('module/IframeToParentCommunication',['require','jquery','lib/Channel','module/Detection','module/Setting','module/InputFormatter','module/NumberOnlyFormatter','module/Validate','module/IframeStylesLoader','module/Parameter','module/Util','module/Options','module/StyleLink','module/Generate','module/ExpiryDate','module/PaymentView','module/SaqaUtil','module/Autofill','module/BinService','module/Wpwl','module/logging/LoggerFactory'],function(require){
 	var $ = require('jquery');
 	var Channel = require('lib/Channel');
 	var Detection = require('module/Detection');
@@ -55359,6 +55422,8 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	var Autofill = require('module/Autofill');
 	var BinService = require('module/BinService');
 	var Wpwl = require('module/Wpwl');
+	var LoggerFactory = require('module/logging/LoggerFactory');
+	var logger = LoggerFactory.getLogger('IframeToParentCommunication');
 
 	var autocompleteAttributes = {};
 	autocompleteAttributes[Parameter.CARD_NUMBER] = "cc-number";
@@ -55388,6 +55453,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			});
 		}
 		catch (e) {
+			logger.additionalLog("ERROR", "Exception when setup channel:\n" + e);
 			this.onReadyDeferred.reject();
 		}
 
