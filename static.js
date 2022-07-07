@@ -11194,6 +11194,7 @@ define('module/Parameter',[],function(){
     Parameter.C2P_CONSUMER_EMAIL = 'customParameters[C2P.CONSUMER.EMAIL]';
 
     Parameter.AFFIRM_CHECKOUT_TOKEN = 'customParameters[AFFIRM.CHECKOUT.TOKEN]';
+    Parameter.AMAZON_COMPLETE_CHECKOUT = 'customParameters[AMAZON.COMPLETE_CHECKOUT]';
 
 	return Parameter;
 });
@@ -53105,15 +53106,17 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
 });
 
 /*global Promise*/
-define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','module/Generate','module/Options','module/error/SessionError','module/error/WidgetError','module/Tracking','lib/Spinner','module/InternalRequestCommunication','module/ForterUtils','module/PaymentView','module/logging/LoggerFactory'],function (require) {
+define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','module/Generate','module/Options','module/Parameter','module/error/SessionError','module/error/WidgetError','module/Tracking','module/Util','lib/Spinner','module/InternalRequestCommunication','module/ForterUtils','module/PaymentView','module/logging/LoggerFactory'],function (require) {
 
     var $ = require('jquery');
     var Wpwl = require('module/Wpwl');
     var Generate = require('module/Generate');
     var Options = require('module/Options');
+    var Parameter = require('module/Parameter');
     var SessionError = require('module/error/SessionError');
     var WidgetError = require("module/error/WidgetError");
     var Tracking = require("module/Tracking");
+    var Util = require('module/Util');
     var Spinner = require('lib/Spinner');
     var InternalRequestCommunication = require('module/InternalRequestCommunication');
     var ForterUtils = require('module/ForterUtils');
@@ -53176,7 +53179,8 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
             checkoutLanguage: Options.amazonpay.checkoutLanguage,
             productType: Options.amazonpay.productType,
             placement: Options.amazonpay.placement,
-            buttonColor: Options.amazonpay.buttonColor
+            buttonColor: Options.amazonpay.buttonColor,
+            completeCheckout: Options.amazonpay.completeCheckout
         };
     };
 
@@ -53188,7 +53192,8 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
             checkoutLanguage: Wpwl.checkout.config.amazonpayConfig.checkoutLanguage,
             productType: Wpwl.checkout.config.amazonpayConfig.productType,
             placement: Wpwl.checkout.config.amazonpayConfig.placement,
-            buttonColor: Wpwl.checkout.config.amazonpayConfig.buttonColor
+            buttonColor: Wpwl.checkout.config.amazonpayConfig.buttonColor,
+            completeCheckout: Wpwl.checkout.config.amazonpayConfig.completeCheckout
          };
     };
 
@@ -53223,6 +53228,7 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
                    productType: checkoutData.productType,
                    placement: checkoutData.placement,
                    buttonColor: checkoutData.buttonColor,
+                   completeCheckout: checkoutData.completeCheckout
             });
             logger.info("loaded, rendered amazonpay button");
 
@@ -53277,12 +53283,24 @@ define('module/integrations/AmazonPayWidget',['require','jquery','module/Wpwl','
         return promise;
     };
 
+    AmazonPay.completeCheckoutParam = function($form) {
+        var completeCheckoutField = $form.find('[name="' + Parameter.AMAZON_COMPLETE_CHECKOUT + '"]');
+        if(completeCheckoutField) {
+            var completeCheckoutFieldValue = Options.amazonpay.completeCheckout;
+            if (! Util.isNullOrUndefined(completeCheckoutFieldValue)) {
+                completeCheckoutField.val(completeCheckoutFieldValue);
+            }
+        }
+    };
 
     AmazonPay.authorizePaymentAndSubmit = function($form) {
         var spinner = new Spinner(Options.spinner).spin($(".wpwl-container-virtualAccount-AMAZONPAY").get(0));
         setPayButtonDisabledStatus(true);
+
         $form.append($.parseHTML(Generate.generateIsSourceBrowserHiddenParam($form)));
         ForterUtils.appendForterCookie($form);
+        AmazonPay.completeCheckoutParam($form);
+
         InternalRequestCommunication.getSender()
         .then(function(sender) {
             return sender.send({
@@ -54374,12 +54392,19 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
             hiddenParameters.add(Parameter.SHOP_ORIGIN, Util.getOrigin());
         }
         addForterSupport(hiddenParameters);
+        addAmazonPaySupport(hiddenParameters);
         return hiddenParameters;
     }
 
     function addForterSupport(hiddenParameters){
         if(ForterUtils.forterActive === true) {
             hiddenParameters.add(Parameter.FORTER_COOKIE, "");
+        }
+    }
+
+    function addAmazonPaySupport(hiddenParameters){
+        if((typeof Options.amazonpay !== 'undefined') && (typeof Options.amazonpay.completeCheckout !== 'undefined')) {
+            hiddenParameters.add(Parameter.AMAZON_COMPLETE_CHECKOUT, "");
         }
     }
 
