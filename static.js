@@ -15629,7 +15629,7 @@ define('module/Language',[],function(){
 			qrcode: 			"QR-Code",
 			paymentMode:		"Please select your preferred payment method:",
 			customerMobile:				"Mobile phone number (+78000001774)",
-			register:		"Register now",
+			register:		"Zaregistrovat",
 			billingCountryError: "Invalid country",
 			billingStateError: "Invalid state",
 			billingCityError: "Invalid city",
@@ -17303,6 +17303,7 @@ define('module/Language',[],function(){
 
 	return Language;
 });
+
 define('module/Locale',['require','module/Options'],function(require){
     var Options = require('module/Options');
     var languageCountryRegex = /^[a-z]{2}-[A-Z]{2}$/g;
