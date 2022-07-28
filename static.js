@@ -12758,7 +12758,7 @@ define('module/Language',[],function(){
 			surname:        "Surname",
 			billingAgreement: "Invoice terms and conditions",
 			accountBankError:	"Invalid bank code",
-			accountBankBicError: "Invalid BIC or bank code",
+			accountBankBicError: "Invalid BIC (SWIFT-Code) / bank code or bank not participating in the program",
 			accountBicError:	"Invalid BIC",
 			accountHolderError:	"Invalid account holder",
 			accountNumberError:	"Invalid account number",
@@ -13215,7 +13215,7 @@ define('module/Language',[],function(){
 			surname:        "لقب",
 			billingAgreement: "شروط و أحكام الفاتورة",
 			accountBankError:	"رمز البنك غير صحيح",
-			accountBankBicError: "رمز البنك او رمز تعريف البنك غير صحيح (BIC)",
+			accountBankBicError: "رمز البنك او رمز تعريف البنك غير صحيح او البنك غير مشترك في الخدمة (BIC)",
 			accountBicError:	"رمز تعريف البنك (BIC) غير صحيح",
 			accountHolderError:	"اسم صاحب الحساب غير صحيح",
 			accountNumberError:	"رقم الحساب غير صحيح",
@@ -13664,7 +13664,7 @@ define('module/Language',[],function(){
 			surname:        "Nachname",
 			billingAgreement: "Rechnungsbedingungen",
 			accountBankError:	"Ungültige Bankleitzahl",
-			accountBankBicError: "Ungültige BIC (SWIFT-Code) oder Bankleitzahl",
+			accountBankBicError: "Ungültige BIC (SWIFT-Code) oder Bankleitzahl oder Bank nimmt nicht am ausgewählten Verfahren teil",
 			accountBicError:	"Ungültige BIC (SWIFT-Code)",
 			accountHolderError:	"Ungültiger Kontoinhaber",
 			accountNumberError:	"Ungültige Kontonummer",
@@ -15629,7 +15629,7 @@ define('module/Language',[],function(){
 			qrcode: 			"QR-Code",
 			paymentMode:		"Please select your preferred payment method:",
 			customerMobile:				"Mobile phone number (+78000001774)",
-			register:		"Register now",
+			register:		"Zaregistrovat",
 			billingCountryError: "Invalid country",
 			billingStateError: "Invalid state",
 			billingCityError: "Invalid city",
@@ -17303,6 +17303,7 @@ define('module/Language',[],function(){
 
 	return Language;
 });
+
 define('module/Locale',['require','module/Options'],function(require){
     var Options = require('module/Options');
     var languageCountryRegex = /^[a-z]{2}-[A-Z]{2}$/g;
