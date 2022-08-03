@@ -45933,42 +45933,10 @@ define('module/OneClickPaymentWidget',['require','jquery','module/I18n','module/
 
     OneClickPaymentWidget.prototype.generateForms = function(){
         if(!Util.isEmpty(this.forms) && !Util.isEmpty(this.registrationsJson)){
-
-            var registeredBrands = [];
-
-            //Get the brands of the saved payment methods
-            for (var i = 0, len = this.registrationsJson.length; i < len; i++) {
-                registeredBrands.push(this.registrationsJson[i].paymentBrand);
-            }
-
-            //Index of the form to which the registration window will be attached to
-            var parentFormIdx = -1;
-
-            //Select the first form which contain a brand from the registered ones
-            for (var idx = 0, brandLen = registeredBrands.length; idx < brandLen; idx++) {
-                var brand = registeredBrands[idx];
-                for (i = 0, len = this.forms.length; i < len; i++) {
-                    var formBrands = new SpecForm(this.forms[i]).getBrands();
-
-                    if (formBrands.includes(brand)) {
-                        parentFormIdx = i;
-                        break;
-                    }
-                }
-                if (parentFormIdx !== -1) {
-                    break;
-                }
-            }
-
-            //If not match could be done, choose first form
-            if (parentFormIdx === -1) {
-                parentFormIdx = 0;
-            }
-
-            saveShopperResultUrl(this.forms[parentFormIdx]);
+            saveShopperResultUrl(this.forms[0]);
             prepareRegistrations.call(this);
             render.call(this);
-            $(this.forms[parentFormIdx]).before(this.$container);
+            $(this.forms[0]).before(this.$container);
             if (Options.registrations.hideInitialPaymentForms) {
                 $(this.$container).after(OneClickPaymentWidget.$showInitialPaymentForms);
             }
