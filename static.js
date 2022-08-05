@@ -12528,7 +12528,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 			type: ''
 		},
 		srcMark: {
-			theme: 'light',
+			theme: 'dark',
 			height: '40',
 			width: '200'
 		}
@@ -49988,11 +49988,11 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	/** display the card list and add onClick event support for all SRC cards in the list */
 	ClickToPayPaymentWidget.displayCards = function() {
 		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
-		var isCardListPresent = document.querySelector('src-card-list');
+		var isCardListPresent = document.querySelectorAll('src-card-list')[0];
 		if (isCardListPresent === undefined || isCardListPresent === null) {
 			$(clickToPayForm).after(ClickToPayPaymentWidget.createCardListElement());
 		}
-		var srcCardList = document.querySelector('src-card-list');
+		var srcCardList = document.querySelectorAll('src-card-list')[0];
 
 		/** to add all the received cards in src card list */
 		var loadCardsPromise = new Promise(function (resolve) {
@@ -50097,14 +50097,14 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			ClickToPayPaymentWidget.callGetCards(true);
 		} else if (checkoutActionCode === "SWITCH_CONSUMER") {
 			ClickToPayPaymentWidget.isCardsFromCookies = false;
-			var srcCardList = document.querySelector('src-card-list');
+			var srcCardList = document.querySelectorAll('src-card-list')[0];
 			$(srcCardList).remove();
 			ClickToPayPaymentWidget.emailIdLookup(Wpwl.checkout.customerEmail, true);
 		}  else if (checkoutActionCode === "ADD_CARD") {
 			logger.error("Shopper opted for ADD_CARD feature for CLICK_TO_PAY.");
 			Options.onError(new WidgetError("CLICK_TO_PAY", "add_new_card", "Shopper requested to add new card."));
 		} else if (checkoutActionCode === "ERROR") {
-			var cardList = document.querySelector('src-card-list');
+			var cardList = document.querySelectorAll('src-card-list')[0];
 			$(cardList).remove();
 			logger.error("ERROR checkoutActionCode received for CLICK_TO_PAY, cannot proceed");
 			Options.onError(new WidgetError("CLICK_TO_PAY", "click_to_pay_checkout_error", "Error checkout action code received, cannot proceed."));
@@ -50142,7 +50142,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			}
 		}).catch(function(error) {
 			srcWindow.close();
-			logger.error("Exception occurred while checkout with card: " + error.message);
+			logger.error("Exception occurred while checkout with new card: " + error.message);
 			Options.onError(new WidgetError("CLICK_TO_PAY", "checkout_with_new_card", "Error occurred, cannot proceed."));
 			return;
 		});
@@ -50784,7 +50784,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	};
 
 	Payment.processEncryptCardResponse = function(response, $form) {
-		if (response !== undefined && response !== "" && response.encryptedCard !== null && response.cardBrand !== null && response.network !== null)
+		if (!Util.isNullOrUndefined(response) && !Util.isBlank(response) && !Util.isNullOrUndefined(response.encryptedCard) && !Util.isBlank(response.encryptedCard) && !Util.isNullOrUndefined(response.cardBrand) && !Util.isBlank(response.cardBrand) !== null && !Util.isNullOrUndefined(response.network) && !Util.isBlank(response.network) !== null) // jshint ignore: line
 		{
 			ClickToPayPaymentWidget.checkoutOfNewCard($form, response);
 		}
@@ -55714,9 +55714,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	};
 
 	IframeToParentCommunication.prototype.updateCardBrand = function(brand) {
-		if (brand) {
-			this.updateCardLogo(brand);
-		}
+		this.updateCardLogo(brand);
 	};
 
 	IframeToParentCommunication.prototype.setUpBrandList = function(brandList) {
@@ -56074,7 +56072,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	};
 
 	IframeToParentCommunication.prototype.updateCardLogo = function(brands) {
-		if (this.isCardLogoActivated() && brands) {
+		if (this.isCardLogoActivated()) {
 			var $logoLayer = $('#cardLogoId');
 
 			var detectedBrand = brands;
@@ -56095,7 +56093,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	function getActiveBrandIfPresentInCardForm(activeBrand, brandsInForm) {
 
 		var result;
-		if (brandsInForm.length > 0 && activeBrand !== undefined) {
+		if (brandsInForm.length > 0 && activeBrand !== undefined && activeBrand != null) {
 			$.each(brandsInForm, function(index, optionValue) {
 				if(optionValue === activeBrand) {
 					result = activeBrand;
@@ -56139,8 +56137,9 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 	};
 
 	function resetCardLogoLayer($logoLayer, brand) {
+
+		$logoLayer.removeClass();
 		if (brand !== undefined) {
-			$logoLayer.removeClass();
 			$logoLayer.addClass("wpwl-brand-card wpwl-brand wpwl-brand-" + brand);
 			$logoLayer.css({
 				'-moz-transform': 'scale(0.5)',
