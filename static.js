@@ -56140,12 +56140,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 		$logoLayer.removeClass();
 		if (brand !== undefined) {
-			$logoLayer.addClass("wpwl-brand-card wpwl-brand wpwl-brand-" + brand);
-			$logoLayer.css({
-				'-moz-transform': 'scale(0.5)',
-				'zoom': '0.5',
-				'margin-top': '-5px'
-			});
+			$logoLayer.addClass("wpwl-saqa-logo wpwl-brand-card wpwl-brand wpwl-brand-" + brand);
 		}
 	}
 
