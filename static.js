@@ -11902,6 +11902,13 @@ define('module/Setting',['require','jquery','module/Parameter','module/forms/Car
         submit: {type: "submit"}
     },
 
+	s.sepaAsyncWorkflowPaymentData = {
+		logo: { brand:"SEPA", type:"logo" },
+		accountHolder: { i18nIdentifier:"accountHolder", name:"bankAccount.holder", type:"text" },
+		accountIban: { i18nIdentifier:"accountIban", name:"bankAccount.iban", type:"text" },
+		submit: { type:"submit" }
+	},
+
 	s.directDebitSepaMixPaymentData = {
 		country:  { i18nIdentifier: "country", name:"bankAccount.country", type:"select"},
 		accountHolder: { i18nIdentifier:"accountHolder", name:"bankAccount.holder", type:"text" },
@@ -36269,6 +36276,8 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 				    generateTextOnlyElement(paymentInputsString, elemName, paymentData);
 				} else if (paymentData.type === 'confirmation') {
 					generateConfirmationElement(paymentInputsString, elemName, paymentData);
+				} else if (paymentData.type === 'logo') {
+					generateBrandLogoElement(paymentInputsString, paymentData);
 				} else {
 					generatePaymentInput(paymentInputsString, elemName, paymentData);
 				}
@@ -36294,6 +36303,11 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 		var html = Generate.groupDiv(elemName,
 			Generate.textDiv(elemName, I18n[paymentData.i18nIdentifier])
 		);
+		paymentInputsString.push(html);
+	}
+
+	function generateBrandLogoElement(paymentInputsString, paymentData) {
+		var html = Generate.string(Generate.groupStart("brand"), Generate.logo(paymentData.brand), Generate.groupEnd());
 		paymentInputsString.push(html);
 	}
 
@@ -44283,7 +44297,7 @@ define('module/forms/VirtualAccountPaymentForm',['require','shim/ObjectCreate','
 
 	return VirtualAccountPaymentForm;
 });
-define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement','module/SaqaUtil','module/Detection'],function(require){
+define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement','module/SaqaUtil','module/Detection','module/Wpwl'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
@@ -44296,7 +44310,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	var BillingAgreement = require("module/BillingAgreement");
 	var SaqaUtil = require('module/SaqaUtil');
 	var Detection = require('module/Detection');
-
+	var Wpwl = require('module/Wpwl');
 	var Validate = {};
 
 	/**
@@ -44629,10 +44643,12 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		}
 
 		var n2 = Validate.validateDirectDebitPaymentElement($idDocId, false, $idDocType);
-		
-		// For SEPA check that the user agreed to pay
-		var $mandateConfirmation = paymentForm.getMandateConfirmationCheckbox();
-		sepa = Validate.validateDirectDebitPaymentCheckbox($mandateConfirmation);
+
+		// For SEPA sync workflow, check that the user agreed to pay
+		if (!Wpwl.checkout.config.b4SepaAsyncWorkflow) {
+			var $mandateConfirmation = paymentForm.getMandateConfirmationCheckbox();
+			sepa = Validate.validateDirectDebitPaymentCheckbox($mandateConfirmation);
+		}
 
 		var validationErrors = Util.extend({}, l, m, n, n2, sepa);
 
@@ -54790,11 +54806,17 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			});
 		}
 		if ( sepaMethods.length > 0 ) {
+			var paymentInputs;
+			if (Wpwl.checkout.config.b4SepaAsyncWorkflow) {
+				paymentInputs = Setting.sepaAsyncWorkflowPaymentData;
+			} else {
+				paymentInputs = Setting.sepaPaymentData;
+			}
 			lastElement = renderDirectDebit ({
 				container: lastElement,
 				paymentMethods: sepaMethods,
 				shopperResultUrl: shopperResultUrl,
-				paymentInputs: Setting.sepaPaymentData,
+				paymentInputs: paymentInputs,
 				brand: "SEPA"
 			});
 		}
