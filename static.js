@@ -50126,10 +50126,26 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		// continue event listener for SRC input - validate OTP
 		srcOtpInput.addEventListener('continue', function() {
 			// to allow click only once
-			var otpField = srcOtpInput.shadowRoot;
+			/*var otpField = srcOtpInput.shadowRoot;
 			var inputField = $(otpField).find('input');
-			var otp = inputField.val();
-			ClickToPayPaymentWidget.validateOtp(otp, srcOtpInput);
+			var otp = inputField.val();*/
+			try {
+				var otpInputs = srcOtpInput.shadowRoot.querySelector("sal-code-input").shadowRoot.querySelectorAll("input");
+				var otp = "";
+				if (!Util.isNullOrUndefined(otpInputs) && !Util.isBlank(otpInputs))
+				{
+					var i;
+					for (i=0; i < otpInputs.length; i++) {
+						otp = otp + otpInputs[i].value;
+					}
+					ClickToPayPaymentWidget.validateOtp(otp, srcOtpInput);
+				} else {
+					throw new Error("Error while fetching OTP, cannot proceed.");
+				}
+			} catch(e) {
+				logger.error("Error while fetching OTP, cannot proceed.");
+				Options.onError(new WidgetError("CLICK_TO_PAY", "otp_error", "Error while fetching OTP, cannot proceed."));
+			}
 		}, {once: true});
 	};
 
