@@ -53333,22 +53333,26 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
                 .then(processCreatePaymentResponse)
                 .fail(notifyError);
         }
-        return Options.createCheckout({brand:this.getBrand()})
-            .then(function(checkoutId) {
-                if (checkoutId) {
-                    Wpwl.checkout.id = checkoutId;
-                    var endpoint = Generate.string(Wpwl.url, '/v', Wpwl.apiVersion, '/checkouts/',
-                        Wpwl.checkout.id, '/payment');
-                    return PaypalRestPaymentForm.sendInternalPostRequest(endpoint, HEADER_FORMAT, data);
+        var createCheckoutResult = Options.createCheckout({brand:this.getBrand()});
+        var createCheckoutPromise = Promise.resolve(createCheckoutResult);
+        return createCheckoutPromise
+            .then(
+                function(checkoutId) {
+                    if (checkoutId) {
+                        Wpwl.checkout.id = checkoutId;
+                        var endpoint = Generate.string(Wpwl.url, '/v', Wpwl.apiVersion, '/checkouts/',
+                            Wpwl.checkout.id, '/payment');
+                        return PaypalRestPaymentForm.sendInternalPostRequest(endpoint, HEADER_FORMAT, data);
+                    }
+                },
+                function(response) {
+                    var info = "Creating checkout returned error: " + JSON.stringify(response);
+                    logger.additionalLog("INFO", info);
+                    notifyError(info);
+                    return Promise.reject(new Error("Transaction Declined - Error creating ACI checkout"));
                 }
-            })
-            .then(processCreatePaymentResponse)
-            .catch(function(response) {
-                var info = "Creating checkout returned error: " + JSON.stringify(response);
-                logger.additionalLog("INFO", info);
-                notifyError(info);
-                return Promise.reject(response); // jshint ignore:line
-            });
+            )
+            .then(processCreatePaymentResponse);
     };
 
     // triggered after user approves payment within PayPal popup
@@ -53570,7 +53574,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     };
 
     PaypalRestPaymentForm.prototype.processCreatePaymentResponse = function(response) {
-        if(!response.additionalAttributes || response.additionalAttributes.connectorId == null){
+        if(!response || !response.additionalAttributes || response.additionalAttributes.connectorId == null){
            return Promise.reject(new Error("Transaction Declined"));
         }
         this.callbackUrl = response.callbackUrl;
