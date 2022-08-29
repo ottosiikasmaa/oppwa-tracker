@@ -50108,7 +50108,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		$(clickToPayForm).after('<src-otp-input card-brands="' + ClickToPayPaymentWidget.initializedBrands + '" locale="' + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase() + '" masked-identity-value="' + result.maskedValidationChannel + '" network-id="' + result.network + '" display-cancel-option="' + Options.clickToPay.otpScreen.displayCancelOption + '" display-header="' + Options.clickToPay.otpScreen.displayHeader + '" type="'  + Options.clickToPay.otpScreen.type + '"></src-otp-input>');
 		var srcOtpInput = document.querySelector('src-otp-input');
 
-		ClickToPayPaymentWidget.continueForOtpInput(srcOtpInput);
+		ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
 
 		// close event listener for SRC input - close the OTP input
 		srcOtpInput.addEventListener('close', function() {
@@ -50121,31 +50121,17 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		});
 	};
 
+	ClickToPayPaymentWidget.addOtpChangedEventListener = function(srcOtpInput) {
+		srcOtpInput.addEventListener('otpChanged', function (obj) {
+			ClickToPayPaymentWidget.continueForOtpInput(srcOtpInput, obj.detail);
+		});
+	};
+
 	/** submit OTP value for validation */
-	ClickToPayPaymentWidget.continueForOtpInput = function(srcOtpInput) {
+	ClickToPayPaymentWidget.continueForOtpInput = function(srcOtpInput, otp) {
 		// continue event listener for SRC input - validate OTP
 		srcOtpInput.addEventListener('continue', function() {
-			// to allow click only once
-			/*var otpField = srcOtpInput.shadowRoot;
-			var inputField = $(otpField).find('input');
-			var otp = inputField.val();*/
-			try {
-				var otpInputs = srcOtpInput.shadowRoot.querySelector("sal-code-input").shadowRoot.querySelectorAll("input");
-				var otp = "";
-				if (!Util.isNullOrUndefined(otpInputs) && !Util.isBlank(otpInputs))
-				{
-					var i;
-					for (i=0; i < otpInputs.length; i++) {
-						otp = otp + otpInputs[i].value;
-					}
-					ClickToPayPaymentWidget.validateOtp(otp, srcOtpInput);
-				} else {
-					throw new Error("Error while fetching OTP, cannot proceed.");
-				}
-			} catch(e) {
-				logger.error("Error while fetching OTP, cannot proceed.");
-				Options.onError(new WidgetError("CLICK_TO_PAY", "otp_error", "Error while fetching OTP, cannot proceed."));
-			}
+			ClickToPayPaymentWidget.validateOtp(srcOtpInput, otp);
 		}, {once: true});
 	};
 
@@ -50191,14 +50177,14 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		srcChannel.addEventListener('close', function() {
 			$(srcChannel).remove();
 			$(srcOtpInput).show();
-			ClickToPayPaymentWidget.continueForOtpInput(srcOtpInput);
+			ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
 		});
 	};
 
 	/** validate OTP entered by user for Email lookup flow
 	* if success - show card list, else show error message in OTP input component
 	*/
-	ClickToPayPaymentWidget.validateOtp = function(otp, srcOtpInput) {
+	ClickToPayPaymentWidget.validateOtp = function(srcOtpInput, otp) {
 		var validateParams = {
 							"value": otp
 							};
@@ -50214,7 +50200,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		}).catch(function(error) {
 			// show error message based on reason on SRC OTP Input UI
 			srcOtpInput.setAttribute("error-reason", error.reason);
-			ClickToPayPaymentWidget.continueForOtpInput(srcOtpInput);
+			ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
 			logger.error('Error occurred while requesting OTP: ' + error.message);
 			Options.onError(new WidgetError("CLICK_TO_PAY", "requestOtp", "Error occurred while requesting OTP"));
 		});
