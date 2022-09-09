@@ -46799,8 +46799,23 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
         // Limit payments to cards from specific countries. Example, ['US']
         "supportedCountries",
 
+        // Boolean
+        "supportsCouponCode",
+
+        // Initial coupon code
+        "couponCode",
+
+        // Can be: enabled, storePickup
+        "shippingContactEditingMode",
+
         // Can contain: email, name, phone, postalAddress, phoneticName
-        "requiredBillingContactFields", "requiredShippingContactFields"];
+        "requiredBillingContactFields", "requiredShippingContactFields",
+
+        // Can contain: phoneNumber, emailAddress, givenName, familyName, phoneticGivenName,
+        // phoneticFamilyName, addressLines, subLocality, locality, postalCode,
+        // subAdministrativeArea, administrativeArea, country, countryCode
+        "billingContact", "shippingContact"
+        ];
 
     var ApplePay = {};
 
@@ -46872,6 +46887,12 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             session.onpaymentmethodselected = function(event) {
                 ApplePay.onPaymentMethodSelected(session, event.paymentMethod);
             };
+        }
+
+        if (Options.applePay.onCouponCodeChanged) {
+            session.addEventListener("couponcodechanged", function(event) {
+                ApplePay.onCouponCodeChanged(session, event.couponCode);
+            });
         }
 
         if (Options.applePay.onShippingContactSelected) {
@@ -46963,6 +46984,35 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             } else {
                 session.completePaymentMethodSelection(update);
             }
+        });
+        return promise;
+    };
+
+    ApplePay.onCouponCodeChanged = function(session, couponCode) {
+        // Callback function should handle String
+        // and return ApplePayCouponCodeUpdate {newTotal, newLineItems, newShippingMethods, errors}
+        var callbackUpdate = Options.applePay.onCouponCodeChanged(couponCode);
+
+        // The callback result can be a promise or directly an update object.
+        // We wrap it with Promise.resolve() to handle both cases.
+        // Note that any then-able objects (esp. JavaScript and jQuery promises) should work.
+        var promise = Promise.resolve(callbackUpdate);
+        promise.then(function(update) {
+            if (update && update.status === "ABORT") {
+                session.abort();
+                return;
+            }
+
+            if (update.errors) {
+                var errors = [];
+
+                // Convert errors to ApplePayError objects
+                update.errors.forEach(function(error) {
+                    errors.push(new ApplePayError(error.code, error.contactField, error.message));
+                });
+                update.errors = errors;
+            }
+            session.completeCouponCodeChange(update);
         });
         return promise;
     };
