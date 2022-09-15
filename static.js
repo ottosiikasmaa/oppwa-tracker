@@ -49438,6 +49438,134 @@ define('module/integrations/RocketFuelInlineWidget',['require','jquery','module/
     return RocketFuelInlineWidget;
 });
 
+define('module/integrations/ACIPayAfterInlineWidget',['require','jquery','module/InlineFlow','module/forms/PaymentForm','module/Generate','module/InternalRequestCommunication','module/Options','module/error/WidgetError','module/error/SessionError','module/logging/LoggerFactory','lib/Spinner'],function(require) {
+
+    var $ = require('jquery');
+    var InlineFlow = require('module/InlineFlow');
+    var PaymentForm = require('module/forms/PaymentForm');
+    var Generate = require('module/Generate');
+    var InternalRequestCommunication = require('module/InternalRequestCommunication');
+    var Options = require("module/Options");
+    var WidgetError = require('module/error/WidgetError');
+    var SessionError = require('module/error/SessionError');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var Spinner = require('lib/Spinner');
+    var logger = LoggerFactory.getLogger('ACIPayAfterInlineWidget');
+    var ACIPayAfterInlineWidget = {};
+
+    ACIPayAfterInlineWidget.isACIPayAfterInlineFlow = function(brand) {
+        return InlineFlow.isInlineFlow(brand) && brand === "ACI_PAYAFTER";
+    };
+
+    ACIPayAfterInlineWidget.authorizePaymentAndLoadData = function (selectedPaymentForm) {
+        var formContainer = $(selectedPaymentForm)[0].parentElement;
+        ACIPayAfterInlineWidget.spinner = new Spinner(Options.spinner).spin(formContainer);
+
+        var $form = $(selectedPaymentForm);
+        var paymentForm = new PaymentForm($form);
+        this.paymentBrand = paymentForm.getBrand();
+
+        if (InlineFlow.isInlineFlow(this.paymentBrand)) {
+            var parent = selectedPaymentForm.offsetParent;
+            if (parent) {
+                this.parentDivClassSelector = this.returnClassSelector($(parent).attr('class'));
+                this.prepareAndSendTransaction($form);
+
+            } else {
+                ACIPayAfterInlineWidget.spinner.stop();
+                logger.error('Cannot identify the parent widget div!');
+                Options.onError(new WidgetError('UConnect-'+this.paymentBrand, 'cannot_insert_widget', 'Parent container undefined'));
+            }
+            return false;
+        }
+        return true;
+    };
+
+    ACIPayAfterInlineWidget.returnClassSelector = function (classList) {
+        if (classList) {
+            return "." + classList.replace(/\s/g, ".");
+        }
+        return "";
+    };
+
+    ACIPayAfterInlineWidget.prepareAndSendTransaction = function ($form) {
+        logger.info("prepareAndSendTransaction start");
+        $form.append($.parseHTML(Generate.generateInlineFlowHiddenCustomParam($form)));
+        $form.append($.parseHTML(Generate.generateIsSourceBrowserHiddenParam($form)));
+
+        ajaxSubmitForm($form)
+            .then(function(response) {
+                ACIPayAfterInlineWidget.loadChargeAfterWidget(response);
+            })
+            .fail(function(reason) {
+                notifyError(reason);
+                ACIPayAfterInlineWidget.spinner.stop();
+            });
+        logger.info("prepareAndSendTransaction end");
+    };
+
+    ACIPayAfterInlineWidget.loadChargeAfterWidget = function (response) {
+        ACIPayAfterInlineWidget.spinner.stop();
+        if (response && response.redirect && response.redirect.url) {
+            try {
+                var srcScript = document.createElement("script");
+                srcScript.setAttribute("src", response.redirect.url);
+                srcScript.setAttribute("async", true);
+                document.head.appendChild(srcScript);
+
+                disablePayButton(true);
+            }
+            catch (e) {
+                console.error('Could not initialize and load ACIPayAfter inline widget: ' + toLoggableValue(e));
+            }
+        } else {
+            logger.error("No valid response received from ACIPayAfter, cannot proceed.");
+            Options.onError(new WidgetError("ACIPayAfter", "no_response", "No valid response received from ACIPayAfter, cannot proceed."));
+        }
+    };
+
+    function ajaxSubmitForm($form) {
+        return InternalRequestCommunication.getSender()
+            .then(function(sender) {
+                return sender.send({
+                    url: $form.attr("action"),
+                    method: $form.attr("method"),
+                    headers: {
+                        Accept: "application/json; charset=utf-8"
+                    },
+                    data: $form.serialize()
+                });
+            });
+    }
+
+    function notifyError(reason) {
+        logger.error("Exception occurred while submitting the form via an Ajax call. Reason: " + reason);
+        if (SessionError.isSessionTimeout(reason)) {
+            SessionError.onTimeoutError();
+        } else {
+            Options.onError(new WidgetError("ACIPayAfter", "ajax_submit_fail", "Exception occurred while submitting the"+
+                "form via an Ajax call. Reason: " + reason));
+        }
+    }
+    function toLoggableValue(param) {
+        if (typeof param === 'object') {
+            // object toString will return [object Object] so we must stringify, but not errors which stringified return {}
+            return (param instanceof Error) ? param.toString() : JSON.stringify(param);
+
+        } else if (typeof param === 'function') {
+            return param.toString();
+
+        } else {
+            return param;
+        }
+    }
+
+    function disablePayButton(status) {
+        $(".wpwl-button-brand").prop("disabled", status);
+    }
+    return ACIPayAfterInlineWidget;
+});
+
 /**
  * This module contains the logic specific for Upg Mobile Payment brand i.e., MEEZA_QR and MEEZA_LINK
  * This is used to load QR in iframe for MEEZA_QR and MEEZA_LINK brand
@@ -50699,7 +50827,7 @@ define('module/integrations/VippsQrWidget',['require','jquery','module/InlineFlo
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/integrations/VippsQrWidget','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/ACIPayAfterInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/integrations/VippsQrWidget','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -50731,7 +50859,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
 	var BancontactMobilePaymentWidget = require('module/integrations/BancontactMobilePaymentWidget');
 	var TrustlyInlineWidget = require('module/integrations/TrustlyInlineWidget');
+	/* ConnectIn Specific Brands : Start */
 	var RocketFuelInlineWidget = require('module/integrations/RocketFuelInlineWidget');
+	var ACIPayAfterInlineWidget = require('module/integrations/ACIPayAfterInlineWidget');
+	/* ConnectIn Specific Brands : End */
 	var UpgMobilePaymentWidget = require('module/integrations/UpgMobilePaymentWidget');
 	var ClickToPayPaymentWidget = require('module/integrations/ClickToPayPaymentWidget');
 	var WidgetError = require("module/error/WidgetError");
@@ -51703,6 +51834,9 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					else if (RocketFuelInlineWidget.isRocketFuelInlineFlow(brand)) {
 						logger.info("Initiating RocketFuel inline flow");
 						return RocketFuelInlineWidget.authorizePaymentAndLoadData(this);
+					}
+					else if (ACIPayAfterInlineWidget.isACIPayAfterInlineFlow(brand)) {
+						return ACIPayAfterInlineWidget.authorizePaymentAndLoadData(this);
 					}
 					else if (VippsQrWidget.isVippsInlineFlow(brand)) {
                         return VippsQrWidget.authorizePaymentAndLoadQr(this);
@@ -56478,7 +56612,7 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 			var $logoLayer = $('<div/>').attr("id", 'cardLogoId');
 			this.$form.append($logoLayer);
 
-			this.$input.css('width', 'auto');
+			this.$input.css('width', '100%');
 			this.$input.resize();
 		}
 	};
