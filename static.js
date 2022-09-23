@@ -11098,6 +11098,7 @@ define('module/Parameter',[],function(){
 	Parameter.BANKACCOUNT_HOLDER = "bankAccount.holder";
 	Parameter.BANKACCOUNT_IBAN = "bankAccount.iban";
 	Parameter.BANKACCOUNT_NUMBER = "bankAccount.number";
+	Parameter.BANKACCOUNT_ROUTINGNUMBER = "bankAccount.routingNumber";
 	
 	Parameter.CARD_CVV = "card.cvv";
 	Parameter.CARD_EXPIRY_MONTH = "card.expiryMonth";
@@ -11891,6 +11892,13 @@ define('module/Setting',['require','jquery','module/Parameter','module/forms/Car
 		accountIban: { i18nIdentifier:"accountIban", name:"bankAccount.iban", type:"text" },
 		accountBic: { i18nIdentifier:"accountBankBic", name:"bankAccount.bic", type:"text" },
 		submit: {type: "submit"}
+	},
+
+	s.directDebitUsOpenBankingPaymentData = {
+	    accountHolder: { i18nIdentifier:"accountHolder", name:"bankAccount.holder", type:"text" },
+	    accountNumber: { i18nIdentifier:"accountNumber", name:"bankAccount.number", type:"tel" },
+	    accountRoutingNumber: { i18nIdentifier:"accountRoutingNumber", name:"bankAccount.routingNumber", type:"text" },
+	    submit: {type: "submit"}
 	},
 
 	s.sepaPaymentData = {
@@ -12754,6 +12762,7 @@ define('module/Language',[],function(){
 			accountNumberIban: "IBAN or account number",
 			accountIban:	"IBAN",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Name of bank",
 			brand:			"Brand",
 			cancel:			"Back",
@@ -12781,6 +12790,7 @@ define('module/Language',[],function(){
 			accountNumberError:	"Invalid account number",
 			accountNumberIbanError: "Invalid IBAN or account number",
 			accountIbanError:   "Invalid IBAN",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Invalid card holder",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -13115,6 +13125,7 @@ define('module/Language',[],function(){
 			accountNumberIban: "IBAN 혹은 계좌번호",
 			accountIban:	"IBAN",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"은행명",
 			brand:			"브랜드",
 			cancel:			"돌아가기",
@@ -13142,6 +13153,7 @@ define('module/Language',[],function(){
 			accountNumberError:	"무효 계좌번호",
 			accountNumberIbanError: "무효 IBAN 혹은 계좌번호",
 			accountIbanError:   "무효 IBAN",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"무효 카드명의인",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -13213,6 +13225,7 @@ define('module/Language',[],function(){
 			accountNumberIban: "الآيبان أو رقم الحساب",
 			accountIban:	"رقم الحساب المصرفي الدولي (الآيبان)",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"إسم البنك",
 			brand:			"نوع البطاقة",
 			cancel:			"رجوع",
@@ -13240,6 +13253,7 @@ define('module/Language',[],function(){
 			accountNumberError:	"رقم الحساب غير صحيح",
 			accountNumberIbanError: "رقم الحساب أو رقم الحساب المصرفي الدولي (الآيبان) غير صحيح",
 			accountIbanError:   "رقم الحساب المصرفي الدولي (الآيبان) غير صحيح",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"اسم حامل البطاقة غير صحيح",
 			surNameError:		"اسم العائلة غير صحيح",
 			givenNameError:		"اسم غير صحيح",
@@ -13570,6 +13584,7 @@ define('module/Language',[],function(){
 			accountId:		"Id",
 			accountNumber:	"Numéro de compte",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Nom de la banque",
 			brand:			"Type de carte",
 			cancel:			"Retour",
@@ -13593,6 +13608,7 @@ define('module/Language',[],function(){
 			accountBankError:	"Codigo Entidad no válidos",
 			accountHolderError:	"Titulaire du compte invalide",
 			accountNumberError:	"Numéro de compte invalide",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Porte-cartes invalides",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -13664,6 +13680,7 @@ define('module/Language',[],function(){
 			accountNumberIban: "IBAN oder Konto-Nr.",
 			accountIban:	"IBAN",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Bankname",
 			brand:			"Kartentyp",
 			cancel:			"Zurück",
@@ -13691,6 +13708,7 @@ define('module/Language',[],function(){
 			accountNumberError:	"Ungültige Kontonummer",
 			accountNumberIbanError: "Ungültige IBAN oder Kontonummer",
 			accountIbanError:   "Ungültige IBAN",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Ungültiger Karteninhaber",
 			surNameError:		"Ungültiger Vorname",
 			givenNameError:		"Ungültiger Nachname",
@@ -14013,6 +14031,7 @@ define('module/Language',[],function(){
         			accountId:		"Id",
         			accountNumber:	"Numéro de compte",
         			accountVerification: "Account verification",
+        			accountRoutingNumber: "Routing number",
         			bankName:		"Nom de la banque",
         			brand:			"Type de carte",
         			cancel:			"Retour",
@@ -14036,6 +14055,7 @@ define('module/Language',[],function(){
         			accountBankError:	"Code saisi invalide",
         			accountHolderError:	"Titulaire du compte invalide",
         			accountNumberError:	"Numéro de compte invalide",
+        			accountRoutingNumberError: "Invalid routing number",
         			cardHolderError:	"Titulaire invalide",
         			surNameError:		"Nom de famille invalide",
         			givenNameError:		"Prenom invalide",
@@ -14358,6 +14378,7 @@ define('module/Language',[],function(){
 			accountId:		"Id",
 			accountNumber:	"Número de cuenta",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Nombre del banco",
 			brand:			"Tipo de tarjeta",
 			cancel:			"Atrás",
@@ -14382,6 +14403,7 @@ define('module/Language',[],function(){
 			accountHolderError:	"Titular de la cuenta no válido",
 			accountNumberError:	"Número de cuenta no válido",
 			accountIbanError:   "IBAN inválido",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Titular de tarjeta no válido",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -14701,6 +14723,7 @@ define('module/Language',[],function(){
 			accountId:		"Id",
 			accountNumber:	"Numero del conto corrente",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Nome della banca",
 			brand:			"Tipo di carta",
 			cancel:			"Tornare indietro",
@@ -14724,6 +14747,7 @@ define('module/Language',[],function(){
 			accountBankError:	"Code ABI non valido",
 			accountHolderError:	"Titolare del conto non valido",
 			accountNumberError:	"Numero di conto non valido",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Titolare della carta non valida",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -14794,6 +14818,7 @@ define('module/Language',[],function(){
 			accountId:		"Id",
 			accountNumber:	"Rekeningsnr.",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Naam van de bank",
 			brand:			"Kaart-type",
 			cancel:			"Terug",
@@ -14817,6 +14842,7 @@ define('module/Language',[],function(){
 			accountBankError:	"Ongeldige bankcode",
 			accountHolderError:	"Ongeldig eigenaar",
 			accountNumberError:	"Ongeldig accountnummer",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Ongeldige kaarthouder",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -14887,6 +14913,7 @@ define('module/Language',[],function(){
 			accountId:		"Id",
 			accountNumber:	"Kontonummer",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Navn bank",
 			brand:			"Kortmærke",
 			cancel:			"Tilbage",
@@ -14910,6 +14937,7 @@ define('module/Language',[],function(){
 			accountBankError:	"Ugyldigt kontonummer eller bankkode",
 			accountHolderError:	"Ugyldig kontoindehaver",
 			accountNumberError:	"Ugyldigt kontonummer",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Ugyldig kortholderen",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -14980,6 +15008,7 @@ define('module/Language',[],function(){
 			accountId:		"Id",
 			accountNumber:	"Tilinumero",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Pankki",
 			brand:			"Kortin tyyppi",
 			cancel:			"Peruuta",
@@ -15003,6 +15032,7 @@ define('module/Language',[],function(){
 			accountBankError:	"Väärä tilinumero tai pankin tunnus",
 			accountHolderError:	"Virheellinen tilin haltijan",
 			accountNumberError:	"Virheellinen tilinumero",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Virheellinen kortin haltija",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -15073,6 +15103,7 @@ define('module/Language',[],function(){
 			accountId:		"Id",
 			accountNumber:	"Kontonummer",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Bankens namn",
 			brand:			"Korttyp",
 			cancel:			"Bakåt",
@@ -15096,6 +15127,7 @@ define('module/Language',[],function(){
 			accountBankError:	"Ogiltigt kontonummer eller bankkod",
 			accountHolderError:	"Ogiltigt kontoinnehavaren",
 			accountNumberError:	"Ogiltigt kontonummer",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Ogiltigt namn",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -15166,6 +15198,7 @@ define('module/Language',[],function(){
 			accountId:		"Bank ID",
 			accountNumber:	"Hesap Numarası",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:		"Bankanın İsmi",
 			brand:			"Marka",
 			cancel:			"Geri",
@@ -15189,6 +15222,7 @@ define('module/Language',[],function(){
 			accountBankError:	"Geçersiz Banka Kodu",
 			accountHolderError:	"Geçersiz Hesap Sahibi"	,
 			accountNumberError:	"Geçersiz Hesap Numarası",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"Geçersiz Kart Sahibi",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -15256,6 +15290,7 @@ define('module/Language',[],function(){
 			accountId:"ID",
 			accountNumber:  "口座番号",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName: "銀行の名前",
 			brand:	"カード会社",
 			cancel:		"戻る",
@@ -15279,6 +15314,7 @@ define('module/Language',[],function(){
 			accountBankError:   "銀行コードが無効です",
 			accountHolderError: "口座名義人が無効です" ,
 			accountNumberError: "口座番号が無効です",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:	"カード所有者名が無効です",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -15346,6 +15382,7 @@ define('module/Language',[],function(){
 			accountId:"Identifikacija",
 			accountNumber:  "številka racuna",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName: "Banka",
 			brand:	"Znamka kartice",
 			cancel:		"Nazaj",
@@ -15369,6 +15406,7 @@ define('module/Language',[],function(){
 			accountBankError:"Napacna koda banke",
 			accountHolderError:"Vnesite vrednosti za Ime lastnika",
 			accountNumberError:"Napacna številka racuna ali kode banke",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Vnesite vrednosti za Ime lastnika",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -15436,6 +15474,7 @@ define('module/Language',[],function(){
              accountId:"Nome do usuário / Id",
              accountNumber:"Número da conta",
              accountVerification: "Account verification",
+             accountRoutingNumber: "Routing number",
              bankName:"Banco",
              brand:"Cartão",
              cancel:"Voltar",
@@ -15459,6 +15498,7 @@ define('module/Language',[],function(){
              accountBankError:"Código do banco inválido",
              accountHolderError:"Por favor insira um valor para o Titular da conta",
              accountNumberError:"Número da conta ou código do banco inválidos",
+             accountRoutingNumberError: "Invalid routing number",
              cardHolderError:"Por favor insira um valor para o Titular do cartão",
              surNameError: "Sobrenome Inválido",
              givenNameError: "Nome Inválido",
@@ -15532,6 +15572,7 @@ define('module/Language',[],function(){
 			accountId:"Nazwa użytkownika / identyfikator",
 			accountNumber:"Nr konta",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:"Bank",
 			brand:"Rodzaj karty",
 			cancel:"Wstecz",
@@ -15555,6 +15596,7 @@ define('module/Language',[],function(){
 			accountBankError:"Nieprawidłowy kod banku",
 			accountHolderError:"Nazwisko właściciela nie może być puste",
 			accountNumberError:"Nieprawidłowy nr konta lub kod banku",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Nazwisko właściciela nie może być puste",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -15622,6 +15664,7 @@ define('module/Language',[],function(){
 			accountId:"Uživatelské jméno / číslo",
 			accountNumber:"Číslo účtu",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:"Banka",
 			brand:"Typ karty",
 			cancel:"Zpět",
@@ -15645,6 +15688,7 @@ define('module/Language',[],function(){
 			accountBankError:"Neplatný kód banky",
 			accountHolderError:"Zadejte prosím hodnotu Majitel účtu",
 			accountNumberError:"Neplatné číslo účtu nebo kód banky",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Zadejte prosím hodnotu Držitel karty",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -15712,6 +15756,7 @@ define('module/Language',[],function(){
 			accountId: "Felhasználónév",
 			accountNumber: "Számlaszám",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName: "Banknév",
 			brand: "Márka",
 			cancel: "Vissza",
@@ -15735,6 +15780,7 @@ define('module/Language',[],function(){
 			accountBankError:"A bank kód érvénytelen",
 			accountHolderError:"Kérjük, adja meg a következőt fiók jogosult",
 			accountNumberError:"Érvénytelen számla száma vagy banki kód",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Kérjük adja meg a kártyatulajdonos nevét",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -15806,6 +15852,7 @@ define('module/Language',[],function(){
                 accountNumberIban: "IBAN ili broj računa",
                 accountIban:	"IBAN",
                 accountVerification: "Potvrda računa",
+                accountRoutingNumber: "Routing number",
                 bankName:		"Naziv banke",
                 brand:			"Robna marka",
                 cancel:			"Nazad",
@@ -15833,6 +15880,7 @@ define('module/Language',[],function(){
                 accountNumberError:	"Nevažeći broj računa",
                 accountNumberIbanError: "Nevažeći IBAN ili broj računa",
                 accountIbanError:	"Nevažeći IBAN",
+                accountRoutingNumberError: "Invalid routing number",
                 cardHolderError:	"Nevažeći vlasnik kartice",
                 surNameError:		"Nevažeće prezime",
                 givenNameError:		"Nevažeće ime",
@@ -16158,6 +16206,7 @@ define('module/Language',[],function(){
 			accountId:"Лична карта No. (IDCard)",
 			accountNumber:"Потребителско име / Id",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:"банка",
 			brand:"Вид на картата",
 			cancel:"Назад",
@@ -16181,6 +16230,7 @@ define('module/Language',[],function(){
 			accountBankError:"Невалиден банков код",
 			accountHolderError:"Моля въведете стойност за Титуляр на сметката",
 			accountNumberError:"Невалидни сметка No. или банков код",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Моля въведете стойност за Титуляр на картата",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -16248,6 +16298,7 @@ define('module/Language',[],function(){
 			accountId:"Nume de utilizator / Id",
 			accountNumber:"Numarul contului",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:"Banca",
 			brand:"Tipul cardului",
 			cancel:"Inapoi",
@@ -16271,6 +16322,7 @@ define('module/Language',[],function(){
 			accountBankError:"Codul bancii nu este valid",
 			accountHolderError:"Vă rugăm să introduceți o valoare pentru Detinatorul contului",
 			accountNumberError:"Numarul de cont sau codul bancii nu este valid",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Vă rugăm să introduceți o valoare pentru Titularul cardului",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -16338,6 +16390,7 @@ define('module/Language',[],function(){
 			accountId:"Имя пользователя / Id",
 			accountNumber:"№ счета",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:"Банк",
 			brand:"Карта",
 			cancel:"Назад",
@@ -16361,6 +16414,7 @@ define('module/Language',[],function(){
 			accountBankError:"Недействительный код банка",
 			accountHolderError:"Пожалуйста, введите владелеца счета",
 			accountNumberError:"Недействительный номер счета или код банка",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Пожалуйста, введите владельца карты",
 			surNameError:		"Неверная фамилия",
 			givenNameError:		"Неверное имя",
@@ -16515,6 +16569,7 @@ define('module/Language',[],function(){
 			accountId:"Όνομα χρήστη / Id",
 			accountNumber:"Αρ. Λογαριασμού",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:"Τράπεζα",
 			brand:"Κάρτα Μάρκα",
 			cancel:"Πίσω",
@@ -16538,6 +16593,7 @@ define('module/Language',[],function(){
 			accountBankError:"Áκυρα Τράπεζα κώδικα",
 			accountHolderError:"Παρακαλώ εισάγετε μια τιμή για κάτοχος λογαριασμού",
 			accountNumberError:"Áκυρα Αρ. Λογαριασμού ή Κωδικός Τράπεζας",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Παρακαλώ εισάγετε μια τιμή για κάτοχο της κάρτας",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -16605,6 +16661,7 @@ define('module/Language',[],function(){
 			accountId:"Brukernavn/ID",
 			accountNumber:"Kontonr.",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:"Bank",
 			brand:"Betalingsmåte",
 			cancel:"Tilbake",
@@ -16628,6 +16685,7 @@ define('module/Language',[],function(){
 			accountBankError:"Ugyldig bankkode",
 			accountHolderError:"Vennligst skriv inn en verdi for Kontoinnehaver",
 			accountNumberError:"Ugyldig kontonr. eller bankkode",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Vennligst skriv inn en verdi for Kortinnehaver",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -16698,6 +16756,7 @@ define('module/Language',[],function(){
 			accountId:"Užívateľské meno / číslo",
 			accountNumber:"Číslo účtu",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
 			bankName:"Banka",
 			brand:"Typ karty",
 			cancel:"Späť",
@@ -16721,6 +16780,7 @@ define('module/Language',[],function(){
 			accountBankError:"Neplatný kód banky",
 			accountHolderError:"Zadajte prosím hodnotu Majiteľ účtu",
 			accountNumberError:"Neplatné číslo účtu alebo kód banky",
+			accountRoutingNumberError: "Invalid routing number",
 			cardHolderError:"Zadajte prosím hodnotu Držiteľ karty",
 			surNameError:		"Invalid surname",
 			givenNameError:		"Invalid given name",
@@ -16792,6 +16852,7 @@ define('module/Language',[],function(){
         	accountNumberIban: "IBAN või konto number",
         	accountIban:	"IBAN",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
         	bankName:		"Panga nimi",
         	brand:			"Bränd",
         	cancel:			"Tagasi",
@@ -16819,6 +16880,7 @@ define('module/Language',[],function(){
         	accountNumberError:	"Kehtetu konto number",
        		accountNumberIbanError: "Kehtetu IBAN või konto number",
         	accountIbanError:   "Kehtetu IBAN",
+        	accountRoutingNumberError: "Invalid routing number",
         	cardHolderError:	"Kehtetu kaardi omanik",
         	surNameError:		"Kehtetu perekonnanimi",
         	givenNameError:		"Kehtetu eesnimi",
@@ -16896,6 +16958,7 @@ define('module/Language',[],function(){
         	accountNumberIban: "IBAN jeb konta numurs",
         	accountIban:	"IBAN",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
         	bankName:		"Bankas nosaukums",
         	brand:			"Zīmols",
         	cancel:			"Atpakaļ",
@@ -16923,6 +16986,7 @@ define('module/Language',[],function(){
         	accountNumberError:	"Nederīgs konta numurs",
         	accountNumberIbanError: "Nederīgs IBAN jeb konta numurs",
         	accountIbanError:   "Nederīgs IBAN",
+        	accountRoutingNumberError: "Invalid routing number",
         	cardHolderError:	"Neatbilstošs kartes turētājs",
         	surNameError:		"Neatbilstošs uzvārds",
         	givenNameError:		"Neatbilstošs vārds",
@@ -17000,6 +17064,7 @@ define('module/Language',[],function(){
         	accountNumberIban: "IBAN arba sąskaitos numeris",
         	accountIban:	"IBAN",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
         	bankName:		"Banko pavadinimas",
         	brand:			"Rūšis",
         	cancel:			"Atgal",
@@ -17027,6 +17092,7 @@ define('module/Language',[],function(){
         	accountNumberError:	"Neteisingas sąskaitos numeris",
         	accountNumberIbanError: "Neteisingas IBAN arba sąskaitos numeris",
         	accountIbanError:   "Neteisingas IBAN",
+        	accountRoutingNumberError: "Invalid routing number",
         	cardHolderError:	"Neteisingas sąskaitos turėtojas",
         	surNameError:		"Neteisinga pavardė",
         	givenNameError:		"Neteisingas vardas",
@@ -17104,6 +17170,7 @@ define('module/Language',[],function(){
             accountNumberIban: "IBAN o número de compte",
             accountIban:	"IBAN",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
             bankName:		"Nom del banc",
             brand:			"Tipus",
             cancel:			"Enrere",
@@ -17130,6 +17197,7 @@ define('module/Language',[],function(){
             accountNumberError:	"Número de compte no vàlid",
             accountNumberIbanError: "IBAN o número de compte no vàlid",
             accountIbanError:   "IBAN no vàlid",
+            accountRoutingNumberError: "Invalid routing number",
             cardHolderError:	"Titular de la targeta no vàlid",
             surNameError:		"Cognom no vàlid",
             givenNameError:		"Nom no vàlid",
@@ -17207,6 +17275,7 @@ define('module/Language',[],function(){
             accountNumberIban: "IBAN edo kontuaren zenbakia",
             accountIban:	"IBAN kodea",
 			accountVerification: "Account verification",
+			accountRoutingNumber: "Routing number",
             bankName:		"Bankuaren izena",
             brand:			"Marka",
             cancel:			"Atzera",
@@ -17233,6 +17302,7 @@ define('module/Language',[],function(){
             accountNumberError:	"Kontuaren zenbakia ez da zuzena",
             accountNumberIbanError: "IBAN edo kontuaren zenbakia ez da zuzena",
             accountIbanError:   "IBAN kodea ez da zuzena",
+            accountRoutingNumberError: "Invalid routing number",
             cardHolderError:	"Txartelaren titularra ez da zuzena",
             surNameError:		"Abizena ez da zuzena",
             givenNameError:		"Zehaztutako izena ez da zuzena",
@@ -37836,6 +37906,14 @@ define('module/forms/BankAccountPaymentForm',['require','module/Detection','shim
 		return this.getElement(Parameter.BANKACCOUNT_COUNTRY);
 	};
 
+	BankAccountPaymentForm.prototype.getRoutingNumber = function(){
+    		return this.getRoutingNumberElement().val();
+    	};
+
+    	BankAccountPaymentForm.prototype.getRoutingNumberElement = function(){
+    		return this.getElement(Parameter.BANKACCOUNT_ROUTINGNUMBER);
+    	};
+
 	BankAccountPaymentForm.prototype.isSimplifiedForm = function() {
         var brand = this.getBrand();
         if (/^DIRECTDEBIT_SEPA$/.test(brand)) {
@@ -44626,15 +44704,18 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 
 		var paymentForm = new BankAccountPaymentForm($form);
 
-		var l = [], m = [], n = [], sepa =[];
+		var l = [], m = [], n = [], sepa =[], rnumber = [];
 		var $holder = paymentForm.getHolderElement();
 		var $ibanOrAccountNumber = paymentForm.getIbanOrAccountNumberElement();
 		var $bicOrBankCode = paymentForm.getBicOrBankCodeElement();
         var $idDocId = paymentForm.getIdentificationDocIdElement();
         var $idDocType = paymentForm.getIdentificationDocTypeElement();
+        var $routingNumber = paymentForm.getRoutingNumberElement();
+
 
 		l = Validate.validateDirectDebitPaymentElement($holder);
 		m = Validate.validateDirectDebitPaymentElement($ibanOrAccountNumber);
+		rnumber = Validate.validateDirectDebitPaymentElement($routingNumber);
 
 		// BIC is no longer necessary when IBAN is provided.
 		if (!isValidIban($ibanOrAccountNumber))
@@ -44650,7 +44731,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 			sepa = Validate.validateDirectDebitPaymentCheckbox($mandateConfirmation);
 		}
 
-		var validationErrors = Util.extend({}, l, m, n, n2, sepa);
+		var validationErrors = Util.extend({}, l, m, n, n2, sepa, rnumber);
 
 		if (Options.billingAddress !== undefined) {
           	validationErrors = Validate.validateBillingParameters(paymentForm,validationErrors);
@@ -44702,19 +44783,27 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 			}
 		}
 
-		// iban or number
-		if( name === Parameter.BANKACCOUNT_IBAN || name === Parameter.BANKACCOUNT_NUMBER ) {
-			if ( paymentForm.isSimplifiedForm() ) {
-				if ( !Validate.validateIban( value ) ) {
-					return { accountIbanError: input };
-				}
-			}
-			else {
-				if (!Validate.validateAccountNumberOrIban( value ) ) {
-					return { accountNumberIbanError: input };
-				}
-			}
-		}
+		 var brand = paymentForm.getBrand();
+
+		 // iban or number
+		 if( name === Parameter.BANKACCOUNT_IBAN || name === Parameter.BANKACCOUNT_NUMBER ) {
+		     if ( paymentForm.isSimplifiedForm() ) {
+		          if ( !Validate.validateIban( value ) ) {
+		                return { accountIbanError: input };
+		          }
+		     }
+		     else if (/^ACI_INSTANTPAY$/.test(brand)) {
+		        //TODO: Brand for US open banking needs to be added for this condition to work
+		              if ( !Validate.validateAccountNumberUS( value ) ) {
+		                    return { accountNumberError: input };
+		              }
+		     }
+		     else {
+		           if (!Validate.validateAccountNumberOrIban( value ) ) {
+		                return { accountNumberIbanError: input };
+		           }
+		     }
+		 }
 
 		// bic or bank code
 		if( name === Parameter.BANKACCOUNT_BIC || name === Parameter.BANKACCOUNT_BANKCODE ){
@@ -44738,7 +44827,14 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		{
             return { taxNumberError: input };
 		}
-	};
+
+		//Routing Number
+		if (name === Parameter.BANKACCOUNT_ROUTINGNUMBER) {
+		       if (!Validate.validateRoutingNumber(value)) {
+		           return { accountRoutingNumberError: input };
+		       }
+		}
+    };
 
 	Validate.validateDirectDebitPaymentCheckbox = function($checkbox) {
         var isChecked = $checkbox.is(":checked");
@@ -44850,6 +44946,22 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	Validate.validateAccountBank = function(t) {
 		// SEPA BIC has 8 digits while US Routing Number is 9 digits long
 		return t = (t + "").replace(/\s+|-/g, ""), /^\d{8,9}$/.test(t);
+	};
+
+	Validate.validateRoutingNumber = function(t) {
+	    // Routing Number is lesser or equal to 9 digits long
+	    if (Util.trim(t).length === 0) {
+	        return false;
+	    }
+	    return t = (t + "").replace(/\s+|-/g, ""), /^\d{0,9}$/.test(t);
+	};
+
+	Validate.validateAccountNumberUS = function(t) {
+	    // Account Number for US is lesser or equal to 23 digits long
+	    if (Util.trim(t).length === 0) {
+	        return false;
+	    }
+	    return t = (t + "").replace(/\s+|-/g, ""), /^\d{0,23}$/.test(t);
 	};
 
 	Validate.validateBic = function(bic) {
@@ -55012,16 +55124,20 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 		var sepaMethods = [];
 		var ddSepaMixMethods = [];
 		var ddNationalMethods = [];
+		var ddUsOpenBankingMethods = [];
 		for (var idd = 0, len = ddMethods.length; idd < len; idd++) {
 			var ddMethod = ddMethods[idd];
 			if ( /^DIRECTDEBIT_SEPA$/.test( ddMethod ) ){
 				ddSepaMethods.push( ddMethod );
 			} else if ( /^SEPA$/.test( ddMethod ) ){
 				sepaMethods.push( ddMethod );
-			} else if( /^DIRECTDEBIT_SEPA_MIX/.test( ddMethod ) ) {
-				ddSepaMixMethods.push( ddMethod );
+			} else if (/^DIRECTDEBIT_SEPA_MIX/.test(ddMethod)) {
+			    ddSepaMixMethods.push(ddMethod);
+			} else if (/^ACI_INSTANTPAY$/.test(ddMethod)) {
+			    //TODO: Brand for US open banking needs to be added for this condition to work
+			    ddUsOpenBankingMethods.push(ddMethod);
 			} else {
-				ddNationalMethods.push( ddMethod );
+			    ddNationalMethods.push(ddMethod);
 			}
 		}
 
@@ -55035,6 +55151,18 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 				brand: "DIRECTDEBIT_SEPA"
 			});
 		}
+
+		//TODO: Brand for US open banking needs to be added for this condition to work
+		if ( ddUsOpenBankingMethods.length > 0 ) {
+		    lastElement = renderDirectDebit ({
+		        container: lastElement,
+		        paymentMethods: ddUsOpenBankingMethods,
+		        shopperResultUrl: shopperResultUrl,
+		        paymentInputs: Setting.directDebitUsOpenBankingPaymentData,
+		        brand: "ACI_INSTANTPAY"
+		    });
+		}
+
 		if ( sepaMethods.length > 0 ) {
 			var paymentInputs;
 			if (Wpwl.checkout.config.b4SepaAsyncWorkflow) {
