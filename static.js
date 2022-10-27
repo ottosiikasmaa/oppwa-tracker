@@ -44857,7 +44857,6 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		          }
 		     }
 		     else if (/^ACI_INSTANTPAY$/.test(brand)) {
-		        //TODO: Brand for US open banking needs to be added for this condition to work
 		              if ( !Validate.validateAccountNumberUS( value ) ) {
 		                    return { accountNumberError: input };
 		              }
@@ -51015,24 +51014,31 @@ define('module/integrations/OneyWidget',['require','jquery','module/Options','mo
 
     var OneyWidget = {};
 
-    OneyWidget.oneyLoadScript = "https://assets.oney.io/build/loader.min.js";
+    var testUrl = "https://assets-staging.oney.io/build/loader.min.js";
+    var prodUrl = "https://assets.oney.io/build/loader.min.js";
+
+    OneyWidget.oneyLoadScript = Wpwl.isTestSystem ?  testUrl : prodUrl;
+
     OneyWidget.renderOneyWidget = function() {
-        var script = document.createElement("script");
-        script.src = OneyWidget.oneyLoadScript;
-        var scriptAdded = OneyWidget.checkScript();
-        if (scriptAdded.added) {
-            scriptAdded.script.remove();
-        }
         /*jshint unused:false*/
         var options = OneyWidget.createOptions();
-        document.body.appendChild(script);
-        script.onload = function() {
-            /* jshint ignore:start */
-            loadOneyWidget(function() {
-                oneyMerchantApp.loadCheckoutSection(options);
+        $.getScript(OneyWidget.oneyLoadScript, function(data, textStatus, jqXhr) {
+                /* jshint ignore:start */
+                if (textStatus === "success" && jqXhr.status === 200) {
+                    loadOneyWidget(function() {
+                        oneyMerchantApp.loadCheckoutSection(options);
+                    });
+                }
+                /* jshint ignore:end */
+            }).fail(function(jqXhr){
+                var form = $(".wpwl-form-virtualAccount-ONEY");
+                PaymentView.disableSubmitButton(form, true);
+                PaymentView.reportError("validateOneyScript", {
+                    error: jqXhr.status,
+                    reason: "Unable to load script",
+                    form: form
+                });
             });
-            /* jshint ignore:end */
-        };
     };
 
     OneyWidget.checkEventTriggered = function(event) {
@@ -51046,15 +51052,8 @@ define('module/integrations/OneyWidget',['require','jquery','module/Options','mo
         return brand === "ONEY";
     };
 
-    OneyWidget.checkScript = function(){
-        var script = document.querySelector("script[src='" + OneyWidget.oneyLoadScript + "']");
-        if (script != null) {
-            return {script:script, added:true};
-        }
-         return {script:null, added:false};
-    };
-
-    OneyWidget.createOptions = function(){
+    OneyWidget.createOptions = function() {
+        injectLocaleFromCheckout();
         var options = {
             "country": Locale.country,
             "language": String(Locale.language).toUpperCase(),
@@ -51076,6 +51075,14 @@ define('module/integrations/OneyWidget',['require','jquery','module/Options','mo
         useOptions.options = options;
         return useOptions;
     };
+
+    function injectLocaleFromCheckout() {
+        if (Wpwl.checkout.locale && Options.locale === "en") {
+            var split = Wpwl.checkout.locale.split('-');
+            Locale.language = split[0];
+            Locale.country = split[1];
+        }
+    }
 
     return OneyWidget;
 });
@@ -55290,7 +55297,6 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			} else if (/^DIRECTDEBIT_SEPA_MIX/.test(ddMethod)) {
 			    ddSepaMixMethods.push(ddMethod);
 			} else if (/^ACI_INSTANTPAY$/.test(ddMethod)) {
-			    //TODO: Brand for US open banking needs to be added for this condition to work
 			    ddUsOpenBankingMethods.push(ddMethod);
 			} else {
 			    ddNationalMethods.push(ddMethod);
@@ -55308,7 +55314,6 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			});
 		}
 
-		//TODO: Brand for US open banking needs to be added for this condition to work
 		if ( ddUsOpenBankingMethods.length > 0 ) {
 		    lastElement = renderDirectDebit ({
 		        container: lastElement,
