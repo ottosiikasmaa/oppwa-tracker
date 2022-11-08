@@ -12527,7 +12527,6 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	Options.clickToPay = {
 		loadWidget: false,
 		isInitSuccess: false,
-		toAddLearnMore: false,
 		brands: ['VISA', 'VISADEBIT', 'VISAELECTRON', 'MASTER', 'MASTERDEBIT', 'AMEX', 'DISCOVER', 'DINERS'],
 		brandSchemes: {
 			VISA: 'VISA',
@@ -42188,14 +42187,12 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	// Shows/hides horizontal logos
 	PaymentView.adjustHorizontalLogos = function(detectedBrands, formObj) {
 		var horizontalLogos = formObj.find('.wpwl-group-card-logos-horizontal div');
-		Options.clickToPay.toAddLearnMore = false;
 		horizontalLogos.each(function() {
 			var $this = $(this);
 			var brand = $this.attr("value");
 			if (isCardLogoBrandValid(detectedBrands, brand)) {
 				$this.removeClass('wpwl-hidden');
 				$this.removeClass('wpwl-invisible');
-				Options.clickToPay.toAddLearnMore = true;
 			} else {
 				$this.addClass('wpwl-hidden');
 			}
@@ -42398,20 +42395,15 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			PaymentView.hideOrShowMobile.call(select,  !Setting.subTypeLabelMap[brand].mobilePhone);
 			PaymentView.hideOrShowBirthDate.call(select, !Setting.subTypeLabelMap[brand].birthDate);
 			PaymentView.hideOrShowExpiryDate.call(select, !!Setting.subTypeLabelMap[brand].noExpiryDate);
-			if (isCardLogoBrandDisplayMode()) {
+			if (!(Options.clickToPay.loadWidget && Options.clickToPay.isInitSuccess)) {
 				PaymentView.hideOrShowClickToPayConfirmation.call(select, brand, true);
-				PaymentView.onSelectCardLogoBrand.call(select);
-				if (Options.clickToPay.toAddLearnMore && Options.clickToPay.isInitSuccess && Options.clickToPay.loadWidget) {
-					PaymentView.updateClickToPayConfirmation(select, brand);
-				}
+			} else {
+				PaymentView.updateClickToPayConfirmation(select, brand);
 			}
-			else {
-				PaymentView.setBrandIcon.call(select);
-				if (!(Options.clickToPay.loadWidget && Options.clickToPay.isInitSuccess)) {
-					PaymentView.hideOrShowClickToPayConfirmation.call(select, brand, true);
-				} else {
-					PaymentView.updateClickToPayConfirmation(select, brand);
-				}
+			if (isCardLogoBrandDisplayMode()) {
+			    PaymentView.onSelectCardLogoBrand.call(select);
+			} else {
+			    PaymentView.setBrandIcon.call(select);
 			}
 		}
 
@@ -42423,11 +42415,11 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	};
 
 	PaymentView.updateClickToPayConfirmation = function(select, brand) {
-        if (Options.clickToPay.brands.indexOf(brand) < 0) {
-            PaymentView.hideOrShowClickToPayConfirmation.call(select, brand, true);
-        } else if (Options.clickToPay.isInitSuccess && Options.clickToPay.loadWidget) {
-            PaymentView.hideOrShowClickToPayConfirmation.call(select, brand, false);
-        }
+		if (Options.clickToPay.brands.indexOf(brand) < 0) {
+			PaymentView.hideOrShowClickToPayConfirmation.call(select, brand, true);
+		} else {
+			PaymentView.hideOrShowClickToPayConfirmation.call(select, brand, false);
+		}
 	};
 
 	function isValidAndNotEmpty(obj) {
@@ -42894,66 +42886,32 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
     };
 
     PaymentView.hideOrShowClickToPayConfirmation = function(brand, hide){
-        var $form = $(this).closest("form");
-        if ($form && brand && hide === false){
-            PaymentView.updateClickToPayScheme($form, brand);
-            PaymentView.updateClickToPayLearnMore($form);
-        }
-        PaymentView.hideOrShowElement($form, ".wpwl-group-clickToPayConfirmation", hide);
+            var $form = $(this).closest("form");
+            if ($form && brand && hide === false){
+                PaymentView.updateClickToPayScheme($form, brand);
+            }
+            PaymentView.hideOrShowElement($form, ".wpwl-group-clickToPayConfirmation", hide);
     };
 
     PaymentView.updateClickToPayScheme = function(elem, brand) {
-        var $checkbox = elem.find(".wpwl-text-confirmation-clickToPayConfirmation");
+            var $checkbox = elem.find(".wpwl-text-confirmation-clickToPayConfirmation");
 
-        // for tests, if checkbox is not present, do nothing
-        if ($checkbox.length < 1){
-            return;
-        }
+            // for tests, if checkbox is not present, do nothing
+            if ($checkbox.length < 1){
+                return;
+            }
 
-        var defaultMessage = I18n.clickToPayConfirmation;
-        var defaultScheme = "this card's scheme";
-        var scheme = Options.clickToPay.brandSchemes[brand];
+            var defaultMessage = I18n.clickToPayConfirmation;
+            var defaultScheme = "this card's scheme";
+            var scheme = Options.clickToPay.brandSchemes[brand];
 
-        // if brand is one of Click2Pay brands, show brand-specific message
-        if(scheme){
-            $checkbox[0].textContent =  defaultMessage.replace(defaultScheme, scheme);
-        } else {
-        // if brand is not one of recognized Click2Pay brands, show default message
-            $checkbox[0].textContent =  defaultMessage;
-        }
-    };
-
-    PaymentView.updateClickToPayLearnMore = function(elem) {
-        var checkbox = elem.find(".wpwl-text-confirmation-clickToPayConfirmation");
-        if (checkbox.length < 1){
-            return;
-        }
-        var templates = {
-            termsAndConditions: "<div class='wpwl-group wpwl-group-customTermsAndConditions'>" +
-                "<a class='customTermsAndConditions'><u>{termsAndConditions}</u></a></div>"
-        };
-        var termsAndConditions = Generate.templateEngine(templates.termsAndConditions, {
-            termsAndConditions: I18n.learnMore
-        });
-        $(checkbox).append(termsAndConditions);
-        var customTermsAndConditions = $(checkbox).find(".customTermsAndConditions");
-
-        // click listener for Learn more option to display SRC Click to Pay Learn More UI component
-        if (customTermsAndConditions.length > 0) {
-            $(customTermsAndConditions).on('click', function(){
-                var srcLearnMore = $.find('src-learn-more');
-                if (srcLearnMore.length > 0) {
-                    $(srcLearnMore[0]).show();
-                } else {
-                    // SRC Click to Pay Learn More UI component
-                    $(checkbox).append("<src-learn-more display-close-button=\"true\" display-ok-button=\"true\"></src-learn-more>");
-                    var addedLearnMore = $.find('src-learn-more');
-                    $(addedLearnMore).on('close', function() {
-                        $(addedLearnMore).hide();
-                    });
-                }
-            });
-        }
+            // if brand is one of Click2Pay brands, show brand-specific message
+            if(scheme){
+                $checkbox[0].textContent =  defaultMessage.replace(defaultScheme, scheme);
+            } else {
+            // if brand is not one of recognized Click2Pay brands, show default message
+                $checkbox[0].textContent =  defaultMessage;
+            }
     };
 
     PaymentView.hideOrShowPin = function(hide){
@@ -44903,6 +44861,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		          }
 		     }
 		     else if (/^ACI_INSTANTPAY$/.test(brand)) {
+		        //TODO: Brand for US open banking needs to be added for this condition to work
 		              if ( !Validate.validateAccountNumberUS( value ) ) {
 		                    return { accountNumberError: input };
 		              }
@@ -50150,7 +50109,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				}
 				var select = $brandElement.get(0);
 				// only show message if initially selected brand is recognized ClickToPay brand
-				if (Options.clickToPay.brands.indexOf(select.value) > -1 && Options.style !== 'logos') {
+				if (Options.clickToPay.brands.indexOf(select.value) > -1) {
 					PaymentView.hideOrShowClickToPayConfirmation.call(select, select.value, false);
 				}
 				ClickToPayPaymentWidget.button.removeAttribute("disabled");
@@ -55395,6 +55354,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			} else if (/^DIRECTDEBIT_SEPA_MIX/.test(ddMethod)) {
 			    ddSepaMixMethods.push(ddMethod);
 			} else if (/^ACI_INSTANTPAY$/.test(ddMethod)) {
+			    //TODO: Brand for US open banking needs to be added for this condition to work
 			    ddUsOpenBankingMethods.push(ddMethod);
 			} else {
 			    ddNationalMethods.push(ddMethod);
@@ -55412,6 +55372,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			});
 		}
 
+		//TODO: Brand for US open banking needs to be added for this condition to work
 		if ( ddUsOpenBankingMethods.length > 0 ) {
 		    lastElement = renderDirectDebit ({
 		        container: lastElement,
