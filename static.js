@@ -56156,8 +56156,12 @@ define('module/Autofill',['require','jquery','lib/Channel','module/BinService','
         }
         var splitted = raw.split(/[/.]/).map(function(item) {
             var trimmed = item.trim();
-            return (trimmed.length > 2) ?
-                trimmed.substring(trimmed.length - 2, trimmed.length) : trimmed;
+            if (trimmed.length > 2) {
+                trimmed = trimmed.substring(trimmed.length - 2, trimmed.length);
+            } else if (trimmed.length === 1) {
+                trimmed = "0" + trimmed;
+            }
+            return trimmed;
         });
         return $.Deferred().resolve((splitted.length === 2) ? splitted.join('/') : null);
     }
