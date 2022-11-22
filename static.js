@@ -49592,6 +49592,533 @@ define('module/integrations/TrustlyInlineWidget',['require','jquery','module/Inl
     return TrustlyInlineWidget;
 });
 
+/**
+ * Module contains logic specific for rendering of PayPal payment widget only
+ */
+/*global Promise*/
+define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','module/forms/VirtualAccountPaymentForm','jquery','module/Wpwl','module/Util','module/Generate','module/SpecForm','module/Options','module/error/SessionError','module/error/WidgetError','module/error/OppError','lib/Spinner','module/InternalRequestCommunication','module/ForterUtils','module/logging/LoggerFactory'],function (require) {
+    var ObjectCreate = require('shim/ObjectCreate');
+    var VirtualAccountPaymentForm = require('module/forms/VirtualAccountPaymentForm');
+
+    var $ = require('jquery');
+    var Wpwl = require('module/Wpwl');
+    var Util = require('module/Util');
+    var Generate = require('module/Generate');
+    var SpecForm = require('module/SpecForm');
+    var Options = require('module/Options');
+    var SessionError = require('module/error/SessionError');
+    var WidgetError = require('module/error/WidgetError');
+    var OppError = require('module/error/OppError');
+    var Spinner = require('lib/Spinner');
+    var InternalRequestCommunication = require('module/InternalRequestCommunication');
+    var ForterUtils = require('module/ForterUtils');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+
+    var logger = LoggerFactory.getLogger('PaypalRestPaymentForm');
+
+    var PAYPAL_SDK_URL = "https://www.paypal.com/sdk/js";
+    var SHOP_ORIGIN_PARAMETER = 'shopOrigin';
+    var REDIRECT_URL_PARAMETER = 'redirectUrl';
+    var METHOD_PARAMETER = 'method';
+    var CHECKOUT_ID_PARAMETER = 'id';
+    var RESOURCE_PATH_PARAMETER = 'resourcePath';
+    var HTTP_POST = 'POST';
+    var HTTP_GET = 'GET';
+    var PAYMENT = '/payment';
+    var CONFIRM = '/confirm';
+    var HEADER_FORMAT = {"Accept": "application/json"};
+    var SUPPORTING_FUNDING_SOURCES = ["PAYPAL", "CARD", "PAYLATER", "CREDIT", "VENMO"];
+    var VALID_INPUT_FUNDING_SOURCES_ARRAY = [];
+    /**
+     * @param $form jquery object for the form inside which button is rendered
+     * @constructor defines callbacks which will be triggered by PayPal
+     */
+    var PaypalRestPaymentForm = function($form) {
+        VirtualAccountPaymentForm.call(this, $form);
+
+        var thisObj = this;
+        this.hiddenInputParameters = $form.find('input');
+        this.form = new SpecForm($form);
+        this.spinner = null;
+        this.sendPaymentBrandToCheckout = thisObj.sendPaymentBrandToCheckout.bind(thisObj);
+
+        // sessionTimeoutHandled added to prevent multiple times invocation of Options.onError for single error which is unexpected for customers and may break integration:
+        // 1. First time Options.onError invoked in notifyError handling error response from backend after unsuccessful attempt to crate order,
+        //    this error handling added in createOrder and createBillingAgreement which make asynchronous request and return promise object back to PayPal JS SDK
+        // 2. Since we return promise object to PayPal, it's rejection callback invoked when notifyError finished and control flow return to PayPal JS SDK
+        //    This callback invokes onError method provided to PayPal smart buttons options and inside that method Options.onError invoked second time.
+        // So to prevent second time invocation sessionTimeoutHandled set to "true" when notifyError handled error and prevents to invoke Options.onError handler second time
+        this.sessionTimeoutHandled = false;
+
+        this.setButtonCallbacks(thisObj);
+    };
+
+    PaypalRestPaymentForm.prototype = ObjectCreate(VirtualAccountPaymentForm.prototype);
+    PaypalRestPaymentForm.prototype.constructor = PaypalRestPaymentForm;
+
+    PaypalRestPaymentForm.prototype.setButtonCallbacks = function(thisObj) {
+        this.buttonCallbacks = {
+            onApprove: thisObj.onApprove.bind(thisObj),
+            onError: thisObj.onError.bind(thisObj),
+            onCancel : thisObj.onCancel.bind(thisObj),
+            onClick: thisObj.onClick.bind(thisObj)
+        };
+
+        if (Wpwl.checkout.config.createRegistration) {
+            this.buttonCallbacks.createBillingAgreement = thisObj.createBillingAgreement.bind(thisObj);
+        } else {
+            this.buttonCallbacks.createOrder = thisObj.createOrder.bind(thisObj);
+        }
+        if (Options.paypal.onShippingChange) {
+            this.buttonCallbacks.onShippingChange = thisObj.onShippingChange.bind(thisObj);
+        }
+    };
+
+    PaypalRestPaymentForm.prototype.buildPaypalButtonUrl = function() {
+
+        var currency = Options.paypal.currency || Wpwl.checkout.currency;
+        var checkoutData = Wpwl.checkout.config.paypalRestConfig.clientId && Wpwl.checkout.config.paypalRestConfig.merchantId ?
+            this.normalCheckout() : this.fastCheckout();
+
+        if(Wpwl.checkout.config.createRegistration) {
+            return Generate.string(PAYPAL_SDK_URL,
+             "?client-id=", checkoutData.clientId,
+              "&vault=true&commit=false",
+              "&components=",
+              checkoutData.components,
+              checkoutData.extraSdkParams);
+        } else {
+            return Generate.string(PAYPAL_SDK_URL,
+                "?integration-date=2019-09-10", // for backward compatibility with PayPal
+                "&merchant-id=", checkoutData.merchantId,
+                "&client-id=", checkoutData.clientId,
+                (currency ? "&currency=" + currency : ""),
+                "&intent=", checkoutData.intent,
+                "&commit=", checkoutData.commit,
+                "&components=", checkoutData.components,
+                checkoutData.extraSdkParams);
+        }
+    };
+
+    function getComponents() {
+       var paypalConfig = Options.paypal;
+        return []
+          .concat((paypalConfig && paypalConfig.sdkParams && paypalConfig.sdkParams.components) || "buttons")
+          .concat(Options.fundingSources && "funding-eligibility")
+          .filter(Boolean)
+          .join(",");
+    }
+
+    function getExtraSdkParams() {
+        var paypalConfig = Options.paypal;
+        if(paypalConfig === undefined) return "";
+        var extra = Object.keys(paypalConfig.sdkParams || [])
+          .filter(function (key) {
+            return key !== "components";
+          })
+          .map(function (key) {
+            return key + "=" + paypalConfig.sdkParams[key];
+          });
+
+        return extra.length ? "&" + extra.join("&") : "";
+    }
+
+    PaypalRestPaymentForm.prototype.fastCheckout = function () {
+        var clientId = Wpwl.isTestSystem ?
+            "ATpyeyrXd-zV-Zgqr51eo5es72xydmmjYJ-prXLOYLO2aDDG0xJb2S5JHkL-1N37Ejb-ih9LYSiVN2xC" :
+            "AXB5vyZAmhNZnBM9HVnor-LVb5vxX_HP1diO9HlK74xLhEGmJCeUYjzEOoXbUBN44kTW28yXh4jZWsGj";
+        return {
+            clientId: Options.paypal.clientId || clientId,
+            merchantId: Options.paypal.merchantId,
+            intent: Options.paypal.intent, // default is authorize
+            commit: false, //Paypal continue = true
+            extraSdkParams: getExtraSdkParams(),
+            components: getComponents()
+        };
+    };
+
+    PaypalRestPaymentForm.prototype.normalCheckout = function () {
+
+        return {
+            clientId: Wpwl.checkout.config.paypalRestConfig.clientId,
+            merchantId: Wpwl.checkout.config.paypalRestConfig.merchantId,
+            intent: this.getIntent(),
+            commit: this.isPayNow(),
+            extraSdkParams: getExtraSdkParams(),
+            components: getComponents()
+        };
+    };
+
+    PaypalRestPaymentForm.prototype.downloadButton = function() {
+        var deferred = $.Deferred();
+        var currentSetup = {};
+
+        this.showSpinner();
+        polyfillForObjectAssign(); // for support IE11
+
+        Object.assign(currentSetup, $.ajaxSetup());
+        $.ajaxSetup({cache: true}); // to avoid extra query params in url
+        $.getScript(this.buildPaypalButtonUrl())
+            .done(deferred.resolve)
+            .fail(deferred.reject);
+        $.ajaxSetup(currentSetup);
+
+        return deferred.promise();
+    };
+
+    PaypalRestPaymentForm.prototype.showSpinner = function() {
+        if (this.spinner === null) {
+            this.spinner = new Spinner(Options.spinner).spin($(".wpwl-container-virtualAccount-PAYPAL").get(0));
+        }
+    };
+
+    PaypalRestPaymentForm.prototype.forwardToShopperResultUrl = function() {
+        var params = this.initRedirectParameters();
+
+        return  Generate.string(Wpwl.url, '/v', Wpwl.apiVersion, '/redirect.html?', params);
+    };
+
+    PaypalRestPaymentForm.prototype.createBillingAgreement = function() {
+        var data = this.prepareUriEncodedParameters();
+        var processCreatePaymentResponse = this.processCreatePaymentResponse.bind(this);
+        var notifyError = this.notifyError.bind(this);
+        return PaypalRestPaymentForm.sendInternalPostRequest(this.form.getAction(), HEADER_FORMAT, data)
+            .then(processCreatePaymentResponse)
+            .fail(notifyError);
+    };
+
+    // triggered after user clicks PayPal button
+    PaypalRestPaymentForm.prototype.createOrder = function () {
+        var data = this.prepareUriEncodedParameters();
+        var processCreatePaymentResponse = this.processCreatePaymentResponse.bind(this);
+        var notifyError = this.notifyError.bind(this);
+
+        // Fast checkout: Look for the createCheckout callback function
+        if (typeof Options.createCheckout !== "function") {
+            return PaypalRestPaymentForm.sendInternalPostRequest(this.form.getAction(), HEADER_FORMAT, data)
+                .then(processCreatePaymentResponse)
+                .fail(notifyError);
+        }
+        var createCheckoutResult = Options.createCheckout({brand:this.getBrand()});
+        var createCheckoutPromise = Promise.resolve(createCheckoutResult);
+        return createCheckoutPromise
+            .then(
+                function(checkoutId) {
+                    if (checkoutId) {
+                        Wpwl.checkout.id = checkoutId;
+                        var endpoint = Generate.string(Wpwl.url, '/v', Wpwl.apiVersion, '/checkouts/',
+                            Wpwl.checkout.id, '/payment');
+                        return PaypalRestPaymentForm.sendInternalPostRequest(endpoint, HEADER_FORMAT, data);
+                    }
+                },
+                function(response) {
+                    var info = "Creating checkout returned error: " + JSON.stringify(response);
+                    logger.additionalLog("INFO", info);
+                    notifyError(info);
+                    return Promise.reject(new Error("Transaction Declined - Error creating ACI checkout"));
+                }
+            )
+            .then(processCreatePaymentResponse);
+    };
+
+    // triggered after user approves payment within PayPal popup
+    PaypalRestPaymentForm.prototype.onApprove = function(data, actions) {
+        this.redirect(actions);
+    };
+
+    PaypalRestPaymentForm.prototype.onError = function(error) {
+        logger.info("PayPal invoked onError callback with error reason: " + error);
+        if (!this.sessionTimeoutHandled) {
+            Options.onError(new WidgetError(this.getBrand(), this.getBrand() + ':onError', error));
+        } else {
+            logger.info("Subsequent onError callback after session timeout error suppressed");
+        }
+    };
+
+    PaypalRestPaymentForm.prototype.onClick = function() {
+        //console.log("PaypalRestPaymentForm.prototype.onClick triggered")
+        return Options.onBeforeSubmitVirtualAccount();
+    };
+
+    PaypalRestPaymentForm.prototype.onCancel = function(data) {
+        Options.onError(new WidgetError(this.getBrand(), 'closed', data));
+    };
+
+    PaypalRestPaymentForm.prototype.onShippingChange = function(data, actions) {
+        return Options.paypal.onShippingChange(data, actions);
+    };
+
+    PaypalRestPaymentForm.prototype.redirect = function(actions) {
+        var notifyAsyncError = this.notifyAsyncError.bind(this);
+        var form = this;
+        var params = {
+            url: getCheckoutEndpoint(CONFIRM),
+            method: HTTP_POST,
+            dataType: "text",
+        };
+
+        PaypalRestPaymentForm.sendInternalRequestWithParams(params)
+            .then(function(data) {
+                if (data && JSON.parse(data).error === 'INSTRUMENT_DECLINED') {
+                    actions.restart();
+                } else {
+                    form.assignLocation(form.forwardToShopperResultUrl());
+                }
+            })
+            .fail(notifyAsyncError);
+    };
+
+    PaypalRestPaymentForm.prototype.assignLocation = function(url) {
+        window.top.location.assign(url);
+    };
+
+    PaypalRestPaymentForm.prototype.initRedirectParameters = function() {
+        var params = Generate.string(METHOD_PARAMETER, "=", HTTP_GET);
+        params += Generate.string("&", CHECKOUT_ID_PARAMETER, "=", Wpwl.checkout.id);
+        params += Generate.string("&", RESOURCE_PATH_PARAMETER, "=", getCheckoutEndpoint(PAYMENT));
+        params += Generate.string("&", SHOP_ORIGIN_PARAMETER, "=", Util.getOrigin());
+        params += Generate.string("&", REDIRECT_URL_PARAMETER, "=", encodeURIComponent(this.getShopperResultUrl()));
+        return params;
+    };
+
+    PaypalRestPaymentForm.prototype.fixedEncodeURIComponent = function(str) {
+        return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+            return '%' + c.charCodeAt(0).toString(16);
+        });
+    };
+
+    PaypalRestPaymentForm.prototype.prepareUriEncodedParameters = function() {
+        var data = "";
+        ForterUtils.appendForterCookie(this.$form);
+        for (var i = 0; i < this.hiddenInputParameters.length; i++) {
+            if (data.length > 0) {
+                data += "&";
+            }
+            var param = this.hiddenInputParameters[i];
+            var uriEncodedValue = this.fixedEncodeURIComponent(param.value);
+            data += Generate.string(param.name, '=', uriEncodedValue);
+        }
+        return data;
+    };
+
+    PaypalRestPaymentForm.prototype.updateCheckoutWithPaymentBrand = function() {
+        return InternalRequestCommunication.getSender()
+            .then(this.sendPaymentBrandToCheckout);
+    };
+
+    PaypalRestPaymentForm.prototype.sendPaymentBrandToCheckout = function(sender) {
+        return sender.send({
+            url: getCheckoutEndpoint(),
+            method: HTTP_POST,
+            datatype: 'json',
+            data: {'paymentBrand': this.getBrand()}
+        });
+    };
+
+    PaypalRestPaymentForm.prototype.renderButton = function() {
+
+        var renderPromises = [];
+
+        if(VALID_INPUT_FUNDING_SOURCES_ARRAY.length === 0) {
+            PaypalRestPaymentForm.getCustomButtonFormIdArray();
+        }
+        var fundingSourcesInputArray = Options.fundingSources;
+        var paypal = window.paypal || {};
+        var buttonOptions = this.buttonCallbacks || {};
+        var atLeastOneButtonDisplayed = false;
+        if (fundingSourcesInputArray !== undefined && fundingSourcesInputArray !== null) {
+            // Loop over each funding source / payment method
+            for (var arrayIndex = 0; arrayIndex < VALID_INPUT_FUNDING_SOURCES_ARRAY.length; arrayIndex++) {
+                var fundingSourceObj = VALID_INPUT_FUNDING_SOURCES_ARRAY[arrayIndex];
+
+                if (Options.styling !== undefined && Options.styling !== null) {
+                    buttonOptions.style = Options.styling;
+                }
+                buttonOptions.fundingSource = fundingSourceObj.fundingSource;
+
+                // Initialize the buttons
+                var button = paypal.Buttons(buttonOptions);
+                // Check if the button is eligible
+                if (button.isEligible()) {
+                    // Render the standalone button for that funding source
+                    var divName = "#" + fundingSourceObj.divName;
+
+                    var singlePromise = button.render(divName);
+                    if (typeof singlePromise !== 'undefined') {
+                        renderPromises.push(singlePromise);
+                    }
+
+                    $(divName).css('display', 'block');
+                    atLeastOneButtonDisplayed = true;
+                }
+            }
+            if (!atLeastOneButtonDisplayed && VALID_INPUT_FUNDING_SOURCES_ARRAY.length > 0) {
+                Options.onError(new WidgetError('PAYPAL', 'renderButton',
+                'Although wpwlOptions.fundingSources is provided, no button could be rendered'));
+            }
+        }
+        else {
+
+            // Options.fundingSources is not defined - We render whatever Paypal defaults
+            if (Options.styling !== undefined && Options.styling !== null) {
+                buttonOptions.style = Options.styling;
+            }
+
+            renderPromises.push(paypal.Buttons(buttonOptions)
+                .render("#" + VALID_INPUT_FUNDING_SOURCES_ARRAY[0].divName));
+        }
+
+        this.spinner.stop();
+        return renderPromises;
+    };
+
+    PaypalRestPaymentForm.getCustomButtonFormIdArray = function() {
+        VALID_INPUT_FUNDING_SOURCES_ARRAY = [];
+        var fundingSourcesInputArray = Options.fundingSources;
+        var fundingSourceObj = {};
+        // Try to work on the formed VALID_INPUT_FUNDING_SOURCES_ARRAY array from PaypalRestPaymentForm.getCustomButtonFormIdArray()
+        if (fundingSourcesInputArray !== undefined && fundingSourcesInputArray !== null) {
+            if ($.isArray(fundingSourcesInputArray)) {
+                // Verify values. If errorneous call onError. Prepare array with valid values and try to render
+                if (fundingSourcesInputArray.length === 0) {
+                    Options.onError(new WidgetError('PAYPAL', 'renderButton',
+                    'wpwlOptions.fundingSources should not be an empty array. No buttons were rendered.'));
+                }
+                for (var arrayIndex = 0; arrayIndex < fundingSourcesInputArray.length; arrayIndex++) {
+                    var value = fundingSourcesInputArray[arrayIndex];
+                    if ($.inArray(value.toUpperCase(), SUPPORTING_FUNDING_SOURCES) !== -1) {
+                        fundingSourceObj =  {
+                            "fundingSource" : value.toLowerCase(),
+                            "divName" :  "payPalHosted" + value.toUpperCase() + "Button",
+                        };
+                        VALID_INPUT_FUNDING_SOURCES_ARRAY.push(fundingSourceObj);
+                    }
+                    else {
+                        Options.onError(new WidgetError('PAYPAL', 'renderButton',
+                        "Element '" + value + "' in wpwlOptions.fundingSources is not valid"));
+                    }
+                }
+            }
+            else {
+                Options.onError(new WidgetError('PAYPAL', 'renderButton',
+                'wpwlOptions.fundingSources should be an array'));
+            }
+        }
+        else {
+            fundingSourceObj =  {
+                "fundingSource" : undefined,
+                "divName" :  "payPalHostedButton",
+            };
+            VALID_INPUT_FUNDING_SOURCES_ARRAY.push(fundingSourceObj);
+        }
+        return VALID_INPUT_FUNDING_SOURCES_ARRAY;
+    };
+
+    PaypalRestPaymentForm.sendInternalPostRequest = function(endpoint, headers, data) {
+        return PaypalRestPaymentForm.sendInternalRequestWithParams({
+            url: endpoint,
+            method: HTTP_POST,
+            headers: headers,
+            data: data,
+        });
+    };
+
+    PaypalRestPaymentForm.sendInternalRequestWithParams = function (params) {
+        return InternalRequestCommunication.getSender().then(function(sender) {
+            return sender.send(params);
+        });
+    };
+
+    PaypalRestPaymentForm.isPaypalBrand = function(brand) {
+        return brand === "PAYPAL" || brand === "PAYPAL_CONTINUE";
+    };
+
+    PaypalRestPaymentForm.checkEventTriggered = function(event) {
+        if (String(event.originalEvent.submitter.className) === "wpwl-button wpwl-button-brand") {
+            return true;
+        }
+        return false;
+    };
+
+    PaypalRestPaymentForm.prototype.isPayNow = function() {
+        if (this.getBrand() !== "PAYPAL_CONTINUE") {
+            return "true";
+        }
+        return "false";
+    };
+
+    PaypalRestPaymentForm.prototype.getIntent = function() {
+        if (Options.paypal.intent) return Options.paypal.intent;
+        if (Wpwl.checkout.paymentType === "PA") {
+            return "authorize";
+        }
+        return "capture";
+    };
+
+    PaypalRestPaymentForm.prototype.processCreatePaymentResponse = function(response) {
+        if(!response || !response.additionalAttributes || response.additionalAttributes.connectorId == null){
+           return Promise.reject(new Error("Transaction Declined"));
+        }
+        this.callbackUrl = response.callbackUrl;
+        return response.additionalAttributes.connectorId;
+    };
+
+    function getCheckoutEndpoint(suffix) {
+        return Generate.string('/v', Wpwl.apiVersion, '/checkouts/',
+            Wpwl.checkout.id, suffix);
+    }
+
+    PaypalRestPaymentForm.prototype.notifyAsyncError = function (reason) {
+        logger.info("PayPal asynchronous redirect failed with error: " + reason);
+        Options.onError(new OppError('Error in asynchronous workflow', 'WidgetError'));
+    };
+
+    PaypalRestPaymentForm.prototype.notifyError = function (reason) {
+        if (SessionError.isSessionTimeout(reason)) {
+            SessionError.onTimeoutError();
+            this.sessionTimeoutHandled = true;
+        } else {
+            logger.info("PayPal request failed with error: " + reason);
+        }
+    };
+
+    function polyfillForObjectAssign() {
+        if (!Object.assign) {
+            Object.defineProperty(Object, 'assign', {
+                enumerable: false,
+                configurable: true,
+                writable: true,
+                value: function (target) {
+                    'use strict';
+                    if (target === undefined || target === null) {
+                        throw new TypeError('Cannot convert first argument to object');
+                    }
+
+                    var to = Object(target);
+                    for (var i = 1; i < arguments.length; i++) {
+                        var nextSource = arguments[i];
+                        if (nextSource === undefined || nextSource === null) {
+                            continue;
+                        }
+
+                        var keysArray = Object.keys(Object(nextSource));
+                        for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                            var nextKey = keysArray[nextIndex];
+                            var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                            if (desc !== undefined && desc.enumerable) {
+                                to[nextKey] = nextSource[nextKey];
+                            }
+                        }
+                    }
+                    return to;
+                }
+            });
+        }
+    }
+
+    return PaypalRestPaymentForm;
+});
+
 define('module/integrations/RocketFuelInlineWidget',['require','jquery','module/InlineFlow','module/forms/PaymentForm','module/Generate','module/InternalRequestCommunication','module/Options','module/error/WidgetError','module/error/SessionError','module/logging/LoggerFactory','lib/Spinner','module/Wpwl'],function(require) {
 
     var $ = require('jquery');
@@ -51172,7 +51699,7 @@ define('module/integrations/VippsQrWidget',['require','jquery','module/InlineFlo
 });
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/ACIPayAfterInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/integrations/VippsQrWidget','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/forms/PaypalRestPaymentForm','module/integrations/RocketFuelInlineWidget','module/integrations/ACIPayAfterInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/integrations/VippsQrWidget','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -51204,6 +51731,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var AfterPayPacificPaymentWidget = require('module/integrations/AfterPayPacificPaymentWidget');
 	var BancontactMobilePaymentWidget = require('module/integrations/BancontactMobilePaymentWidget');
 	var TrustlyInlineWidget = require('module/integrations/TrustlyInlineWidget');
+	var PaypalRestPaymentForm = require('module/forms/PaypalRestPaymentForm');
 	/* ConnectIn Specific Brands : Start */
 	var RocketFuelInlineWidget = require('module/integrations/RocketFuelInlineWidget');
 	var ACIPayAfterInlineWidget = require('module/integrations/ACIPayAfterInlineWidget');
@@ -52186,6 +52714,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					else if (VippsQrWidget.isVippsInlineFlow(brand)) {
                         return VippsQrWidget.authorizePaymentAndLoadQr(this);
                     }
+                    else if (PaypalRestPaymentForm.isPaypalBrand(brand)) {
+                        console.log("Triggered PayPal on before virtual account");
+                        return PaypalRestPaymentForm.checkEventTriggered(event);
+                    }
 					else {
 						return true;
 					}
@@ -52947,6 +53479,18 @@ define('module/Country',['require','module/I18n'],function(require){
                 {"value":"NT", "label":"Northwest Territories"},
                 {"value":"NU", "label":"Nunavut"},
                 {"value":"YT", "label":"Yukon"}
+            ],
+            "ZA" : [
+                {"value": "" , "label":"Please select"},
+                {"value":"EC", "label":"Eastern Cape"},
+                {"value":"FS", "label":"Free State"},
+                {"value":"GP", "label":"Gauteng"},
+                {"value":"KZN", "label":"KwaZulu-Natal"},
+                {"value":"LP", "label":"Limpopo"},
+                {"value":"MP", "label":"Mpumalanga"},
+                {"value":"NC", "label":"Northern Cape"},
+                {"value":"NW", "label":"North-West"},
+                {"value":"WC", "label":"Western Cape"},
             ]
         }
 	};
@@ -53071,7 +53615,8 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
         street1Wrapper.append( street1 );
         street2Wrapper.append( street2 );
 
-        if( Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA' ){
+        if( Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA' ||
+                Options.billingAddress.country === 'ZA'){
             stateSelect.html( getStates ( Options.billingAddress.country ) ).val( Options.billingAddress.state );
         }
 
@@ -53103,7 +53648,8 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
             $.each([country, stateSelect, stateText, city, postcode, street1, street2], function(e,v){ $(v).hide(); });
             stateSelect.removeAttr('name');
         }
-        else if (Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA'){
+        else if (Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA' ||
+                    Options.billingAddress.country === 'ZA'){
             stateSelect.show().attr('name', Parameter.BILLING_STATE);
             stateText.hide().removeAttr('name');
         }
@@ -53129,7 +53675,7 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
 
         //listener
         billingGroup.find('.wpwl-control-country').on('change', function(){
-            if( $(this).val() === 'US' || $(this).val() === 'CA' ){
+            if( $(this).val() === 'US' || $(this).val() === 'CA' || $(this).val() === 'ZA' ){
                 stateSelect.html( getStates( $(this).val() ) ).show().attr('name', Parameter.BILLING_STATE);
                 stateText.hide().removeAttr('name').removeClass('wpwl-has-error');
                 $(stateText).parent().find('.wpwl-hint-billingStateError').remove();
@@ -53145,7 +53691,8 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
             $(this).hide();
             billingGroup.find('.wpwl-text-billing').hide();
             $.each([stateSelect, stateText], function(e,v){ $(v).removeAttr('name'); });
-            var state =  (Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA') ? stateSelect : stateText;
+            var state =  (Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA' ||
+                                Options.billingAddress.country === 'ZA') ? stateSelect : stateText;
             $(state).attr('name', Parameter.BILLING_STATE);
             $.each([country, state, city, postcode, street1, street2], function(e,v){ $(v).show(); });
         });
@@ -53509,516 +54056,6 @@ define('module/IdealPaymentWidget',['require','jquery','module/Util','module/Tra
     }
 
     return IdealPaymentWidget;
-});
-
-/**
- * Module contains logic specific for rendering of PayPal payment widget only
- */
-/*global Promise*/
-define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','module/forms/VirtualAccountPaymentForm','jquery','module/Wpwl','module/Util','module/Generate','module/SpecForm','module/Options','module/error/SessionError','module/error/WidgetError','module/error/OppError','lib/Spinner','module/InternalRequestCommunication','module/ForterUtils','module/logging/LoggerFactory'],function (require) {
-    var ObjectCreate = require('shim/ObjectCreate');
-    var VirtualAccountPaymentForm = require('module/forms/VirtualAccountPaymentForm');
-
-    var $ = require('jquery');
-    var Wpwl = require('module/Wpwl');
-    var Util = require('module/Util');
-    var Generate = require('module/Generate');
-    var SpecForm = require('module/SpecForm');
-    var Options = require('module/Options');
-    var SessionError = require('module/error/SessionError');
-    var WidgetError = require('module/error/WidgetError');
-    var OppError = require('module/error/OppError');
-    var Spinner = require('lib/Spinner');
-    var InternalRequestCommunication = require('module/InternalRequestCommunication');
-    var ForterUtils = require('module/ForterUtils');
-    var LoggerFactory = require('module/logging/LoggerFactory');
-
-    var logger = LoggerFactory.getLogger('PaypalRestPaymentForm');
-
-    var PAYPAL_SDK_URL = "https://www.paypal.com/sdk/js";
-    var SHOP_ORIGIN_PARAMETER = 'shopOrigin';
-    var REDIRECT_URL_PARAMETER = 'redirectUrl';
-    var METHOD_PARAMETER = 'method';
-    var CHECKOUT_ID_PARAMETER = 'id';
-    var RESOURCE_PATH_PARAMETER = 'resourcePath';
-    var HTTP_POST = 'POST';
-    var HTTP_GET = 'GET';
-    var PAYMENT = '/payment';
-    var CONFIRM = '/confirm';
-    var HEADER_FORMAT = {"Accept": "application/json"};
-    var SUPPORTING_FUNDING_SOURCES = ["PAYPAL", "CARD", "PAYLATER", "CREDIT", "VENMO"];
-    var VALID_INPUT_FUNDING_SOURCES_ARRAY = [];
-    /**
-     * @param $form jquery object for the form inside which button is rendered
-     * @constructor defines callbacks which will be triggered by PayPal
-     */
-    var PaypalRestPaymentForm = function($form) {
-        VirtualAccountPaymentForm.call(this, $form);
-
-        var thisObj = this;
-        this.hiddenInputParameters = $form.find('input');
-        this.form = new SpecForm($form);
-        this.spinner = null;
-        this.sendPaymentBrandToCheckout = thisObj.sendPaymentBrandToCheckout.bind(thisObj);
-
-        // sessionTimeoutHandled added to prevent multiple times invocation of Options.onError for single error which is unexpected for customers and may break integration:
-        // 1. First time Options.onError invoked in notifyError handling error response from backend after unsuccessful attempt to crate order,
-        //    this error handling added in createOrder and createBillingAgreement which make asynchronous request and return promise object back to PayPal JS SDK
-        // 2. Since we return promise object to PayPal, it's rejection callback invoked when notifyError finished and control flow return to PayPal JS SDK
-        //    This callback invokes onError method provided to PayPal smart buttons options and inside that method Options.onError invoked second time.
-        // So to prevent second time invocation sessionTimeoutHandled set to "true" when notifyError handled error and prevents to invoke Options.onError handler second time
-        this.sessionTimeoutHandled = false;
-
-        this.setButtonCallbacks(thisObj);
-    };
-
-    PaypalRestPaymentForm.prototype = ObjectCreate(VirtualAccountPaymentForm.prototype);
-    PaypalRestPaymentForm.prototype.constructor = PaypalRestPaymentForm;
-
-    PaypalRestPaymentForm.prototype.setButtonCallbacks = function(thisObj) {
-        this.buttonCallbacks = {
-            onApprove: thisObj.onApprove.bind(thisObj),
-            onError: thisObj.onError.bind(thisObj),
-            onCancel : thisObj.onCancel.bind(thisObj)
-        };
-
-        if (Wpwl.checkout.config.createRegistration) {
-            this.buttonCallbacks.createBillingAgreement = thisObj.createBillingAgreement.bind(thisObj);
-        } else {
-            this.buttonCallbacks.createOrder = thisObj.createOrder.bind(thisObj);
-        }
-        if (Options.paypal.onShippingChange) {
-            this.buttonCallbacks.onShippingChange = thisObj.onShippingChange.bind(thisObj);
-        }
-    };
-
-    PaypalRestPaymentForm.prototype.buildPaypalButtonUrl = function() {
-
-        var currency = Options.paypal.currency || Wpwl.checkout.currency;
-        var checkoutData = Wpwl.checkout.config.paypalRestConfig.clientId && Wpwl.checkout.config.paypalRestConfig.merchantId ?
-            this.normalCheckout() : this.fastCheckout();
-
-        if(Wpwl.checkout.config.createRegistration) {
-            return Generate.string(PAYPAL_SDK_URL,
-             "?client-id=", checkoutData.clientId,
-              "&vault=true&commit=false",
-              "&components=",
-              checkoutData.components,
-              checkoutData.extraSdkParams);
-        } else {
-            return Generate.string(PAYPAL_SDK_URL,
-                "?integration-date=2019-09-10", // for backward compatibility with PayPal
-                "&merchant-id=", checkoutData.merchantId,
-                "&client-id=", checkoutData.clientId,
-                (currency ? "&currency=" + currency : ""),
-                "&intent=", checkoutData.intent,
-                "&commit=", checkoutData.commit,
-                "&components=", checkoutData.components,
-                checkoutData.extraSdkParams);
-        }
-    };
-
-    function getComponents() {
-       var paypalConfig = Options.paypal;
-        return []
-          .concat((paypalConfig && paypalConfig.sdkParams && paypalConfig.sdkParams.components) || "buttons")
-          .concat(Options.fundingSources && "funding-eligibility")
-          .filter(Boolean)
-          .join(",");
-    }
-
-    function getExtraSdkParams() {
-        var paypalConfig = Options.paypal;
-        if(paypalConfig === undefined) return "";
-        var extra = Object.keys(paypalConfig.sdkParams || [])
-          .filter(function (key) {
-            return key !== "components";
-          })
-          .map(function (key) {
-            return key + "=" + paypalConfig.sdkParams[key];
-          });
-
-        return extra.length ? "&" + extra.join("&") : "";
-    }
-
-    PaypalRestPaymentForm.prototype.fastCheckout = function () {
-        var clientId = Wpwl.isTestSystem ?
-            "ATpyeyrXd-zV-Zgqr51eo5es72xydmmjYJ-prXLOYLO2aDDG0xJb2S5JHkL-1N37Ejb-ih9LYSiVN2xC" :
-            "AXB5vyZAmhNZnBM9HVnor-LVb5vxX_HP1diO9HlK74xLhEGmJCeUYjzEOoXbUBN44kTW28yXh4jZWsGj";
-        return {
-            clientId: Options.paypal.clientId || clientId,
-            merchantId: Options.paypal.merchantId,
-            intent: Options.paypal.intent, // default is authorize
-            commit: false, //Paypal continue = true
-            extraSdkParams: getExtraSdkParams(),
-            components: getComponents()
-        };
-    };
-
-    PaypalRestPaymentForm.prototype.normalCheckout = function () {
-
-        return {
-            clientId: Wpwl.checkout.config.paypalRestConfig.clientId,
-            merchantId: Wpwl.checkout.config.paypalRestConfig.merchantId,
-            intent: this.getIntent(),
-            commit: this.isPayNow(),
-            extraSdkParams: getExtraSdkParams(),
-            components: getComponents()
-        };
-    };
-
-    PaypalRestPaymentForm.prototype.downloadButton = function() {
-        var deferred = $.Deferred();
-        var currentSetup = {};
-
-        this.showSpinner();
-        polyfillForObjectAssign(); // for support IE11
-
-        Object.assign(currentSetup, $.ajaxSetup());
-        $.ajaxSetup({cache: true}); // to avoid extra query params in url
-        $.getScript(this.buildPaypalButtonUrl())
-            .done(deferred.resolve)
-            .fail(deferred.reject);
-        $.ajaxSetup(currentSetup);
-
-        return deferred.promise();
-    };
-
-    PaypalRestPaymentForm.prototype.showSpinner = function() {
-        if (this.spinner === null) {
-            this.spinner = new Spinner(Options.spinner).spin($(".wpwl-container-virtualAccount-PAYPAL").get(0));
-        }
-    };
-
-    PaypalRestPaymentForm.prototype.forwardToShopperResultUrl = function() {
-        var params = this.initRedirectParameters();
-
-        return  Generate.string(Wpwl.url, '/v', Wpwl.apiVersion, '/redirect.html?', params);
-    };
-
-    PaypalRestPaymentForm.prototype.createBillingAgreement = function() {
-        var data = this.prepareUriEncodedParameters();
-        var processCreatePaymentResponse = this.processCreatePaymentResponse.bind(this);
-        var notifyError = this.notifyError.bind(this);
-        return PaypalRestPaymentForm.sendInternalPostRequest(this.form.getAction(), HEADER_FORMAT, data)
-            .then(processCreatePaymentResponse)
-            .fail(notifyError);
-    };
-
-    // triggered after user clicks PayPal button
-    PaypalRestPaymentForm.prototype.createOrder = function () {
-        var data = this.prepareUriEncodedParameters();
-        var processCreatePaymentResponse = this.processCreatePaymentResponse.bind(this);
-        var notifyError = this.notifyError.bind(this);
-
-        // Fast checkout: Look for the createCheckout callback function
-        if (typeof Options.createCheckout !== "function") {
-            return PaypalRestPaymentForm.sendInternalPostRequest(this.form.getAction(), HEADER_FORMAT, data)
-                .then(processCreatePaymentResponse)
-                .fail(notifyError);
-        }
-        var createCheckoutResult = Options.createCheckout({brand:this.getBrand()});
-        var createCheckoutPromise = Promise.resolve(createCheckoutResult);
-        return createCheckoutPromise
-            .then(
-                function(checkoutId) {
-                    if (checkoutId) {
-                        Wpwl.checkout.id = checkoutId;
-                        var endpoint = Generate.string(Wpwl.url, '/v', Wpwl.apiVersion, '/checkouts/',
-                            Wpwl.checkout.id, '/payment');
-                        return PaypalRestPaymentForm.sendInternalPostRequest(endpoint, HEADER_FORMAT, data);
-                    }
-                },
-                function(response) {
-                    var info = "Creating checkout returned error: " + JSON.stringify(response);
-                    logger.additionalLog("INFO", info);
-                    notifyError(info);
-                    return Promise.reject(new Error("Transaction Declined - Error creating ACI checkout"));
-                }
-            )
-            .then(processCreatePaymentResponse);
-    };
-
-    // triggered after user approves payment within PayPal popup
-    PaypalRestPaymentForm.prototype.onApprove = function(data, actions) {
-        this.redirect(actions);
-    };
-
-    PaypalRestPaymentForm.prototype.onError = function(error) {
-        logger.info("PayPal invoked onError callback with error reason: " + error);
-        if (!this.sessionTimeoutHandled) {
-            Options.onError(new WidgetError(this.getBrand(), this.getBrand() + ':onError', error));
-        } else {
-            logger.info("Subsequent onError callback after session timeout error suppressed");
-        }
-    };
-
-    PaypalRestPaymentForm.prototype.onCancel = function(data) {
-        Options.onError(new WidgetError(this.getBrand(), 'closed', data));
-    };
-
-    PaypalRestPaymentForm.prototype.onShippingChange = function(data, actions) {
-        return Options.paypal.onShippingChange(data, actions);
-    };
-
-    PaypalRestPaymentForm.prototype.redirect = function(actions) {
-        var notifyAsyncError = this.notifyAsyncError.bind(this);
-        var form = this;
-        var params = {
-            url: getCheckoutEndpoint(CONFIRM),
-            method: HTTP_POST,
-            dataType: "text",
-        };
-
-        PaypalRestPaymentForm.sendInternalRequestWithParams(params)
-            .then(function(data) {
-                if (data && JSON.parse(data).error === 'INSTRUMENT_DECLINED') {
-                    actions.restart();
-                } else {
-                    form.assignLocation(form.forwardToShopperResultUrl());
-                }
-            })
-            .fail(notifyAsyncError);
-    };
-
-    PaypalRestPaymentForm.prototype.assignLocation = function(url) {
-        window.top.location.assign(url);
-    };
-
-    PaypalRestPaymentForm.prototype.initRedirectParameters = function() {
-        var params = Generate.string(METHOD_PARAMETER, "=", HTTP_GET);
-        params += Generate.string("&", CHECKOUT_ID_PARAMETER, "=", Wpwl.checkout.id);
-        params += Generate.string("&", RESOURCE_PATH_PARAMETER, "=", getCheckoutEndpoint(PAYMENT));
-        params += Generate.string("&", SHOP_ORIGIN_PARAMETER, "=", Util.getOrigin());
-        params += Generate.string("&", REDIRECT_URL_PARAMETER, "=", encodeURIComponent(this.getShopperResultUrl()));
-        return params;
-    };
-
-    PaypalRestPaymentForm.prototype.fixedEncodeURIComponent = function(str) {
-        return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-            return '%' + c.charCodeAt(0).toString(16);
-        });
-    };
-
-    PaypalRestPaymentForm.prototype.prepareUriEncodedParameters = function() {
-        var data = "";
-        ForterUtils.appendForterCookie(this.$form);
-        for (var i = 0; i < this.hiddenInputParameters.length; i++) {
-            if (data.length > 0) {
-                data += "&";
-            }
-            var param = this.hiddenInputParameters[i];
-            var uriEncodedValue = this.fixedEncodeURIComponent(param.value);
-            data += Generate.string(param.name, '=', uriEncodedValue);
-        }
-        return data;
-    };
-
-    PaypalRestPaymentForm.prototype.updateCheckoutWithPaymentBrand = function() {
-        return InternalRequestCommunication.getSender()
-            .then(this.sendPaymentBrandToCheckout);
-    };
-
-    PaypalRestPaymentForm.prototype.sendPaymentBrandToCheckout = function(sender) {
-        return sender.send({
-            url: getCheckoutEndpoint(),
-            method: HTTP_POST,
-            datatype: 'json',
-            data: {'paymentBrand': this.getBrand()}
-        });
-    };
-
-    PaypalRestPaymentForm.prototype.renderButton = function() {
-
-        var renderPromises = [];
-
-        if(VALID_INPUT_FUNDING_SOURCES_ARRAY.length === 0) {
-            PaypalRestPaymentForm.getCustomButtonFormIdArray();
-        }
-        var fundingSourcesInputArray = Options.fundingSources;
-        var paypal = window.paypal || {};
-        var buttonOptions = this.buttonCallbacks || {};
-        var atLeastOneButtonDisplayed = false;
-        if (fundingSourcesInputArray !== undefined && fundingSourcesInputArray !== null) {
-            // Loop over each funding source / payment method
-            for (var arrayIndex = 0; arrayIndex < VALID_INPUT_FUNDING_SOURCES_ARRAY.length; arrayIndex++) {
-                var fundingSourceObj = VALID_INPUT_FUNDING_SOURCES_ARRAY[arrayIndex];
-
-                if (Options.styling !== undefined && Options.styling !== null) {
-                    buttonOptions.style = Options.styling;
-                }
-                buttonOptions.fundingSource = fundingSourceObj.fundingSource;
-
-                // Initialize the buttons
-                var button = paypal.Buttons(buttonOptions);
-                // Check if the button is eligible
-                if (button.isEligible()) {
-                    // Render the standalone button for that funding source
-                    var divName = "#" + fundingSourceObj.divName;
-
-                    var singlePromise = button.render(divName);
-                    if (typeof singlePromise !== 'undefined') {
-                        renderPromises.push(singlePromise);
-                    }
-
-                    $(divName).css('display', 'block');
-                    atLeastOneButtonDisplayed = true;
-                }
-            }
-            if (!atLeastOneButtonDisplayed && VALID_INPUT_FUNDING_SOURCES_ARRAY.length > 0) {
-                Options.onError(new WidgetError('PAYPAL', 'renderButton',
-                'Although wpwlOptions.fundingSources is provided, no button could be rendered'));
-            }
-        }
-        else {
-
-            // Options.fundingSources is not defined - We render whatever Paypal defaults
-            if (Options.styling !== undefined && Options.styling !== null) {
-                buttonOptions.style = Options.styling;
-            }
-
-            renderPromises.push(paypal.Buttons(buttonOptions)
-                .render("#" + VALID_INPUT_FUNDING_SOURCES_ARRAY[0].divName));
-        }
-
-        this.spinner.stop();
-        return renderPromises;
-    };
-
-    PaypalRestPaymentForm.getCustomButtonFormIdArray = function() {
-        VALID_INPUT_FUNDING_SOURCES_ARRAY = [];
-        var fundingSourcesInputArray = Options.fundingSources;
-        var fundingSourceObj = {};
-        // Try to work on the formed VALID_INPUT_FUNDING_SOURCES_ARRAY array from PaypalRestPaymentForm.getCustomButtonFormIdArray()
-        if (fundingSourcesInputArray !== undefined && fundingSourcesInputArray !== null) {
-            if ($.isArray(fundingSourcesInputArray)) {
-                // Verify values. If errorneous call onError. Prepare array with valid values and try to render
-                if (fundingSourcesInputArray.length === 0) {
-                    Options.onError(new WidgetError('PAYPAL', 'renderButton',
-                    'wpwlOptions.fundingSources should not be an empty array. No buttons were rendered.'));
-                }
-                for (var arrayIndex = 0; arrayIndex < fundingSourcesInputArray.length; arrayIndex++) {
-                    var value = fundingSourcesInputArray[arrayIndex];
-                    if ($.inArray(value.toUpperCase(), SUPPORTING_FUNDING_SOURCES) !== -1) {
-                        fundingSourceObj =  {
-                            "fundingSource" : value.toLowerCase(),
-                            "divName" :  "payPalHosted" + value.toUpperCase() + "Button",
-                        };
-                        VALID_INPUT_FUNDING_SOURCES_ARRAY.push(fundingSourceObj);
-                    }
-                    else {
-                        Options.onError(new WidgetError('PAYPAL', 'renderButton',
-                        "Element '" + value + "' in wpwlOptions.fundingSources is not valid"));
-                    }
-                }
-            }
-            else {
-                Options.onError(new WidgetError('PAYPAL', 'renderButton',
-                'wpwlOptions.fundingSources should be an array'));
-            }
-        }
-        else {
-            fundingSourceObj =  {
-                "fundingSource" : undefined,
-                "divName" :  "payPalHostedButton",
-            };
-            VALID_INPUT_FUNDING_SOURCES_ARRAY.push(fundingSourceObj);
-        }
-        return VALID_INPUT_FUNDING_SOURCES_ARRAY;
-    };
-
-    PaypalRestPaymentForm.sendInternalPostRequest = function(endpoint, headers, data) {
-        return PaypalRestPaymentForm.sendInternalRequestWithParams({
-            url: endpoint,
-            method: HTTP_POST,
-            headers: headers,
-            data: data,
-        });
-    };
-
-    PaypalRestPaymentForm.sendInternalRequestWithParams = function (params) {
-        return InternalRequestCommunication.getSender().then(function(sender) {
-            return sender.send(params);
-        });
-    };
-
-    PaypalRestPaymentForm.prototype.isPayNow = function() {
-        if (this.getBrand() !== "PAYPAL_CONTINUE") {
-            return "true";
-        }
-        return "false";
-    };
-
-    PaypalRestPaymentForm.prototype.getIntent = function() {
-        if (Options.paypal.intent) return Options.paypal.intent;
-        if (Wpwl.checkout.paymentType === "PA") {
-            return "authorize";
-        }
-        return "capture";
-    };
-
-    PaypalRestPaymentForm.prototype.processCreatePaymentResponse = function(response) {
-        if(!response || !response.additionalAttributes || response.additionalAttributes.connectorId == null){
-           return Promise.reject(new Error("Transaction Declined"));
-        }
-        this.callbackUrl = response.callbackUrl;
-        return response.additionalAttributes.connectorId;
-    };
-
-    function getCheckoutEndpoint(suffix) {
-        return Generate.string('/v', Wpwl.apiVersion, '/checkouts/',
-            Wpwl.checkout.id, suffix);
-    }
-
-    PaypalRestPaymentForm.prototype.notifyAsyncError = function (reason) {
-        logger.info("PayPal asynchronous redirect failed with error: " + reason);
-        Options.onError(new OppError('Error in asynchronous workflow', 'WidgetError'));
-    };
-
-    PaypalRestPaymentForm.prototype.notifyError = function (reason) {
-        if (SessionError.isSessionTimeout(reason)) {
-            SessionError.onTimeoutError();
-            this.sessionTimeoutHandled = true;
-        } else {
-            logger.info("PayPal request failed with error: " + reason);
-        }
-    };
-
-    function polyfillForObjectAssign() {
-        if (!Object.assign) {
-            Object.defineProperty(Object, 'assign', {
-                enumerable: false,
-                configurable: true,
-                writable: true,
-                value: function (target) {
-                    'use strict';
-                    if (target === undefined || target === null) {
-                        throw new TypeError('Cannot convert first argument to object');
-                    }
-
-                    var to = Object(target);
-                    for (var i = 1; i < arguments.length; i++) {
-                        var nextSource = arguments[i];
-                        if (nextSource === undefined || nextSource === null) {
-                            continue;
-                        }
-
-                        var keysArray = Object.keys(Object(nextSource));
-                        for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-                            var nextKey = keysArray[nextIndex];
-                            var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-                            if (desc !== undefined && desc.enumerable) {
-                                to[nextKey] = nextSource[nextKey];
-                            }
-                        }
-                    }
-                    return to;
-                }
-            });
-        }
-    }
-
-    return PaypalRestPaymentForm;
 });
 
 /*global Promise*/
