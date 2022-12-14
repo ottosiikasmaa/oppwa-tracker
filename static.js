@@ -51009,91 +51009,8 @@ define('module/integrations/VippsQrWidget',['require','jquery','module/InlineFlo
     return VippsQrWidget;
 });
 /*jshint camelcase: false */
-define('module/integrations/OneyWidget',['require','jquery','module/Options','module/Locale','module/Wpwl','module/PaymentView'],function(require) {
-
-    var $ = require('jquery');
-    var Options = require("module/Options");
-    var Locale = require('module/Locale');
-    var Wpwl = require('module/Wpwl');
-    var PaymentView = require('module/PaymentView');
-
-    var OneyWidget = {};
-
-    var testUrl = "https://assets-staging.oney.io/build/loader.min.js";
-    var prodUrl = "https://assets.oney.io/build/loader.min.js";
-
-    OneyWidget.oneyLoadScript = Wpwl.isTestSystem ?  testUrl : prodUrl;
-
-    OneyWidget.renderOneyWidget = function() {
-        /*jshint unused:false*/
-        var options = OneyWidget.createOptions();
-        $.getScript(OneyWidget.oneyLoadScript, function(data, textStatus, jqXhr) {
-                /* jshint ignore:start */
-                if (textStatus === "success" && jqXhr.status === 200) {
-                    loadOneyWidget(function() {
-                        oneyMerchantApp.loadCheckoutSection(options);
-                    });
-                }
-                /* jshint ignore:end */
-            }).fail(function(jqXhr){
-                var form = $(".wpwl-form-virtualAccount-ONEY");
-                PaymentView.disableSubmitButton(form, true);
-                PaymentView.reportError("validateOneyScript", {
-                    error: jqXhr.status,
-                    reason: "Unable to load script",
-                    form: form
-                });
-            });
-    };
-
-    OneyWidget.checkEventTriggered = function(event) {
-        if (String(event.originalEvent.submitter.className) === "wpwl-button wpwl-button-pay") {
-            return true;
-        }
-        return false;
-    };
-
-    OneyWidget.isOneyBrand = function(brand) {
-        return brand === "ONEY";
-    };
-
-    OneyWidget.createOptions = function() {
-        injectLocaleFromCheckout();
-        var options = {
-            "country": Locale.country,
-            "language": String(Locale.language).toUpperCase(),
-            "payment_amount": Wpwl.checkout.amount,
-        };
-        Object.assign(options, Options.oney);
-        var useOptions = {};
-        /*jshint unused:false*/
-        options.errorCallback = function(status, response) {
-            var message = "Unable to load widget";
-            var form = $(".wpwl-form-virtualAccount-ONEY");
-            PaymentView.disableSubmitButton(form, true);
-            PaymentView.reportError("validateOneyWidget", {
-                error: status,
-                reason: message,
-                form: form
-            });
-        };
-        useOptions.options = options;
-        return useOptions;
-    };
-
-    function injectLocaleFromCheckout() {
-        if (Wpwl.checkout.locale && Options.locale === "en") {
-            var split = Wpwl.checkout.locale.split('-');
-            Locale.language = split[0];
-            Locale.country = split[1];
-        }
-    }
-
-    return OneyWidget;
-});
-/*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/ACIPayAfterInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/integrations/VippsQrWidget','module/integrations/OneyWidget','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/ACIPayAfterInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/integrations/VippsQrWidget','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -51134,7 +51051,6 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var WidgetError = require("module/error/WidgetError");
 	var FastCheckout = require('module/FastCheckout');
 	var VippsQrWidget = require('module/integrations/VippsQrWidget');
-	var OneyWidget = require('module/integrations/OneyWidget');
 	var ForterUtils = require('module/ForterUtils');
 	var LoggerFactory = require('module/logging/LoggerFactory');
 	var GroupCardUtil = require('module/GroupCardUtil');
@@ -52107,9 +52023,6 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					}
 					else if (VippsQrWidget.isVippsInlineFlow(brand)) {
                         return VippsQrWidget.authorizePaymentAndLoadQr(this);
-                    }
-                    else if (OneyWidget.isOneyBrand(brand)) {
-                        return OneyWidget.checkEventTriggered(event);
                     }
 					else {
 						return true;
@@ -53498,6 +53411,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     PaypalRestPaymentForm.prototype.constructor = PaypalRestPaymentForm;
 
     PaypalRestPaymentForm.prototype.setButtonCallbacks = function(thisObj) {
+
         this.buttonCallbacks = {
             onApprove: thisObj.onApprove.bind(thisObj),
             onError: thisObj.onError.bind(thisObj),
@@ -53512,6 +53426,12 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
         if (Options.paypal.onShippingChange) {
             this.buttonCallbacks.onShippingChange = thisObj.onShippingChange.bind(thisObj);
         }
+        if (Options.paypal.onClick) {
+            this.buttonCallbacks.onClick = thisObj.onClick.bind(thisObj);
+        }
+        if (Options.paypal.onInit) {
+            this.buttonCallbacks.onInit = thisObj.onInit.bind(thisObj);
+        }
     };
 
     PaypalRestPaymentForm.prototype.buildPaypalButtonUrl = function() {
@@ -53519,6 +53439,15 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
         var currency = Options.paypal.currency || Wpwl.checkout.currency;
         var checkoutData = Wpwl.checkout.config.paypalRestConfig.clientId && Wpwl.checkout.config.paypalRestConfig.merchantId ?
             this.normalCheckout() : this.fastCheckout();
+
+        if(typeof Options.paypal.createRegistration !== "undefined") {
+            if(('true' === Options.paypal.createRegistration) !== Wpwl.checkout.config.createRegistration) {
+                Wpwl.checkout.config.createRegistration = ('true' === Options.paypal.createRegistration);
+
+                var thisObj = this;
+                this.setButtonCallbacks(thisObj);
+            }
+        }
 
         if(Wpwl.checkout.config.createRegistration) {
             return Generate.string(PAYPAL_SDK_URL,
@@ -53590,6 +53519,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     };
 
     PaypalRestPaymentForm.prototype.downloadButton = function() {
+
         var deferred = $.Deferred();
         var currentSetup = {};
 
@@ -53629,6 +53559,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
 
     // triggered after user clicks PayPal button
     PaypalRestPaymentForm.prototype.createOrder = function () {
+
         var data = this.prepareUriEncodedParameters();
         var processCreatePaymentResponse = this.processCreatePaymentResponse.bind(this);
         var notifyError = this.notifyError.bind(this);
@@ -53673,6 +53604,14 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
         } else {
             logger.info("Subsequent onError callback after session timeout error suppressed");
         }
+    };
+
+    PaypalRestPaymentForm.prototype.onClick = function(data, actions) {
+        return Options.paypal.onClick(data, actions);
+    };
+
+    PaypalRestPaymentForm.prototype.onInit = function(data, actions) {
+        return Options.paypal.onInit(data, actions);
     };
 
     PaypalRestPaymentForm.prototype.onCancel = function(data) {
@@ -53742,13 +53681,13 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
     };
 
     PaypalRestPaymentForm.prototype.sendPaymentBrandToCheckout = function(sender) {
-        return sender.send({
-            url: getCheckoutEndpoint(),
-            method: HTTP_POST,
-            datatype: 'json',
-            data: {'paymentBrand': this.getBrand()}
-        });
-    };
+            return sender.send({
+                url: getCheckoutEndpoint(),
+                method: HTTP_POST,
+                datatype: 'json',
+                data: {'paymentBrand': this.getBrand(), 'createRegistration': Options.paypal.createRegistration}
+            });
+        };
 
     PaypalRestPaymentForm.prototype.renderButton = function() {
 
@@ -54471,6 +54410,82 @@ define('module/integrations/forter',['require'],function(require){
 });
 /* jshint ignore:end */
 ;
+/*jshint camelcase: false */
+define('module/integrations/OneyWidget',['require','jquery','module/Options','module/Locale','module/Wpwl','module/PaymentView'],function(require) {
+
+    var $ = require('jquery');
+    var Options = require("module/Options");
+    var Locale = require('module/Locale');
+    var Wpwl = require('module/Wpwl');
+    var PaymentView = require('module/PaymentView');
+
+    var OneyWidget = {};
+
+    var testUrl = "https://assets-staging.oney.io/build/loader.min.js";
+    var prodUrl = "https://assets.oney.io/build/loader.min.js";
+
+    OneyWidget.oneyLoadScript = Wpwl.isTestSystem ?  testUrl : prodUrl;
+
+    OneyWidget.renderOneyWidget = function() {
+        /*jshint unused:false*/
+        var options = OneyWidget.createOptions();
+        $.getScript(OneyWidget.oneyLoadScript, function(data, textStatus, jqXhr) {
+                /* jshint ignore:start */
+                if (textStatus === "success" && jqXhr.status === 200) {
+                    loadOneyWidget(function() {
+                        oneyMerchantApp.loadCheckoutSection(options);
+                    });
+                }
+                /* jshint ignore:end */
+            }).fail(function(jqXhr){
+                var form = $(".wpwl-form-virtualAccount-ONEY");
+                PaymentView.disableSubmitButton(form, true);
+                PaymentView.reportError("validateOneyScript", {
+                    error: jqXhr.status,
+                    reason: "Unable to load script",
+                    form: form
+                });
+            });
+    };
+
+    OneyWidget.isOneyBrand = function(brand) {
+        return brand === "ONEY";
+    };
+
+    OneyWidget.createOptions = function() {
+        injectLocaleFromCheckout();
+        var options = {
+            "country": Locale.country,
+            "language": String(Locale.language).toUpperCase(),
+            "payment_amount": Wpwl.checkout.amount,
+        };
+        Object.assign(options, Options.oney);
+        var useOptions = {};
+        /*jshint unused:false*/
+        options.errorCallback = function(status, response) {
+            var message = "Unable to load widget";
+            var form = $(".wpwl-form-virtualAccount-ONEY");
+            PaymentView.disableSubmitButton(form, true);
+            PaymentView.reportError("validateOneyWidget", {
+                error: status,
+                reason: message,
+                form: form
+            });
+        };
+        useOptions.options = options;
+        return useOptions;
+    };
+
+    function injectLocaleFromCheckout() {
+        if (Wpwl.checkout.locale && Options.locale === "en") {
+            var split = Wpwl.checkout.locale.split('-');
+            Locale.language = split[0];
+            Locale.country = split[1];
+        }
+    }
+
+    return OneyWidget;
+});
 // Script is implemented to handle Device fingerprinting functionality via Ratepay
 define('module/integrations/RatepayDeviceFingerPrinting',['require','jquery','module/PaymentView','module/Wpwl','module/Options'],function(require) {
     var $ = require('jquery');
@@ -54775,6 +54790,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 
 	var PaymentWidget = function(forms){
 		this.forms = forms;
+		this.widgets = [];
 		this.frameMessenger = new FrameMessenger([new Redirect(), new PreconditionIframe(), new SessionTimeoutErrorHandler()]);
 		this.onReadyPromise = $.when();
 	};
@@ -54830,6 +54846,20 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
          Payment.executePayment(containerClassName);
     };
 
+    // reloads Paypal button only
+    PaymentWidget.prototype.reloadButton = function() {
+        var paypalRestWidget = this.widgets.find(isPaypal);
+
+        paypalRestWidget.updateCheckoutWithPaymentBrand();
+        paypalRestWidget.downloadButton().then(function(){
+            paypalRestWidget.renderButton();
+        }).catch(function(error) {
+            logger.info("PayPal buttons loading failed with reason: " + error);
+            Options.onError(ObjectCreate(WidgetError.prototype));
+        });
+        paypalRestWidget.setButtonCallbacks(paypalRestWidget);
+    };
+
     PaymentWidget.prototype.getOnReadyPromise = function() {
         return this.onReadyPromise;
     };
@@ -54837,6 +54867,10 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
     PaymentWidget.prototype.addOnReadyPromise = function(promise) {
         this.onReadyPromise = $.when(this.onReadyPromise, promise);
     };
+
+    function isPaypal(widget) {
+        return widget instanceof PaypalRestPaymentForm;
+    }
 
 	function triggerReadyEvent(readyLatch) {
 		if (readyLatch.countDown()) {
@@ -55108,16 +55142,20 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 
 			// 2nd configure block
 			var formAttributes = {id: id, subType: brand, hidden: hiddenParameters.getParameters()};
+
 			if ((brand === "PAYPAL" || brand === "PAYPAL_CONTINUE") && InlineFlow.isInlineFlow(brand)) {
 				var form = Payment.showInlineButtonForm(formAttributes, PaypalRestPaymentForm.getCustomButtonFormIdArray());
 				var paypalRestWidget = new PaypalRestPaymentForm(form);
+
 				paypalRestWidget.updateCheckoutWithPaymentBrand();
-				paypalRestWidget.downloadButton().then(function(){
+
+                paypalRestWidget.downloadButton().then(function(){
 					paypalRestWidget.renderButton();
 				}).catch(function(error) {
 					logger.info("PayPal buttons loading failed with reason: " + error);
 					Options.onError(ObjectCreate(WidgetError.prototype));
 				});
+				self.widgets.push(paypalRestWidget);
 			} else {
 				$form = Payment.showButtonForm(formAttributes);
 			}
@@ -55622,6 +55660,10 @@ define('module/Start',['require','jquery','module/error/OppError','module/Option
 
 		this.wpwl.unload = function(){
             self.paymentWidget.unload();
+        };
+
+		this.wpwl.reloadButton = function(){
+            return self.paymentWidget.reloadButton();
         };
 
         this.wpwl.executePayment = function(containerClassName) {
