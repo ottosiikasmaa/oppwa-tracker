@@ -11888,6 +11888,7 @@ define('module/Setting',['require','jquery','module/Parameter','module/forms/Car
 	},
 
 	s.directDebitOpenBankingPaymentData = {
+	    logo: { brand:"ACI_INSTANTPAY", type:"logo" },
 	    accountHolder: { i18nIdentifier:"accountHolder", name:"bankAccount.holder", type:"text" },
 	    accountNumber: { i18nIdentifier:"accountNumber", name:"bankAccount.number", type:"tel" },
 	    accountRoutingNumber: { i18nIdentifier:"accountRoutingNumber", name:"bankAccount.routingNumber", type:"text" },
@@ -37684,13 +37685,17 @@ define('module/OneClickPaymentRegistration',['require','module/Generate','module
             // we treat PAYPAL registration the same way as card registration from UI point of view
             return RegistrationType.card;
         }
-        if (render === "DD" && this.bankAccount && this.bankAccount.iban) {
+        if (render === "DD" && this.bankAccount && (this.bankAccount.iban || isAciInstantPayBrand(this.paymentBrand))) {
             return RegistrationType.directDebit;
         }
     }
 
     function isPaypal(paymentBrand){
         return paymentBrand === "PAYPAL" || paymentBrand === "PAYPAL_CONTINUE" ;
+    }
+
+    function isAciInstantPayBrand(paymentBrand) {
+        return paymentBrand === "ACI_INSTANTPAY";
     }
 
     return OneClickPaymentRegistration;
@@ -37736,7 +37741,7 @@ define('module/OneClickPaymentUtil',['require','module/Generate','module/OneClic
                 registration.holder = registration.card.holder;
             }
             if(!Util.isEmpty(registration.bankAccount)) {
-                registration.number = getMaskedIban(registration.bankAccount.iban);
+                registration.number = getMaskedIbanOrNumber(registration.bankAccount);
                 registration.holder = registration.bankAccount.holder;
             }
         });
@@ -37744,11 +37749,18 @@ define('module/OneClickPaymentUtil',['require','module/Generate','module/OneClic
         return registrations;
     };
 
-    function getMaskedIban(iban){
-        // it might happen that an iban is not provided
-        if (!Util.isNullOrUndefined(iban))
+    function getMaskedIbanOrNumber(bankAccount) {
+        if (!Util.isNullOrUndefined(bankAccount.iban)) {
+            return getMasked(bankAccount.iban);
+        }
+        return getMasked(bankAccount.number);
+    }
+
+    function getMasked(ibanOrNumber){
+        // it might happen that an ibanOrNumber is not provided
+        if (!Util.isNullOrUndefined(ibanOrNumber))
         {
-            return Generate.string(iban.slice(0,4), " **** ", iban.slice(iban.length - 4, iban.length));
+            return Generate.string(ibanOrNumber.slice(0,4), " **** ", ibanOrNumber.slice(ibanOrNumber.length - 4, ibanOrNumber.length));
         }
         return null;
     }
