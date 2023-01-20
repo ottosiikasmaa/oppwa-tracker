@@ -37621,9 +37621,7 @@ define('module/OneClickPaymentRegistration',['require','module/Generate','module
         this.virtualAccount = json.virtualAccount;
         this.customer = json.customer;
         this.type = getTypeByPaymentBrand.call(this);
-        this.displayVirtualAccountId = isPaypal(this.paymentBrand) &&
-            !Util.isNullOrUndefined(this.virtualAccount) &&
-            !Util.isBlank(this.virtualAccount.accountId);
+        this.displayVirtualAccountId = displayPaypalID(this.paymentBrand, this.virtualAccount) || displayKlarnaEmail(this.paymentBrand, this.customer);
 
         var requiredCvv = (this.options.registrations.requireCvv === undefined && this.options.requireCvv) || this.options.registrations.requireCvv;
         this.isCardAndCvvRequired = this.type === RegistrationType.card && requiredCvv && !Setting.usesBirthDate(this.paymentBrand);
@@ -37685,7 +37683,7 @@ define('module/OneClickPaymentRegistration',['require','module/Generate','module
             return RegistrationType.card;
         }
         var render = Setting.subTypeLabelMap[this.paymentBrand].render;
-        if (render === "CC" || render === "DC" || isPaypal(this.paymentBrand) )  {
+        if (render === "CC" || render === "DC" || isPaypal(this.paymentBrand) || OneClickPaymentRegistration.isKlarna(this.paymentBrand)) {
             // we treat PAYPAL registration the same way as card registration from UI point of view
             return RegistrationType.card;
         }
@@ -37700,6 +37698,19 @@ define('module/OneClickPaymentRegistration',['require','module/Generate','module
 
     function isAciInstantPayBrand(paymentBrand) {
         return paymentBrand === "ACI_INSTANTPAY";
+    }
+
+    OneClickPaymentRegistration.isKlarna = function (paymentBrand) {
+        return paymentBrand === "KLARNA_PAYMENTS_PAYLATER" || paymentBrand === "KLARNA_PAYMENTS_PAYNOW" || paymentBrand === "KLARNA_PAYMENTS_SLICEIT" ||
+            paymentBrand === "KLARNA_PAYMENTS_ONE" || paymentBrand === "KLARNA_PAYMENTS_BILLPAY" ;
+    };
+
+    function displayKlarnaEmail(paymentBrand, customer) {
+        return OneClickPaymentRegistration.isKlarna(paymentBrand) && !Util.isNullOrUndefined(customer) && !Util.isBlank(customer.email);
+    }
+
+    function displayPaypalID(paymentBrand, virtualAccount) {
+        return isPaypal(paymentBrand) && !Util.isNullOrUndefined(virtualAccount) && !Util.isBlank(virtualAccount.accountId);
     }
 
     return OneClickPaymentRegistration;
@@ -37748,6 +37759,10 @@ define('module/OneClickPaymentUtil',['require','module/Generate','module/OneClic
                 registration.number = getMaskedIbanOrNumber(registration.bankAccount);
                 registration.holder = registration.bankAccount.holder;
             }
+            if(!Util.isEmpty(registration.customer) && OneClickPaymentRegistration.isKlarna(registration.paymentBrand)) {
+                registration.virtualAccount = {};
+                registration.virtualAccount.accountId = registration.customer.email;
+            } 
         });
 
         return registrations;
