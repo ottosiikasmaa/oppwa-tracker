@@ -11900,7 +11900,7 @@ define('module/Setting',['require','jquery','module/Parameter','module/forms/Car
 		submit: {type: "submit"}
 	},
 
-	s.directDebitUsOpenBankingPaymentData = {
+	s.directDebitOpenBankingPaymentData = {
 	    accountHolder: { i18nIdentifier:"accountHolder", name:"bankAccount.holder", type:"text" },
 	    accountNumber: { i18nIdentifier:"accountNumber", name:"bankAccount.number", type:"tel" },
 	    accountRoutingNumber: { i18nIdentifier:"accountRoutingNumber", name:"bankAccount.routingNumber", type:"text" },
@@ -12515,6 +12515,8 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	Options.validateOnlineTransfer = undefined;
 	Options.validateVirtualAccount = undefined;
 	Options.validatePrepayment = undefined;
+	Options.validateInvoice = undefined;
+	Options.validateOnDelivery = undefined;
 
 	// validation callbacks
 	Options.onBlurCardNumber = function(){};
@@ -12528,6 +12530,8 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	Options.onBeforeSubmitOnlineTransfer = function(){return true;};
 	Options.onBeforeSubmitVirtualAccount = function(){return true;};
 	Options.onBeforeSubmitPrepayment = function(){return true;};
+	Options.onBeforeSubmitInvoice = function(){return true;};
+	Options.onBeforeSubmitOnDelivery = function(){return true;};
 	Options.onAfterSubmit = function(){};
 
 	Options.onChangeBrand = function(){};
@@ -12740,6 +12744,8 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
     Options.styling = undefined;
 
     Options.fundingSources = undefined;
+
+    Options.aciInstantPay = [];
 
     Options.processing = {
 		appendMerchantTxIdToShopperResultUrl: false
@@ -45316,6 +45322,14 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		return {};
 	};
 
+	Validate.validateInvoiceForm = function() {
+		return {};
+	};
+
+	Validate.validateOnDeliveryForm = function() {
+		return {};
+	};
+
 	Validate.validateMbwayForm = function(paymentForm) {
         var validationErrors = {};
         var $email = paymentForm.getElementByCssClass("wpwl-control-customerEmail");
@@ -46354,7 +46368,7 @@ define('module/OneClickPaymentWidget',['require','jquery','module/I18n','module/
                 for (i = 0, len = this.forms.length; i < len; i++) {
                     var formBrands = new SpecForm(this.forms[i]).getBrands();
 
-                    if (formBrands.includes(brand)) {
+                    if (formBrands.indexOf(brand) !== -1) {
                         parentFormIdx = i;
                         break;
                     }
@@ -52099,6 +52113,28 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				return Payment.validateForm.call(this, obj);
 			};
 
+			Payment.validateInvoice = function(event){
+				var obj = {
+					event: event,
+					optionsValidateFunc: Options.validateInvoice,
+					validateFunc: Validate.validateInvoiceForm,
+					optionsOnBeforeSubmitFunc: Options.onBeforeSubmitInvoice
+				};
+
+				return Payment.validateForm.call(this, obj);
+			};
+
+			Payment.validateOnDelivery = function(event){
+				var obj = {
+					event: event,
+					optionsValidateFunc: Options.validateOnDelivery,
+					validateFunc: Validate.validateOnDeliveryForm,
+					optionsOnBeforeSubmitFunc: Options.onBeforeSubmitOnDelivery
+				};
+
+				return Payment.validateForm.call(this, obj);
+			};
+
 			Payment.validateForm = function(obj){
 				var isValid = false;
 
@@ -52363,6 +52399,14 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 			$(document).on('submit.wpwlEvent', 'form.wpwl-form-prepayment', function(event){
 				return Payment.validatePrepayment.call(this, event);
+			});
+
+			$(document).on('submit.wpwlEvent', 'form.wpwl-form-invoice', function(event){
+				return Payment.validateInvoice.call(this, event);
+			});
+
+			$(document).on('submit.wpwlEvent', 'form.wpwl-form-cashOnDelivery', function(event){
+				return Payment.validateOnDelivery.call(this, event);
 			});
 
 			// event is bound to all forms, but will trigger only on the specific form
@@ -52947,6 +52991,18 @@ define('module/Country',['require','module/I18n'],function(require){
                 {"value":"NT", "label":"Northwest Territories"},
                 {"value":"NU", "label":"Nunavut"},
                 {"value":"YT", "label":"Yukon"}
+            ],
+            "ZA" : [
+                {"value": "" , "label":"Please select"},
+                {"value":"EC", "label":"Eastern Cape"},
+                {"value":"FS", "label":"Free State"},
+                {"value":"GP", "label":"Gauteng"},
+                {"value":"KZN", "label":"KwaZulu-Natal"},
+                {"value":"LP", "label":"Limpopo"},
+                {"value":"MP", "label":"Mpumalanga"},
+                {"value":"NC", "label":"Northern Cape"},
+                {"value":"NW", "label":"North-West"},
+                {"value":"WC", "label":"Western Cape"},
             ]
         }
 	};
@@ -53071,7 +53127,8 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
         street1Wrapper.append( street1 );
         street2Wrapper.append( street2 );
 
-        if( Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA' ){
+        if( Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA' ||
+                Options.billingAddress.country === 'ZA'){
             stateSelect.html( getStates ( Options.billingAddress.country ) ).val( Options.billingAddress.state );
         }
 
@@ -53103,7 +53160,8 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
             $.each([country, stateSelect, stateText, city, postcode, street1, street2], function(e,v){ $(v).hide(); });
             stateSelect.removeAttr('name');
         }
-        else if (Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA'){
+        else if (Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA' ||
+                    Options.billingAddress.country === 'ZA'){
             stateSelect.show().attr('name', Parameter.BILLING_STATE);
             stateText.hide().removeAttr('name');
         }
@@ -53129,7 +53187,7 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
 
         //listener
         billingGroup.find('.wpwl-control-country').on('change', function(){
-            if( $(this).val() === 'US' || $(this).val() === 'CA' ){
+            if( $(this).val() === 'US' || $(this).val() === 'CA' || $(this).val() === 'ZA' ){
                 stateSelect.html( getStates( $(this).val() ) ).show().attr('name', Parameter.BILLING_STATE);
                 stateText.hide().removeAttr('name').removeClass('wpwl-has-error');
                 $(stateText).parent().find('.wpwl-hint-billingStateError').remove();
@@ -53145,7 +53203,8 @@ define('module/Billing',['require','jquery','module/Country','module/Options','m
             $(this).hide();
             billingGroup.find('.wpwl-text-billing').hide();
             $.each([stateSelect, stateText], function(e,v){ $(v).removeAttr('name'); });
-            var state =  (Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA') ? stateSelect : stateText;
+            var state =  (Options.billingAddress.country === 'US' || Options.billingAddress.country === 'CA' ||
+                                Options.billingAddress.country === 'ZA') ? stateSelect : stateText;
             $(state).attr('name', Parameter.BILLING_STATE);
             $.each([country, state, city, postcode, street1, street2], function(e,v){ $(v).show(); });
         });
@@ -54892,8 +54951,24 @@ define('module/framemessaging/SessionTimeoutErrorHandler',['require','module/Opt
 
 	return SessionTimeoutErrorNotification;
 });
+define('module/AciInstantPay',['require','module/Options'],function (require) {
+
+    var Options = require('module/Options');
+
+    var AciInstantPay = {};
+
+    AciInstantPay.getAciInstantPayCountry = function () {
+        if (Options.aciInstantPay !== undefined && Options.aciInstantPay !== null &&
+            Options.aciInstantPay.country !== undefined && Options.aciInstantPay.country !== null
+        ) {
+              return Options.aciInstantPay.country;
+        }
+    };
+
+    return AciInstantPay;
+});
 /*jshint camelcase: false */
-define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','module/ApplePay','module/GooglePay','module/Console','lib/Spinner','module/Options','module/error/OppError','module/CountDownLatch','module/Message','module/MessageView','module/Parameter','module/Parameters','module/Payment','module/Setting','module/SpecForm','module/Wpwl','module/Billing','module/CardHolder','module/Util','module/SaqaUtil','module/integrations/RedShieldDeviceId','module/integrations/CyberSourceRiskDeviceId','module/integrations/KountIntegration','module/Generate','module/InternalRequestCommunication','module/IdealPaymentWidget','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/forms/PaypalRestPaymentForm','module/InlineFlow','module/integrations/AmazonPayWidget','module/integrations/ClickToPayPaymentWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/SezzleInlineWidget','module/FrameMessenger','module/integrations/forter','module/ForterUtils','module/integrations/OneyWidget','module/BirthDate','module/integrations/RatepayDeviceFingerPrinting','module/framemessaging/PreconditionIframe','module/framemessaging/Redirect','module/framemessaging/SessionTimeoutErrorHandler','module/error/WidgetError','module/logging/LoggerFactory','shim/ObjectCreate'],function(require){
+define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','module/ApplePay','module/GooglePay','module/Console','lib/Spinner','module/Options','module/error/OppError','module/CountDownLatch','module/Message','module/MessageView','module/Parameter','module/Parameters','module/Payment','module/Setting','module/SpecForm','module/Wpwl','module/Billing','module/CardHolder','module/Util','module/SaqaUtil','module/integrations/RedShieldDeviceId','module/integrations/CyberSourceRiskDeviceId','module/integrations/KountIntegration','module/Generate','module/InternalRequestCommunication','module/IdealPaymentWidget','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/RocketFuelInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/forms/PaypalRestPaymentForm','module/InlineFlow','module/integrations/AmazonPayWidget','module/integrations/ClickToPayPaymentWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/SezzleInlineWidget','module/FrameMessenger','module/integrations/forter','module/ForterUtils','module/integrations/OneyWidget','module/BirthDate','module/integrations/RatepayDeviceFingerPrinting','module/framemessaging/PreconditionIframe','module/framemessaging/Redirect','module/framemessaging/SessionTimeoutErrorHandler','module/error/WidgetError','module/logging/LoggerFactory','shim/ObjectCreate','module/AciInstantPay'],function(require){
 	var $ = require('jquery');
 	var Affirm = require('module/integrations/Affirm');
 	var ApplePay = require('module/ApplePay');
@@ -54952,6 +55027,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	var WPWL_CLEARFIX = "wpwl-clearfix";
 	var ccBrandsForClickToPay = [];
 	var uniqueDivIdArray = [];
+	var AciInstantPay = require("module/AciInstantPay");
 
 	var PaymentWidget = function(forms){
 		this.forms = forms;
@@ -55549,7 +55625,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 		var sepaMethods = [];
 		var ddSepaMixMethods = [];
 		var ddNationalMethods = [];
-		var ddUsOpenBankingMethods = [];
+		var ddOpenBankingMethods = [];
 		for (var idd = 0, len = ddMethods.length; idd < len; idd++) {
 			var ddMethod = ddMethods[idd];
 			if ( /^DIRECTDEBIT_SEPA$/.test( ddMethod ) ){
@@ -55559,7 +55635,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			} else if (/^DIRECTDEBIT_SEPA_MIX/.test(ddMethod)) {
 			    ddSepaMixMethods.push(ddMethod);
 			} else if (/^ACI_INSTANTPAY$/.test(ddMethod)) {
-			    ddUsOpenBankingMethods.push(ddMethod);
+			    ddOpenBankingMethods.push(ddMethod);
 			} else {
 			    ddNationalMethods.push(ddMethod);
 			}
@@ -55576,15 +55652,26 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			});
 		}
 
-		if ( ddUsOpenBankingMethods.length > 0 ) {
-		    lastElement = renderDirectDebit ({
-		        container: lastElement,
-		        paymentMethods: ddUsOpenBankingMethods,
-		        shopperResultUrl: shopperResultUrl,
-		        paymentInputs: Setting.directDebitUsOpenBankingPaymentData,
-		        brand: "ACI_INSTANTPAY"
-		    });
-		}
+        if ( ddOpenBankingMethods.length > 0 ) {
+        	var aciInstantPayCountry = AciInstantPay.getAciInstantPayCountry();
+        	if ( aciInstantPayCountry === "US" || aciInstantPayCountry === undefined ) {
+        		lastElement = renderDirectDebit({
+        			container: lastElement,
+        			paymentMethods: ddOpenBankingMethods,
+        			shopperResultUrl: shopperResultUrl,
+        			paymentInputs: Setting.directDebitOpenBankingPaymentData,
+        			brand: "ACI_INSTANTPAY"
+        		});
+        	} else if ( aciInstantPayCountry === "EUR" ) {
+        		//TODO: Other country code could be checked and implemented here
+        		// For ACIInstantPay US implementation, we could skip this else if statement.
+        		var messageFutureCountries = "The widget is not ready for this country.";
+        		widgetMessage(messageFutureCountries, specForm.$form);
+        	} else {
+        		var messageInvalidCountries = "Country is not supported - maybe misspelled.";
+        		widgetMessage(messageInvalidCountries, specForm.$form);
+        	}
+        }
 
 		if ( sepaMethods.length > 0 ) {
 			var paymentInputs;
@@ -55651,6 +55738,19 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 			CardHolder.initCardHolder();
 		}
 	}
+
+	function widgetMessage(messageString, specForm) {
+    	var message = new Message({
+    		type: 'warning',
+    		message: messageString
+    	});
+    	var messageView = new MessageView({
+    		elem: specForm,
+    		method: 'before',
+    		message: message
+    	});
+    	messageView.inject();
+    }
 	
 	return PaymentWidget;
 });
