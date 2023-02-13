@@ -46530,7 +46530,7 @@ define('module/OneClickPaymentWidget',['require','jquery','module/I18n','module/
                 for (i = 0, len = this.forms.length; i < len; i++) {
                     var formBrands = new SpecForm(this.forms[i]).getBrands();
 
-                    if (formBrands.includes(brand)) {
+                    if (formBrands.indexOf(brand) !== -1) {
                         parentFormIdx = i;
                         break;
                     }
