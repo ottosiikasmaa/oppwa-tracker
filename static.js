@@ -12567,7 +12567,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 			displayCancelOption: true,
 			displayHeader: true,
 			type: '',
-			autoSubmit: false,
+			autoSubmit: true,
 			hideLoader: false
 		},
 		srcMark: {
@@ -50568,12 +50568,12 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		}
 		var select = $brandElement.get(0);
 		// only show message if initially selected brand is recognized ClickToPay brand
-		ClickToPayPaymentWidget.initializedBrands = result.availableCardBrands;
-		ClickToPayPaymentWidget.updateInitializedBrandsForNewUserFlow(result.availableCardBrands);
-		if (Options.clickToPay.initializedBrands.indexOf(select.value) > -1 && Options.style !== 'logos') {
+		if (Options.clickToPay.brands.indexOf(select.value) > -1 && Options.style !== 'logos') {
 			PaymentView.hideOrShowClickToPayConfirmation.call(select, select.value, false);
 		}
 		ClickToPayPaymentWidget.button.removeAttribute("disabled");
+		ClickToPayPaymentWidget.initializedBrands = result.availableCardBrands;
+		ClickToPayPaymentWidget.updateInitializedBrandsForNewUserFlow(result.availableCardBrands);
 		var b = $(clickToPayForm).find("button");
 		if (Options.clickToPay.srcMark.height >= 32 && Options.clickToPay.srcMark.height <= 60 && Options.clickToPay.srcMark.width >= 178 && Options.clickToPay.srcMark.width <= 500) {
 			$(b[0]).html('<src-mark card-brands=' + ClickToPayPaymentWidget.initializedBrands + ' height=' + Options.clickToPay.srcMark.height + ' width=' + Options.clickToPay.srcMark.width + ' locale=' + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase() +  ' theme=' + Options.clickToPay.srcMark.theme + '></src-mark>');
@@ -51214,28 +51214,10 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 
 	/** this will redirect the shopper to shopperResultUrl */
 	ClickToPayPaymentWidget.redirect = function(url) {
-		var numberOfRedirects = 0;
-		var iframe = document.querySelectorAll('[name^="virtualAccount-CLICK_TO_PAY_"]')[0];
-		$(iframe).on("load", function(){
-			// The first redirect is to OPP. The second redirect is 3D-Secure.
-			if ( ++numberOfRedirects === 2 ) {
-				ClickToPayPaymentWidget.$form.hide(); // to hide CLICK_TO_PAY form
-				ClickToPayPaymentWidget.$form.next().hide(); // to hide card-list and even if iframe, then will be shown again by next line
-				$(iframe).show();
-				var dim = Options.threeDIframeSize;
-				$(iframe).width(dim.width);
-				$(iframe).height(dim.height);
-				Options.onLoadThreeDIframe.call($(iframe).get(0));
-			}
-		});
-
-		var $submitForm = $("<form/>", {
-			action: url,
-			method: "GET",
-			target: ClickToPayPaymentWidget.$form.parent().attr("id")
-		});
-		ClickToPayPaymentWidget.$form.before($submitForm);
-		$submitForm.submit();
+		var formHtml = '<form id=\"clickToPayForm\" action=' + url + ' lang="' + Generate.language.toLowerCase() + '" accept-charset=\"UTF-8\"  method=GET target=\"' + "_top" + '\"></form>';
+		var submitForm = $(formHtml);
+		ClickToPayPaymentWidget.$form.before(submitForm);
+		submitForm.submit();
 	};
 
 	/** submit the form via an ajax call (this would call the opp payment endpoint) */
