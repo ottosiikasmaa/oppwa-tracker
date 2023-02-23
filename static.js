@@ -44373,6 +44373,21 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 	return ParentToIframeCommunication;
 }); 
 
+define('module/VABrands',[],function(){
+    var VABrands = [
+    "PAYPAL",
+    "PAYPAL_CONTINUE",
+    "KLARNA_INSTALLMENTS",
+    "KLARNA_INVOICE",
+    "KLARNA_CHECKOUT",
+    "KLARNA_PAYMENTS_BILLPAY",
+    "KLARNA_PAYMENTS_ONE",
+    "KLARNA_PAYMENTS_PAYLATER",
+    "KLARNA_PAYMENTS_PAYNOW",
+    "KLARNA_PAYMENTS_SLICEIT"];
+
+    return VABrands;
+});
 /**
  * Copyright (c) 2011-2014 Felix Gnass
  * Licensed under the MIT license
@@ -46044,7 +46059,7 @@ define('template/oneclickpayment/HolderIFrameTemplate',['require','template/Temp
     };
 });
 
-define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentUtil','module/Options','module/PaymentView','module/AutoFocus','module/ParentToIframeCommunication','module/RegistrationType','lib/Spinner','module/Tracking','module/Generate','module/Validate','module/Util','module/I18n','module/DateFormatter','module/SaqaUtil','template/oneclickpayment/MainTemplate','template/oneclickpayment/IframeTemplate','template/oneclickpayment/PaypalRestFraudNetJsTemplate','template/oneclickpayment/HolderIFrameTemplate'],function(require){
+define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentUtil','module/Options','module/PaymentView','module/AutoFocus','module/ParentToIframeCommunication','module/RegistrationType','module/VABrands','lib/Spinner','module/Tracking','module/Generate','module/Validate','module/Util','module/I18n','module/DateFormatter','module/SaqaUtil','template/oneclickpayment/MainTemplate','template/oneclickpayment/IframeTemplate','template/oneclickpayment/PaypalRestFraudNetJsTemplate','template/oneclickpayment/HolderIFrameTemplate'],function(require){
     var $ = require("jquery");
     var OneClickPaymentUtil = require("module/OneClickPaymentUtil");
     var Options = require("module/Options");
@@ -46052,6 +46067,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
     var AutoFocus = require('module/AutoFocus');
     var ParentToIframeCommunication = require('module/ParentToIframeCommunication');
     var RegistrationType = require("module/RegistrationType");
+    var VABrands = require("module/VABrands");
     var Spinner = require("lib/Spinner");
     var Tracking = require("module/Tracking");
     var Generate = require("module/Generate");
@@ -46117,13 +46133,15 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
         }
 
         var firstRegistration = this.registrations[0];
-        if(firstRegistration.isCardAndCvvRequired){
+        if(firstRegistration.isCardAndCvvRequired && !VABrands.includes(firstRegistration.paymentBrand)){
             this.prepareCvvPciCompliance();
             var customPlaceholder = I18n.cvvPlaceholder;
             if (!Util.isNullOrUndefined(customPlaceholder)) {
                 this.$container.find(".wpwl-control.wpwl-control-iframe.wpwl-control-cvv")
                     .attr("placeholder", customPlaceholder);
             }
+        } else {
+            this.$container.find(".wpwl-wrapper-registration-cvv").empty();
         }
 
         if(firstRegistration.isHolderRequired) {
@@ -46247,7 +46265,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
 
         // empty wrapper to remove cvv iframe and error message
         $form.find(".wpwl-wrapper-registration-cvv").empty();
-        if (registration.isCardAndCvvRequired){
+        if (registration.isCardAndCvvRequired && !VABrands.includes(registration.paymentBrand)){
             this.iframeTemplate.addObject({registration: registration});
             $selected.closest(".wpwl-registration").find(".wpwl-wrapper-registration-cvv").append(this.iframeTemplate.render());
 
