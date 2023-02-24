@@ -46133,7 +46133,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
         }
 
         var firstRegistration = this.registrations[0];
-        if(firstRegistration.isCardAndCvvRequired && !VABrands.includes(firstRegistration.paymentBrand)){
+        if(firstRegistration.isCardAndCvvRequired && VABrands.indexOf(firstRegistration.paymentBrand) === -1){
             this.prepareCvvPciCompliance();
             var customPlaceholder = I18n.cvvPlaceholder;
             if (!Util.isNullOrUndefined(customPlaceholder)) {
@@ -46265,7 +46265,7 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
 
         // empty wrapper to remove cvv iframe and error message
         $form.find(".wpwl-wrapper-registration-cvv").empty();
-        if (registration.isCardAndCvvRequired && !VABrands.includes(registration.paymentBrand)){
+        if (registration.isCardAndCvvRequired && VABrands.indexOf(registration.paymentBrand) === -1){
             this.iframeTemplate.addObject({registration: registration});
             $selected.closest(".wpwl-registration").find(".wpwl-wrapper-registration-cvv").append(this.iframeTemplate.render());
 
