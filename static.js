@@ -36287,6 +36287,11 @@ define('module/Util',['require','jquery','underscore','lodash'],function(require
         return window.location.origin;
     };
 
+    Util.getUserAgent = function(){
+        return navigator == null ? "" : navigator.userAgent;
+    };
+
+
     Util.getOrigin=function(){
         var origin = Util.getWindowLocationOrigin();
         //In IE, window.location.origin is not there... We need to help the browser.
@@ -47332,6 +47337,7 @@ define('module/ForterUtils',['require','jquery','module/Parameter','module/Util'
                if(forterCookieField) {
                    forterCookieField.val(token);
                }
+
            };
            document.removeEventListener(FORTER_EVENT_NAME, listenerFunction);
            document.addEventListener(FORTER_EVENT_NAME, listenerFunction);
@@ -47350,6 +47356,11 @@ define('module/ForterUtils',['require','jquery','module/Parameter','module/Util'
                     forterCookieField.val(forterCookieFieldValue);
                 }
                 // If value from Cookie is null, then 'ftr:tokenReady' event must have already set the field value
+            }
+            var forterUserAgent = form.find('[name="' + Parameter.BROWSER_USERAGENT + '"]');
+
+            if(forterUserAgent) {
+               forterUserAgent.val(Util.getUserAgent());
             }
         }
     };
@@ -55897,6 +55908,10 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
     function addForterSupport(hiddenParameters){
         if(ForterUtils.forterActive === true) {
             hiddenParameters.add(Parameter.FORTER_COOKIE, "");
+            console.error("navigator:" +navigator);
+            if (navigator) {
+                hiddenParameters.add(Parameter.BROWSER_USERAGENT, navigator.userAgent);
+            }
         }
     }
 
