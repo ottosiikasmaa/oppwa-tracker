@@ -46131,7 +46131,18 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
         // we can include other templates as objects and access them inside this template
         this.template.addObject({iframeTemplate: this.iframeTemplate});
         this.template.addObject({shopOrigin: Util.getOrigin()});
-        this.$container.html(this.template.render());
+
+        var $oneClickForm = $('form.paymentWidgets[data-brands="ONECLICK"]');
+        if ($oneClickForm.length) {
+            var $action = $oneClickForm.prop('action');
+
+            $oneClickForm.replaceWith("<div class=\"wpwl-container wpwl-container-registration wpwl-clearfix\">" + this.template.render() + "</div>");
+
+            $("form.wpwl-form-registrations").find("input[name='shopperResultUrl']").attr("value", $action);
+        }
+        else {
+            this.$container.html(this.template.render());
+        }
 
         if (SaqaUtil.isSAQACompliance() ===true) {
             this.$container.find('.wpwl-group-submit').remove();
@@ -55526,8 +55537,16 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 		var brandsNotInUpperCase = [];
 
 		var specFormBrands = specForm.getBrands();
+		if (specFormBrands !== undefined && !Array.isArray(specFormBrands)) {
+		    specFormBrands = [specFormBrands];
+		}
 		$.each( specFormBrands, function(index, brand){
 			if(brand) {
+			    // allow for registrations display only
+			    if (brand === "ONECLICK") {
+			        return false;
+			    }
+
 				var paymentConfig = Setting.subTypeLabelMap[brand];
 
 				if ( paymentConfig !== undefined ) {
