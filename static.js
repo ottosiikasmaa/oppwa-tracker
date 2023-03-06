@@ -46647,7 +46647,8 @@ define('module/OneClickPaymentWidget',['require','jquery','module/I18n','module/
 
             render.call(this);
             if (oneClickForm) {
-                $(this.forms[parentFormIdx]).replaceWith(this.$container);
+                $(this.forms[parentFormIdx]).after(this.$container);
+                $(this.forms[parentFormIdx]).remove();
             }
             else {
                 $(this.forms[parentFormIdx]).before(this.$container);
@@ -48556,7 +48557,8 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
     };
 
     KlarnaPaymentsInlineWidget.isKlarnaBrand = function(brand) {
-        return (brand === "KLARNA_PAYMENTS_ONE" || brand === "KLARNA_PAYMENTS_PAYNOW" ||
+        return (brand === "KLARNA_PAYMENTS_ONE" ||
+                brand === "KLARNA_PAYMENTS_PAYNOW" ||
                 brand === "KLARNA_PAYMENTS_PAYLATER" ||
                 brand === "KLARNA_PAYMENTS_SLICEIT");
     };
@@ -48573,6 +48575,8 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
             return "pay_later";
         else if (this.paymentBrand === "KLARNA_PAYMENTS_SLICEIT")
             return "pay_over_time";
+        else if (this.paymentBrand === "KLARNA_PAYMENTS_ONE")
+            return "klarna";
     };
 
     KlarnaPaymentsInlineWidget.loadKlarnaPaymentsLibrary = function() {
