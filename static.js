@@ -46612,28 +46612,19 @@ define('module/OneClickPaymentWidget',['require','jquery','module/I18n','module/
             //Index of the form to which the registration window will be attached to
             var parentFormIdx = -1;
 
-            var oneClickForm = this.forms.find(function (form) {
-                return new SpecForm(form).getBrands().indexOf('ONECLICK') > -1;
-            });
+            //Select the first form which contain a brand from the registered ones
+            for (var idx = 0, brandLen = registeredBrands.length; idx < brandLen; idx++) {
+                var brand = registeredBrands[idx];
+                for (i = 0, len = this.forms.length; i < len; i++) {
+                    var formBrands = new SpecForm(this.forms[i]).getBrands();
 
-            if (oneClickForm) {
-                parentFormIdx = this.forms.indexOf(oneClickForm);
-            }
-            else {
-                //Select the first form which contain a brand from the registered ones
-                for (var idx = 0, brandLen = registeredBrands.length; idx < brandLen; idx++) {
-                    var brand = registeredBrands[idx];
-                    for (i = 0, len = this.forms.length; i < len; i++) {
-                        var formBrands = new SpecForm(this.forms[i]).getBrands();
-
-                        if (formBrands.indexOf(brand) !== -1) {
-                            parentFormIdx = i;
-                            break;
-                        }
-                    }
-                    if (parentFormIdx !== -1) {
+                    if (formBrands.indexOf(brand) !== -1) {
+                        parentFormIdx = i;
                         break;
                     }
+                }
+                if (parentFormIdx !== -1) {
+                    break;
                 }
             }
 
@@ -46644,15 +46635,8 @@ define('module/OneClickPaymentWidget',['require','jquery','module/I18n','module/
 
             saveShopperResultUrl(this.forms[parentFormIdx]);
             prepareRegistrations.call(this);
-
             render.call(this);
-            if (oneClickForm) {
-                $(this.forms[parentFormIdx]).after(this.$container);
-                $(this.forms[parentFormIdx]).remove();
-            }
-            else {
-                $(this.forms[parentFormIdx]).before(this.$container);
-            }
+            $(this.forms[parentFormIdx]).before(this.$container);
             if (Options.registrations.hideInitialPaymentForms) {
                 $(this.$container).after(OneClickPaymentWidget.$showInitialPaymentForms);
             }
@@ -48557,8 +48541,7 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
     };
 
     KlarnaPaymentsInlineWidget.isKlarnaBrand = function(brand) {
-        return (brand === "KLARNA_PAYMENTS_ONE" ||
-                brand === "KLARNA_PAYMENTS_PAYNOW" ||
+        return (brand === "KLARNA_PAYMENTS_ONE" || brand === "KLARNA_PAYMENTS_PAYNOW" ||
                 brand === "KLARNA_PAYMENTS_PAYLATER" ||
                 brand === "KLARNA_PAYMENTS_SLICEIT");
     };
@@ -48575,8 +48558,6 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
             return "pay_later";
         else if (this.paymentBrand === "KLARNA_PAYMENTS_SLICEIT")
             return "pay_over_time";
-        else if (this.paymentBrand === "KLARNA_PAYMENTS_ONE")
-            return "klarna";
     };
 
     KlarnaPaymentsInlineWidget.loadKlarnaPaymentsLibrary = function() {
@@ -55368,9 +55349,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 	var AciInstantPay = require("module/AciInstantPay");
 
 	var PaymentWidget = function(forms){
-		this.forms = forms.filter(function (form) {
-		    return $(form).data('brands') !== 'ONECLICK';
-		});
+		this.forms = forms;
 		this.widgets = [];
 		this.frameMessenger = new FrameMessenger([new Redirect(), new PreconditionIframe(), new SessionTimeoutErrorHandler()]);
 		this.onReadyPromise = $.when();
