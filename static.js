@@ -45535,7 +45535,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		else if (brand === "STC_PAY") {
 			validationErrors = Validate.validateStcPayForm(paymentForm);
 		}
-		else if (brand === "AFTERPAY") {
+		else if (brand === "AFTERPAY" || brand === "CLEARPAY") {
 			validationErrors = Validate.validateAfterPayForm(paymentForm);
 		}
 		else if (brand === "RATEPAY_INVOICE" && BirthDate.showBirthDate()) {
@@ -49402,7 +49402,7 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
     };
 
     AfterPayPacificPaymentWidget.isAfterPayPacificBrand = function(brand) {
-        return (brand === "AFTERPAY_PACIFIC");
+        return ((brand === "AFTERPAY_PACIFIC") || (brand === "CLEARPAY"));
     };
 
     AfterPayPacificPaymentWidget.onBeforeSubmitVirtualAccount = function(selectedPaymentForm) {
@@ -49431,9 +49431,8 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
     };
 
     AfterPayPacificPaymentWidget.prepareFormAndSendTx = function($form) {
-        var spinner = new Spinner(Options.spinner).spin($(".wpwl-container-virtualAccount-AFTERPAY_PACIFIC").get(0));
+        var spinner = new Spinner(Options.spinner).spin($(".wpwl-container-virtualAccount-" + this.paymentBrand).get(0));
         setPayButtonDisabledStatus(true);
-
         $form.append($.parseHTML(Generate.generateIsSourceBrowserHiddenParam($form)));
         if (InlineFlow.isInlineFlow(this.paymentBrand)) {
             $form.append($.parseHTML(Generate.generateInlineFlowHiddenCustomParam($form)));
@@ -49456,7 +49455,6 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
 
             if (createSessionResponse) {
                 if (createSessionResponse.clientToken) {
-
                     AfterPayPacificPaymentWidget.initializeAndLoadAfterPayPacificWidget({
                         token: createSessionResponse.clientToken,
                         countryCode: createSessionResponse.region,
@@ -49466,11 +49464,11 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
 
                 } else {
                     logger.error("No token for widget rendering, cannot proceed.");
-                    Options.onError(new WidgetError("AFTERPAY_PACIFIC", "no_token", "No token for widget rendering, cannot proceed."));
+                    Options.onError(new WidgetError("AFTERPAY_PACIFIC or CLEARPAY", "no_token", "No token for widget rendering, cannot proceed."));
                 }
             } else {
                 logger.error("No create session response received, cannot proceed.");
-                Options.onError(new WidgetError("AFTERPAY_PACIFIC", "no_session", "No create session response received, cannot proceed."));
+                Options.onError(new WidgetError("AFTERPAY_PACIFIC or CLEARPAY", "no_session", "No create session response received, cannot proceed."));
             }
 
             setPayButtonDisabledStatus(false);
@@ -49489,17 +49487,25 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
         if (SessionError.isSessionTimeout(reason)) {
             SessionError.onTimeoutError();
         } else {
-            Options.onError(new WidgetError("AFTERPAY_PACIFIC", "ajax_submit_fail", "Exception occurred while submitting the form via an Ajax call. Reason: " + reason));
+            Options.onError(new WidgetError("AFTERPAY_PACIFIC or CLEARPAY", "ajax_submit_fail", "Exception occurred while submitting the form via an Ajax call. Reason: " + reason));
         }
     }
 
+
     AfterPayPacificPaymentWidget.initializeAndLoadAfterPayPacificWidget = function(params) {
         var AfterPay = window.AfterPay;
-
+        var country = params.countryCode;
+        
         if (AfterPay) {
             try {
+                if (this.paymentBrand === 'CLEARPAY' && country === 'GLOBAL') {
+                    logger.info("Executing Clearpay widget flow for " + this.paymentBrand);
+                    logger.info("Country is being set to GB for Clearpay flow");
+                    country = 'GB';
+                }
+
                 AfterPay.initialize({
-                    countryCode: params.countryCode
+                    countryCode: country
                 });
 
                 if (InlineFlow.isInlineFlow(this.paymentBrand)) {
@@ -49533,13 +49539,13 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
                 }
 
             } catch (e) {
-                logger.error("An exception was thrown while initializing/loading the AfterPay Pacific widget: " + e);
-                Options.onError(new WidgetError("AFTERPAY_PACIFIC", "after_pay_error", "Exception was thrown while initializing/loading the AfterPay Pacific widget: " + e));
+                 logger.error("An exception was thrown while initializing/loading the AfterPay Pacific or Clearpay widget: " + e);
+                Options.onError(new WidgetError("AFTERPAY_PACIFIC or CLEARPAY", "after_pay_error", "Exception was thrown while initializing/loading the AfterPay Pacific widget: " + e));
             }
 
         } else {
-            logger.error("The AfterPay Pacific widget could not be initialized because the script from their side failed to load.");
-            Options.onError(new WidgetError("AFTERPAY_PACIFIC", "script_not_initialized", "The script could not initialize correctly from AfterPay Pacific side. Please retry."));
+            logger.error("The AfterPay Pacific or Clearpay widget could not be initialized because the script from their side failed to load.");
+            Options.onError(new WidgetError("AFTERPAY_PACIFIC or CLEARPAY", "script_not_initialized", "The script could not initialize correctly from AfterPay Pacific side. Please retry."));
         }
     };
 
@@ -53206,7 +53212,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				} else if (containerClassName.indexOf("virtualAccount-AFFIRM") > -1) {
 					Payment.callAffirm(container);
 
-				} else if (containerClassName.indexOf("virtualAccount-AFTERPAY_PACIFIC") > -1) {
+				} else if (containerClassName.indexOf("virtualAccount-AFTERPAY_PACIFIC") > -1 || containerClassName.indexOf("virtualAccount-CLEARPAY") > -1) {
 					Payment.callAfterPayPacific(container);
 
 				} else if (containerClassName.indexOf("virtualAccount-BANCONTACT_LINK") > -1) {
@@ -55708,7 +55714,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 		    YandexCheckoutPaymentWidget.loadYandexCheckoutPaymentsLibrary();
 		}
 
-		if (paymentMethods.indexOf("AFTERPAY_PACIFIC") > -1) {
+		if (paymentMethods.indexOf("AFTERPAY_PACIFIC") > -1 || paymentMethods.indexOf("CLEARPAY") > -1) {
 		    AfterPayPacificPaymentWidget.loadAfterPayPacificPaymentsLibrary(Wpwl.isTestSystem);
 		}
 
