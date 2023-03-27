@@ -52847,8 +52847,11 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			}
 
 			var $iframe = $form.next();
+			if (Options.paymentTarget) {
+				$iframe = $('iframe[name=\"' + Options.paymentTarget + '\"]');
+			}
 
-			// show spinner
+                  // show spinner
 			var $formContainer = $form.parent();
 			var spinner = new Spinner(Options.spinner).spin($formContainer.get(0));
 
