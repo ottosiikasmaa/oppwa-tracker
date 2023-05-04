@@ -12777,6 +12777,14 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 		return options;
 	};
 
+    Options.onBeforeSubmitCardPromise = undefined;
+    Options.onBeforeSubmitInvoicePromise = undefined;
+    Options.onBeforeSubmitPrepaymentPromise = undefined;
+    Options.onBeforeSubmitVirtualAccountPromise = undefined;
+    Options.onBeforeSubmitOnlineTransferPromise = undefined;
+    Options.onBeforeSubmitDirectDebitPromise = undefined;
+    Options.onBeforeSubmitOnDeliveryPromise = undefined;
+
     Options.setWpwlOptions = function(wpwlOptions){
         Options = merge(Options, wpwlOptions);
         // store Options in wpwlOptions
@@ -51690,6 +51698,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 	Payment.preparePaymentFormData = [];
 	Payment.preparePaymentFormEnabled = false;
+	Payment.onBeforeSubmitPromiseFlag = false;
 
 	Payment.initPayment = function() {
 		Payment.style = Options.style;
@@ -51721,6 +51730,14 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
 		Payment.initListeners();
 	};
+
+	Payment.isOnBeforeSubmitPromiseFlagSet = function() {
+        return !!Payment.onBeforeSubmitPromiseFlag;
+    };
+
+    Payment.setOnBeforeSubmitPromiseFlag = function(value) {
+        Payment.onBeforeSubmitPromiseFlag = value;
+    };
 
 	Payment.logBasicInfo = function(){
 		logger.info("User-agent: " + navigator.userAgent);
@@ -52485,7 +52502,21 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				})
 				.then(function(isValid){
 					if (isValid && Options.onBeforeSubmitCard.call(form, event)) {
-						Payment.submitPciIframes.call(form);
+					    if($.isFunction(Options.onBeforeSubmitCardPromise)) {
+                            Options.onBeforeSubmitCardPromise()
+                                    .then(function() {
+                                        logger.info("Merchant implementation of onBeforeSubmitCardPromise was resolved successfully.");
+                                        Payment.submitPciIframes.call(form);
+                                    })
+                                    .catch(function(errorMessage) {
+                                        logger.additionalLog("ERROR", "Merchant implementation of onBeforeSubmitCardPromise resulted in Rejection " + errorMessage);
+                                        Options.onError(new WidgetError("CARD_FORM", "onBeforeSubmitCardPromise",
+                                        "Merchant implementation of onBeforeSubmitCardPromise resulted in Rejection, cannot proceed."));
+                                    });
+					    }
+					    else {
+                            Payment.submitPciIframes.call(form);
+					    }
 					}
 				})
 				.fail(function(error, message) {
@@ -52834,37 +52865,114 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				return Payment.validateCard.call(this, event);
 			});
 
-			$(document).on('submit.wpwlEvent', '[data-action="submit-payment-directDebit"]', function(event){
-				return Payment.validateDirectDebit.call(this, event);
-			});
-
 			$(document).on('submit.wpwlEvent', 'form.wpwl-form-onlineTransfer', function(event){
-				return Payment.validateOnlineTransfer.call(this, event);
+			    var validation = Payment.validateOnlineTransfer.call(this, event);
+                if (!validation) {
+                    return false;
+                }
+
+                if ($.isFunction(Options.onBeforeSubmitOnlineTransferPromise)) {
+                    var brand = $(this).closest("form").find('[name="paymentBrand"]').val();
+                    var classSelector = 'form.wpwl-form-onlineTransfer' + '-' + brand;
+
+                    var obj = {
+                        event: event,
+                        optionsOnBeforeSubmitPromise: Options.onBeforeSubmitOnlineTransferPromise,
+                        elementClassName: classSelector,
+                        submitWpwlEvent: 'submit.wpwlEvent',
+                        promiseName: "onBeforeSubmitOnlineTransferPromise"
+                    };
+
+                    handleValidation(validation, function () {
+                        Payment.handleOnBeforeSubmitPromise(obj);
+                        event.preventDefault();
+                    });
+                }
+                else {
+                    return validation;
+                }
 			});
 
 			$(document).on('submit.wpwlEvent', 'form.wpwl-form-virtualAccount', function(event){
+                if($.isFunction(Options.onBeforeSubmitVirtualAccountPromise)) {
+                    if(!Payment.isOnBeforeSubmitPromiseFlagSet()) {
+                        var brand = $(this).closest("form").find('[name="paymentBrand"]').val();
+                        var classSelector = 'form.wpwl-form-virtualAccount' + '-' + brand;
+                        var obj = {
+                            event: event,
+                            optionsOnBeforeSubmitPromise: Options.onBeforeSubmitVirtualAccountPromise,
+                            elementClassName: classSelector,
+                            submitWpwlEvent: 'submit.wpwlEvent',
+                            isVirtualAccount: true,
+                            promiseName: "onBeforeSubmitVirtualAccountPromise"
+                        };
+                        handleValidation(true, function () {
+                            Payment.handleOnBeforeSubmitPromise(obj);
+                            event.preventDefault();
+                        });
+                    }
+                    else {
+                        Payment.setOnBeforeSubmitPromiseFlag(false);
+                        return Payment.defaultValidateAndSubmitVirtualAccountForm.call(this, event);
+                    }
+                }
+                else {
+                    return Payment.defaultValidateAndSubmitVirtualAccountForm.call(this, event);
+                }
+			});
+
+			Payment.defaultValidateAndSubmitVirtualAccountForm = function(event) {
 				if (Wpwl.checkout.id) {
-					return Payment.validateVirtualAccount.call(this, event);
+				    return Payment.validateVirtualAccount.call(this, event);
 				}
 				return FastCheckout.submitForm.call(this, event, Payment.validateVirtualAccount);
-			});
+			};
 
-			$(document).on('submit.wpwlEvent', 'form.wpwl-form-prepayment', function(event){
-				return Payment.validatePrepayment.call(this, event);
-			});
+            /* jshint maxparams: 5 */
+            Payment.handleAndAttachSubmitEventHandler = function(selector, validateFn, onBeforeSubmitPromise, promiseName, appendBrand) {
+                $(document).on('submit.wpwlEvent', selector, function(event) {
+                    var validation = validateFn.call(this, event);
+                    if ($.isFunction(onBeforeSubmitPromise)) {
+                        if (!validation) {
+                            return false;
+                        }
+                        var classSelector = selector;
+                        if (appendBrand) {
+                            var brand = $(this).closest("form").find('[name="paymentBrand"]').val();
+                            classSelector = selector + '-' + brand;
+                        }
+                        var obj = {
+                            event: event,
+                            optionsOnBeforeSubmitPromise: onBeforeSubmitPromise,
+                            elementClassName: classSelector,
+                            submitWpwlEvent: 'submit.wpwlEvent',
+                            promiseName: promiseName
+                        };
+                        handleValidation(validation, function() {
+                            Payment.handleOnBeforeSubmitPromise(obj);
+                            event.preventDefault();
+                        });
+                    }
+                    else {
+						return validation;
+                    }
+                });
+            };
 
-			$(document).on('submit.wpwlEvent', 'form.wpwl-form-invoice', function(event){
-				return Payment.validateInvoice.call(this, event);
-			});
-
-			$(document).on('submit.wpwlEvent', 'form.wpwl-form-cashOnDelivery', function(event){
-				return Payment.validateOnDelivery.call(this, event);
-			});
+            Payment.handleAndAttachSubmitEventHandler('[data-action="submit-payment-directDebit"]',
+                    Payment.validateDirectDebit, Options.onBeforeSubmitDirectDebitPromise, "onBeforeSubmitDirectDebitPromise", false);
+            Payment.handleAndAttachSubmitEventHandler('form.wpwl-form-prepayment',
+                    Payment.validatePrepayment, Options.onBeforeSubmitPrepaymentPromise, "onBeforeSubmitPrepaymentPromise", true);
+            Payment.handleAndAttachSubmitEventHandler('form.wpwl-form-invoice',
+                    Payment.validateInvoice, Options.onBeforeSubmitInvoicePromise, "onBeforeSubmitInvoicePromise", false);
+            Payment.handleAndAttachSubmitEventHandler('form.wpwl-form-cashOnDelivery',
+                    Payment.validateOnDelivery, Options.onBeforeSubmitOnDeliveryPromise, "onBeforeSubmitOnDeliveryPromise", true);
 
 			// event is bound to all forms, but will trigger only on the specific form
 			$(document).on('form.isValid', 'form.wpwl-form', function(event, isValid){
 				PaymentView.updateSubmitButtonState.call(this, isValid);
 			});
+
 		}
 
 		Payment.canSubmit = function(){
@@ -53168,6 +53276,48 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		);
 		return deferred.promise();
 	}
+
+    function handleValidation(validation, callback) {
+        if (validation && Payment.isOnBeforeSubmitPromiseFlagSet()) {
+            Payment.setOnBeforeSubmitPromiseFlag(false);
+            return true;
+        }
+
+        if (validation && !Payment.isOnBeforeSubmitPromiseFlagSet()) {
+            callback();
+        }
+    }
+
+    Payment.handleOnBeforeSubmitPromise = function(obj) {
+        var onBeforeSubmitPromise = obj.optionsOnBeforeSubmitPromise;
+
+        if (onBeforeSubmitPromise && $.isFunction(onBeforeSubmitPromise)) {
+            obj.event.preventDefault();
+            onBeforeSubmitPromise()
+                .then(function() {
+                    logger.info("Merchant implementation of " + obj.promiseName + " was resolved successfully.");
+                    Payment.handleOnBeforeSubmitPromiseSuccess(obj);
+                })
+                .catch(function(errorMessage) {
+                    logger.error("Merchant implementation of " + obj.promiseName + " resulted in Rejection, error - ", errorMessage);
+                    Options.onError(new WidgetError("OTHER_FORMS_SUBMISSION", obj.promiseName,
+                    "Merchant implementation of " + obj.promiseName + " resulted in Rejection, cannot proceed."));
+                    Payment.handleOnBeforeSubmitPromiseFailure();
+                });
+        }
+        else {
+            Payment.setOnBeforeSubmitPromiseFlag(true);
+        }
+    };
+
+    Payment.handleOnBeforeSubmitPromiseSuccess = function(obj) {
+        Payment.setOnBeforeSubmitPromiseFlag(true);
+        $(obj.elementClassName).trigger(obj.submitWpwlEvent);
+    };
+
+    Payment.handleOnBeforeSubmitPromiseFailure = function() {
+        Payment.setOnBeforeSubmitPromiseFlag(false);
+    };
 
 	Payment.preparePciCompliance = function () {
 		if (!$(GroupCardUtil.DIV_ID_CARD).length) {
@@ -55871,7 +56021,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
                 $form.find("button[type=\"submit\"]").attr("title", brand);
             }
 
-			if (brand === "APPLEPAY") {
+			if (brand === "APPLEPAY" || brand === "APPLEPAYTKN") {
 			    ApplePay.checkAndShowButton($form);
 			}
 
@@ -56223,7 +56373,7 @@ define('module/SpecFormUtil',['require','jquery','module/MessageView','module/Sp
 	SpecFormUtil.DEFAULT_BRANDS = ["AMEX", "CASH_ON_DELIVERY", "DIRECTDEBIT_SEPA", "IDEAL",
 	        "INVOICE", "MASTER", "PAYPAL", "SOFORTUEBERWEISUNG", "VISA"];
 
-    SpecFormUtil.FAST_CHECKOUT_BRANDS = ["APPLEPAY", "PAYPAL_CONTINUE", "GOOGLEPAY", "AMAZONPAY", "VIPPS"];
+    SpecFormUtil.FAST_CHECKOUT_BRANDS = ["APPLEPAY", "APPLEPAYTKN", "PAYPAL_CONTINUE", "GOOGLEPAY", "AMAZONPAY", "VIPPS"];
 
 	SpecFormUtil.prototype.getSpecForms = function() {
 		var allFormsOnPageArray = this.getAllForms();
