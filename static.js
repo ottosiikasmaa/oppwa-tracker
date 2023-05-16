@@ -12001,6 +12001,11 @@ define('module/Setting',['require','jquery','module/Parameter','text!module/json
 					method: 'renderWithoutButton',
 				}
 			},
+            APPLEPAYTKN: {
+                func: {
+                    method: 'renderWithoutButton',
+                }
+            },
 			GOOGLEPAY: {
 				func: {
 					method: 'renderWithoutButton',
@@ -48968,17 +48973,21 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
             logger.error("Inline flow requires a successful AccountDiscovery transaction before the payment");
             return;
         }
+        if(Wpwl.checkout.config.createRegistration) {
+            logger.info("Loading the Klarna Payment inline widget for registration request");
+            this.authorizePaymentOnKlarnaApi();
+        } else {
+            var $form = $(this.formClassSelector);
+            $form.append($.parseHTML(Generate.generateSubmitPACustomParam($form, this.accountDiscoveryTxId)));
 
-        var $form = $(this.formClassSelector);
-        $form.append($.parseHTML(Generate.generateSubmitPACustomParam($form, this.accountDiscoveryTxId)));
-
-        ajaxSubmitForm($form)
-            .then(withModuleScope(this.updateCallbackUrlsAfterPaymentAuthorized))
-            .then(withModuleScope(this.getClientSideBillingShippingAddress))
-            .then(withModuleScope(this.authorizePaymentOnKlarnaApi))
-            .fail(function (reason) {
-                notifyError(reason, "authorizePaymentAndSubmit");
-            });
+            ajaxSubmitForm($form)
+                .then(withModuleScope(this.updateCallbackUrlsAfterPaymentAuthorized))
+                .then(withModuleScope(this.getClientSideBillingShippingAddress))
+                .then(withModuleScope(this.authorizePaymentOnKlarnaApi))
+                .fail(function (reason) {
+                    notifyError(reason, "authorizePaymentAndSubmit");
+                });
+        }
     };
 
     KlarnaPaymentsInlineWidget.updateCallbackUrlsAfterPaymentAuthorized = function(paymentResponse) {
@@ -53165,17 +53174,28 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		return false;
 	};
 
-
 	Payment.appendBrowserInfo = function($form) {
-
-		if (($form.hasClass('wpwl-form-card') || isCardRegistration($form)) &&
-		        (isThreeDV2Enabled($form) || populateBrowserParams()) ||
-		     ForterUtils.forterActive === true)
+		if (shouldAppendBrowserForFormSubmit($form))
 		{
 			var browserInfoFields = Generate.generateBrowserFields($form);
 			$form.append(browserInfoFields);
 		}
 	};
+
+	function shouldAppendBrowserForFormSubmit($form)
+	{
+		if (doesOneClickTokenRequireBrowserInfo($form))
+		{
+			return true;
+		}
+		else if (($form.hasClass('wpwl-form-card') || isCardRegistration($form)) &&
+		        (isThreeDV2Enabled($form) || populateBrowserParams()) ||
+		     ForterUtils.forterActive === true)
+		{
+			return true;
+		}
+		return false;
+	}
 
 	function isCardRegistration($form) {
 
@@ -53184,6 +53204,34 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		{
 			var isCard = Setting.subTypeLabelMap[ selectedBrand.val() ];
 			return (isCard && isCard.render === 'CC');
+		}
+		return false;
+	}
+
+	function doesOneClickTokenRequireBrowserInfo($form)
+	{
+		if ($form.hasClass('wpwl-form-registrations'))
+		{
+			var $selected = $form.find("[data-action=\"change-registration\"]:checked");
+			if ($selected.length)
+			{
+				var regId = $selected.val();
+				var externalToken;
+				if (Wpwl.checkout.config.registrations !== undefined)
+				{
+					Wpwl.checkout.config.registrations.forEach( function(registration){
+						if (registration.id === regId)
+						{
+							externalToken = registration.externalToken;
+						}
+					});
+				}
+
+				if (externalToken && (externalToken.method === 'CC' || externalToken.method === 'DC')) 
+				{
+					return true;
+				}
+			}
 		}
 		return false;
 	}
