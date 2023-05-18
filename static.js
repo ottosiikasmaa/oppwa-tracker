@@ -49643,8 +49643,7 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
                 }
 
                 AfterPay.initialize({
-                    countryCode: country,
-                    consumerLocale: Wpwl.checkout.locale
+                    countryCode: country
                 });
 
                 if (InlineFlow.isInlineFlow(this.paymentBrand)) {
@@ -49669,11 +49668,13 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
 
                     AfterPay.transfer({
                       token: params.token,
+                      consumerLocale: Wpwl.checkout.locale
                     });
 
                 } else {
                     AfterPay.redirect({
-                        token: params.token
+                        token: params.token,
+                        consumerLocale: Wpwl.checkout.locale
                     });
                 }
 
