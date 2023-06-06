@@ -12644,6 +12644,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Expiry Date",
 			taxNumber:      "Tax Identification Number",
 			submit:			"Pay now",
+			applyNow:		"Apply now",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:     "Given Name",
@@ -13009,6 +13010,7 @@ define('module/Language',[],function(){
 			expiryDate:		"유효기일",
             taxNumber:      "Tax Identification Number",
 			submit:			"지불",
+			applyNow:		"Apply now",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "주어진 이름",
@@ -13111,6 +13113,7 @@ define('module/Language',[],function(){
 			expiryDate:		"تاريخ الإنتهاء",
             taxNumber:      "الرقم الضريبي",
 			submit:			"إدفع الأن",
+			applyNow:		"قدم الآن",
 			nextStep:		"استمر",
 			moreBrands:     "اكثر",
 			givenName:      "الاسم المعطى",
@@ -13472,6 +13475,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Expire",
             taxNumber:      "Tax Identification Number",
 			submit:			"Soumettre",
+			applyNow:		"Appliquer maintenant",
 			nextStep:		"Continuer",
 			moreBrands:     "More",
 			givenName:      "prénom",
@@ -13570,6 +13574,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Gültig bis",
             taxNumber:      "Tax Identification Number",
 			submit:			"Jetzt bezahlen",
+			applyNow:		"Jetzt absenden",
 			nextStep:		"Fortfahren",
 			moreBrands:     "More",
 			givenName:      "Vorname",
@@ -13923,6 +13928,7 @@ define('module/Language',[],function(){
         			expiryDate:		"Date d´expiration",
                     taxNumber:      "Numéro d´identification fiscal",
         			submit:			"Soumettre",
+                    applyNow:		"Appliquer maintenant",
         			nextStep:		"Continuer",
         			moreBrands:     "Plus",
         			givenName:      "Prénom",
@@ -14272,6 +14278,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Expira",
             taxNumber:      "Tax Identification Number",
 			submit:			"Pagar",
+            applyNow:		"Aplica ya",
 			nextStep:		"Seguir",
 			moreBrands:     "More",
 			givenName:      "nombre de pila",
@@ -14619,6 +14626,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Scadenza",
             taxNumber:      "Tax Identification Number",
 			submit:			"Paga",
+            applyNow:		"Applica ora",
 			nextStep:			"Continuare",
 			moreBrands:     "More",
 			givenName:      "nome di battesimo",
@@ -14716,6 +14724,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Vervalt",
             taxNumber:      "Tax Identification Number",
 			submit:			"Bestelling afronden",
+            applyNow:		"Nu toepassen",
 			nextStep:		"Doorgaan met",
 			moreBrands:     "More",
 			givenName:      "gegeven naam",
@@ -14813,6 +14822,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Udløber",
             taxNumber:      "Tax Identification Number",
 			submit:			"Betal nu",
+            applyNow:		"Ansøg nu",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "givet navn",
@@ -14910,6 +14920,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Erääntymispäivä",
             taxNumber:      "Tax Identification Number",
 			submit:			"Maksa nyt",
+            applyNow:		"Hae nyt",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "etunimi",
@@ -15007,6 +15018,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Giltigt till",
             taxNumber:      "Tax Identification Number",
 			submit:			"Betala nu",
+            applyNow:		"Ansök nu",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "förnamn",
@@ -15104,6 +15116,7 @@ define('module/Language',[],function(){
 			expiryDate:		"Son Kullanma Tarihi",
             taxNumber:      "Tax Identification Number",
 			submit:			"Öde",
+            applyNow:		"Apply now",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "isim",
@@ -15198,6 +15211,7 @@ define('module/Language',[],function(){
 			expiryDate:	"有効期限",
             taxNumber:      "Tax Identification Number",
 			submit:		"送信する",
+            applyNow:		"Apply now",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "名",
@@ -15292,6 +15306,7 @@ define('module/Language',[],function(){
 			expiryDate:	"Datum veljavnosti",
             taxNumber:      "Tax Identification Number",
 			submit:		"Placaj",
+            applyNow:		"Apply now",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "imeName",
@@ -15386,6 +15401,7 @@ define('module/Language',[],function(){
              expiryDate:"Data de validade",
              taxNumber:"CPF",
              submit:"Pague agora",
+             applyNow:		"Apply now",
              nextStep: "Continuar",
              moreBrands: "Mais",
              givenName: "nome",
@@ -15486,6 +15502,7 @@ define('module/Language',[],function(){
 			expiryDate:"Data ważności",
             taxNumber:"Tax Identification Number",
 			submit:"Zapłać teraz",
+            applyNow:		"Apply now",
 			nextStep:"Kontynuować coś",
 			moreBrands:     "More",
 			givenName:      "nadane imię",
@@ -15580,6 +15597,7 @@ define('module/Language',[],function(){
 			expiryDate:"Platnost do",
             taxNumber:"Tax Identification Number",
 			submit:"Zaplatit",
+            applyNow:		"Apply now",
 			nextStep:		"Pokračovat",
 			moreBrands:     "More",
 			givenName:      "křestní jméno",
@@ -15674,6 +15692,7 @@ define('module/Language',[],function(){
 			expiryDate: "Lejárati dátum",
             taxNumber:"Tax Identification Number",
 			submit: "Fizetek most",
+            applyNow:		"Apply now",
 			nextStep: "Tovább",
 			moreBrands:     "More",
 			givenName:      "keresztnév",
@@ -15772,6 +15791,7 @@ define('module/Language',[],function(){
                 expiryDate:		"Datum isteka",
                 taxNumber:	"Porezni identifikacijski broj",
                 submit:			"Plati sada",
+                applyNow:		"Apply now",
                 nextStep:		"Nastavi",
                 moreBrands:	"Više",
                 givenName:	"Ime",
@@ -16128,6 +16148,7 @@ define('module/Language',[],function(){
 			expiryDate:"Дата на валидност",
             taxNumber:"Tax Identification Number",
 			submit:"Плати сега",
+            applyNow:		"Apply now",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "собствено име",
@@ -16222,6 +16243,7 @@ define('module/Language',[],function(){
 			expiryDate:"Data de expirare a cardului",
             taxNumber:"Tax Identification Number",
 			submit:"Plateste acum",
+            applyNow:		"Apply now",
 			nextStep:		"Continua",
 			moreBrands:     "More",
 			givenName:      "nume dat",
@@ -16316,6 +16338,7 @@ define('module/Language',[],function(){
 			expiryDate:"Срок истечения карты",
             taxNumber:"ИНН",
 			submit:"Оплатить",
+            applyNow:		"Apply now",
 			nextStep:"Далее",
 			moreBrands:     "More",
 			givenName:      "собственное имя",
@@ -16410,6 +16433,7 @@ define('module/Language',[],function(){
 			expiryDate:"有效期限",
             taxNumber:"税号",
 			submit:"立即支付",
+            applyNow:		"现在申请",
 			nextStep:"继续",
 			moreBrands:     "更多",
 			givenName:      "名",
@@ -16499,6 +16523,7 @@ define('module/Language',[],function(){
 			expiryDate:"Ημερομηνία λήξης",
             taxNumber:"Tax Identification Number",
 			submit:"Πληρώνουν τώρα",
+            applyNow:		"Apply now",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "Ονομα",
@@ -16593,6 +16618,7 @@ define('module/Language',[],function(){
 			expiryDate:"Utløpsdato",
             taxNumber:"Tax Identification Number",
 			submit:"Betal nå",
+            applyNow:		"Apply now",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "fornavn",
@@ -16690,6 +16716,7 @@ define('module/Language',[],function(){
 			expiryDate:"Platnosť do",
             taxNumber:"Tax Identification Number",
 			submit:"Zaplatiť",
+            applyNow:		"Apply now",
 			nextStep:		"Continue",
 			moreBrands:     "More",
 			givenName:      "krstné meno",
@@ -16788,6 +16815,7 @@ define('module/Language',[],function(){
         	expiryDate:		"Kehtivusaja lõpp",
         	taxNumber:      "Maksukohustuslase number",
         	submit:			"Maksa kohe",
+            applyNow:		"Apply now",
         	nextStep:		"Jätka",
         	moreBrands:     "More",
         	givenName:      "antud nimi",
@@ -16896,6 +16924,7 @@ define('module/Language',[],function(){
         	expiryDate:		"Derīguma termiņš",
         	taxNumber:      "Nodokļu maksātāja numurs",
         	submit:			"Maksāt tūlīt",
+            applyNow:		"Apply now",
         	nextStep:		"Turpināt",
         	moreBrands:     "More",
         	givenName:      "vārds",
@@ -17004,6 +17033,7 @@ define('module/Language',[],function(){
         	expiryDate:		"Galiojimo data",
         	taxNumber:      "Mokesčių mokėtojo identifikavimo kodas",
         	submit:			"Mokėti dabar",
+            applyNow:		"Apply now",
         	nextStep:		"Tęsti",
         	moreBrands:     "More",
         	givenName:      "duotas vardas",
@@ -17112,6 +17142,7 @@ define('module/Language',[],function(){
             expiryDate:		"Data de caducitat",
             taxNumber:      "Número d’identificació fiscal",
             submit:			"Paga ara",
+            applyNow:		"Apply now",
             nextStep:		"Continua",
             givenName:      "donat nom",
             surname:        "cognom",
@@ -17219,6 +17250,7 @@ define('module/Language',[],function(){
             expiryDate:		"Iraungitze-data",
             taxNumber:      "Identifikazio fiskaleko zenbakia",
             submit:			"Ordaindu orain",
+            applyNow:		"Apply now",
             nextStep:		"Egin aurrera",
             givenName:      "emandako izena",
             surname:        "abizenak",
@@ -17306,6 +17338,7 @@ define('module/Language',[],function(){
             expiryDate:  "Tanggal Kedaluwarsa",
             cardHolder:  "Pemegang Kartu",
             submit: 	 "Bayar Sekarang",
+            applyNow:		"Apply now",
             mmyy:        "MM / YY",
             cvv:  		 "CVV",
             cancel:      "Kembali",
@@ -17328,6 +17361,7 @@ define('module/Language',[],function(){
             expiryDate:  "วันหมดอายุ",
             cardHolder:  "ชื่อผู้ถือบัตร",
             submit: 	 "ชำระเงินทันที",
+            applyNow:		"Apply now",
             mmyy:        "ดด / ปป",
             cvv:  		 "CVV"
       },
@@ -17337,6 +17371,7 @@ define('module/Language',[],function(){
             expiryDate:  "Ngày hết hạn",
             cardHolder:  "Tên chủ thẻ",
             submit: 	 "Thanh toán",
+            applyNow:		"Apply now",
             mmyy:        "MM / YY",
             cvv:  		 "CVV"
       }
@@ -46078,7 +46113,7 @@ define('template/oneclickpayment/MainTemplate',['require','template/TemplateBase
             }
             else 
             {
-                ret = ret + '           <button type="submit" class="wpwl-button wpwl-button-pay" aria-label="'+ escape(obj.registrations[0].lang.submit) +'">'+ escape(obj.registrations[0].lang.submit) +'</button>'
+                ret = ret + '           <button type="submit" class="wpwl-button wpwl-button-pay" aria-label="'+ escape(obj.oneClickSubmitText) +'">'+ escape(obj.oneClickSubmitText) +'</button>'
             }
             ret = ret + '        </div>'
             + '    </div>'
@@ -46205,6 +46240,14 @@ define('module/OneClickPaymentView',['require','jquery','module/OneClickPaymentU
         // we can include other templates as objects and access them inside this template
         this.template.addObject({iframeTemplate: this.iframeTemplate});
         this.template.addObject({shopOrigin: Util.getOrigin()});
+        if (window.wpwl.checkout.config.standaloneThreeDSecure)
+        {
+            this.template.addObject({oneClickSubmitText: I18n.applyNow});
+        }
+        else
+        {
+            this.template.addObject({oneClickSubmitText: I18n.submit});
+        }
         this.$container.html(this.template.render());
 
         if (SaqaUtil.isSAQACompliance() ===true) {
