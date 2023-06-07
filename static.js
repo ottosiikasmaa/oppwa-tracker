@@ -12022,8 +12022,14 @@ define('module/Setting',['require','jquery','module/Parameter','text!module/json
                 },
 
 				countryCodePhone:{
+				    type: "force-dropdown",
 					name: "virtualAccount.holder",
-					value: "+351"
+					live: {
+						'351': "Portugal 351"
+					},
+					test: {
+						'351': "Portugal 351"
+					}
 				},
                 mobilePhone: {
                     name: "virtualAccount.accountId"
@@ -12675,7 +12681,6 @@ define('module/Language',[],function(){
 			ddmmyyyyWithDot:    "DD . MM . YYYY",
 			customerMobile:				"Mobile phone number (+78000001774)",
 			countryCodePhone:   "Country code",
-			countryCodePhoneError:  "Country code format error. Need to start with + or 00 (e.g +351 or 00351)",
 			mobile:				"Mobile Phone",
 			qrcode: 			"QR-Code",
 			paymentMode:		"Please select your preferred payment method:",
@@ -13139,7 +13144,6 @@ define('module/Language',[],function(){
 			ddmmyyyyWithDot:    "DD . MM . YYYY",
 			customerMobile:				"رقم الجوال (+78000001774)",
 			countryCodePhone:   "كود الدولة",
-			countryCodePhoneError:  " أن تبدأ بـ + أو 00 (على سبيل المثال +351 أو 00351",
 			mobile:				"رقم الهاتف",
 			qrcode: 			"رمز QR",
 			paymentMode:		"الرجاء اختيار طريقة الدفع :",
@@ -13602,8 +13606,6 @@ define('module/Language',[],function(){
 			mobile:				"Mobile Phone",
 			qrcode: 			"QR-Code",
 			paymentMode:		"Please select your preferred payment method:",
-			countryCodePhone: "Landesvorwahl",
-			countryCodePhoneError: "Landesvorwahl muss mit + oder 00 beginnen (z.B. +49 oder 0049)",
 			customerMobile:				"Mobilnummer (+78000001774)",
 			register:		"Jetzt anmelden",
 			billingCountryError: "Ungültiges Land",
@@ -15818,9 +15820,8 @@ define('module/Language',[],function(){
                 mmyy:				"MM / GG",
                 ddmmyyyy:			"DD / MM / GGGG",
                 ddmmyyyyWithDot:    "DD . MM . GGGG",
-                customerMobile:	    "Broj mobitela (+78000001774)",
+                customerMobile:				"Broj mobitela (+78000001774)",
                 countryCodePhone:	"Kôd države",
-                countryCodePhoneError:  "Pozivni broj mora da počne sa + ili 00 (npr. +351 ili 00351)",
                 mobile:				"Mobitel",
                 qrcode: 			"QR-kôd",
                 paymentMode:		"Odaberite željeni način plaćanja:",
@@ -16954,7 +16955,6 @@ define('module/Language',[],function(){
 			ddmmyyyyWithDot:    "DD . MM . YYYY",
         	customerMobile:		"Mobilā tālruņa numurs (+78000001774)",
         	countryCodePhone:   "Valsts kods",
-        	countryCodePhoneError:  "Valsts koda formāta kļūda. Jāsāk ar + vai 00 (piemēram, +351 vai 00351)",
 			mobile:				"Mobile Phone",
 			qrcode: 			"QR-Code",
 			paymentMode:		"Please select your preferred payment method:",
@@ -17064,7 +17064,6 @@ define('module/Language',[],function(){
 			ddmmyyyyWithDot:    "DD . MM . YYYY",
         	customerMobile:				"Mob. telefono numeris  (+78000001774)",
         	countryCodePhone:   "Šalies kodas",
-        	countryCodePhoneError:  "Šalies kodo formato klaida. Reikia pradėti + arba 00 (pvz., +351 arba 00351)",
 			mobile:				"Mobile Phone",
 			qrcode: 			"QR-Code",
 			paymentMode:		"Please select your preferred payment method:",
@@ -17173,7 +17172,6 @@ define('module/Language',[],function(){
 			ddmmyyyyWithDot:    "DD . MM . YYYY",
             customerMobile:				"Número de telèfon mòbil (+78000001774)",
             countryCodePhone:   "Codi de país",
-            countryCodePhoneError:  "Error de format del codi de país. Cal començar amb + o 00 (p. ex. +351 o 00351)",
 			mobile:				"Mobile Phone",
 			qrcode: 			"QR-Code",
 			paymentMode:		"Please select your preferred payment method:",
@@ -17282,7 +17280,6 @@ define('module/Language',[],function(){
 			ddmmyyyyWithDot:    "DD . MM . YYYY",
             customerMobile:				"Telefono mugikorraren zenbakia (+78000001774)",
             countryCodePhone:   "Herrialdeko kodea",
-            countryCodePhoneError:  "Herrialde-kodearen formatuan errorea. + edo 00-rekin hasi behar da (adibidez, +351 edo 00351)",
 			mobile:				"Mobile Phone",
 			qrcode: 			"QR-Code",
 			paymentMode:		"Please select your preferred payment method:",
@@ -36694,7 +36691,6 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 
 	function generateNonCcInputField(genState, brand, setup) {
         var inputName = genState.brandSetup[setup].name;
-		var inputValue = genState.brandSetup[setup].value || undefined;
         var selectOptionValues = Generate.generateValueSelectOptions(genState.paymentMethod, brand, setup);
         var selectOptionNames = Generate.generateNameSelectOptions(genState.paymentMethod, brand, setup);
 
@@ -36707,7 +36703,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
                 return;
             }
             // no options, it is a input element
-            genState.customHtmlStrings.push(generateInputElement({setup:setup, inputName:inputName, value:inputValue, placeholder:genState.brandSetup[setup].i18nPlaceholderIdentifier}));
+            genState.customHtmlStrings.push(generateInputElement({setup:setup, inputName:inputName, value:undefined, placeholder:genState.brandSetup[setup].i18nPlaceholderIdentifier}));
         }
         else if( options.length === 1 && genState.brandSetup[setup].type !== 'force-dropdown')
         {
@@ -45674,25 +45670,16 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
         var email = $email.val();
         var $mobilePhoneNumber = paymentForm.getElementByCssClass("wpwl-control-mobilePhone");
         var mobilePhoneNumber = $mobilePhoneNumber.val();
-		var $countryCode = paymentForm.getElement("virtualAccount.holder");
-		var country = $countryCode.val();
 
-		if(country && !country.startsWith("00") && !country.startsWith("+")) {
-			validationErrors = Util.extend(validationErrors, {countryCodePhoneError: $countryCode.add($countryCode)});
-		}
         if (Util.isBlank(email) && Util.isBlank(mobilePhoneNumber)) {
             validationErrors = Util.extend(validationErrors, {mbwayEmailOrPhoneMandatory: $email.add($mobilePhoneNumber)});
-        }
-        if(Util.isEmpty(validationErrors)){
+        } else {
             if (!Util.isBlank(email)) {
                 // email has higher prio than phone number
                 $mobilePhoneNumber.remove();
             } else {
                 // email is empty, so we are sending Mobile phone number
                 $email.remove();
-				if(country){
-				    $countryCode.val(country.replace("+", "00")).change();
-				}
             }
         }
         return validationErrors;
