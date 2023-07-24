@@ -12138,8 +12138,8 @@ define('module/Setting',['require','jquery','module/Parameter','text!module/json
                 func: {
                        method: 'renderPetcoGiftCard',
                        data: {
-                            giftCardNumber: { i18nIdentifier:"cardNumber", name:Parameter.GIFT_CARD_NUMBER_GEN, type:"tel", maxLength:16, label: "Petco Gift Card" },
-                            pin: { i18nIdentifier:"pin", name:Parameter.GIFT_CARD_CVV_GEN, type:"password", maxLength:8 },
+                            giftCardNumber: { i18nIdentifier:"cardNumber", name:Parameter.VIRTUALACCOUNT_ACCOUNTID, type:"tel", maxLength:16, label: "Petco Gift Card" },
+                            pin: { i18nIdentifier:"pin", name:Parameter.VIRTUALACCOUNT_ACCOUNT_PIN, type:"password", maxLength:8 },
                        }
                 },
                 name: "PETCO_GIFT_CARD"
@@ -45977,8 +45977,8 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 
     Validate.validatePetcoGiftCardForm = function(paymentForm) {
             var brand = paymentForm.getBrand(paymentForm);
-            var cardNumberElement = paymentForm.getElement(Parameter.GIFT_CARD_NUMBER_GEN);
-            var pinElement = paymentForm.getElement(Parameter.GIFT_CARD_CVV_GEN);
+            var cardNumberElement = paymentForm.getElement(Parameter.VIRTUALACCOUNT_ACCOUNTID);
+            var pinElement = paymentForm.getElement(Parameter.VIRTUALACCOUNT_ACCOUNT_PIN);
             var cardError = Validate.validateGiftCardNumberElement(cardNumberElement, brand, '^\\d{16}$');
             var pinError = Validate.validateGiftCardPinElement(pinElement, brand, '^[0-9]{8}$');
             var validationErrors = Util.extend({}, cardError, pinError);
@@ -53343,6 +53343,9 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				return true;
 			}
 			else if ("UNIONPAY" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.unionPayThreeDV2) {
+				return true;
+			}
+			else if ("MADA" ===  brand && Wpwl.checkout.config.threeDSecureV2Config.madaThreeDV2) {
 				return true;
 			}
 		}
