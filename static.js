@@ -12301,6 +12301,9 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	//target iframe for Upg QR
 	Options.upgQr = {width: '100%', height: '270px'};
 
+	//target iframe for Vipps QR
+    Options.vippsQr = {width: '100%', height: '500px'};
+
 	// cvv
 	Options.requireCvv = true; // By default - cvv field should be displayed in the form (remark: name of this parameter can be deceiving).
 	Options.allowEmptyCvv = false; // By default - cvv should not be empty.
@@ -51600,11 +51603,10 @@ define('module/FastCheckout',['require','jquery','module/Generate','module/Track
 
     return FastCheckout;
 });
-define('module/integrations/VippsQrWidget',['require','jquery','module/InlineFlow','module/Generate','module/forms/PaymentForm','module/InternalRequestCommunication','module/Options','module/error/WidgetError','module/error/SessionError','module/logging/LoggerFactory','lib/Spinner','module/Wpwl'],function(require) {
+define('module/integrations/VippsQrWidget',['require','jquery','module/InlineFlow','module/forms/PaymentForm','module/InternalRequestCommunication','module/Options','module/error/WidgetError','module/error/SessionError','module/logging/LoggerFactory','lib/Spinner'],function(require) {
 
     var $ = require('jquery');
     var InlineFlow = require('module/InlineFlow');
-    var Generate = require('module/Generate');
     var PaymentForm = require('module/forms/PaymentForm');
     var InternalRequestCommunication = require('module/InternalRequestCommunication');
     var Options = require("module/Options");
@@ -51613,148 +51615,131 @@ define('module/integrations/VippsQrWidget',['require','jquery','module/InlineFlo
     var LoggerFactory = require('module/logging/LoggerFactory');
     var Spinner = require('lib/Spinner');
     var logger = LoggerFactory.getLogger('VippsQrWidget');
-    var Wpwl = require('module/Wpwl');
     var VippsQrWidget = {};
-    var BRAND = 'VIPPS';
-    var STATUS_PENDING = 'PENDING';
-    var JSESSIONID = 'jsessionid';
-    var POLL_DURATION = 5000;
-    var QR_STATUS_ENDPOINT = '/v1/vipps/qrFlowStatus';
 
     VippsQrWidget.isVippsInlineFlow = function(brand) {
-        return InlineFlow.isInlineFlow(brand) && brand === BRAND;
+        return InlineFlow.isInlineFlow(brand) && brand === "VIPPS";
     };
 
     VippsQrWidget.authorizePaymentAndLoadQr = function (selectedPaymentForm) {
-        VippsQrWidget.$form = $(selectedPaymentForm);
-        var paymentForm = new PaymentForm(VippsQrWidget.$form);
-        this.paymentBrand = paymentForm.getBrand();
+        var formClassSelector = VippsQrWidget.returnClassSelector($(selectedPaymentForm).attr('class'));
+                var form = $(formClassSelector);
+                var paymentForm = new PaymentForm(form);
+                this.paymentBrand = paymentForm.getBrand();
 
-        if (InlineFlow.isInlineFlow(this.paymentBrand)) {
-            var parent = selectedPaymentForm.offsetParent;
-            if (parent) {
-                this.prepareAndSendTransaction(VippsQrWidget.$form);
+                if (selectedPaymentForm.offsetParent){
+                    this.parentDivClassSelector = VippsQrWidget.returnClassSelector($(selectedPaymentForm.offsetParent).attr('class'));
+                } else {
+                    this.parentDivClassSelector = "";
+                }
 
-            } else {
-                logger.error('Cannot identify the parent widget div!');
-                Options.onError(new WidgetError('VIPPS', 'cannot_insert_widget', 'Parent container undefined'));
-            }
-            return false;
-        }
-        return true;
+                if (VippsQrWidget.isVippsInlineFlow(this.paymentBrand)) {
+                    VippsQrWidget.prepareAndSendTransaction(form, selectedPaymentForm, this.paymentBrand);
+                    return false;
+                }
+                return true;
     };
 
-    VippsQrWidget.prepareAndSendTransaction = function($form) {
-        var formContainer = $form[0].parentElement;
-        VippsQrWidget.spinner = new Spinner(Options.spinner).spin(formContainer);
+    VippsQrWidget.returnClassSelector = function(classList) {
+            if(classList) {
+                return "." + classList.replace(/\s+/g, ".");
+            } else {
+                return "";
+            }
+        };
 
-        $form.append($.parseHTML(Generate.generateInlineFlowHiddenCustomParam($form)));
-        $form.append($.parseHTML(Generate.generateIsSourceBrowserHiddenParam($form)));
+    /** Submits form and checks that required parameters are received in response. Calls respective functions for VIPPS
+    to load QR */
+    VippsQrWidget.prepareAndSendTransaction = function(form, selectedPaymentForm, brand) {
+        // show spinner
+        var $formContainer = form.parent();
+        var spinner = new Spinner(Options.spinner).spin($formContainer.get(0));
 
-        ajaxSubmitForm($form)
-        .then(function(response) {
-            VippsQrWidget.renderVippsQr(response, $(formContainer));
+        ajaxSubmitForm(form)
+        .then(function(createSessionResponse) {
+            spinner.stop();
+            if (createSessionResponse && createSessionResponse.redirect && createSessionResponse.redirect.parameters) {
+                if (VippsQrWidget.isVippsInlineFlow(brand)) {
+                    VippsQrWidget.submitFormAndLoadQR(selectedPaymentForm, createSessionResponse);
+                }
+            } else {
+                logger.error("No create session response received, cannot proceed.");
+                Options.onError(new WidgetError("Vipps Mobile Payment brand", "no_session", "No response received, cannot proceed."));
+            }
         })
         .fail(function(reason) {
             notifyError(reason);
-            VippsQrWidget.spinner.stop();
         });
     };
 
-    VippsQrWidget.renderVippsQr = function(response, $formContainer) {
+    /** Submit hidden form to payment.link and load QR in the existing iframe. */
+    VippsQrWidget.submitFormAndLoadQR = function(selectedPaymentForm, response, brand) {
+        var paymentLink = response.redirect.url;
+        var parameters = response.redirect.parameters;
+        var qrCodeUrl = parameters.filter(function (x) {
+            return x.name === "qrCodeUrl";
+        })[0];
+        var txId = parameters.filter(function (x) {
+            return x.name === "txId";
+        })[0];
+        var redirectUrl = parameters.filter(function (x) {
+            return x.name === "redirectUrl";
+        })[0];
+        // check that request is successful and received required parameters in response
+        var requestNotSuccessful = !qrCodeUrl || qrCodeUrl.value === "" || !txId || txId.value === "" || !redirectUrl || redirectUrl.value === "";
+        if (requestNotSuccessful) {
+            logger.error("No payment link or parameters found for redirection, cannot proceed.");
+            $(".wpwl-button.wpwl-button-brand").removeAttr("disabled");
+            Options.onError(new WidgetError(brand, "no_session", "No payment link or parameters found for redirection, cannot proceed."));
+            return;
+        }
 
-        if (response && response.redirect && response.redirect.url && VippsQrWidget.hasMandatoryParameters(response.redirect.parameters)) {
+        // using the existing iframe for Vipps QR and removing wpwl-target class to have specified height as QR will
+        // be of height 400px
+        var dim = Options.vippsQr;
+        var iframe = document.querySelectorAll('[name^="virtualAccount-VIPPS_"]')[0];
+        iframe.setAttribute("style", "display:inline");
+        iframe.setAttribute("width", dim.width);
+        iframe.setAttribute("height", dim.height);
+        iframe.setAttribute("class", "");
 
-            VippsQrWidget.storePaypipeSessionId(response.redirect.parameters);
-
-            var $iframe = $($formContainer.find('iframe.wpwl-target')[0]);
-            $iframe.attr("src", VippsQrWidget.createVippsQrUrl(response.redirect.url, response.redirect.parameters));
-            $formContainer.find('form').remove();
-            $iframe.addClass('wpwl-vipps-qr-inline');
-
-            $iframe.on('load', function() {
-               VippsQrWidget.spinner.stop();
-               setTimeout(VippsQrWidget.pollQRTransactionStatus, POLL_DURATION);
-            });
-
+        // create form and submit POST request to payment.link with all the received input parameters
+        if(paymentLink) {
+            this.submitHiddenForm(response, iframe.name);
         } else {
-            logger.error("No create session response received, cannot proceed.");
-            Options.onError(new WidgetError("VIPPS", "no_session", "No create session response received, cannot proceed."));
-            VippsQrWidget.spinner.stop();
+            logger.error("A transaction was already created. Cannot submit the hidden form, the success/failure callback url is not defined.");
+            Options.onError(new WidgetError(brand, "callback_not_def", "A transaction was already created. Cannot submit the hidden form, the success/failure callback url is not defined."));
         }
     };
-
-    VippsQrWidget.storePaypipeSessionId = function (params) {
-        for (var index = 0; index < params.length; index++) {
-
-            if (params[index].name === JSESSIONID) {
-               VippsQrWidget.paypipeSessionId = params[index].value;
-               params.splice(index, 1);
-               return;
-            }
+    /** Form needs to add in the parent division otherwise we see "Form submission canceled because the form is not
+    connected" error and form doesn't submit */
+    VippsQrWidget.submitHiddenForm = function(response, target) {
+        var params = response.redirect.parameters;
+        var i;
+        var inputParam="";
+        for (i=0; i< params.length; i++) {
+            inputParam = inputParam + '<input name=\"' + params[i].name + '\" type=\"hidden\" value=\"' + params[i].value + '\">';
         }
+        var formHtml = '<form id=\"vippsWalletForm\" action=' + response.redirect.url + ' lang=\"en\" accept-charset=\"UTF-8\"  method=POST target=\"' + target + '\">' + inputParam + '</form>';
+        var submitForm = $(formHtml);
+        $(this.parentDivClassSelector).append(submitForm);
+        submitForm.submit();
     };
 
-    VippsQrWidget.hasMandatoryParameters = function(params) {
-
-        var paypipeSessionId = function(param) {
-            return param.name === JSESSIONID;
-        };
-        return params && params.some(paypipeSessionId);
-    };
-
-    VippsQrWidget.pollQRTransactionStatus = function () {
-         ajaxPollQRStatus(Wpwl.url + QR_STATUS_ENDPOINT + "/" + VippsQrWidget.paypipeSessionId)
-         .then(function(response) {
-            if (response !== STATUS_PENDING) {
-                VippsQrWidget.redirect();
-            } else {
-                setTimeout(VippsQrWidget.pollQRTransactionStatus, POLL_DURATION);
-            }
-         })
-         .fail(function(reason) {
-             notifyError(reason);
-             VippsQrWidget.redirect();
-         });
-    };
-
-    VippsQrWidget.redirect = function() {
-        logger.info('Redirecting to shopper result url : ' + VippsQrWidget.$form[0].shopperResultUrl.value);
-        window.top.location.href = VippsQrWidget.$form[0].shopperResultUrl.value;
-    };
-
-    VippsQrWidget.createVippsQrUrl = function (url, params) {
-        url += "?";
-        params.forEach(function(urlData) {
-          url += Generate.string(urlData.name, "=", urlData.value, "&");
-        });
-        url = url.slice(0, -1);
-        return url;
-    };
-
-    function ajaxSubmitForm($form) {
+    // submit the form via an ajax call (this would call the opp payment endpoint)
+    function ajaxSubmitForm(form) {
+        var endpointUrl = form.attr("action");
+        var formMethod = form.attr("method");
+        var formData = form.serialize();
         return InternalRequestCommunication.getSender()
         .then(function(sender) {
             return sender.send({
-                url: $form.attr("action"),
-                method: $form.attr("method"),
+                url: endpointUrl,
+                method: formMethod,
                 headers: {
                     Accept: "application/json; charset=utf-8"
                 },
-                data: $form.serialize()
-            });
-        });
-    }
-
-    function ajaxPollQRStatus(action) {
-        return InternalRequestCommunication.getSender()
-        .then(function(sender) {
-            return sender.send({
-                url: action,
-                method: "GET",
-                headers: {
-                    Accept: "application/json; charset=utf-8"
-                }
+                data: formData
             });
         });
     }
@@ -51764,7 +51749,7 @@ define('module/integrations/VippsQrWidget',['require','jquery','module/InlineFlo
         if (SessionError.isSessionTimeout(reason)) {
             SessionError.onTimeoutError();
         } else {
-            Options.onError(new WidgetError("VIPPS", "ajax_submit_fail", "Exception occurred while submitting the form via an Ajax call. Reason: " + reason));
+             Options.onError(new WidgetError("Vipps Mobile Payment brand", "ajax_submit_fail", "Exception occurred while submitting the form via an Ajax call. Reason: " + reason));
         }
     }
 
