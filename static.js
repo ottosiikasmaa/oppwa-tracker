@@ -12094,6 +12094,11 @@ define('module/Setting',['require','jquery','module/Parameter','text!module/json
                     method: 'renderRatepayInvoice'
                 }
             },
+			BLIK: {
+                func: {
+                    method: 'renderBlikWidget'
+                }
+            },
             STC_PAY: {
 				func: {
 					method: 'renderStcPay',
@@ -12637,6 +12642,7 @@ define('module/Language',[],function(){
 			giftCardNumber:	"Gift Card Number",
 			giftCardNumberError:	"Invalid Gift Card Number",
 			pin:			"PIN",
+            otpCode:            "Enter the code generated in your bank application",
 			pinError:		"Invalid PIN",
 			pinEmptyError:	"Please enter a valid PIN",
 			expiryDate:		"Expiry Date",
@@ -13105,6 +13111,7 @@ define('module/Language',[],function(){
 			cvv:			"رمز التحقق (CVV)",
 			country:		"الدولة",
 			giftCardNumber:		"Gift Card Number",
+			otpCode:            "أدخل الرمز الذي تم إنشاؤه في تطبيق البنك الخاص بك",
 			giftCardNumberError:		"Invalid Gift Card Number",
 			pin:		"PIN",
 			pinError:		"دبوس غير صالح",
@@ -15496,6 +15503,7 @@ define('module/Language',[],function(){
 			cardNumber:"Numer karty",
 			cvv:"CVV",
 			country:"Kraj",
+            otpCode:"Wprowadź kod wygenerowany w aplikacji bankowej",
 			giftCardNumber:	"Gift Card Number",
             giftCardNumberError:	"Invalid Gift Card Number",
             pin:			"PIN",
@@ -36286,7 +36294,17 @@ define('module/BirthDate',['require','module/Options'],function (require) {
 
 	return BirthDate;
 });
-define('module/Generate',['require','jquery','dompurify','module/I18n','module/Locale','module/Options','module/Parameter','module/Setting','module/Browser','module/Util','module/Wpwl','module/BillingAgreement','module/BirthDate'],function(require) {
+define('module/OneTimePassInput',['require','module/Options'],function (require) {
+
+	var Options = require('module/Options');
+
+	var OneTimePassInput = {};
+	OneTimePassInput.showOtpInput = function () {
+		return String(Options.showOtpInput).toLowerCase() === "true";
+	};
+	return OneTimePassInput;
+});
+define('module/Generate',['require','jquery','dompurify','module/I18n','module/Locale','module/Options','module/Parameter','module/Setting','module/Browser','module/Util','module/Wpwl','module/BillingAgreement','module/BirthDate','module/OneTimePassInput'],function(require) {
 	var $ = require('jquery');
 	var DOMPurify = require('dompurify');
 	var I18n = require('module/I18n');
@@ -36300,7 +36318,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 	var BillingAgreement = require("module/BillingAgreement");
     var BirthDate = require("module/BirthDate");
 	var paymentSystem = Wpwl.isTestSystem ? "test" : "live";
-
+	var OneTimePassInput = require('module/OneTimePassInput');
 	var Generate = {};
 
 	// settings, can be overwritten in tests
@@ -37216,6 +37234,20 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
         return Generate.string(buttonWithLogo);
     };
 
+	Generate.renderBlikWidget = function(){
+		var brand = "BLIK";
+		if(OneTimePassInput.showOtpInput()){
+			var logo = Generate.string(Generate.groupStart("brand"), Generate.logo(brand), Generate.groupEnd());
+			var text = Generate.generateLabelElement(I18n.otpCode, "otp");
+            var pinInput = generateInputElement({setup:"otp", inputName:"otpPin", maxLength:"6"});
+			pinInput = pinInput.replace("input", "input id=\"otpId\"");
+            var submitButton = Generate.submitButton(Generate.getSubmitButtonLabel());
+			return Generate.string(logo,text, pinInput, submitButton);
+		}
+		var buttonWithLogo = Generate.string(Generate.groupStart("button"), Generate.buttonWithLogo(brand), Generate.groupEnd());
+		return Generate.string(buttonWithLogo);
+	};
+
 	Generate.renderIdeal = function(data){
 		var brand = "IDEAL";
 		var logo = Generate.string(Generate.groupStart("brand"), Generate.logo(brand), Generate.groupEnd());
@@ -37254,6 +37286,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 				'</button>' +
 			Generate.groupEnd());
     };
+
 
 	Generate.renderWithoutButton = function(){
 		return Generate.string(
