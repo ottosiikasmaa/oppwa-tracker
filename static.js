@@ -15487,11 +15487,11 @@ define('module/Language',[],function(){
 			cvv:"CVV",
 			country:"Kraj",
             otpCode:"Wprowadź kod wygenerowany w aplikacji bankowej",
-			giftCardNumber:	"Gift Card Number",
-            giftCardNumberError:	"Invalid Gift Card Number",
+			giftCardNumber:	"Numer karty podarunkowej",
+            giftCardNumberError:	"Nieprawidłowy numer karty podarunkowej",
             pin:			"PIN",
-            pinError:		"Invalid PIN",
-            pinEmptyError:	"Please enter a valid PIN",
+            pinError:		"Nieprawidłowy kod PIN",
+            pinEmptyError:	"Wprowadź prawidłowy kod PIN",
 			expiryDate:"Data ważności",
             taxNumber:"Tax Identification Number",
 			submit:"Zapłać teraz",
@@ -37207,7 +37207,6 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 			var logo = Generate.string(Generate.groupStart("brand"), Generate.logo(brand), Generate.groupEnd());
 			var text = Generate.generateLabelElement(I18n.otpCode, "otp");
             var pinInput = generateInputElement({setup:"otp", inputName:"otpPin", maxLength:"6"});
-			pinInput = pinInput.replace("input", "input id=\"otpId\"");
             var submitButton = Generate.submitButton(Generate.getSubmitButtonLabel());
 			return Generate.string(logo,text, pinInput, submitButton);
 		}
@@ -44871,7 +44870,7 @@ define('module/forms/VirtualAccountPaymentForm',['require','shim/ObjectCreate','
 
 	return VirtualAccountPaymentForm;
 });
-define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement','module/SaqaUtil','module/Detection','module/Wpwl','module/BirthDate'],function(require){
+define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement','module/SaqaUtil','module/Detection','module/Wpwl','module/BirthDate','module/OneTimePassInput'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
@@ -44886,6 +44885,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	var Detection = require('module/Detection');
 	var Wpwl = require('module/Wpwl');
 	var BirthDate = require("module/BirthDate");
+	var OneTimePassInput = require('module/OneTimePassInput');
 	var Validate = {};
 
 	/**
@@ -44979,6 +44979,13 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		}
 
 		return validationErrors;
+	};
+
+	Validate.validateOtpInput = function(paymentForm) {
+		var input = paymentForm.getElement("otpPin");
+		if ( !Validate.validateNumber( input.val(), 6 ) ) {
+			return { pinEmptyError: input };
+	  }
 	};
 
 	Validate.validateBirthDate = function(paymentForm) {
@@ -45487,6 +45494,15 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	    return t = (t + "").replace(/\s+|-/g, ""), /^\d{0,23}$/.test(t);
 	};
 
+	Validate.validateNumber = function(t, length) {
+	    // Number should 
+	    if (Util.trim(t).length === 0) {
+	        return false;
+	    }
+		var regexDigitLength = new RegExp("^\\d{"+ length+ "}$");
+	    return t = (t + "").replace(/\s+|-/g, ""), regexDigitLength.test(t);
+	};
+
 	Validate.validateBic = function(bic) {
 		if (bic === undefined || bic === null)
 			return false;
@@ -45609,6 +45625,9 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 
 		if( Options.billingAddress !== undefined ){
 			validationErrors = Validate.validateBillingParameters(paymentForm, validationErrors);
+		}
+		if ( OneTimePassInput.showOtpInput() ){
+			return Validate.validateOtpInput(paymentForm);
 		}
 
 		if (brand === "MBWAY") {
