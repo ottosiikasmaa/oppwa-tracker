@@ -43309,8 +43309,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
                 return;
             }
             var templates = {
-                learnMoreLink: "<a id='srcLearnMoreLink' data-toggle='modal' data-target='#srcLearnMoreModal'>" +
-                    "<u>{learnMore}</u></a>"
+                learnMoreLink: "<a id='srcLearnMoreLink'><u>{learnMore}</u></a>"
             };
 
             var learnMoreLink = Generate.templateEngine(templates.learnMoreLink, {
@@ -43318,6 +43317,12 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
             });
 
             $(checkbox).append(learnMoreLink);
+
+            // Attach click event on Learn more link
+            $('#srcLearnMoreLink').click(function() {
+                $('#srcLearnMoreModalContainer').css('display','block');
+                $('#srcLearnMoreModal').css('display','block');
+            });
         }
     };
 
@@ -43326,13 +43331,12 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
             var clickToPayConfirmationGroup = elem.find(".wpwl-group-clickToPayConfirmation");
 
             var templates = {
-                learnMoreModal: "<div class='modal fade' id='srcLearnMoreModal'><div class='modal-dialog modal-dialog-centered'>" +
-                    "<div class='modal-content'><div class='modal-body'>" +
-                    "<src-learn-more card-brands=\"{cardBrands}\" locale={locale}" +
-                    " display-close-button={displayCloseButton} display-ok-button={displayOkButton}" +
-                    " {dark} ></src-learn-more></div>" +
-                    "<button type='button' id='close-learn-more-modal' data-dismiss='modal' style='display:none' />" +
-                    "</div></div></div>"
+                learnMoreModal: "<div id='srcLearnMoreModalContainer' class='wpwl-click-to-pay-learn-more-modal-container' />" +
+                   "<div id='srcLearnMoreModal' class='wpwl-click-to-pay-learn-more-modal'>" +
+                   "<div id='srcLearnMoreModalContent'>" +
+                   "<src-learn-more card-brands=\"{cardBrands}\" locale={locale}" +
+                   " display-close-button={displayCloseButton} display-ok-button={displayOkButton}" +
+                   " {dark} ></src-learn-more></div></div>"
             };
 
             var learnMoreModal = Generate.templateEngine(templates.learnMoreModal, {
@@ -43348,13 +43352,14 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
             // Attach learn more events to learn-more component
             var srcLearnMore = $('src-learn-more')[0];
 
-
             srcLearnMore.addEventListener('ok', function() {
-                $('#close-learn-more-modal').trigger('click');
+                $('#srcLearnMoreModalContainer').fadeOut();
+                $('#srcLearnMoreModal').fadeOut();
             });
 
             srcLearnMore.addEventListener('close', function() {
-                $('#close-learn-more-modal').trigger('click');
+                $('#srcLearnMoreModalContainer').fadeOut();
+                $('#srcLearnMoreModal').fadeOut();
             });
         }
     };
