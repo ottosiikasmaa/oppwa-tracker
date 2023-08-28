@@ -50996,6 +50996,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 						ClickToPayPaymentWidget.spinner.stop();
 						ClickToPayPaymentWidget.isCardsFromCookies = true;
 						if (Options.clickToPay.cardList.displayCardListByDefault) {
+							ClickToPayPaymentWidget.initializeClickToPayPaymentWidgetForm();
 							ClickToPayPaymentWidget.displayCards();
 						}
 					} else {
@@ -51032,6 +51033,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				.then(function(result) {
 					if (result.consumerPresent) {
 						ClickToPayPaymentWidget.removeExistingCardList();
+						ClickToPayPaymentWidget.initializeClickToPayPaymentWidgetForm();
 						if (!isAccessCardsOptionUsed) {
 							ClickToPayPaymentWidget.spinner.stop();
 							ClickToPayPaymentWidget.isClickToPayEnrolled = true;
@@ -51509,6 +51511,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	 * If device is not recognized and email in the checkout request is enrolled then request OTP
 	 */
 	ClickToPayPaymentWidget.submitRequest = function() {
+		ClickToPayPaymentWidget.initializeClickToPayPaymentWidgetForm();
 		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
 		// remove ERROR_CLASS if any before submitting payment
 		PaymentView.removeErrorClassAndMessage(clickToPayForm);
@@ -51526,6 +51529,12 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			Options.onError(new WidgetError("CLICK_TO_PAY", "payment_error", "Error occurred, cannot proceed."));
 		}
 		return false;
+	};
+
+	ClickToPayPaymentWidget.initializeClickToPayPaymentWidgetForm = function() {
+		var selectedPaymentForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
+		var formClassSelector = ClickToPayPaymentWidget.returnClassSelector($(selectedPaymentForm).attr('class'));
+		ClickToPayPaymentWidget.$form = $(formClassSelector);
 	};
 
 	ClickToPayPaymentWidget.returnClassSelector = function(classList) {
