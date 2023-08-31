@@ -12144,7 +12144,6 @@ define('module/Setting',['require','jquery','module/Parameter','text!module/json
                        method: 'renderPetcoGiftCard',
                        data: {
                             giftCardNumber: { i18nIdentifier:"cardNumber", name:Parameter.VIRTUALACCOUNT_ACCOUNTID, type:"tel", maxLength:16, label: "Petco Gift Card" },
-                            pin: { i18nIdentifier:"pin", name:Parameter.VIRTUALACCOUNT_ACCOUNT_PIN, type:"password", maxLength:8 },
                        }
                 },
                 name: "PETCO_GIFT_CARD"
@@ -12357,11 +12356,12 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	//Additional logs
 	Options.enableAdditionalLogs = false;
 
-	//Click To Pay
+	//Click To Pay Configurations
 	Options.clickToPay = {
 		loadWidget: false,
 		isInitSuccess: false,
 		toAddLearnMore: false,
+		darkTheme: false,
 		brands: ['VISA', 'VISADEBIT', 'VISAELECTRON', 'MASTER', 'MASTERDEBIT', 'AMEX', 'DISCOVER', 'DINERS'],
 		brandSchemes: {
 			VISA: 'VISA',
@@ -12373,27 +12373,36 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 			DISCOVER: 'Discover',
 			DINERS: 'Discover'
 		},
-		initializedBrands: [],
+		initializedSrcCardBrands: [],
+		initializedAciBrands: [],
 		cardList: {
+			displayCardListByDefault: true,
 			displayCancelOption: false,
 			displayAddCard: true,
 			displayPreferredCard: true,
 			displaySignOut: true,
-			displayHeader: true,
+			displayHeader: false,
 			cardSelectionType: 'gridView',
 			unacceptedCard: ''
 		},
 		otpScreen: {
+			displayOtpScreenByDefault: true,
 			displayCancelOption: true,
 			displayHeader: true,
-			type: '',
+			type: 'overlay',
 			autoSubmit: false,
-			hideLoader: false
+			hideLoader: false,
+			displayRememberMe: false,
+			otpResendLoading: false,
+			displayPayAnotherWay: true
 		},
 		srcMark: {
-			theme: 'dark',
 			height: '40',
 			width: '200'
+		},
+		learnMore: {
+			displayCloseButton: true,
+			displayOkButton: true,
 		}
 	};
 
@@ -12671,11 +12680,6 @@ define('module/Language',[],function(){
 			expiryYearError:	"Invalid expiry date",
 			taxNumberError:     "Invalid Tax Identification Number",
 			customerEmailError:     "Invalid email address",
-			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
-			clickToPayInitializationError:     "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
-			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			generalTermsAndConditionsError:			"Please accept the consent for data transmission",
 			emailOrAccountId:	"Email or Account Id",
 			secureId:			"Secure Id",
@@ -12734,7 +12738,12 @@ define('module/Language',[],function(){
 			afterpayAcceptError: "Please accept the Terms and Conditions.",
 			meezaQrLabel: "Pay through MEEZA App using QR code scan",
 			meezaLinkLabel: "Pay through MEEZA App using Notification",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
+			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
+			clickToPayInitializationError: "Click to Pay SDK not initialized",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
+			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
 			countryCodes: [
                     {"value": "" , "label": "Please select"},
                     {"value":"AF", "label":"Afghanistan"},
@@ -13085,10 +13094,10 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
         },
 		ar: {
 			accountBank:	"رمز البنك",
@@ -13197,13 +13206,13 @@ define('module/Language',[],function(){
 			afterpayAcceptError: "Please accept the Terms and Conditions.",
 			meezaQrLabel: "ادفع من خلال تطبيق ميزة باستخدام مسح كود QR",
 			meezaLinkLabel: "ادفع من خلال تطبيق ميزة باستخدام الإشعارات",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
 			countryCodes: [
                     {"value": "" , "label": "الرجاء الإختيار"},
                     {"value":"AF", "label":"أفغانستان"},
@@ -13549,7 +13558,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
         },
 		de: {
 			accountBank:	"Bankleitzahl",
@@ -13655,7 +13664,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
 			countryCodes : [
 			        {"value": "" , "label": "Bitte auswählen"},
                     {"value":"AF", "label":"Afghanistan"},
@@ -14004,7 +14013,7 @@ define('module/Language',[],function(){
         			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
         			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
         			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-        			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
+        			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
         			countryCodes: [
                         {"value": "", "label": "Veuillez sélectionner"},
                         {"value": "AF", "label": "Afghanistan"},
@@ -14351,7 +14360,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
 			countryCodes: [
                 {"value": "", "label": "Por favor, seleccione"},
                 {"value": "AF", "label": "Afganistán"},
@@ -14700,7 +14709,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		nl: {
 			accountBank:	"Bankcode",
@@ -14797,7 +14806,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		da: {
 			accountBank:	"Bankkode",
@@ -14894,7 +14903,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
 		},
 		fi: {
 			accountBank:	"Pankin tunnus",
@@ -14991,7 +15000,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		sv: {
 			accountBank:	"Bankkod",
@@ -15088,7 +15097,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		tr: {
 			accountBank:	"Banka Kodu",
@@ -15182,7 +15191,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		ja: {
 			accountBank:	"銀行コード",
@@ -15276,7 +15285,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		sl: {
 			accountBank:	"Koda banke",
@@ -15370,7 +15379,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		pt: {
 			 accountBank: "Código do banco",
@@ -15470,7 +15479,7 @@ define('module/Language',[],function(){
              clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
              clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
              clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-             clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+             clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		pl: {
 			accountBank:	"Kod banku",
@@ -15565,7 +15574,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		cz: {
 			accountBank:	"Kód banky",
@@ -15659,7 +15668,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		hu: {
 			accountBank:	"bank kód",
@@ -15753,7 +15762,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
         hr: {
                 accountBank:	"Bankovni kôd",
@@ -15862,7 +15871,7 @@ define('module/Language',[],function(){
                 clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
                 clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
                 clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-                clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts.",
+                clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
                 countryCodes: [
                     {"value": "" , "label": "Izaberite"},
                     {"value":"AF", "label":"Afganistan"},
@@ -16208,7 +16217,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		ro: {
 			accountBank:	"Codul bancii",
@@ -16302,7 +16311,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		ru: {
 			accountBank:	"Код банка",
@@ -16396,7 +16405,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		cn: {
 			accountBank:	"银行代码",
@@ -16579,7 +16588,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		no: {
 			accountBank:	"Bankkode",
@@ -16676,7 +16685,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		sk: {
 			accountBank:	"Kód banky",
@@ -16770,7 +16779,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
 		et: {
         	accountBank:	"Panga kood",
@@ -16878,7 +16887,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
         },
         lv: {
         	accountBank:	"Bankas kods",
@@ -16987,7 +16996,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
         },
         lt: {
         	accountBank:	"Banko kodas",
@@ -17096,7 +17105,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
         },
         ca: {
         	accountBank:	"Codi bancari",
@@ -17204,7 +17213,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
         },
         eu: {
 			accountBank:	"Bankuaren kodea",
@@ -17312,7 +17321,7 @@ define('module/Language',[],function(){
 			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
-			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts."
+			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
 		},
       id:   {
             brand: 		 "Merek",
@@ -37337,18 +37346,18 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 	};
 
 	Generate.renderClickToPay = function() {
-		var buttonWithLogoHtml = Generate.string(Generate.groupStart("button"), Generate.buttonWithLogo("CLICK_TO_PAY"), Generate.groupEnd());
+		var logo = Generate.string(Generate.groupStart("brand"), Generate.logo("CLICK_TO_PAY"), Generate.groupEnd());
 		var customerEmail = generateInputElement({setup:"clickToPayAccessMyCards", inputName:Parameter.C2P_CONSUMER_EMAIL});
 		var submitButton = Generate.string(Generate.outerHtml(
 								$("<button/>", {
-									"class": "wpwl-button-continue",
+									"class": "wpwl-button wpwl-button-pay",
 									"text": I18n.nextStep,
 									"type": "button",
 									"aria-label": I18n.nextStep,
 									"id": "wpwl-button-c2pAccessCards"
 								})
 							));
-		return Generate.string(buttonWithLogoHtml, customerEmail, submitButton);
+		return Generate.string(logo, customerEmail, submitButton);
 	};
 	
 	Generate.templateEngine = function(template, data){
@@ -37470,10 +37479,8 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
         var petcoLogo = Generate.string(Generate.groupStart("brand"), Generate.logo(Setting.paymentTypeSetup.VA.PETCO_GIFT_CARD.name), labelDiv, Generate.groupEnd());
         petcoLogo = petcoLogo.replace("wpwl-brand", "wpwl-brand wpwl-label");
         var giftCardNumber = generateInputElement({setup:"petcoGiftCardNumber", inputName:data.giftCardNumber.name, placeholder:data.giftCardNumber.i18nIdentifier, label:"giftCardNumber"});
-        var giftCardPin = generateInputElement({setup:"pin", inputName:data.pin.name, placeholder:data.pin, maxLength:data.pin.maxLength});
         var submitButton = Generate.submitButton(Generate.getSubmitButtonLabel());
-
-        return Generate.string(petcoLogo, giftCardNumber, giftCardPin, submitButton);
+        return Generate.string(petcoLogo, giftCardNumber, submitButton);
     };
 
     Generate.renderOneyPaymentDetails = function() {
@@ -42010,7 +42017,7 @@ return $.ui.autocomplete;
 
 } );
 
-define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/NumberOnlyFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','module/SaqaUtil','module/GroupCardUtil','jquery-ui/widgets/autocomplete'],function(require){
+define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/NumberOnlyFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','module/SaqaUtil','module/GroupCardUtil','module/Locale','jquery-ui/widgets/autocomplete'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var CVVHint = require('module/CVVHint');
@@ -42035,6 +42042,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	var Detection = require('module/Detection');
 	var SaqaUtil = require('module/SaqaUtil');
 	var GroupCardUtil = require('module/GroupCardUtil');
+	var Locale = require('module/Locale');
     require('jquery-ui/widgets/autocomplete');
 
 	var HAS_ERROR_CLASS = "wpwl-has-error";
@@ -42796,7 +42804,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	};
 
 	PaymentView.updateClickToPayConfirmation = function(select, brand) {
-        if (Options.clickToPay.brands.indexOf(brand) < 0) {
+        if (Options.clickToPay.initializedAciBrands.indexOf(brand) < 0) {
             PaymentView.hideOrShowClickToPayConfirmation.call(select, brand, true);
         } else if (Options.clickToPay.isInitSuccess && Options.clickToPay.loadWidget) {
             PaymentView.hideOrShowClickToPayConfirmation.call(select, brand, false);
@@ -43266,65 +43274,100 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
         	PaymentView.hideOrShowElement($form, ".wpwl-group-expiry", hide);
     };
 
-    PaymentView.hideOrShowClickToPayConfirmation = function(brand, hide){
+    PaymentView.hideOrShowClickToPayConfirmation = function(brand, hide) {
         var $form = $(this).closest("form");
-        if ($form && brand && hide === false){
-            PaymentView.updateClickToPayScheme($form, brand);
-            PaymentView.updateClickToPayLearnMore($form);
+        if ($form && brand && hide === false) {
+            PaymentView.updateClickToPayConfirmationMessage($form, brand);
+            PaymentView.generateClickToPayLearnMoreModal($form);
         }
         PaymentView.hideOrShowElement($form, ".wpwl-group-clickToPayConfirmation", hide);
     };
 
-    PaymentView.updateClickToPayScheme = function(elem, brand) {
+    PaymentView.updateClickToPayConfirmationMessage = function(elem, brand) {
         var $checkbox = elem.find(".wpwl-text-confirmation-clickToPayConfirmation");
 
         // for tests, if checkbox is not present, do nothing
-        if ($checkbox.length < 1){
+        if ($checkbox.length < 1) {
             return;
         }
 
-        var defaultMessage = I18n.clickToPayConfirmation;
-        var defaultScheme = "this card's scheme";
+        var newMessage = I18n.clickToPayConfirmation;
         var scheme = Options.clickToPay.brandSchemes[brand];
 
         // if brand is one of Click2Pay brands, show brand-specific message
-        if(scheme){
-            $checkbox[0].textContent =  defaultMessage.replace(defaultScheme, scheme);
-        } else {
-        // if brand is not one of recognized Click2Pay brands, show default message
-            $checkbox[0].textContent =  defaultMessage;
+        if (scheme) {
+            newMessage = newMessage.replace("this card's scheme", scheme);
+        }
+        $checkbox[0].textContent = newMessage;
+        PaymentView.appendClickToPayLearnMoreLink(elem);
+
+        $checkbox.click(function(e) {
+            if (e.currentTarget !== e.target) {
+                event.preventDefault();
+            }
+        });
+    };
+
+    PaymentView.appendClickToPayLearnMoreLink = function(elem) {
+        if ($('#srcLearnMoreLink').length < 1) {
+            var checkbox = elem.find(".wpwl-text-confirmation-clickToPayConfirmation");
+            if (checkbox.length < 1) {
+                return;
+            }
+            var templates = {
+                learnMoreLink: "<a id='srcLearnMoreLink'><u>{learnMore}</u></a>"
+            };
+
+            var learnMoreLink = Generate.templateEngine(templates.learnMoreLink, {
+                learnMore: I18n.learnMore
+            });
+
+            $(checkbox).append(learnMoreLink);
+
+            // Attach click event on Learn more link
+            $('#srcLearnMoreLink').click(function() {
+                $(document.body).addClass('wpwl-src-learn-more-modal-open');
+                $('#srcLearnMoreModalContainer').css('display', 'flex').hide().fadeIn('fast');
+            });
         }
     };
 
-    PaymentView.updateClickToPayLearnMore = function(elem) {
-        var checkbox = elem.find(".wpwl-text-confirmation-clickToPayConfirmation");
-        if (checkbox.length < 1){
-            return;
-        }
-        var templates = {
-            termsAndConditions: "<div class='wpwl-group wpwl-group-customTermsAndConditions'>" +
-                "<a class='customTermsAndConditions'><u>{termsAndConditions}</u></a></div>"
-        };
-        var termsAndConditions = Generate.templateEngine(templates.termsAndConditions, {
-            termsAndConditions: I18n.learnMore
-        });
-        $(checkbox).append(termsAndConditions);
-        var customTermsAndConditions = $(checkbox).find(".customTermsAndConditions");
+    PaymentView.generateClickToPayLearnMoreModal = function(elem) {
+        if ($('#srcLearnMoreModalContainer').length < 1) {
+            var clickToPayConfirmationGroup = elem.find('.wpwl-group-clickToPayConfirmation');
 
-        // click listener for Learn more option to display SRC Click to Pay Learn More UI component
-        if (customTermsAndConditions.length > 0) {
-            $(customTermsAndConditions).on('click', function(){
-                var srcLearnMore = $.find('src-learn-more');
-                if (srcLearnMore.length > 0) {
-                    $(srcLearnMore[0]).show();
-                } else {
-                    // SRC Click to Pay Learn More UI component
-                    $(checkbox).append("<src-learn-more display-close-button=\"true\" display-ok-button=\"true\"></src-learn-more>");
-                    var addedLearnMore = $.find('src-learn-more');
-                    $(addedLearnMore).on('close', function() {
-                        $(addedLearnMore).hide();
-                    });
-                }
+            var templates = {
+                learnMoreModal: "<div id='srcLearnMoreModalContainer' class='wpwl-src-learn-more-modal-container'>" +
+                    "<div class='wpwl-src-learn-more-modal'>" +
+                    "<div class='wpwl-src-learn-more-modal-content'>" +
+                    "<src-learn-more card-brands=\"{cardBrands}\" locale={locale}" +
+                    " display-close-button={displayCloseButton} display-ok-button={displayOkButton}" +
+                    " {dark} ></src-learn-more></div></div></div>"
+            };
+
+            var learnMoreModal = Generate.templateEngine(templates.learnMoreModal, {
+                cardBrands: Options.clickToPay.initializedSrcCardBrands,
+                locale: Locale.language + "_" + Locale.country,
+                displayCloseButton: Options.clickToPay.learnMore.displayCloseButton,
+                displayOkButton: Options.clickToPay.learnMore.displayOkButton,
+                dark: (Options.clickToPay.darkTheme ? 'dark' : '')
+            });
+
+            $(clickToPayConfirmationGroup).append(learnMoreModal);
+
+            // Attach learn more events to learn-more component
+            var srcLearnMore = $('src-learn-more')[0];
+
+            srcLearnMore.addEventListener('ok', function() {
+                $('#srcLearnMoreModalContainer').fadeOut('fast', function() {
+                    $(document.body).removeClass("wpwl-src-learn-more-modal-open");
+                });
+            });
+
+            srcLearnMore.addEventListener('close', function() {
+                $('#srcLearnMoreModalContainer').fadeOut('fast', function() {
+                    $(document.body).removeClass("wpwl-src-learn-more-modal-open");
+                });
             });
         }
     };
@@ -46000,13 +46043,10 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
     Validate.validatePetcoGiftCardForm = function(paymentForm) {
             var brand = paymentForm.getBrand(paymentForm);
             var cardNumberElement = paymentForm.getElement(Parameter.VIRTUALACCOUNT_ACCOUNTID);
-            var pinElement = paymentForm.getElement(Parameter.VIRTUALACCOUNT_ACCOUNT_PIN);
             var cardError = Validate.validateGiftCardNumberElement(cardNumberElement, brand, '^\\d{16}$');
-            var pinError = Validate.validateGiftCardPinElement(pinElement, brand, '^[0-9]{8}$');
-            var validationErrors = Util.extend({}, cardError, pinError);
+            var validationErrors = Util.extend({}, cardError);
             if (Util.isEmpty(validationErrors)) {
                 cardNumberElement.val(Util.trimAll(cardNumberElement.val()));
-                pinElement.val(Util.trimAll(pinElement.val()));
             }
             return validationErrors;
     };
@@ -50645,7 +50685,7 @@ define('module/integrations/UpgMobilePaymentWidget',['require','jquery','module/
 
 /*jshint camelcase: false */
 /*global Promise*/
-define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module/logging/LoggerFactory','module/Wpwl','module/Generate','module/Options','module/error/WidgetError','module/error/SessionError','module/InternalRequestCommunication','lib/Spinner','module/Parameter','module/Util','module/PaymentView'],function(require) {
+define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module/logging/LoggerFactory','module/Wpwl','module/Generate','module/Options','module/error/WidgetError','module/error/SessionError','module/InternalRequestCommunication','lib/Spinner','module/Parameter','module/Util','module/PaymentView','module/Locale'],function(require) {
 	var $ = require("jquery");
 	var LoggerFactory = require('module/logging/LoggerFactory');
 	var Wpwl = require('module/Wpwl');
@@ -50659,59 +50699,62 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	var Parameter = require('module/Parameter');
 	var Util = require('module/Util');
 	var PaymentView = require('module/PaymentView');
+	var Locale = require('module/Locale');
 	var ClickToPayPaymentWidget = {};
 
 	ClickToPayPaymentWidget.isCardsFromCookies = false;
 	ClickToPayPaymentWidget.isClickToPayEnrolled = false;
 	ClickToPayPaymentWidget.cards = null;
-	ClickToPayPaymentWidget.initializedBrands = null;
 	ClickToPayPaymentWidget.spinner = null;
-	ClickToPayPaymentWidget.button = null;
 	ClickToPayPaymentWidget.$form = null;
 	var clickToPay = null;
 
-	/** checks if CLICK_TO_PAY brand */
+	/** checks if given brand is CLICK_TO_PAY brand */
 	ClickToPayPaymentWidget.isClickToPayBrand = function(brand) {
 		return brand === "CLICK_TO_PAY";
 	};
 
 	/** This is for unrecognized returning user - either when no customer.email address added in the checkout request or
-	* when shopper want's to use different email address than in checkout request that is enrolled with Click to Pay.
-	* To use this, SRC Click to Pay SDK must be initialized.
-	* 1. Validates entered email with the regex, if incorrect then adds error in the UI component
-	* 2. If email is correct, then continues with emailIdLookup flow
-	*/
+	 * when shopper want's to use different email address which is provided in checkout request that is enrolled with
+	 * Click to Pay. To use this, SRC Click to Pay SDK must be initialized.
+	 * 1. Validates entered email with the regex, if incorrect then add error in the UI component
+	 * 2. If email is correct, then continues with emailIdLookup flow
+	 */
 	ClickToPayPaymentWidget.addEventListerForEmailContinue = function() {
 		$('#wpwl-button-c2pAccessCards').click(function() {
-			 var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
-			 var $emailInput = clickToPayForm[0].getElementsByClassName('wpwl-control wpwl-control-clickToPayAccessMyCards');
-			 var formClassSelector = ClickToPayPaymentWidget.returnClassSelector($(clickToPayForm).attr('class'));
-			 ClickToPayPaymentWidget.$form = $(formClassSelector);
-			 var email = $emailInput[0].value;
-			 var regexEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-			 var validationErrors = {};
-			 // remove ERROR_CLASS if any; when shopper continues with access my cards option and earlier there was some error
-			 PaymentView.removeErrorClassAndMessage(clickToPayForm);
-			 if (Options.clickToPay.isInitSuccess) {
-				 if (Util.isBlank(email) || !regexEmail.test(email)) {
-					 logger.error("Entered email not in valid format : " + email);
-					 validationErrors = Util.extend(validationErrors, {customerEmailError: $emailInput});
-					 PaymentView.generateErrorRow(validationErrors);
-				 } else {
-					 PaymentView.removeErrorClassAndMessage($emailInput);
-					 ClickToPayPaymentWidget.emailIdLookup(email, true);
-				 }
-			 } else {
-				 logger.error("SDK not initialized, please try again later.");
-				 validationErrors = Util.extend(validationErrors, {clickToPayInitializationError: clickToPayForm});
-				 PaymentView.generateErrorRow(validationErrors);
-			 }
+			var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
+			var $emailInput = clickToPayForm[0].getElementsByClassName('wpwl-control wpwl-control-clickToPayAccessMyCards');
+			var formClassSelector = ClickToPayPaymentWidget.returnClassSelector($(clickToPayForm).attr('class'));
+			ClickToPayPaymentWidget.$form = $(formClassSelector);
+			var email = $emailInput[0].value;
+			var regexEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			var validationErrors = {};
+			// remove ERROR_CLASS if any; when shopper continues with access my cards option and earlier there was some error
+			PaymentView.removeErrorClassAndMessage(clickToPayForm);
+			if (Options.clickToPay.isInitSuccess) {
+				if (Util.isBlank(email) || !regexEmail.test(email)) {
+					logger.error("Entered email not in valid format : " + email);
+					validationErrors = Util.extend(validationErrors, {
+						customerEmailError: $emailInput
+					});
+					PaymentView.generateErrorRow(validationErrors);
+				} else {
+					PaymentView.removeErrorClassAndMessage($emailInput);
+					ClickToPayPaymentWidget.emailIdLookup(email, true);
+				}
+			} else {
+				logger.error("SDK not initialized, please try again later.");
+				validationErrors = Util.extend(validationErrors, {
+					clickToPayInitializationError: clickToPayForm
+				});
+				PaymentView.generateErrorRow(validationErrors);
+			}
 		});
 	};
 
 	/** Mastercard UI components are used later in Click to Pay recognized users and email lookup flow
-	* update click to pay mark with merchant requested brands first and later update with initialized brands
-	*/
+	 * update click to pay mark with merchant requested brands first and later update with initialized brands
+	 */
 	ClickToPayPaymentWidget.loadClickToPayUIKit = function(ccBrandsForClickToPay) {
 		ClickToPayPaymentWidget.addScriptAndLink();
 		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
@@ -50737,10 +50780,10 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	/** Click to Pay needs network names rather than Pay.On defined card brands.
-	* If none of the supported brands are requested by merchant, we cannot proceed with Click to Pay transactions.
-	* If none of the supported brands, log an error and widget error.
-	* If supported brand, then update predefined Pay.on logo button with src-mark
-	*/
+	 * If none of the supported brands are requested by merchant, we cannot proceed with Click to Pay transactions.
+	 * If none of the supported brands, log an error and widget error.
+	 * If supported brand, then update predefined Pay.on logo with src-mark
+	 */
 	ClickToPayPaymentWidget.updateClickToPayMark = function(ccBrandsForClickToPay, clickToPayForm) {
 		var brands = [];
 		if (ccBrandsForClickToPay.indexOf("VISA") > -1 || ccBrandsForClickToPay.indexOf("VISADEBIT") > -1 || ccBrandsForClickToPay.indexOf("VISAELECTRON") > -1) {
@@ -50761,26 +50804,28 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			Options.onError(new WidgetError("CLICK_TO_PAY", "no_c2p_card_brands", "No click to pay supported card brands requested by merchant, cannot proceed."));
 			return;
 		}
-		var b = $(clickToPayForm).find("button");
-		if (Options.clickToPay.srcMark.height >= 32 && Options.clickToPay.srcMark.height <= 60 && Options.clickToPay.srcMark.width >= 178 && Options.clickToPay.srcMark.width <= 500) {
-			$(b[0]).html('<src-mark card-brands=' + brands + ' height=' + Options.clickToPay.srcMark.height + ' width=' + Options.clickToPay.srcMark.width + ' locale=' + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase() + ' theme=' + Options.clickToPay.srcMark.theme + '></src-mark>');
-		} else {
-			$(b[0]).html('<src-mark card-brands=' + brands + ' locale=' + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase() + ' theme=' + Options.clickToPay.srcMark.theme + '></src-mark>');
-		}
+		var b = $(clickToPayForm).find(".wpwl-group-brand");
+		$(b[0]).html(ClickToPayPaymentWidget.generateSrcMarkElement(brands));
 		ClickToPayPaymentWidget.loadClickToPayLibrary(brands, clickToPayForm);
 	};
 
+	ClickToPayPaymentWidget.generateSrcMarkElement = function(brands) {
+		return '<src-mark ' +
+			' card-brands="' + brands + '"' +
+			' height=' + Options.clickToPay.srcMark.height +
+			' width=' + Options.clickToPay.srcMark.width +
+			' locale=' + Locale.language + "_" + Locale.country +
+			' theme=' + (Options.clickToPay.darkTheme ? 'light' : 'dark') +
+			' ></src-mark>';
+	};
+
 	/** load Click to Pay library
-	* Click to Pay library needs DPA ID (configured at RIRO in BIP) and locale in format like (en_US)
-	* If DPA ID is not present, log an error and widget error.
-	* Library is required before using any of SRC Click to Pay JS method or UI component.
-	* Add spinner and disable CLICK_TO_PAY button until library is loaded and initialized, as none of the flow will work without these
-	*/
+	 * Click to Pay library needs DPA ID (configured at RIRO in BIP) and locale in format like (en_US)
+	 * If DPA ID is not present, log an error and widget error.
+	 * Library is required before using any of SRC Click to Pay JS method or UI component.
+	 */
 	ClickToPayPaymentWidget.loadClickToPayLibrary = function(brands, clickToPayForm) {
 		ClickToPayPaymentWidget.spinner = new Spinner(Options.spinner).spin(clickToPayForm[0]);
-		ClickToPayPaymentWidget.button = $(clickToPayForm).find("button")[0];
-		ClickToPayPaymentWidget.button.setAttribute("disabled", "true");
-
 		var dpaId = Wpwl.checkout.config.clickToPayConfig.dpaId;
 		if (!dpaId || dpaId === "" || dpaId === undefined) {
 			logger.error("No dpaId found to load Mastercard Click to Pay Library, cannot proceed.");
@@ -50790,7 +50835,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		}
 		var environment = Wpwl.isTestSystem ? "sandbox." : "";
 		// default locale is en-US
-		var script = "https://" + environment + "src.mastercard.com/srci/integration/2/lib.js?dpaId=" + dpaId + "&locale=" + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase();
+		var script = "https://" + environment + "src.mastercard.com/srci/integration/2/lib.js?dpaId=" + dpaId + "&locale=" + Locale.language + "_" + Locale.country;
 
 		var srcScript = document.createElement("script");
 		srcScript.setAttribute("src", script);
@@ -50814,19 +50859,19 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	/** call init() method to initialize then check for if user recognized or email enrolled
-	* If init() is success, then we add Click to Pay confirmation checkbox in card form (not for logos style)
-	* then enable the button again after successful initialization and update src mark with initialized brands
-	*/
+	 * If init() is success, then we add Click to Pay confirmation checkbox in card form (not for logos style)
+	 * then after successful initialization and update src mark with initialized brands
+	 */
 	ClickToPayPaymentWidget.initializeClickToPay = function(brands, clickToPayForm) {
-		var initPromise = new Promise(function (resolve) {
-				resolve(ClickToPayPaymentWidget.callInit(ClickToPayPaymentWidget.getInitRequestBody(brands)));
-			});
+		var initPromise = new Promise(function(resolve) {
+			resolve(ClickToPayPaymentWidget.callInit(ClickToPayPaymentWidget.getInitRequestBody(brands)));
+		});
 
 		initPromise
 			.then(function(result) {
-				/** Updating UX for existing CLICK_TO_PAY button to Click to Pay horizontal mark from Mastercard Click to Pay UI Kit'
-				* only initialized brands will be reflected and not the one ACI requested for initialization
-				*/
+				/** Updating UX for existing CLICK_TO_PAY logo to Click to Pay horizontal mark from Mastercard Click to Pay UI Kit'
+				 * only initialized brands will be reflected and not the one ACI requested for initialization
+				 */
 				/** flag to be used to identify if Click to Pay flow shall be used or not */
 				Options.clickToPay.isInitSuccess = true;
 				ClickToPayPaymentWidget.updateMarkWithInitializedBrands(result, clickToPayForm);
@@ -50839,7 +50884,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				logger.error('Initialization of Click To Pay is not successful');
 				if (error.details !== undefined && error.details.length > 0) {
 					var i;
-					for (i=0; i< error.details.length; i++) {
+					for (i = 0; i < error.details.length; i++) {
 						logger.error(error.details[i].message);
 					}
 				}
@@ -50856,19 +50901,18 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		}
 		var select = $brandElement.get(0);
 		// only show message if initially selected brand is recognized ClickToPay brand
-		ClickToPayPaymentWidget.initializedBrands = result.availableCardBrands;
+		Options.clickToPay.initializedSrcCardBrands = result.availableCardBrands;
 		ClickToPayPaymentWidget.updateInitializedBrandsForNewUserFlow(result.availableCardBrands);
-		if (Options.clickToPay.initializedBrands.indexOf(select.value) > -1 && Options.style !== 'logos') {
+		if (Options.clickToPay.initializedAciBrands.indexOf(select.value) > -1 && Options.style !== 'logos') {
 			PaymentView.hideOrShowClickToPayConfirmation.call(select, select.value, false);
 		}
-		ClickToPayPaymentWidget.button.removeAttribute("disabled");
-		var b = $(clickToPayForm).find("button");
-		if (Options.clickToPay.srcMark.height >= 32 && Options.clickToPay.srcMark.height <= 60 && Options.clickToPay.srcMark.width >= 178 && Options.clickToPay.srcMark.width <= 500) {
-			$(b[0]).html('<src-mark card-brands=' + ClickToPayPaymentWidget.initializedBrands + ' height=' + Options.clickToPay.srcMark.height + ' width=' + Options.clickToPay.srcMark.width + ' locale=' + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase() +  ' theme=' + Options.clickToPay.srcMark.theme + '></src-mark>');
-		} else {
-			$(b[0]).html('<src-mark card-brands=' + ClickToPayPaymentWidget.initializedBrands + ' locale=' + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase() +  ' theme=' + Options.clickToPay.srcMark.theme + '></src-mark>');
-		}
-		logger.info('Mastercard Click To Pay available brands:' + ClickToPayPaymentWidget.initializedBrands);
+		var b = $(clickToPayForm).find(".wpwl-group-brand");
+		$(b[0]).html(ClickToPayPaymentWidget.generateSrcMarkElement(Options.clickToPay.initializedSrcCardBrands));
+		var srcMark = document.querySelector('src-mark');
+		srcMark.addEventListener('click', function() {
+			ClickToPayPaymentWidget.submitRequest();
+		});
+		logger.info('Mastercard Click To Pay available brands:' + Options.clickToPay.initializedSrcCardBrands);
 	};
 
 	/** returns input request for init() method */
@@ -50877,38 +50921,40 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var paymentOptions = [];
 		var i = 0;
 		if (dataType !== undefined && dataType.length > 0) {
-			for (i=0; i < dataType.length; i++) {
-				var option = {dynamicDataType: dataType[i]};
+			for (i = 0; i < dataType.length; i++) {
+				var option = {
+					dynamicDataType: dataType[i]
+				};
 				paymentOptions.push(option);
 			}
 		}
 
 		var initInput = {
-		  "srcDpaId": Wpwl.checkout.config.clickToPayConfig.dpaId,
-		  "cardBrands": brands,
-		  "dpaTransactionOptions": {
-			"consumerEmailAddressRequested": Wpwl.checkout.config.clickToPayConfig.consumerEmailAddressRequested,
-			"consumerNameRequested": Wpwl.checkout.config.clickToPayConfig.consumerNameRequested,
-			"consumerPhoneNumberRequested": Wpwl.checkout.config.clickToPayConfig.consumerPhoneNumberRequested,
-			"dpaAcceptedBillingCountries": Wpwl.checkout.config.clickToPayConfig.dpaAcceptedBillingCountries,
-			"dpaAcceptedShippingCountries": Wpwl.checkout.config.clickToPayConfig.dpaAcceptedShippingCountries,
-			"dpaBillingPreference": Wpwl.checkout.config.clickToPayConfig.dpaBillingPreference,
-			"dpaShippingPreference": Wpwl.checkout.config.clickToPayConfig.dpaShippingPreference,
-			"dpaLocale": Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase(),
-			"threeDsPreference": "NONE",
-			"paymentOptions": paymentOptions,
-			"transactionAmount": {
-			  "transactionAmount": Number(Wpwl.checkout.amount),
-			  "transactionCurrencyCode": Wpwl.checkout.currency
+			"srcDpaId": Wpwl.checkout.config.clickToPayConfig.dpaId,
+			"cardBrands": brands,
+			"dpaTransactionOptions": {
+				"consumerEmailAddressRequested": Wpwl.checkout.config.clickToPayConfig.consumerEmailAddressRequested,
+				"consumerNameRequested": Wpwl.checkout.config.clickToPayConfig.consumerNameRequested,
+				"consumerPhoneNumberRequested": Wpwl.checkout.config.clickToPayConfig.consumerPhoneNumberRequested,
+				"dpaAcceptedBillingCountries": Wpwl.checkout.config.clickToPayConfig.dpaAcceptedBillingCountries,
+				"dpaAcceptedShippingCountries": Wpwl.checkout.config.clickToPayConfig.dpaAcceptedShippingCountries,
+				"dpaBillingPreference": Wpwl.checkout.config.clickToPayConfig.dpaBillingPreference,
+				"dpaShippingPreference": Wpwl.checkout.config.clickToPayConfig.dpaShippingPreference,
+				"dpaLocale": Locale.language + "_" + Locale.country,
+				"threeDsPreference": "NONE",
+				"paymentOptions": paymentOptions,
+				"transactionAmount": {
+					"transactionAmount": Number(Wpwl.checkout.amount),
+					"transactionCurrencyCode": Wpwl.checkout.currency
+				}
+			},
+			"dpaData": {
+				"dpaPresentationName": Wpwl.checkout.config.clickToPayConfig.dpaPresentationName,
+				"dpaName": Wpwl.checkout.config.clickToPayConfig.dpaName,
+				"dpaLogoUri": Wpwl.checkout.config.clickToPayConfig.dpaLogoUrl,
+				"dpaUri": Wpwl.checkout.config.clickToPayConfig.dpaUrl,
+				"applicationType": "WEB_BROWSER"
 			}
-		  },
-		  "dpaData": {
-			"dpaPresentationName": Wpwl.checkout.config.clickToPayConfig.dpaPresentationName,
-			"dpaName": Wpwl.checkout.config.clickToPayConfig.dpaName,
-			"dpaLogoUri": Wpwl.checkout.config.clickToPayConfig.dpaLogoUrl,
-			"dpaUri": Wpwl.checkout.config.clickToPayConfig.dpaUrl,
-			"applicationType": "WEB_BROWSER"
-		  }
 		};
 		return initInput;
 	};
@@ -50937,77 +50983,86 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			brands.push("DISCOVER");
 			brands.push("DINERS");
 		}
-		Options.clickToPay.initializedBrands = brands;
+		Options.clickToPay.initializedAciBrands = brands;
 	};
 
 	/** Calling getCards() right after init() to save rendering time when CLICK_TO_PAY is selected.
-	* Rendered cards will be then added to src card list when CLICK_TO_PAY is selected.
-	* Cannot be rendered as after successful operation, request needs to be sent to backend, payment form is required for the purpose.
-	*/
+	 * Rendered cards will be then added to src card list when CLICK_TO_PAY is selected.
+	 * Cannot be rendered as after successful operation, request needs to be sent to backend, payment form is required for the purpose.
+	 */
 	ClickToPayPaymentWidget.callGetCards = function(isRefreshRequest) {
-		var getCardsPromise = new Promise(function (resolve) {
-					resolve(clickToPay.getCards());
-				});
+		var getCardsPromise = new Promise(function(resolve) {
+			resolve(clickToPay.getCards());
+		});
 
 		getCardsPromise
-		.then(function(result) {
-			if (result.length > 0) {
-				logger.info('Get cards from cookies is success.');
-				ClickToPayPaymentWidget.cards = result;
-				if (!isRefreshRequest) {
-					ClickToPayPaymentWidget.spinner.stop();
-					ClickToPayPaymentWidget.isCardsFromCookies = true;
+			.then(function(result) {
+				if (result.length > 0) {
+					logger.info('Get cards from cookies is success.');
+					ClickToPayPaymentWidget.cards = result;
+					if (!isRefreshRequest) {
+						ClickToPayPaymentWidget.spinner.stop();
+						ClickToPayPaymentWidget.isCardsFromCookies = true;
+						if (Options.clickToPay.cardList.displayCardListByDefault) {
+							ClickToPayPaymentWidget.initializeClickToPayPaymentWidgetForm();
+							ClickToPayPaymentWidget.displayCards();
+						}
+					} else {
+						ClickToPayPaymentWidget.displayCards();
+					}
 				} else {
-					ClickToPayPaymentWidget.displayCards();
+					logger.info("No cards received from cookies.");
+					ClickToPayPaymentWidget.emailIdLookup(Wpwl.checkout.customerEmail, false);
 				}
-			} else {
-				logger.info("No cards received from cookies.");
+			}).catch(function(error) {
 				ClickToPayPaymentWidget.emailIdLookup(Wpwl.checkout.customerEmail, false);
-			}
-		}).catch(function(error) {
-			ClickToPayPaymentWidget.emailIdLookup(Wpwl.checkout.customerEmail, false);
-			logger.error("Get cards error");
-			if (error.details !== undefined && error.details.length > 0) {
-				var i;
-				for (i=0; i< error.details.length; i++) {
-					logger.error(error.details[i].message);
+				logger.error("Get cards error");
+				if (error.details !== undefined && error.details.length > 0) {
+					var i;
+					for (i = 0; i < error.details.length; i++) {
+						logger.error(error.details[i].message);
+					}
 				}
-			}
-		});
+			});
 	};
 
 	/** checks if emailId received in checkout request is enrolled with Click to Pay or not */
 	ClickToPayPaymentWidget.emailIdLookup = function(customerEmailAddress, isAccessCardsOptionUsed) {
 		if (customerEmailAddress !== undefined && customerEmailAddress !== null) {
 			var emailId = {
-						"email": customerEmailAddress
-						};
+				"email": customerEmailAddress
+			};
 
-			var idLookupPromise = new Promise(function (resolve) {
+			var idLookupPromise = new Promise(function(resolve) {
 				resolve(clickToPay.idLookup(emailId));
 			});
 
 			idLookupPromise
-			.then(function(result) {
-				if (result.consumerPresent) {
+				.then(function(result) {
+					if (result.consumerPresent) {
+						ClickToPayPaymentWidget.removeExistingCardList();
+						ClickToPayPaymentWidget.initializeClickToPayPaymentWidgetForm();
+						if (!isAccessCardsOptionUsed) {
+							ClickToPayPaymentWidget.spinner.stop();
+							ClickToPayPaymentWidget.isClickToPayEnrolled = true;
+							if (Options.clickToPay.otpScreen.displayOtpScreenByDefault && !ClickToPayPaymentWidget.isCardsFromCookies) {
+								ClickToPayPaymentWidget.requestOtp(true, null);
+							}
+						} else {
+							ClickToPayPaymentWidget.requestOtp(true, null);
+						}
+					} else {
+						logger.info("Customer is not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address.");
+						ClickToPayPaymentWidget.displayEmailError(isAccessCardsOptionUsed);
+					}
+				}).catch(function(error) {
 					if (!isAccessCardsOptionUsed) {
 						ClickToPayPaymentWidget.spinner.stop();
-						ClickToPayPaymentWidget.isClickToPayEnrolled = true;
-					} else {
-						ClickToPayPaymentWidget.requestOtp(true, null);
 					}
-				} else {
-					logger.info("Customer is not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address.");
 					ClickToPayPaymentWidget.displayEmailError(isAccessCardsOptionUsed);
-				}
-			}).catch(function(error) {
-				if (!isAccessCardsOptionUsed) {
-					ClickToPayPaymentWidget.spinner.stop();
-				}
-				ClickToPayPaymentWidget.displayEmailError(isAccessCardsOptionUsed);
-				logger.error('Error occurred while email lookup: ' + error.message);
-				Options.onError(new WidgetError("CLICK_TO_PAY", "emailIdLookup", "Error occurred while email lookup"));
-			});
+					logger.error('Error occurred while email lookup: ' + error.message);
+					Options.onError(new WidgetError("CLICK_TO_PAY", "emailIdLookup", "Error occurred while email lookup"));
+				});
 		} else {
 			if (!isAccessCardsOptionUsed) {
 				ClickToPayPaymentWidget.spinner.stop();
@@ -51022,40 +51077,44 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var $emailInput = clickToPayForm[0].getElementsByClassName('wpwl-control wpwl-control-clickToPayAccessMyCards');
 		var validationErrors = {};
 		if (isAccessCardsOptionUsed) {
-			validationErrors = Util.extend(validationErrors, {clickToPayCustomerNotPresent: $emailInput});
+			validationErrors = Util.extend(validationErrors, {
+				clickToPayCustomerNotPresent: $emailInput
+			});
 			PaymentView.generateErrorRow(validationErrors);
 		} else {
 			ClickToPayPaymentWidget.spinner.stop();
-			validationErrors = Util.extend(validationErrors, {clickToPayCustomerNotPresent: clickToPayForm});
+			validationErrors = Util.extend(validationErrors, {
+				clickToPayCustomerNotPresent: clickToPayForm
+			});
 			PaymentView.generateErrorRow(validationErrors);
 		}
 	};
 
 	/** requestOTP on default channel first time as it varies for different scheme network
-	* for other time, request OTP on requested channels
-	*/
+	 * for other time, request OTP on requested channels
+	 */
 	ClickToPayPaymentWidget.requestOtp = function(isFirstCall, requestedChannel) {
 		var initiateValidationPromise;
 		if (!isFirstCall) {
 			var requestedValidationChannel = {
-											"requestedValidationChannelId": requestedChannel
-										};
-			initiateValidationPromise = new Promise(function (resolve) {
+				"requestedValidationChannelId": requestedChannel
+			};
+			initiateValidationPromise = new Promise(function(resolve) {
 				resolve(clickToPay.initiateValidation(requestedValidationChannel));
 			});
 		} else {
-			initiateValidationPromise = new Promise(function (resolve) {
+			initiateValidationPromise = new Promise(function(resolve) {
 				resolve(clickToPay.initiateValidation());
 			});
 		}
 
 		initiateValidationPromise
-		.then(function(result) {
-			ClickToPayPaymentWidget.addSrcOtpInput(result);
-		}).catch(function(error) {
-			logger.error('Error occurred while requesting OTP: ' + error.message);
-			Options.onError(new WidgetError("CLICK_TO_PAY", "requestOtp", "Error occurred while requesting OTP."));
-		});
+			.then(function(result) {
+				ClickToPayPaymentWidget.addSrcOtpInput(result);
+			}).catch(function(error) {
+				logger.error('Error occurred while requesting OTP: ' + error.message);
+				Options.onError(new WidgetError("CLICK_TO_PAY", "requestOtp", "Error occurred while requesting OTP."));
+			});
 	};
 
 	/** add SRC OTP input UI component and add event listeners */
@@ -51067,7 +51126,21 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			$(otpInputPresent).remove();
 		}
 
-		$(clickToPayForm).after('<src-otp-input card-brands="' + ClickToPayPaymentWidget.initializedBrands + '" locale="' + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase() + '" masked-identity-value="' + result.maskedValidationChannel + '" network-id="' + result.network + '" display-cancel-option="' + Options.clickToPay.otpScreen.displayCancelOption + '" display-header="' + Options.clickToPay.otpScreen.displayHeader + '" auto-submit="' + Options.clickToPay.otpScreen.autoSubmit + '" hide-loader="' + Options.clickToPay.otpScreen.hideLoader + '" type="'  + Options.clickToPay.otpScreen.type + '"></src-otp-input>');
+		$(clickToPayForm).after('<src-otp-input' +
+			' card-brands="' + Options.clickToPay.initializedSrcCardBrands + '"' +
+			' locale=' + Locale.language + "_" + Locale.country +
+			' display-cancel-option=' + Options.clickToPay.otpScreen.displayCancelOption +
+			' masked-identity-value="' + result.maskedValidationChannel + '"' +
+			' network-id="' + result.network + '"' +
+			' display-header=' + Options.clickToPay.otpScreen.displayHeader +
+			' auto-submit=' + Options.clickToPay.otpScreen.autoSubmit +
+			' hide-loader=' + Options.clickToPay.otpScreen.hideLoader +
+			' display-remember-me=' + Options.clickToPay.otpScreen.displayRememberMe +
+			(Options.clickToPay.otpScreen.otpResendLoading ? ' otp-resend-loading=\"true\"' : '') +
+			' type="' + Options.clickToPay.otpScreen.type + '"' +
+			(Options.clickToPay.darkTheme ? ' dark' : '') +
+			' ></src-otp-input>');
+
 		var srcOtpInput = document.querySelector('src-otp-input');
 
 		ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
@@ -51084,7 +51157,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	ClickToPayPaymentWidget.addOtpChangedEventListener = function(srcOtpInput) {
-		srcOtpInput.addEventListener('otpChanged', function (obj) {
+		srcOtpInput.addEventListener('otpChanged', function(obj) {
 			ClickToPayPaymentWidget.continueForOtpInput(srcOtpInput, obj.detail);
 		});
 	};
@@ -51094,7 +51167,9 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		// continue event listener for SRC input - validate OTP
 		srcOtpInput.addEventListener('continue', function() {
 			ClickToPayPaymentWidget.validateOtp(srcOtpInput, otp);
-		}, {once: true});
+		}, {
+			once: true
+		});
 	};
 
 	/** event listener for OTP channel selection UI component */
@@ -51102,19 +51177,27 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var channels = [];
 		var i = 0;
 		if ((result.supportedValidationChannels !== undefined && result.supportedValidationChannels !== null) && result.supportedValidationChannels.length > 0) {
-			for (i=0; i < result.supportedValidationChannels.length; i++) {
+			for (i = 0; i < result.supportedValidationChannels.length; i++) {
 				var channel = result.supportedValidationChannels[i];
 				var option = {
-							identityProvider: channel.identityProvider,
-							maskedValidationChannel: channel.maskedValidationChannel,
-							identityType: channel.identityType,
-							validationChannelId: channel.validationChannelId
-						};
+					identityProvider: channel.identityProvider,
+					maskedValidationChannel: channel.maskedValidationChannel,
+					identityType: channel.identityType,
+					validationChannelId: channel.validationChannelId
+				};
 				channels.push(option);
 			}
 		}
 		$(srcOtpInput).hide();
-		$(clickToPayForm).after('<src-otp-channel-selection card-brands="' + ClickToPayPaymentWidget.initializedBrands + '" locale="' + Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase() + '" display-cancel-option="' + Options.clickToPay.otpScreen.displayCancelOption + '" display-header="' + Options.clickToPay.otpScreen.displayHeader + '" type="'  + Options.clickToPay.otpScreen.type + '"></src-otp-channel-selection>');
+		$(clickToPayForm).after('<src-otp-channel-selection' +
+			' card-brands="' + Options.clickToPay.initializedSrcCardBrands + '"' +
+			' locale=' + Locale.language + "_" + Locale.country +
+			' display-cancel-option=' + Options.clickToPay.otpScreen.displayCancelOption +
+			' display-header=' + Options.clickToPay.otpScreen.displayHeader +
+			' display-pay-another-way=' + Options.clickToPay.otpScreen.displayPayAnotherWay +
+			' type="' + Options.clickToPay.otpScreen.type + '"' +
+			(Options.clickToPay.darkTheme ? ' dark' : '') +
+			' ></src-otp-channel-selection>');
 
 		var srcChannel = document.querySelector('src-otp-channel-selection');
 		srcChannel.identityValidationChannels = channels;
@@ -51146,28 +51229,29 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	/** validate OTP entered by user for Email lookup flow
-	* if success - show card list, else show error message in OTP input component
-	*/
+	 * if success - show card list, else show error message in OTP input component
+	 */
 	ClickToPayPaymentWidget.validateOtp = function(srcOtpInput, otp) {
 		var validateParams = {
-							"value": otp
-							};
-		var validatePromise = new Promise(function (resolve) {
+			"value": otp
+		};
+		var validatePromise = new Promise(function(resolve) {
 			resolve(clickToPay.validate(validateParams));
 		});
 
 		validatePromise
-		.then(function(result) {
-			$(srcOtpInput).remove();
-			ClickToPayPaymentWidget.cards = result;
-			ClickToPayPaymentWidget.displayCards();
-		}).catch(function(error) {
-			// show error message based on reason on SRC OTP Input UI
-			srcOtpInput.setAttribute("error-reason", error.reason);
-			ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
-			logger.error('Error occurred while requesting OTP: ' + error.message);
-			Options.onError(new WidgetError("CLICK_TO_PAY", "requestOtp", "Error occurred while requesting OTP"));
-		});
+			.then(function(result) {
+				$(srcOtpInput).remove();
+				ClickToPayPaymentWidget.cards = result;
+				ClickToPayPaymentWidget.removeExistingCardList();
+				ClickToPayPaymentWidget.displayCards();
+			}).catch(function(error) {
+				// show error message based on reason on SRC OTP Input UI
+				srcOtpInput.setAttribute("error-reason", error.reason);
+				ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
+				logger.error('Error occurred while requesting OTP: ' + error.message);
+				Options.onError(new WidgetError("CLICK_TO_PAY", "requestOtp", "Error occurred while requesting OTP"));
+			});
 	};
 
 	/** display the card list and add onClick event support for all SRC cards in the list */
@@ -51180,39 +51264,39 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var srcCardList = document.querySelectorAll('src-card-list')[0];
 
 		/** to add all the received cards in src card list */
-		var loadCardsPromise = new Promise(function (resolve) {
+		var loadCardsPromise = new Promise(function(resolve) {
 			resolve(srcCardList.loadCards(ClickToPayPaymentWidget.cards));
 		});
 		loadCardsPromise
-		.then(function() {
-			ClickToPayPaymentWidget.loadCardsPromiseResolve(srcCardList);
-		}).catch(function(error) {
-			logger.error('Error occurred while loading cards: ' + error.message);
-			Options.onError(new WidgetError("CLICK_TO_PAY", "load_cards", "Error occurred while loading cards"));
-		});
+			.then(function() {
+				ClickToPayPaymentWidget.loadCardsPromiseResolve(srcCardList);
+			}).catch(function(error) {
+				logger.error('Error occurred while loading cards: ' + error.message);
+				Options.onError(new WidgetError("CLICK_TO_PAY", "load_cards", "Error occurred while loading cards"));
+			});
 	};
 
 	ClickToPayPaymentWidget.loadCardsPromiseResolve = function(srcCardList) {
 		/** timeout used as Mastercard Click to Pay SDK Library takes a bit of time to load cards.
-		* If the logic triggers before that, the script will fail and on click won't work.
-		*/
+		 * If the logic triggers before that, the script will fail and on click won't work.
+		 */
 		setTimeout(function() {
-			srcCardList.addEventListener('selectSrcDigitalCardId', function (event) {
+			srcCardList.addEventListener('selectSrcDigitalCardId', function(event) {
 				logger.info('selectSrcDigitalCardId event is triggered for card id:' + event.detail);
 				ClickToPayPaymentWidget.checkoutOfCard(event.detail);
 			});
 
-			srcCardList.addEventListener('close', function () {
+			srcCardList.addEventListener('close', function() {
 				logger.info('close event is triggered');
 				$(srcCardList).remove();
 			});
 
-			srcCardList.addEventListener('clickAddCardLink', function () {
+			srcCardList.addEventListener('clickAddCardLink', function() {
 				logger.info('clickAddCardLink event is triggered');
 				Options.onError(new WidgetError("CLICK_TO_PAY", "add_new_card", "Shopper clicked on add new card option"));
 			});
 
-			srcCardList.addEventListener("clickSignOutLink", function () {
+			srcCardList.addEventListener("clickSignOutLink", function() {
 				logger.info('clickSignOutLink event is triggered');
 				ClickToPayPaymentWidget.signOut();
 				ClickToPayPaymentWidget.isCardsFromCookies = false;
@@ -51225,39 +51309,38 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	/**
-	* To disassociate cards with the recognized device and cookies when shopper clicks on "Not my cards"
-	*/
+	 * To disassociate cards with the recognized device and cookies when shopper clicks on "Not my cards"
+	 */
 	ClickToPayPaymentWidget.signOut = function() {
-		var signOutPromise = new Promise(function (resolve) {
+		var signOutPromise = new Promise(function(resolve) {
 			resolve(clickToPay.signOut());
 		});
 
 		signOutPromise
-		.then(function(result) {
-			if (!result.recognized) {
-				logger.info("The device is disassociated from the SRC Profile ");
-			}
-		}).catch(function(error) {
-			logger.error('Error occurred while disassociating device from the SRC profile :' + error.message);
-		});
+			.then(function(result) {
+				if (!result.recognized) {
+					logger.info("The device is disassociated from the SRC Profile ");
+				}
+			}).catch(function(error) {
+				logger.error('Error occurred while disassociating device from the SRC profile :' + error.message);
+			});
 	};
 
 	ClickToPayPaymentWidget.createCardListElement = function() {
 		var cardList = '<src-card-list' +
-			' card-brands="' + ClickToPayPaymentWidget.initializedBrands + '"' +
+			' card-brands="' + Options.clickToPay.initializedSrcCardBrands + '"' +
 			' locale="' + Generate.language.toLowerCase() + "_" + Generate.country.toUpperCase() + '"' +
 			' display-cancel-option="' + Options.clickToPay.cardList.displayCancelOption + '"' +
 			' display-add-card="' + Options.clickToPay.cardList.displayAddCard + '"' +
 			' display-preferred-card="' + Options.clickToPay.cardList.displayPreferredCard + '"' +
 			' card-selection-type="' + Options.clickToPay.cardList.cardSelectionType + '"' +
 			' display-header="' + Options.clickToPay.cardList.displayHeader + '"' +
-			' display-sign-out="' + Options.clickToPay.cardList.displaySignOut + '"';
-			if (Options.clickToPay.cardList.unacceptedCard === "CREDIT" || Options.clickToPay.cardList.unacceptedCard === "DEBIT") {
-				cardList += ' unaccepted-card-type="' + Options.clickToPay.cardList.unacceptedCard + '"' +
-				'></src-card-list>';
-			} else {
-				cardList += '></src-card-list>';
-			}
+			' display-sign-out="' + Options.clickToPay.cardList.displaySignOut + '"' +
+			(Options.clickToPay.darkTheme ? ' dark' : '');
+		if (Options.clickToPay.cardList.unacceptedCard === "CREDIT" || Options.clickToPay.cardList.unacceptedCard === "DEBIT") {
+			cardList += ' unaccepted-card-type="' + Options.clickToPay.cardList.unacceptedCard + '"';
+		}
+		cardList += ' ></src-card-list>';
 		return cardList;
 	};
 
@@ -51270,62 +51353,61 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		window.childSrcWindow = srcWindow;
 
 		var checkoutRequestParams = {
-			srcDigitalCardId : id,
+			srcDigitalCardId: id,
 			windowRef: srcWindow,
-			dpaTransactionOptions : {
-				dpaLocale : Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase()
+			dpaTransactionOptions: {
+				dpaLocale: Locale.language + "_" + Locale.country
 			}
 		};
 
-		var checkoutPromise = new Promise(function (resolve) {
+		var checkoutPromise = new Promise(function(resolve) {
 			resolve(clickToPay.checkoutWithCard(checkoutRequestParams));
 		});
 
 		checkoutPromise
-		.then(function(result) {
-			srcWindow.close();
-			if (result.checkoutActionCode === "COMPLETE") {
-				ClickToPayPaymentWidget.addCustomParametersForRequest(result);
-				ClickToPayPaymentWidget.submitAjaxRequest(ClickToPayPaymentWidget.$form, false);
-			} else {
-				ClickToPayPaymentWidget.handleCheckoutActionCode(result.checkoutActionCode);
-			}
-		}).catch(function(error) {
-			srcWindow.close();
-			var srcCardList = document.querySelector('src-card-list');
-			srcCardList.setAttribute("style", "display: none;");
-			var validationErrors = {};
-			validationErrors = Util.extend(validationErrors, {clickToPayFlowError: clickToPayForm});
-			PaymentView.generateErrorRow(validationErrors);
-			logger.error("Exception occurred while checkout with card: " + error.message);
-			Options.onError(new WidgetError("CLICK_TO_PAY", "checkout_with_card", "Error occurred, cannot proceed."));
-			return;
-		});
+			.then(function(result) {
+				srcWindow.close();
+				if (result.checkoutActionCode === "COMPLETE") {
+					ClickToPayPaymentWidget.addCustomParametersForRequest(result);
+					ClickToPayPaymentWidget.submitAjaxRequest(ClickToPayPaymentWidget.$form, false);
+				} else {
+					ClickToPayPaymentWidget.handleCheckoutActionCode(result.checkoutActionCode);
+				}
+			}).catch(function(error) {
+				srcWindow.close();
+				ClickToPayPaymentWidget.removeExistingCardList();
+				var validationErrors = {};
+				validationErrors = Util.extend(validationErrors, {
+					clickToPayFlowError: clickToPayForm
+				});
+				PaymentView.generateErrorRow(validationErrors);
+				logger.error("Exception occurred while checkout with card: " + error.message);
+				Options.onError(new WidgetError("CLICK_TO_PAY", "checkout_with_card", "Error occurred, cannot proceed."));
+				return;
+			});
 	};
 
 	/**
-	* 1. COMPLETE - continue with the payment flow
-	* 2. CHANGE_CARD - refresh the card list displayed to shopper
-	* 3. SWITCH_CONSUMER - remove the existing card list and go with email lookup flow
-	* 4. ADD_CARD - to be handled by merchant to show card form
-	* 5. CANCEL - keep the payment widget as is for shopper to choose other card or different payment options
-	* 6. ERROR - remove the existing card list and log an error
-	*/
+	 * 1. COMPLETE - continue with the payment flow
+	 * 2. CHANGE_CARD - refresh the card list displayed to shopper
+	 * 3. SWITCH_CONSUMER - remove the existing card list and go with email lookup flow
+	 * 4. ADD_CARD - to be handled by merchant to show card form
+	 * 5. CANCEL - keep the payment widget as is for shopper to choose other card or different payment options
+	 * 6. ERROR - remove the existing card list and log an error
+	 */
 	ClickToPayPaymentWidget.handleCheckoutActionCode = function(checkoutActionCode) {
 		if (checkoutActionCode === "CHANGE_CARD") {
 			ClickToPayPaymentWidget.isCardsFromCookies = false;
 			ClickToPayPaymentWidget.callGetCards(true);
 		} else if (checkoutActionCode === "SWITCH_CONSUMER") {
 			ClickToPayPaymentWidget.isCardsFromCookies = false;
-			var srcCardList = document.querySelectorAll('src-card-list')[0];
-			$(srcCardList).remove();
+			ClickToPayPaymentWidget.removeExistingCardList();
 			ClickToPayPaymentWidget.emailIdLookup(Wpwl.checkout.customerEmail, true);
-		}  else if (checkoutActionCode === "ADD_CARD") {
+		} else if (checkoutActionCode === "ADD_CARD") {
 			logger.error("Shopper opted for ADD_CARD feature for CLICK_TO_PAY.");
 			Options.onError(new WidgetError("CLICK_TO_PAY", "add_new_card", "Shopper requested to add new card."));
 		} else if (checkoutActionCode === "ERROR") {
-			var cardList = document.querySelectorAll('src-card-list')[0];
-			$(cardList).remove();
+			ClickToPayPaymentWidget.removeExistingCardList();
 			logger.error("ERROR checkoutActionCode received for CLICK_TO_PAY, cannot proceed");
 			Options.onError(new WidgetError("CLICK_TO_PAY", "click_to_pay_checkout_error", "Error checkout action code received, cannot proceed."));
 		}
@@ -51342,32 +51424,34 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var checkoutRequestParams = ClickToPayPaymentWidget.createCheckoutWithNewCardRequest(response);
 		checkoutRequestParams.windowRef = srcWindow;
 
-		var checkoutPromise = new Promise(function (resolve) {
+		var checkoutPromise = new Promise(function(resolve) {
 			resolve(clickToPay.checkoutWithNewCard(checkoutRequestParams));
 		});
 
 		checkoutPromise
-		.then(function(result) {
-			srcWindow.close();
-			if (result.checkoutActionCode === "COMPLETE") {
-				ClickToPayPaymentWidget.handleCompleteActionForNewCard(result, response);
-			} else {
-				ClickToPayPaymentWidget.handleCheckoutActionCode(result.checkoutActionCode);
-			}
-		}).catch(function(error) {
-			srcWindow.close();
-			var validationErrors = {};
-			validationErrors = Util.extend(validationErrors, {clickToPayNewUserFlowError: $cardForm});
-			PaymentView.generateErrorRow(validationErrors);
-			logger.error("Exception occurred while checkout with new card: " + error.message);
-			Options.onError(new WidgetError("CLICK_TO_PAY", "checkout_with_new_card", "Error occurred, cannot proceed."));
-			return;
-		});
+			.then(function(result) {
+				srcWindow.close();
+				if (result.checkoutActionCode === "COMPLETE") {
+					ClickToPayPaymentWidget.handleCompleteActionForNewCard(result, response);
+				} else {
+					ClickToPayPaymentWidget.handleCheckoutActionCode(result.checkoutActionCode);
+				}
+			}).catch(function(error) {
+				srcWindow.close();
+				var validationErrors = {};
+				validationErrors = Util.extend(validationErrors, {
+					clickToPayNewUserFlowError: $cardForm
+				});
+				PaymentView.generateErrorRow(validationErrors);
+				logger.error("Exception occurred while checkout with new card: " + error.message);
+				Options.onError(new WidgetError("CLICK_TO_PAY", "checkout_with_new_card", "Error occurred, cannot proceed."));
+				return;
+			});
 	};
 
 	/**
-	* To add custom parameters specific to new user flow and then submit the request to backend
-	*/
+	 * To add custom parameters specific to new user flow and then submit the request to backend
+	 */
 	ClickToPayPaymentWidget.handleCompleteActionForNewCard = function(result, response) {
 		ClickToPayPaymentWidget.$form.append($.parseHTML(Generate.hiddenInput(Parameter.C2P_NEW_USER, "true")));
 		ClickToPayPaymentWidget.$form.append($.parseHTML(Generate.hiddenInput(Parameter.C2P_NEW_USER_CARD_BRAND, response.cardBrand)));
@@ -51380,9 +51464,9 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var checkoutRequestParams = {
 			encryptedCard: response.encryptedCard,
 			cardBrand: response.network,
-			dpaTransactionOptions : {
-							dpaLocale : Generate.language.toLowerCase() + "_" +  Generate.country.toUpperCase()
-						}
+			dpaTransactionOptions: {
+				dpaLocale: Locale.language + "_" + Locale.country
+			}
 		};
 		var consumer = {};
 		var mobileNumber = {};
@@ -51407,8 +51491,8 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	}
 
 	/** adds CLICK_TO_PAY specific custom parameters as received in response
-	* These are required in backend processing to get the DPAN/ FPAN data
-	*/
+	 * These are required in backend processing to get the DPAN/ FPAN data
+	 */
 	ClickToPayPaymentWidget.addCustomParametersForRequest = function(result) {
 		ClickToPayPaymentWidget.addConfigCustomParameters();
 		ClickToPayPaymentWidget.$form.append($.parseHTML(Generate.hiddenInput(Parameter.C2P_MERCHANT_TX_ID, result.headers["merchant-transaction-id"])));
@@ -51422,21 +51506,20 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	/** Add RIRO values for Click to Pay Config as custom parameters
-	* 1. To skip multiple calls to fetch the value
-	* 2. To use the same value in API call as we use in init() call and not change as per CTPE dispatching and different channel used
-	*/
+	 * 1. To skip multiple calls to fetch the value
+	 * 2. To use the same value in API call as we use in init() call and not change as per CTPE dispatching and different channel used
+	 */
 	ClickToPayPaymentWidget.addConfigCustomParameters = function() {
 		ClickToPayPaymentWidget.$form.append($.parseHTML(Generate.hiddenInput(Parameter.C2P_DPA_ID, Wpwl.checkout.config.clickToPayConfig.dpaId)));
 		ClickToPayPaymentWidget.$form.append($.parseHTML(Generate.hiddenInput(Parameter.C2P_DYNAMIC_DATA_TYPES, JSON.stringify(Wpwl.checkout.config.clickToPayConfig.dynamicDataType))));
 	};
 
 	/** calls when shopper selects CLICK_TO_PAY brand option
-	* If device and cookies recognized, we simply display the card list
-	* If device is not recognized and email in the checkout request is enrolled then request OTP
-	*/
-	ClickToPayPaymentWidget.submitRequest = function(selectedPaymentForm) {
-		var formClassSelector = ClickToPayPaymentWidget.returnClassSelector($(selectedPaymentForm).attr('class'));
-		ClickToPayPaymentWidget.$form = $(formClassSelector);
+	 * If device and cookies recognized, we simply display the card list
+	 * If device is not recognized and email in the checkout request is enrolled then request OTP
+	 */
+	ClickToPayPaymentWidget.submitRequest = function() {
+		ClickToPayPaymentWidget.initializeClickToPayPaymentWidgetForm();
 		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
 		// remove ERROR_CLASS if any before submitting payment
 		PaymentView.removeErrorClassAndMessage(clickToPayForm);
@@ -51446,12 +51529,20 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			ClickToPayPaymentWidget.requestOtp(true, null);
 		} else {
 			var validationErrors = {};
-			validationErrors = Util.extend(validationErrors, {clickToPayFlowError: clickToPayForm});
+			validationErrors = Util.extend(validationErrors, {
+				clickToPayFlowError: clickToPayForm
+			});
 			PaymentView.generateErrorRow(validationErrors);
 			logger.error("Click to Pay cannot proceed as not possible workflow, please try with different email address or new user flow.");
 			Options.onError(new WidgetError("CLICK_TO_PAY", "payment_error", "Error occurred, cannot proceed."));
 		}
 		return false;
+	};
+
+	ClickToPayPaymentWidget.initializeClickToPayPaymentWidgetForm = function() {
+		var selectedPaymentForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
+		var formClassSelector = ClickToPayPaymentWidget.returnClassSelector($(selectedPaymentForm).attr('class'));
+		ClickToPayPaymentWidget.$form = $(formClassSelector);
 	};
 
 	ClickToPayPaymentWidget.returnClassSelector = function(classList) {
@@ -51480,15 +51571,15 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var spinner = new Spinner(Options.spinner).spin($container.get(0));
 		ClickToPayPaymentWidget.appendBrowserData($ajaxForm);
 		ajaxSubmitForm($ajaxForm)
-		.then(function(response) {
-			spinner.stop();
-			if (response && response.redirect && response.redirect.shortUrl) {
-				ClickToPayPaymentWidget.redirect(response.redirect.shortUrl, isNewCard);
-			}
-		})
-		.fail(function(reason) {
-			notifyError(reason);
-		});
+			.then(function(response) {
+				spinner.stop();
+				if (response && response.redirect && response.redirect.shortUrl) {
+					ClickToPayPaymentWidget.redirect(response.redirect.shortUrl, isNewCard);
+				}
+			})
+			.fail(function(reason) {
+				notifyError(reason);
+			});
 	};
 
 	ClickToPayPaymentWidget.appendBrowserData = function($ajaxForm) {
@@ -51509,11 +51600,11 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		}
 		$(iframe).on("load", function() {
 			// The first redirect is to OPP. The second redirect is 3D-Secure.
-			if ( ++numberOfRedirects === 2 ) {
+			if (++numberOfRedirects === 2) {
 				ClickToPayPaymentWidget.$form.hide(); // to hide CLICK_TO_PAY form
 				var nextElement = ClickToPayPaymentWidget.$form.next(); // to hide card-list and even if iframe, then will be shown again by next line
 				if (!Util.isNullOrUndefined(nextElement) && !Util.isBlank(nextElement)) {
-					 nextElement.hide();
+					nextElement.hide();
 				}
 
 				var dim = Options.threeDIframeSize;
@@ -51533,22 +51624,29 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		$submitForm.submit();
 	};
 
+	ClickToPayPaymentWidget.removeExistingCardList = function() {
+		var srcCardList = document.querySelectorAll('src-card-list')[0];
+		if (!Util.isNullOrUndefined(srcCardList)) {
+			$(srcCardList).remove();
+		}
+	};
+
 	/** submit the form via an ajax call (this would call the opp payment endpoint) */
 	function ajaxSubmitForm(form) {
 		var endpointUrl = form.attr("action");
 		var formMethod = form.attr("method");
 		var formData = form.serialize();
 		return InternalRequestCommunication.getSender()
-		.then(function(sender) {
-			return sender.send({
-				url: endpointUrl,
-				method: formMethod,
-				headers: {
-					Accept: "application/json; charset=utf-8"
-				},
-				data: formData
+			.then(function(sender) {
+				return sender.send({
+					url: endpointUrl,
+					method: formMethod,
+					headers: {
+						Accept: "application/json; charset=utf-8"
+					},
+					data: formData
+				});
 			});
-		});
 	}
 
 	/** notifies error if submitAjaxRequest fails */
@@ -51563,7 +51661,6 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 
 	return ClickToPayPaymentWidget;
 });
-
 /*global Promise*/
 define('module/FastCheckout',['require','jquery','module/Generate','module/Tracking','module/logging/LoggerFactory','module/PaymentView','module/Wpwl','module/Options','module/forms/PaymentForm'],function (require) {
 
@@ -52557,7 +52654,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				var isChecked = $clickToPayConfirmation.is(":checked");
 				if (isChecked && Options.clickToPay.isInitSuccess) {
 					var brand = getBrand($form);
-					if (Options.clickToPay.initializedBrands.indexOf(brand) > -1) {
+					if (Options.clickToPay.initializedAciBrands.indexOf(brand) > -1) {
 						console.log("Click To Pay checkbox is checked. Click to Pay flow will be used for the request");
 						Payment.updateClickToPayForm($form);
 					} else {
@@ -52821,9 +52918,6 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					}
 					else if (UpgMobilePaymentWidget.isUpgMobilePaymentBrand(brand)) {
 						return UpgMobilePaymentWidget.authorizePaymentAndLoadData(this);
-					}
-					else if (ClickToPayPaymentWidget.isClickToPayBrand(brand)) {
-						return  ClickToPayPaymentWidget.submitRequest(this);
 					}
 					else if (TrustlyInlineWidget.isTrustlyInlineFlow(brand)) {
 						return TrustlyInlineWidget.authorizePaymentAndLoadData(this);
