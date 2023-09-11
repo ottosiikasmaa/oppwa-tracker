@@ -12497,7 +12497,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 			displayOtpScreenByDefault: true,
 			displayCancelOption: true,
 			displayHeader: true,
-			type: 'overlay',
+			type: '',
 			autoSubmit: false,
 			hideLoader: false,
 			displayRememberMe: false,
@@ -12849,6 +12849,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
@@ -13203,6 +13204,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -13317,7 +13319,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
@@ -13663,7 +13666,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -13769,7 +13773,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Ungültige Email Adresse",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
@@ -14118,7 +14123,8 @@ define('module/Language',[],function(){
         			customerEmailError: "Invalid email address",
         			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
         			clickToPayInitializationError: "Click to Pay SDK not initialized",
-        			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+        			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+        			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
         			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
         			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
         			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
@@ -14465,7 +14471,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
@@ -14814,7 +14821,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -14911,7 +14919,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15008,7 +15017,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
@@ -15105,7 +15115,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15202,7 +15213,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15296,7 +15308,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15390,7 +15403,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15484,7 +15498,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15584,7 +15599,8 @@ define('module/Language',[],function(){
              customerEmailError: "Invalid email address",
              clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
              clickToPayInitializationError: "Click to Pay SDK not initialized",
-             clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+             clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
              clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
              clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
              clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15679,7 +15695,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15773,7 +15790,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15867,7 +15885,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -15976,7 +15995,8 @@ define('module/Language',[],function(){
                 customerEmailError: "Invalid email address",
                 clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
                 clickToPayInitializationError: "Click to Pay SDK not initialized",
-                clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+                clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			    clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
                 clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
                 clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
                 clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. ",
@@ -16322,7 +16342,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -16416,7 +16437,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -16510,7 +16532,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -16693,7 +16716,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -16790,7 +16814,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -16884,7 +16909,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -16992,7 +17018,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -17101,7 +17128,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -17210,7 +17238,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -17318,7 +17347,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -17426,7 +17456,8 @@ define('module/Language',[],function(){
 			customerEmailError: "Invalid email address",
 			clickToPayAccessMyCards: "Enter your email to access your Click to Pay cards",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
-			clickToPayCustomerNotPresent:     "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
+			clickToPayCustomerNotEnrolled: "This email is not registered with Click to Pay. Please re-enter the email ID again to Continue or Register with Click to Pay for faster checkout",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
 			clickToPayConfirmation: "I agree to share my card details, billing address and email with this card's scheme to protect my payment information and allow me to enroll in Click to Pay for faster checkouts. "
@@ -51865,8 +51896,8 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 							ClickToPayPaymentWidget.requestOtp(true, null);
 						}
 					} else {
-						logger.info("Customer is not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address.");
-						ClickToPayPaymentWidget.displayEmailError(isAccessCardsOptionUsed);
+						logger.info("Customer is not enrolled for Click to Pay.");
+						ClickToPayPaymentWidget.displayCustomerNotEnrolledError(isAccessCardsOptionUsed);
 					}
 				}).catch(function(error) {
 					if (!isAccessCardsOptionUsed) {
@@ -51898,6 +51929,24 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			ClickToPayPaymentWidget.spinner.stop();
 			validationErrors = Util.extend(validationErrors, {
 				clickToPayCustomerNotPresent: clickToPayForm
+			});
+			PaymentView.generateErrorRow(validationErrors);
+		}
+	};
+
+	ClickToPayPaymentWidget.displayCustomerNotEnrolledError = function(isAccessCardsOptionUsed) {
+		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
+		var $emailInput = clickToPayForm[0].getElementsByClassName('wpwl-control wpwl-control-clickToPayAccessMyCards');
+		var validationErrors = {};
+		if (isAccessCardsOptionUsed) {
+			validationErrors = Util.extend(validationErrors, {
+				clickToPayCustomerNotEnrolled: $emailInput
+			});
+			PaymentView.generateErrorRow(validationErrors);
+		} else {
+			ClickToPayPaymentWidget.spinner.stop();
+			validationErrors = Util.extend(validationErrors, {
+				clickToPayCustomerNotEnrolled: clickToPayForm
 			});
 			PaymentView.generateErrorRow(validationErrors);
 		}
@@ -52054,8 +52103,8 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 
 		validatePromise
 			.then(function(result) {
+				$(srcOtpInput).remove();
 				if (result.length > 0) {
-					$(srcOtpInput).remove();
 					ClickToPayPaymentWidget.cards = result;
 					ClickToPayPaymentWidget.removeExistingCardList();
 					ClickToPayPaymentWidget.displayCards();
