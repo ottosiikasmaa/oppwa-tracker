@@ -56553,7 +56553,7 @@ define('module/framemessaging/PreconditionIframe',['require','jquery','module/lo
 	function render(message) {
 
         console.log("precondition iframe render");
-        var $parentLayer = $(".wpwl-container-card");
+        var $parentLayer = $(".wpwl-container-card, .wpwl-container-virtualAccount-GOOGLEPAY").first();
         if ($parentLayer.length) {
 
             var host = message.data.host;
