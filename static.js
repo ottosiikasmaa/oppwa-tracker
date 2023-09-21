@@ -12449,6 +12449,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	Options.onBeforeSubmitDirectDebit = function(){return true;};
 	Options.onBeforeSubmitOnlineTransfer = function(){return true;};
 	Options.onBeforeSubmitVirtualAccount = function(){return true;};
+	Options.onBeforeSubmitInlineVirtualAccount = function(){return true;};
 	Options.onBeforeSubmitPrepayment = function(){return true;};
 	Options.onBeforeSubmitInvoice = function(){return true;};
 	Options.onBeforeSubmitOnDelivery = function(){return true;};
@@ -12718,6 +12719,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
     Options.onBeforeSubmitInvoicePromise = undefined;
     Options.onBeforeSubmitPrepaymentPromise = undefined;
     Options.onBeforeSubmitVirtualAccountPromise = undefined;
+    Options.onBeforeSubmitInlineVirtualAccountPromise = undefined;
     Options.onBeforeSubmitOnlineTransferPromise = undefined;
     Options.onBeforeSubmitDirectDebitPromise = undefined;
     Options.onBeforeSubmitOnDeliveryPromise = undefined;
@@ -45753,7 +45755,7 @@ define('module/forms/VirtualAccountPaymentForm',['require','shim/ObjectCreate','
 
 	return VirtualAccountPaymentForm;
 });
-define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement','module/SaqaUtil','module/Detection','module/Wpwl','module/BirthDate','module/OneTimePassInput'],function(require){
+define('module/Validate',['require','jquery','module/forms/CardPaymentForm','module/forms/BankAccountPaymentForm','module/Parameter','module/PaymentView','module/Setting','module/Util','module/forms/VirtualAccountPaymentForm','module/Options','module/BillingAgreement','module/SaqaUtil','module/Detection','module/Wpwl','module/BirthDate','module/OneTimePassInput','module/logging/LoggerFactory'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
@@ -45769,6 +45771,8 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	var Wpwl = require('module/Wpwl');
 	var BirthDate = require("module/BirthDate");
 	var OneTimePassInput = require('module/OneTimePassInput');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var logger = LoggerFactory.getLogger('ApplePay');
 	var Validate = {};
 
 	/**
@@ -46587,21 +46591,28 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 		var $countryCode = paymentForm.getElement("virtualAccount.holder");
 		var country = $countryCode.val();
 
+        if(!$countryCode){
+            logger.additionalLog('INFO', 'field virtualAccount.holder not found');
+        }
+        logger.additionalLog('INFO', 'holder: ' + country + ', email: ' + email);
 		if(country && !country.startsWith("00") && !country.startsWith("+")) {
 			validationErrors = Util.extend(validationErrors, {countryCodePhoneError: $countryCode.add($countryCode)});
 		}
         if (Util.isBlank(email) && Util.isBlank(mobilePhoneNumber)) {
             validationErrors = Util.extend(validationErrors, {mbwayEmailOrPhoneMandatory: $email.add($mobilePhoneNumber)});
         }
+
         if(Util.isEmpty(validationErrors)){
             if (!Util.isBlank(email)) {
                 // email has higher prio than phone number
                 $mobilePhoneNumber.remove();
+				$countryCode.remove();
             } else {
                 // email is empty, so we are sending Mobile phone number
                 $email.remove();
 				if(country){
-				    $countryCode.val(country.replace("+", "00")).change();
+				    logger.additionalLog('INFO', 'replace: + with 00' );
+				    $countryCode.val(country.replace("+", "00"));
 				}
             }
         }
@@ -49653,7 +49664,8 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
         failureCallbackUrl: null,
         parentDivClassSelector: null,
         paymentBrand: null,
-        accountDiscoveryTxId: null
+        accountDiscoveryTxId: null,
+        onBeforeSubmitPromiseFlag: false
     };
 
     KlarnaPaymentsInlineWidget.isKlarnaBrand = function(brand) {
@@ -49904,21 +49916,96 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
         return document.getElementById("button-klarna-div-" + paymentBrand);
     }
 
-    function createSubmitButton() {
+    KlarnaPaymentsInlineWidget.createSubmitButton = function() {
         var buttonObj = document.createElement("BUTTON");
         buttonObj.innerHTML = "SUBMIT";
-        buttonObj.className = "wpwl-button wpwl-button-pay";
-        buttonObj.onclick = function() {
-            KlarnaPaymentsInlineWidget.authorizePaymentAndSubmit();
+        buttonObj.className = "wpwl-button wpwl-button-pay klarnaInlineSubmitButton";
+        buttonObj.onclick = function(event) {
+            if(typeof Options.onBeforeSubmitInlineVirtualAccountPromise === "function") {
+                if(!KlarnaPaymentsInlineWidget.isOnBeforeSubmitPromiseFlagSet()) {
+                    var obj = {
+                        event: event,
+                        optionsOnBeforeSubmitPromise: Options.onBeforeSubmitInlineVirtualAccountPromise,
+                        elementClassName: 'button.klarnaInlineSubmitButton',
+                        submitEvent: 'click',
+                        promiseName: "onBeforeSubmitInlineVirtualAccountPromise"
+                    };
+                    KlarnaPaymentsInlineWidget.handleValidation(true, function () {
+                        KlarnaPaymentsInlineWidget.handleOnBeforeSubmitPromise(obj);
+                        event.preventDefault();
+                    });
+                }
+                else {
+                    KlarnaPaymentsInlineWidget.setOnBeforeSubmitPromiseFlag(false);
+                    KlarnaPaymentsInlineWidget.submitInlineWidget(event);
+                }
+            }
+            else {
+                KlarnaPaymentsInlineWidget.submitInlineWidget(event);
+            }
         };
         return buttonObj;
-    }
+    };
+
+    KlarnaPaymentsInlineWidget.handleValidation = function(validation, callback) {
+        if (validation && KlarnaPaymentsInlineWidget.isOnBeforeSubmitPromiseFlagSet()) {
+            KlarnaPaymentsInlineWidget.setOnBeforeSubmitPromiseFlag(false);
+            return true;
+        }
+
+        if (validation && !KlarnaPaymentsInlineWidget.isOnBeforeSubmitPromiseFlagSet()) {
+            callback();
+        }
+    };
+
+     KlarnaPaymentsInlineWidget.handleOnBeforeSubmitPromise = function(obj) {
+        var onBeforeSubmitPromise = obj.optionsOnBeforeSubmitPromise;
+
+        if (onBeforeSubmitPromise && typeof onBeforeSubmitPromise === "function") {
+            obj.event.preventDefault();
+            onBeforeSubmitPromise()
+                .then(function() {
+                    logger.info("Merchant implementation of " + obj.promiseName + " was resolved successfully.");
+                    KlarnaPaymentsInlineWidget.handleOnBeforeSubmitPromiseSuccess(obj);
+                })
+                .catch(function(errorMessage) {
+                    logger.additionalLog("ERROR", "Merchant implementation of " + obj.promiseName + " resulted in Rejection, error - " + errorMessage);
+                    Options.onError(new WidgetError("KLARNA_PAYMENTS", obj.promiseName,
+                    "Merchant implementation of " + obj.promiseName + " resulted in Rejection, cannot proceed."));
+                    KlarnaPaymentsInlineWidget.handleOnBeforeSubmitPromiseFailure();
+                });
+        }
+        else {
+            KlarnaPaymentsInlineWidget.setOnBeforeSubmitPromiseFlag(true);
+        }
+    };
+
+    KlarnaPaymentsInlineWidget.handleOnBeforeSubmitPromiseSuccess = function(obj) {
+        KlarnaPaymentsInlineWidget.setOnBeforeSubmitPromiseFlag(true);
+        $(obj.elementClassName).trigger(obj.submitEvent);
+    };
+
+    KlarnaPaymentsInlineWidget.handleOnBeforeSubmitPromiseFailure = function() {
+        KlarnaPaymentsInlineWidget.setOnBeforeSubmitPromiseFlag(false);
+        if(typeof Options.onBeforeSubmitPromiseRejectCallback === "function") {
+            Options.onBeforeSubmitPromiseRejectCallback();
+        }
+    };
+
+    KlarnaPaymentsInlineWidget.handleOnBeforeSubmitInlineVirtualAccount = function(event) {
+        if(typeof Options.onBeforeSubmitInlineVirtualAccount === "function") {
+            if( Options.onBeforeSubmitInlineVirtualAccount.call(this, event) === false || event.isDefaultPrevented()){
+                return false;
+            }
+        }
+        return true;
+    };
 
     KlarnaPaymentsInlineWidget.doOnKlarnaWidgetLoaded = function (loadWidgetResponse) {
         if (loadWidgetResponse.show_form === true && !(loadWidgetResponse.error)) {
             try {
                 var submitButtonParent = createSubmitButtonParent(this.paymentBrand, this.parentDivClassSelector);
-                submitButtonParent.appendChild(createSubmitButton());
+                submitButtonParent.appendChild(KlarnaPaymentsInlineWidget.createSubmitButton());
                 Options.onReadyExternal({ externalBrand : this.paymentBrand, message : this.paymentBrand + " is loaded." });
             } catch (e) {
                 logger.error('Cannot create the submit button because an error occurred! ' + toLoggableValue(e));
@@ -49933,6 +50020,13 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
                 logMessage: errorLog,
                 onErrorEventName: 'auth_rejected'
             });
+        }
+    };
+
+    KlarnaPaymentsInlineWidget.submitInlineWidget = function (event) {
+        if( KlarnaPaymentsInlineWidget.handleOnBeforeSubmitInlineVirtualAccount(event) !== false)
+        {
+            KlarnaPaymentsInlineWidget.authorizePaymentAndSubmit();
         }
     };
 
@@ -50023,6 +50117,14 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
                 this.redirectToFailureUrl("unspecifiedBehavior");
             }
         }
+    };
+
+    KlarnaPaymentsInlineWidget.isOnBeforeSubmitPromiseFlagSet = function() {
+        return !!this.onBeforeSubmitPromiseFlag;
+    };
+
+    KlarnaPaymentsInlineWidget.setOnBeforeSubmitPromiseFlag = function(value) {
+        this.onBeforeSubmitPromiseFlag = value;
     };
 
     // Everything is good, Klarna approved the transaction so for us is successful as well
@@ -53597,7 +53699,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 				})
 				.then(function(isValid){
 					if (isValid && Options.onBeforeSubmitCard.call(form, event)) {
-					    if($.isFunction(Options.onBeforeSubmitCardPromise)) {
+					    if(typeof Options.onBeforeSubmitCardPromise === "function") {
                             Options.onBeforeSubmitCardPromise()
                                     .then(function() {
                                         logger.info("Merchant implementation of onBeforeSubmitCardPromise was resolved successfully.");
@@ -53717,7 +53819,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			Payment.validateForm = function(obj){
 				var isValid = false;
 
-				if($.isFunction(obj.optionsValidateFunc))
+				if(typeof obj.optionsValidateFunc === "function")
 				{
 					// use external validation
 					isValid = obj.optionsValidateFunc.call(this);
@@ -53964,7 +54066,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
                     return false;
                 }
 
-                if ($.isFunction(Options.onBeforeSubmitOnlineTransferPromise)) {
+                if (typeof Options.onBeforeSubmitOnlineTransferPromise === "function") {
                     var brand = $(this).closest("form").find('[name="paymentBrand"]').val();
                     var classSelector = 'form.wpwl-form-onlineTransfer' + '-' + brand;
 
@@ -53987,7 +54089,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 			});
 
 			$(document).on('submit.wpwlEvent', 'form.wpwl-form-virtualAccount', function(event){
-                if($.isFunction(Options.onBeforeSubmitVirtualAccountPromise)) {
+                if(typeof Options.onBeforeSubmitVirtualAccountPromise === "function") {
                     if(!Payment.isOnBeforeSubmitPromiseFlagSet()) {
                         var brand = $(this).closest("form").find('[name="paymentBrand"]').val();
                         var classSelector = 'form.wpwl-form-virtualAccount' + '-' + brand;
@@ -54025,7 +54127,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
             Payment.handleAndAttachSubmitEventHandler = function(selector, validateFn, onBeforeSubmitPromise, promiseName, appendBrand) {
                 $(document).on('submit.wpwlEvent', selector, function(event) {
                     var validation = validateFn.call(this, event);
-                    if ($.isFunction(onBeforeSubmitPromise)) {
+                    if (typeof onBeforeSubmitPromise === "function") {
                         if (!validation) {
                             return false;
                         }
@@ -54426,7 +54528,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
     Payment.handleOnBeforeSubmitPromise = function(obj) {
         var onBeforeSubmitPromise = obj.optionsOnBeforeSubmitPromise;
 
-        if (onBeforeSubmitPromise && $.isFunction(onBeforeSubmitPromise)) {
+        if (onBeforeSubmitPromise && typeof onBeforeSubmitPromise === "function") {
             obj.event.preventDefault();
             onBeforeSubmitPromise()
                 .then(function() {
@@ -54452,13 +54554,13 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 
     Payment.handleOnBeforeSubmitPromiseFailure = function() {
         Payment.setOnBeforeSubmitPromiseFlag(false);
-        if($.isFunction(Options.onBeforeSubmitPromiseRejectCallback)) {
+        if(typeof Options.onBeforeSubmitPromiseRejectCallback === "function") {
             Options.onBeforeSubmitPromiseRejectCallback();
         }
     };
 
     Payment.handleOnBeforeCardSubmitPromiseFailure = function() {
-        if($.isFunction(Options.onBeforeSubmitPromiseRejectCallback)) {
+        if(typeof Options.onBeforeSubmitPromiseRejectCallback === "function") {
             Options.onBeforeSubmitPromiseRejectCallback();
         }
     };
