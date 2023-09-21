@@ -49994,9 +49994,8 @@ define('module/integrations/KlarnaPaymentsInlineWidget',['require','jquery','mod
 
     KlarnaPaymentsInlineWidget.handleOnBeforeSubmitInlineVirtualAccount = function(event) {
         if(typeof Options.onBeforeSubmitInlineVirtualAccount === "function") {
-            if( Options.onBeforeSubmitInlineVirtualAccount.call(this, event) === false || event.isDefaultPrevented()){
-                return false;
-            }
+            return Options.onBeforeSubmitInlineVirtualAccount.call(this, event) !== false &&
+                (typeof event !== 'undefined' && !event.defaultPrevented);
         }
         return true;
     };
