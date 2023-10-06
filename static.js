@@ -11295,7 +11295,7 @@ define('module/Parameter',[],function(){
     Parameter.GIFT_CARD_CVV_GEN = 'giftCard.pin';
     Parameter.GIFT_CARD_HOLDER_GEN = 'giftCard.holder';
 
-    Parameter.OTP_PIN = "otpPin";
+    Parameter.OTP_PIN = "virtualAccount.accountPin";
 
     Parameter.WIDGET_BIRTH_DATE = 'widgetBirthDate';
     Parameter.ACI_INSTANTPAY_COUNTRY = 'customParameters[ACI_INSTANTPAY.COUNTRY]';
@@ -12507,7 +12507,8 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 		},
 		srcMark: {
 			height: '40',
-			width: '200'
+			width: '200',
+			darkTheme: true
 		},
 		learnMore: {
 			displayCloseButton: true,
@@ -38189,18 +38190,18 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 	Generate.renderClickToPay = function() {
 		var logo = Generate.string(Generate.groupStart("brand"), Generate.logo("CLICK_TO_PAY"), Generate.groupEnd());
 		var customerEmail = generateInputElement({setup:"clickToPayAccessMyCards", inputName:Parameter.C2P_CONSUMER_EMAIL});
-		var submitButton = Generate.string(Generate.outerHtml(
-								$("<button/>", {
-									"class": "wpwl-button wpwl-button-pay",
-									"text": I18n.nextStep,
-									"type": "button",
-									"aria-label": I18n.nextStep,
-									"id": "wpwl-button-c2pAccessCards"
-								})
-							));
-		return Generate.string(logo, customerEmail, submitButton);
+		var continueButton = Generate.string(Generate.groupStart("continue"), Generate.outerHtml(
+							$("<button/>", {
+								"class": "wpwl-button wpwl-button-continue",
+								"text": I18n.nextStep,
+								"type": "button",
+								"aria-label": I18n.nextStep,
+								"id": "wpwl-button-c2pAccessCards"
+							})
+					), Generate.groupEnd());
+		return Generate.string(logo, customerEmail, continueButton);
 	};
-	
+
 	Generate.templateEngine = function(template, data){
 		for(var key in data){
 			/* istanbul ignore else */
@@ -45869,9 +45870,9 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	};
 
 	Validate.validateOtpInput = function(paymentForm) {
-		var input = paymentForm.getElement("otpPin");
-		if ( !Validate.validateNumber( input.val(), 6 ) ) {
-			return { pinEmptyError: input };
+		var $input = paymentForm.getElement("virtualAccount.accountPin");
+		if ( !Validate.validateNumber( $input.val(), 6 ) ) {
+			return { pinEmptyError: $input };
 	  }
 	};
 
@@ -51760,7 +51761,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			' height=' + Options.clickToPay.srcMark.height +
 			' width=' + Options.clickToPay.srcMark.width +
 			' locale=' + Locale.language + "_" + Locale.country +
-			' theme=' + (Options.clickToPay.darkTheme ? 'light' : 'dark') +
+			(ClickToPayPaymentWidget.isDarkTheme(Options.clickToPay.srcMark.darkTheme) ? ' dark' : '') +
 			' ></src-mark>';
 	};
 
@@ -52089,7 +52090,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			$(otpInputPresent).remove();
 		}
 
-		$(clickToPayForm).after('<src-otp-input' +
+		$(clickToPayForm).append('<src-otp-input' +
 			' card-brands="' + Options.clickToPay.initializedSrcCardBrands + '"' +
 			' locale=' + Locale.language + "_" + Locale.country +
 			' display-cancel-option=' + Options.clickToPay.otpScreen.displayCancelOption +
@@ -52101,7 +52102,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			' display-remember-me=' + Options.clickToPay.otpScreen.displayRememberMe +
 			(Options.clickToPay.otpScreen.otpResendLoading ? ' otp-resend-loading=\"true\"' : '') +
 			' type="' + Options.clickToPay.otpScreen.type + '"' +
-			(Options.clickToPay.darkTheme ? ' dark' : '') +
+			(ClickToPayPaymentWidget.isDarkTheme(Options.clickToPay.darkTheme) ? ' dark' : '') +
 			' ></src-otp-input>');
 
 		var srcOtpInput = document.querySelector('src-otp-input');
@@ -52152,14 +52153,14 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			}
 		}
 		$(srcOtpInput).hide();
-		$(clickToPayForm).after('<src-otp-channel-selection' +
+		$(clickToPayForm).append('<src-otp-channel-selection' +
 			' card-brands="' + Options.clickToPay.initializedSrcCardBrands + '"' +
 			' locale=' + Locale.language + "_" + Locale.country +
 			' display-cancel-option=' + Options.clickToPay.otpScreen.displayCancelOption +
 			' display-header=' + Options.clickToPay.otpScreen.displayHeader +
 			' display-pay-another-way=' + Options.clickToPay.otpScreen.displayPayAnotherWay +
 			' type="' + Options.clickToPay.otpScreen.type + '"' +
-			(Options.clickToPay.darkTheme ? ' dark' : '') +
+			(ClickToPayPaymentWidget.isDarkTheme(Options.clickToPay.darkTheme) ? ' dark' : '') +
 			' ></src-otp-channel-selection>');
 
 		var srcChannel = document.querySelector('src-otp-channel-selection');
@@ -52226,7 +52227,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
 		var isCardListPresent = document.querySelectorAll('src-card-list')[0];
 		if (isCardListPresent === undefined || isCardListPresent === null) {
-			$(clickToPayForm).after(ClickToPayPaymentWidget.createCardListElement());
+			$(clickToPayForm).append(ClickToPayPaymentWidget.createCardListElement());
 		}
 		var srcCardList = document.querySelectorAll('src-card-list')[0];
 
@@ -52303,7 +52304,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			' card-selection-type="' + Options.clickToPay.cardList.cardSelectionType + '"' +
 			' display-header="' + Options.clickToPay.cardList.displayHeader + '"' +
 			' display-sign-out="' + Options.clickToPay.cardList.displaySignOut + '"' +
-			(Options.clickToPay.darkTheme ? ' dark' : '');
+			(ClickToPayPaymentWidget.isDarkTheme(Options.clickToPay.darkTheme) ? ' dark' : '');
 		if (Options.clickToPay.cardList.unacceptedCard === "CREDIT" || Options.clickToPay.cardList.unacceptedCard === "DEBIT") {
 			cardList += ' unaccepted-card-type="' + Options.clickToPay.cardList.unacceptedCard + '"';
 		}
@@ -52596,6 +52597,10 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		if (!Util.isNullOrUndefined(srcCardList)) {
 			$(srcCardList).remove();
 		}
+	};
+
+	ClickToPayPaymentWidget.isDarkTheme = function(theme) {
+		return theme === true || theme === 'true';
 	};
 
 	/** submit the form via an ajax call (this would call the opp payment endpoint) */
