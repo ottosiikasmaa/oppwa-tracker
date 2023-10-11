@@ -11295,7 +11295,7 @@ define('module/Parameter',[],function(){
     Parameter.GIFT_CARD_CVV_GEN = 'giftCard.pin';
     Parameter.GIFT_CARD_HOLDER_GEN = 'giftCard.holder';
 
-    Parameter.OTP_PIN = "virtualAccount.accountPin";
+    Parameter.OTP_PIN = "otpPin";
 
     Parameter.WIDGET_BIRTH_DATE = 'widgetBirthDate';
     Parameter.ACI_INSTANTPAY_COUNTRY = 'customParameters[ACI_INSTANTPAY.COUNTRY]';
@@ -45870,9 +45870,9 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	};
 
 	Validate.validateOtpInput = function(paymentForm) {
-		var $input = paymentForm.getElement("virtualAccount.accountPin");
-		if ( !Validate.validateNumber( $input.val(), 6 ) ) {
-			return { pinEmptyError: $input };
+		var input = paymentForm.getElement("otpPin");
+		if ( !Validate.validateNumber( input.val(), 6 ) ) {
+			return { pinEmptyError: input };
 	  }
 	};
 
