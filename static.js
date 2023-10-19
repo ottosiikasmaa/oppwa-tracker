@@ -11295,7 +11295,7 @@ define('module/Parameter',[],function(){
     Parameter.GIFT_CARD_CVV_GEN = 'giftCard.pin';
     Parameter.GIFT_CARD_HOLDER_GEN = 'giftCard.holder';
 
-    Parameter.OTP_PIN = "otpPin";
+    Parameter.OTP_PIN = "virtualAccount.accountPin";
 
     Parameter.WIDGET_BIRTH_DATE = 'widgetBirthDate';
     Parameter.ACI_INSTANTPAY_COUNTRY = 'customParameters[ACI_INSTANTPAY.COUNTRY]';
@@ -12508,7 +12508,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 		srcMark: {
 			height: '40',
 			width: '200',
-			darkTheme: true
+			darkTheme: false
 		},
 		learnMore: {
 			displayCloseButton: true,
@@ -45870,9 +45870,9 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	};
 
 	Validate.validateOtpInput = function(paymentForm) {
-		var input = paymentForm.getElement("otpPin");
-		if ( !Validate.validateNumber( input.val(), 6 ) ) {
-			return { pinEmptyError: input };
+		var $input = paymentForm.getElement("virtualAccount.accountPin");
+		if ( !Validate.validateNumber( $input.val(), 6 ) ) {
+			return { pinEmptyError: $input };
 	  }
 	};
 
@@ -52567,6 +52567,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			iframe = document.querySelectorAll('[name^="virtualAccount-CLICK_TO_PAY_"]')[0];
 		}
 		$(iframe).on("load", function() {
+
 			// The first redirect is to OPP. The second redirect is 3D-Secure.
 			if (++numberOfRedirects === 2) {
 				ClickToPayPaymentWidget.$form.hide(); // to hide CLICK_TO_PAY form
@@ -52574,7 +52575,6 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				if (!Util.isNullOrUndefined(nextElement) && !Util.isBlank(nextElement)) {
 					nextElement.hide();
 				}
-
 				var dim = Options.threeDIframeSize;
 				$(iframe).width(dim.width);
 				$(iframe).height(dim.height);
@@ -52586,7 +52586,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var $submitForm = $("<form/>", {
 			action: url,
 			method: "GET",
-			target: ClickToPayPaymentWidget.$form.parent().attr("id")
+			target: Options.paymentTarget ? Options.paymentTarget : ClickToPayPaymentWidget.$form.parent().attr("id")
 		});
 		ClickToPayPaymentWidget.$form.before($submitForm);
 		$submitForm.submit();
