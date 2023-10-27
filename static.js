@@ -53066,6 +53066,12 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		// add extra hidden fields
 		.append(Generate.generateExtraHiddenFields());
 
+		// If we have SAQA, remove submit button but keep "wpwl-group-submit" so that billing address is rendered.
+		if (SaqaUtil.isSAQACompliance()) {
+			$form.find('.wpwl-group-submit').html("");
+			$form.find('.wpwl-group-submit').hide();
+		}
+
 		// build Payment
 		$container
 		.append($form)
@@ -53085,7 +53091,6 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		if (SaqaUtil.isSAQACompliance()) {
 			paymentData = $.extend({}, paymentData, Setting.cardPaymentBasicSAQA);
 			paymentData.brand.hidden=true;
-			delete paymentData.submit;
 			Options.brandDetectionType = 'binlist';
 		}
 		return paymentData;
