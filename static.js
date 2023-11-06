@@ -45787,7 +45787,7 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	var BirthDate = require("module/BirthDate");
 	var OneTimePassInput = require('module/OneTimePassInput');
     var LoggerFactory = require('module/logging/LoggerFactory');
-    var logger = LoggerFactory.getLogger('Validate');
+    var logger = LoggerFactory.getLogger('ApplePay');
 	var Validate = {};
 
 	/**
@@ -55909,8 +55909,14 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
 
     // triggered after user approves payment within PayPal popup
     PaypalRestPaymentForm.prototype.onApprove = function(data, actions) {
-        Options.paypal.onApprove.call(data, actions);
-        return this.redirect(actions);
+        var wpwlOnApprove = Options.paypal.onApprove;
+        if (typeof wpwlOnApprove !== 'function') {
+            return this.redirect(actions);
+        }
+        return Promise.resolve(wpwlOnApprove(data))
+            .then(function () {
+                return this.redirect(actions);
+            }.bind(this));
     };
 
     PaypalRestPaymentForm.prototype.onError = function(error) {
