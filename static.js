@@ -11295,7 +11295,7 @@ define('module/Parameter',[],function(){
     Parameter.GIFT_CARD_CVV_GEN = 'giftCard.pin';
     Parameter.GIFT_CARD_HOLDER_GEN = 'giftCard.holder';
 
-    Parameter.OTP_PIN = "otpPin";
+    Parameter.OTP_PIN = "virtualAccount.accountPin";
 
     Parameter.WIDGET_BIRTH_DATE = 'widgetBirthDate';
     Parameter.ACI_INSTANTPAY_COUNTRY = 'customParameters[ACI_INSTANTPAY.COUNTRY]';
@@ -12416,6 +12416,9 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 	//target iframe for Vipps QR
     Options.vippsQr = {width: '100%', height: '500px'};
 
+    //target iframe for Blik spinner
+    Options.blikSpinner = {width: '100%', height: '500px'};
+
 	// cvv
 	Options.requireCvv = true; // By default - cvv field should be displayed in the form (remark: name of this parameter can be deceiving).
 	Options.allowEmptyCvv = false; // By default - cvv should not be empty.
@@ -12508,7 +12511,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 		srcMark: {
 			height: '40',
 			width: '200',
-			darkTheme: true
+			darkTheme: false
 		},
 		learnMore: {
 			displayCloseButton: true,
@@ -12649,6 +12652,17 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
     Options.paypal = {
     	clientId: '', //is set in the PaypalRestPaymentForm
 		intent: 'authorize'
+	};
+
+	Options.afterPay = {
+	    isCashApp: false,
+	    mobileRedirectUrl: "https://docs.oppwa.com/",
+	    cashAppButton: {
+            size: 'small', // "medium" | "small"
+            width: 'full', // "full" | "static"
+            theme: 'dark', // "dark" | "light"
+            shape: 'round' // "round" | "semiround"
+        }
 	};
 
 	Options.forter = {
@@ -45870,9 +45884,9 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
 	};
 
 	Validate.validateOtpInput = function(paymentForm) {
-		var input = paymentForm.getElement("otpPin");
-		if ( !Validate.validateNumber( input.val(), 6 ) ) {
-			return { pinEmptyError: input };
+		var $input = paymentForm.getElement("virtualAccount.accountPin");
+		if ( !Validate.validateNumber( $input.val(), 6 ) ) {
+			return { pinEmptyError: $input };
 	  }
 	};
 
@@ -50668,7 +50682,7 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
                         countryCode: createSessionResponse.region,
                         successCallbackUrl: createSessionResponse.callbackUrl,
                         failureCallbackUrl: createSessionResponse.failureCallbackUrl
-                    });
+                    }, $form);
 
                 } else {
                     logger.error("No token for widget rendering, cannot proceed.");
@@ -50700,9 +50714,11 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
     }
 
 
-    AfterPayPacificPaymentWidget.initializeAndLoadAfterPayPacificWidget = function(params) {
+    AfterPayPacificPaymentWidget.initializeAndLoadAfterPayPacificWidget = function(params, $form) {
         var AfterPay = window.AfterPay;
         var country = params.countryCode;
+        var isCashApp = Options.afterPay.isCashApp;
+        var mobileRedirectUrl = Options.afterPay.mobileRedirectUrl;
         
         if (AfterPay) {
             try {
@@ -50712,40 +50728,56 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
                     country = 'GB';
                 }
 
-                AfterPay.initialize({
-                    countryCode: country
-                });
-
-                if (InlineFlow.isInlineFlow(this.paymentBrand)) {
-
-                    AfterPay.open();
-
-                    // If you don't already have an order token at this point, you can
-                    // AJAX to your backend to retrieve one here. The spinning animation
-                    // will continue until `AfterPay.transfer` is called.
-                    AfterPay.onComplete = function(event) {
-                        console.log("Received event: " + JSON.stringify(event));
-
-                        if (event.data.status === 'SUCCESS') {
-                            // The customer confirmed the payment schedule.
-                            // The token is now ready to be captured from your server backend.
-                            redirectBrowserTo(params.successCallbackUrl);
-                        } else {
-                            // The customer cancelled the payment or closed the popup window.
-                            redirectBrowserTo(params.failureCallbackUrl);
-                        }
-                    };
-
-                    AfterPay.transfer({
-                      token: params.token,
-                      consumerLocale: Wpwl.checkout.locale
+                if (isCashApp === true) {
+                    $('<div id="cash-app-pay"></div>').appendTo($form.parent());
+                    hidePayButton();
+                    var cashAppPayOptions = createCashAppPayOptions({
+                        successCallbackUrl: params.successCallbackUrl,
+                        failureCallbackUrl: params.failureCallbackUrl,
+                        mobileRedirectUrl: mobileRedirectUrl
+                    });
+                    AfterPay.initializeForCashAppPay({
+                         countryCode: country,
+                         token: params.token,
+                         cashAppPayOptions: cashAppPayOptions
+                    });
+                }
+                else {
+                    AfterPay.initialize({
+                        countryCode: country
                     });
 
-                } else {
-                    AfterPay.redirect({
-                        token: params.token,
-                        consumerLocale: Wpwl.checkout.locale
-                    });
+                    if (InlineFlow.isInlineFlow(this.paymentBrand)) {
+
+                        AfterPay.open();
+
+                        // If you don't already have an order token at this point, you can
+                        // AJAX to your backend to retrieve one here. The spinning animation
+                        // will continue until `AfterPay.transfer` is called.
+                        AfterPay.onComplete = function(event) {
+                            console.log("Received event: " + JSON.stringify(event));
+
+                            if (event.data.status === 'SUCCESS') {
+                                // The customer confirmed the payment schedule.
+                                // The token is now ready to be captured from your server backend.
+                                redirectBrowserTo(params.successCallbackUrl);
+                            } else {
+                                // The customer cancelled the payment or closed the popup window.
+                                redirectBrowserTo(params.failureCallbackUrl);
+                            }
+                        };
+
+                        AfterPay.transfer({
+                          token: params.token,
+                          consumerLocale: Wpwl.checkout.locale
+                        });
+
+                    } else {
+                        AfterPay.redirect({
+                            token: params.token,
+                            consumerLocale: Wpwl.checkout.locale
+                        });
+                    }
                 }
 
             } catch (e) {
@@ -50765,6 +50797,33 @@ define('module/integrations/AfterPayPacificPaymentWidget',['require','jquery','m
 
     function setPayButtonDisabledStatus(disabled) {
         $(".wpwl-button-brand").prop("disabled", disabled);
+    }
+
+    function hidePayButton() {
+        $(".wpwl-button-brand").hide();
+    }
+
+    function createCashAppPayOptions(params) {
+
+         var cashAppPayOptions = {
+            button: {
+                size: Options.afterPay.cashAppButton.size,
+                width: Options.afterPay.cashAppButton.width,
+                theme: Options.afterPay.cashAppButton.theme,
+                shape: Options.afterPay.cashAppButton.shape
+            },
+            mobileRedirectUrl: params.mobileRedirectUrl,
+            onComplete: function(event) {
+                console.log("CashApp - Received event: " + JSON.stringify(event));
+                if (event.data.status === 'SUCCESS') {
+                    redirectBrowserTo(params.successCallbackUrl);
+                } else {
+                    redirectBrowserTo(params.failureCallbackUrl);
+                }
+            },
+         };
+
+        return cashAppPayOptions;
     }
 
     return AfterPayPacificPaymentWidget;
@@ -51702,6 +51761,13 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	 * update click to pay mark with merchant requested brands first and later update with initialized brands
 	 */
 	ClickToPayPaymentWidget.loadClickToPayUIKit = function(ccBrandsForClickToPay) {
+		var form = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
+		// to prevent form submission on enter key press
+		$(form).keydown(function(event) {
+			if (event.keyCode === 13) {
+				event.preventDefault();
+			}
+		});
 		ClickToPayPaymentWidget.addScriptAndLink();
 		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
 		if (clickToPayForm.length < 1) {
@@ -52052,6 +52118,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			});
 			PaymentView.generateErrorRow(validationErrors);
 		}
+		Options.onError(new WidgetError("CLICK_TO_PAY", "not_enrolled", "Email address added is not enrolled for Click to Pay"));
 	};
 
 	/** requestOTP on default channel first time as it varies for different scheme network
@@ -52561,24 +52628,28 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	ClickToPayPaymentWidget.redirect = function(url, isNewCard) {
 		var numberOfRedirects = 0;
 		var iframe;
+		var $formComponent;
 		if (isNewCard) {
+			$formComponent = ClickToPayPaymentWidget.$form;
 			iframe = ClickToPayPaymentWidget.$form.next();
 		} else {
+			$formComponent = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix')[0];
 			iframe = document.querySelectorAll('[name^="virtualAccount-CLICK_TO_PAY_"]')[0];
 		}
 		$(iframe).on("load", function() {
 			// The first redirect is to OPP. The second redirect is 3D-Secure.
 			if (++numberOfRedirects === 2) {
+				var spinner = new Spinner(Options.spinner).spin($formComponent);
 				ClickToPayPaymentWidget.$form.hide(); // to hide CLICK_TO_PAY form
 				var nextElement = ClickToPayPaymentWidget.$form.next(); // to hide card-list and even if iframe, then will be shown again by next line
 				if (!Util.isNullOrUndefined(nextElement) && !Util.isBlank(nextElement)) {
 					nextElement.hide();
 				}
-
 				var dim = Options.threeDIframeSize;
 				$(iframe).width(dim.width);
 				$(iframe).height(dim.height);
 				$(iframe).show();
+				spinner.stop();
 				Options.onLoadThreeDIframe.call($(iframe).get(0));
 			}
 		});
@@ -52586,7 +52657,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		var $submitForm = $("<form/>", {
 			action: url,
 			method: "GET",
-			target: ClickToPayPaymentWidget.$form.parent().attr("id")
+			target: Options.paymentTarget ? Options.paymentTarget : ClickToPayPaymentWidget.$form.parent().attr("id")
 		});
 		ClickToPayPaymentWidget.$form.before($submitForm);
 		$submitForm.submit();
@@ -52844,9 +52915,154 @@ define('module/integrations/VippsQrWidget',['require','jquery','module/InlineFlo
 
     return VippsQrWidget;
 });
+define('module/integrations/BlikMobileWidget',['require','jquery','module/forms/PaymentForm','module/InlineFlow','module/InternalRequestCommunication','module/Options','module/error/WidgetError','module/error/SessionError','module/logging/LoggerFactory','lib/Spinner'],function(require) {
+
+    var $ = require('jquery');
+    var PaymentForm = require('module/forms/PaymentForm');
+    var InlineFlow = require('module/InlineFlow');
+    var InternalRequestCommunication = require('module/InternalRequestCommunication');
+    var Options = require("module/Options");
+    var WidgetError = require('module/error/WidgetError');
+    var SessionError = require('module/error/SessionError');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var Spinner = require('lib/Spinner');
+    var logger = LoggerFactory.getLogger('BlikMobileWidget');
+    var BlikMobileWidget = {};
+
+    BlikMobileWidget.isBlikInlineFlow = function(brand) {
+        return InlineFlow.isInlineFlow(brand) && brand === "BLIK";
+    };
+
+    BlikMobileWidget.authorizePaymentAndLoadData = function(selectedPaymentForm) {
+        var formClassSelector = BlikMobileWidget.returnClassSelector($(selectedPaymentForm).attr('class'));
+        var form = $(formClassSelector);
+        var paymentForm = new PaymentForm(form);
+        this.paymentBrand = paymentForm.getBrand();
+
+        if (selectedPaymentForm.offsetParent) {
+            this.parentDivClassSelector = BlikMobileWidget.returnClassSelector($(selectedPaymentForm.offsetParent).attr('class'));
+        } else {
+            this.parentDivClassSelector = "";
+        }
+
+        if (BlikMobileWidget.isBlikInlineFlow(this.paymentBrand)) {
+            BlikMobileWidget.prepareAndSendTransaction(form, selectedPaymentForm, this.paymentBrand);
+            return false;
+        }
+        return true;
+    };
+
+    BlikMobileWidget.returnClassSelector = function(classList) {
+            if(classList) {
+                return "." + classList.replace(/\s+/g, ".");
+            } else {
+                return "";
+            }
+        };
+
+    BlikMobileWidget.prepareAndSendTransaction = function(form, selectedPaymentForm, brand) {
+        // show spinner
+        var $formContainer = form.parent();
+        var spinner = new Spinner(Options.spinner).spin($formContainer.get(0));
+
+        ajaxSubmitForm(form)
+            .then(function(createSessionResponse) {
+                spinner.stop();
+                if (createSessionResponse && createSessionResponse.redirect && createSessionResponse.redirect.parameters) {
+                    if (BlikMobileWidget.isBlikInlineFlow(brand)) {
+                        BlikMobileWidget.submitFormAndLoadData(selectedPaymentForm, createSessionResponse);
+                    }
+                } else {
+                    logger.error("No create session response received, cannot proceed.");
+                }
+            })
+            .fail(function(reason) {
+                notifyError(reason);
+            });
+    };
+
+   BlikMobileWidget.submitFormAndLoadData = function(selectedPaymentForm, response, brand) {
+        var paymentLink = response.redirect.url;
+        var parameters = response.redirect.parameters;
+        var txId = parameters.filter(function (x) {
+            return x.name === "txId";
+        })[0];
+        var redirectUrl = parameters.filter(function (x) {
+            return x.name === "redirectUrl";
+        })[0];
+        // check that request is successful and received required parameters in response
+        var requestNotSuccessful = !txId || txId.value === "" || !redirectUrl || redirectUrl.value === "";
+        if (requestNotSuccessful) {
+            logger.error("No payment link or parameters found for redirection, cannot proceed.");
+            $(".wpwl-button.wpwl-button-brand").removeAttr("disabled");
+            Options.onError(new WidgetError(brand, "no_session", "No payment link or parameters found for redirection, cannot proceed."));
+            return;
+        }
+
+        var dim = Options.blikSpinner;
+        var iframe = document.querySelectorAll('[name^="virtualAccount-BLIK_"]')[0];
+        iframe.setAttribute("style", "display:inline");
+        iframe.setAttribute("width", dim.width);
+        iframe.setAttribute("height", dim.height);
+        iframe.setAttribute("class", "wpwl-blik-inline");
+        iframe.setAttribute("scrolling", "no");
+
+        // create form and submit POST request to payment.link with all the received input parameters
+        if(paymentLink) {
+            this.submitHiddenForm(response, iframe.name);
+        } else {
+            logger.error("A transaction was already created. Cannot submit the hidden form, the success/failure callback url is not defined.");
+            Options.onError(new WidgetError(brand, "callback_not_def", "A transaction was already created. Cannot submit the hidden form, the success/failure callback url is not defined."));
+        }
+    };
+
+    /** Form needs to add in the parent division otherwise we see "Form submission canceled because the form is not
+    connected" error and form doesn't submit */
+    BlikMobileWidget.submitHiddenForm = function(response, target) {
+        var params = response.redirect.parameters;
+        var i;
+        var inputParam = "";
+        for (i = 0; i < params.length; i++) {
+            inputParam = inputParam + '<input name=\"' + params[i].name + '\" type=\"hidden\" value=\"' + params[i].value + '\">';
+        }
+        var formHtml = '<form id=\"blikWalletForm\" action=' + response.redirect.url + ' lang=\"en\" accept-charset=\"UTF-8\"  method=POST target=\"' + target + '\">' + inputParam + '</form>';
+        var submitForm = $(formHtml);
+        $(this.parentDivClassSelector).append(submitForm);
+        submitForm.submit();
+    };
+
+    // submit the form via an ajax call (this would call the opp payment endpoint)
+    function ajaxSubmitForm(form) {
+        var endpointUrl = form.attr("action");
+        var formMethod = form.attr("method");
+        var formData = form.serialize();
+        return InternalRequestCommunication.getSender()
+            .then(function(sender) {
+                return sender.send({
+                    url: endpointUrl,
+                    method: formMethod,
+                    headers: {
+                        Accept: "application/json; charset=utf-8"
+                    },
+                    data: formData
+                });
+            });
+    }
+
+    function notifyError(reason) {
+        logger.error("Exception occurred while submitting the form via an Ajax call. Reason: " + reason);
+        if (SessionError.isSessionTimeout(reason)) {
+            SessionError.onTimeoutError();
+        } else {
+            Options.onError(new WidgetError("Blik Mobile Payment brand", "ajax_submit_fail", "Exception occurred while submitting the form via an Ajax call. Reason: " + reason));
+        }
+    }
+
+    return BlikMobileWidget;
+});
 /*jshint camelcase: false */
 /*global MasterPass*/
-define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/AciInstantPay','module/integrations/RocketFuelInlineWidget','module/integrations/ACIPayAfterInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/integrations/VippsQrWidget','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
+define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm','module/forms/CardPaymentForm','module/forms/VirtualAccountPaymentForm','module/Generate','module/Options','module/Locale','module/Parameter','module/Setting','lib/Spinner','module/StyleLoader','module/StyleLink','module/PaymentView','module/forms/PaymentForm','module/ParentToIframeCommunication','module/State','module/Tracking','module/Util','module/Validate','module/Detection','module/WpwlOptions','module/Wpwl','module/AutoFocus','module/ApplePay','module/InternalRequestCommunication','module/SaqaUtil','module/integrations/KlarnaPaymentsInlineWidget','module/integrations/YandexCheckoutPaymentWidget','module/integrations/AfterPayPacificPaymentWidget','module/integrations/BancontactMobilePaymentWidget','module/integrations/TrustlyInlineWidget','module/AciInstantPay','module/integrations/RocketFuelInlineWidget','module/integrations/ACIPayAfterInlineWidget','module/integrations/UpgMobilePaymentWidget','module/integrations/ClickToPayPaymentWidget','module/error/WidgetError','module/FastCheckout','module/integrations/VippsQrWidget','module/integrations/BlikMobileWidget','module/ForterUtils','module/logging/LoggerFactory','module/GroupCardUtil'],function(require) {
 	var $ = require('jquery');
 	var BankAccountPaymentForm = require('module/forms/BankAccountPaymentForm');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
@@ -52888,6 +53104,7 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	var WidgetError = require("module/error/WidgetError");
 	var FastCheckout = require('module/FastCheckout');
 	var VippsQrWidget = require('module/integrations/VippsQrWidget');
+	var BlikMobileWidget = require('module/integrations/BlikMobileWidget');
 	var ForterUtils = require('module/ForterUtils');
 	var LoggerFactory = require('module/logging/LoggerFactory');
 	var GroupCardUtil = require('module/GroupCardUtil');
@@ -53066,6 +53283,13 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		// add extra hidden fields
 		.append(Generate.generateExtraHiddenFields());
 
+		// If we have SAQA, remove submit button but keep "wpwl-group-submit" so that billing address is rendered.		
+		if ( paymentName==='card' && SaqaUtil.isSAQACompliance()) {
+			$form.find('.wpwl-group-submit').html("");
+			$form.find('.wpwl-group-submit').hide();
+		}
+
+
 		// build Payment
 		$container
 		.append($form)
@@ -53085,7 +53309,6 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		if (SaqaUtil.isSAQACompliance()) {
 			paymentData = $.extend({}, paymentData, Setting.cardPaymentBasicSAQA);
 			paymentData.brand.hidden=true;
-			delete paymentData.submit;
 			Options.brandDetectionType = 'binlist';
 		}
 		return paymentData;
@@ -53904,7 +54127,10 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 					else if (VippsQrWidget.isVippsInlineFlow(brand)) {
                         return VippsQrWidget.authorizePaymentAndLoadQr(this);
                     }
-					else {
+                    else if (BlikMobileWidget.isBlikInlineFlow(brand)) {
+                        return BlikMobileWidget.authorizePaymentAndLoadData(this);
+                    }
+                    else {
 						return true;
 					}
 				}
@@ -55683,7 +55909,14 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
 
     // triggered after user approves payment within PayPal popup
     PaypalRestPaymentForm.prototype.onApprove = function(data, actions) {
-        this.redirect(actions);
+        var wpwlOnApprove = Options.paypal.onApprove;
+        if (typeof wpwlOnApprove !== 'function') {
+            return this.redirect(actions);
+        }
+        return Promise.resolve(wpwlOnApprove(data))
+            .then(function () {
+                return this.redirect(actions);
+            }.bind(this));
     };
 
     PaypalRestPaymentForm.prototype.onError = function(error) {
@@ -55720,7 +55953,7 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
             dataType: "text",
         };
 
-        PaypalRestPaymentForm.sendInternalRequestWithParams(params)
+        return PaypalRestPaymentForm.sendInternalRequestWithParams(params)
             .then(function(data) {
                 if (data && JSON.parse(data).error === 'INSTRUMENT_DECLINED') {
                     actions.restart();
@@ -59216,8 +59449,10 @@ define('module/IframeToParentCommunication',['require','jquery','lib/Channel','m
 
 		if (!this.isCardLogoStyleInjected()) {
 
-			var $logoLayer = $('<div/>').attr("id", 'cardLogoId');
-			this.$form.append($logoLayer);
+			var $logoWrapper = $('<div class="wpwl-saqa-logo-wrapper"></div>');
+			var $logoLayer = $('<div></div>').attr("id", 'cardLogoId');
+			$logoWrapper.append($logoLayer);
+			this.$form.append($logoWrapper);
 
 			this.$input.css('width', '100%');
 			this.$input.resize();
