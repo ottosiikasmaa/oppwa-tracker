@@ -12226,6 +12226,11 @@ define('module/Setting',['require','jquery','module/Parameter','text!module/json
             			name: "customer.mobile"
             		}
 			},
+            URPAY: {
+            		mobilePhone: {
+            			name: "customer.mobile"
+            		}
+			},
             CLICK_TO_PAY: {
                     func: {
                         method: "renderClickToPay"
