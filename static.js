@@ -38077,7 +38077,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 			var text = Generate.generateLabelElement(I18n.otpCode, "otp");
             var pinInput = generateInputElement({setup:"otp", inputName:Parameter.OTP_PIN, maxLength:"6"});
             var submitButton = Generate.submitButton(Generate.getSubmitButtonLabel());
-			return Generate.string(logo,text, pinInput, submitButton);
+			return Generate.string(logo, text, pinInput, submitButton);
 		}
 		var buttonWithLogo = Generate.string(Generate.groupStart("button"), Generate.buttonWithLogo(brand), Generate.groupEnd());
 		return Generate.string(buttonWithLogo);
@@ -53093,16 +53093,15 @@ define('module/integrations/BlikMobileWidget',['require','jquery','module/forms/
             } else {
                 return "";
             }
-        };
+    };
 
     BlikMobileWidget.prepareAndSendTransaction = function(form, selectedPaymentForm, brand) {
         // show spinner
         var $formContainer = form.parent();
         var spinner = new Spinner(Options.spinner).spin($formContainer.get(0));
-
+        disablePayButton(true);
         ajaxSubmitForm(form)
             .then(function(createSessionResponse) {
-                spinner.stop();
                 if (createSessionResponse && createSessionResponse.redirect && createSessionResponse.redirect.parameters) {
                     if (BlikMobileWidget.isBlikInlineFlow(brand)) {
                         BlikMobileWidget.submitFormAndLoadData(selectedPaymentForm, createSessionResponse);
@@ -53113,8 +53112,13 @@ define('module/integrations/BlikMobileWidget',['require','jquery','module/forms/
             })
             .fail(function(reason) {
                 notifyError(reason);
+                spinner.stop();
             });
     };
+
+    function disablePayButton(disabled) {
+        $(".wpwl-button-pay").prop("disabled", disabled);
+    }
 
    BlikMobileWidget.submitFormAndLoadData = function(selectedPaymentForm, response, brand) {
         var paymentLink = response.redirect.url;
