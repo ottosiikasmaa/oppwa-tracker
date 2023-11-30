@@ -12208,18 +12208,13 @@ define('module/Setting',['require','jquery','module/Parameter','text!module/json
                 }
             },
             STC_PAY: {
-				func: {
-					method: 'renderStcPay',
-					data: {
-						brand: "STC_PAY",
-						paymentMode: {i18nIdentifier: "paymentMode", name: "paymentMode", type:"textOnly"},
-						paymentModeOptions: {
-							qrcode: {name: Parameter.SHOPPER_PAYMENT_MODE, type: "radio", value: "qr_code", dataAction:"qrcode-radio-action"},
-							mobile: {name: Parameter.SHOPPER_PAYMENT_MODE, type: "radio", value: "mobile", dataAction:"mobile-radio-action"}
-						},
-						mobilePhone: { i18nIdentifier:"mobilePhone", name: Parameter.MOBILE_NUMBER, type:"text"}
-						}
-				}
+                func: {
+                    method: 'renderStcPay',
+                    data: {
+                        brand: "STC_PAY",
+                        mobilePhone: { i18nIdentifier:"mobilePhone", name: Parameter.MOBILE_NUMBER, type:"text"}
+                    }
+                }
             },
             TAMARA: {
             		mobilePhone: {
@@ -37645,27 +37640,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
         );
 	}
 
-	function generateRadioElement(obj) {
-		var result = "";
-
-		var options = obj.setup;
-		for(var i in options){
-			if (options.hasOwnProperty(i)){
-				var opt = options[i];
-				var label = I18n[i];
-				result += Generate.inputElement({name: opt.name, type: opt.type, checked: opt.checked, label: label, 
-									cssClass: "radio-" + i, value : opt.value, dataAction: opt.dataAction});
-			}
-		}
-		
-        return Generate.string(
-			Generate.groupStart("radio"),
-			result,
-			Generate.groupEnd()
-        );
-	}
-
-	 Generate.generateAutocompleteInputElement = function (parameters) {
+	Generate.generateAutocompleteInputElement = function (parameters) {
 		var label = I18n[parameters.setup];
 		return Generate.string(
 				Generate.groupStart(parameters.setup),
@@ -38313,23 +38288,15 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 
         return Generate.string(logo, token, submitButton);
 	};
-	
+
 	Generate.renderStcPay = function(data){
-		var logo = Generate.string(Generate.groupStart("brand"), Generate.logo(data.brand), Generate.groupEnd());
-		
-		var label = Generate.string(Generate.groupStart(data.paymentMode.name), I18n[data.paymentMode.name], Generate.groupEnd());
-
-		var option = generateRadioElement({setup:data.paymentModeOptions});
-		
-		var mobilePhone = generateInputElement({setup:"mobilePhone", inputName:data.mobilePhone.name, placeholder:data.mobilePhone});
-
-		mobilePhone = mobilePhone.replace(" wpwl-clearfix'>", " wpwl-clearfix' style='display: none'>");
-
+        var hidden = Generate.hiddenInput(Parameter.SHOPPER_PAYMENT_MODE, "mobile",  Parameter.SHOPPER_PAYMENT_MODE);
+        var logo = Generate.string(Generate.groupStart("brand"), Generate.logo(data.brand), Generate.groupEnd());
+        var mobilePhone = generateInputElement({setup:"mobilePhone", inputName:data.mobilePhone.name, placeholder:data.mobilePhone});
         var submitButton = Generate.submitButton(Generate.getSubmitButtonLabel());
-
-        return Generate.string(logo, label, option, mobilePhone, submitButton);
-    };
-
+        return Generate.string(logo, hidden, mobilePhone, submitButton);
+	};
+	
 	Generate.renderRedLobsterGiftCard = function(data){
 
 		var giftCardNumber = generateInputElement({setup:"giftCardNumber", inputName:data.giftCardNumber.name, placeholder:data.giftCardNumber});
@@ -47333,16 +47300,12 @@ define('module/Validate',['require','jquery','module/forms/CardPaymentForm','mod
         return Validate.validateExpiry(month, year, brand );
 	};
 	
-	Validate.validateStcPayForm = function(paymentForm){
-		var validationErrors = {};
-		var $mobileRadio = paymentForm.getElementByCssClass("wpwl-control-radio-mobile")[0];
-		var $qrcodeRadio = paymentForm.getElementByCssClass("wpwl-control-radio-qrcode")[0];
+	Validate.validateStcPayForm = function(paymentForm) {
+        var validationErrors = {};
         var $mobilePhoneNumber = paymentForm.getElementByCssClass("wpwl-control-mobilePhone");
         var mobilePhoneNumber = $mobilePhoneNumber.val();
 
-		if (!$mobileRadio.checked && !$qrcodeRadio.checked) {
-			validationErrors = Util.extend(validationErrors, {noSelectionError: $mobileRadio});
-		} else if ($mobileRadio.checked && Util.isBlank(mobilePhoneNumber)) {
+        if (Util.isBlank(mobilePhoneNumber)) {
             validationErrors = Util.extend(validationErrors, {mobilePhoneError: $mobilePhoneNumber});
         }
         return validationErrors;
@@ -53804,33 +53767,6 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 		//adjust DD paymentBrand, e.g. change DIRECTDEBIT to DIRECTDEBIT_DE
 		$(document).on('change.wpwlEvent', 'form.wpwl-form-directDebit select[name="' + Parameter.BANKACCOUNT_COUNTRY + '"]', function(){
 			PaymentView.adjustDirectDebitPaymentBrand.call(this);
-		});
-
-		$(document).on('click.wpwlEvent change.wpwlEvent', 'form.wpwl-form-virtualAccount [data-action=\"mobile-radio-action\"]', function(){
-			var $form = $("form.wpwl-form.wpwl-form-virtualAccount.wpwl-form-virtualAccount-STC_PAY");
-			var $mobileRadio = $form.find(".wpwl-control-radio-mobile")[0];
-			var $qrCodeRadio = $form.find(".wpwl-control-radio-qrcode")[0];
-
-			if ($mobileRadio.checked){
-				PaymentView.hideOrShowElement($form, ".wpwl-group-mobilePhone", false);
-				$qrCodeRadio.checked = false;
-				Payment.removeValidationError.call($(".wpwl-control-radio-mobile." + HAS_ERROR_CLASS).first());
-			}
-		});
-
-		$(document).on('click.wpwlEvent change.wpwlEvent', 'form.wpwl-form-virtualAccount [data-action=\"qrcode-radio-action\"]', function(){
-			var $form = $("form.wpwl-form.wpwl-form-virtualAccount.wpwl-form-virtualAccount-STC_PAY");
-			var $mobileRadio = $form.find(".wpwl-control-radio-mobile")[0];
-			var $qrCodeRadio = $form.find(".wpwl-control-radio-qrcode")[0];
-			var $mobilePhoneInput = $form.find(".wpwl-control-mobilePhone")[0];
-
-			if ($qrCodeRadio.checked) {
-				PaymentView.hideOrShowElement($form, ".wpwl-group-mobilePhone", true);
-				$mobileRadio.checked = false;
-				$mobilePhoneInput.value = "";
-				Payment.removeValidationError.call($(".wpwl-control-mobilePhone." + HAS_ERROR_CLASS).first());
-				Payment.removeValidationError.call($(".wpwl-control-radio-mobile." + HAS_ERROR_CLASS).first());
-			}
 		});
 
 		$(document).on('keyup.wpwlEvent', 'input.wpwl-control-giftCardNumber', function(){
