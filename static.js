@@ -52607,9 +52607,8 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		ClickToPayPaymentWidget.appendBrowserData($ajaxForm);
 		ajaxSubmitForm($ajaxForm)
 			.then(function(response) {
-				spinner.stop();
 				if (response && response.redirect && response.redirect.shortUrl) {
-					ClickToPayPaymentWidget.redirect(response.redirect.shortUrl, isNewCard);
+					ClickToPayPaymentWidget.redirect(response.redirect.shortUrl, isNewCard, spinner);
 				}
 			})
 			.fail(function(reason) {
@@ -52625,21 +52624,17 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	};
 
 	/** this will redirect the shopper to shopperResultUrl */
-	ClickToPayPaymentWidget.redirect = function(url, isNewCard) {
+	ClickToPayPaymentWidget.redirect = function(url, isNewCard, spinner) {
 		var numberOfRedirects = 0;
 		var iframe;
-		var $formComponent;
 		if (isNewCard) {
-			$formComponent = ClickToPayPaymentWidget.$form;
 			iframe = ClickToPayPaymentWidget.$form.next();
 		} else {
-			$formComponent = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix')[0];
 			iframe = document.querySelectorAll('[name^="virtualAccount-CLICK_TO_PAY_"]')[0];
 		}
 		$(iframe).on("load", function() {
 			// The first redirect is to OPP. The second redirect is 3D-Secure.
 			if (++numberOfRedirects === 2) {
-				var spinner = new Spinner(Options.spinner).spin($formComponent);
 				ClickToPayPaymentWidget.$form.hide(); // to hide CLICK_TO_PAY form
 				var nextElement = ClickToPayPaymentWidget.$form.next(); // to hide card-list and even if iframe, then will be shown again by next line
 				if (!Util.isNullOrUndefined(nextElement) && !Util.isBlank(nextElement)) {
@@ -52649,8 +52644,8 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				$(iframe).width(dim.width);
 				$(iframe).height(dim.height);
 				$(iframe).show();
-				spinner.stop();
 				Options.onLoadThreeDIframe.call($(iframe).get(0));
+				spinner.stop();
 			}
 		});
 
