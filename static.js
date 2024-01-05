@@ -12631,10 +12631,8 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 
     // Apple Pay
     Options.applePay = {
-        // Possible values: css, js
-        buttonSource: "css",
-        // Possible values: white-outline, white, black
-        buttonStyle: "white-outline",
+        // Possible values: white-with-line, white, black
+        style: "white-with-line",
         // Store name. Displayed in the Touch Bar on supported models of MacBook Pro.
         displayName: "With Apple Pay",
         total: {
@@ -48710,22 +48708,15 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
         "billingContact", "shippingContact"
         ];
 
-    var BUTTON_STYLES = ["white-with-line", "white", "black", "white-outline"];
+    var BUTTON_STYLES = ["white-with-line", "white", "black"];
 
-    var BUTTON_TYPES = [
-        // https://developer.apple.com/documentation/apple_pay_on_the_web/displaying_apple_pay_buttons_using_css
-        // From version 2
-        "buy", "donate", "plain", "set-up",
+    var BUTTON_TYPES = ["buy", "donate", "plain",
         // From version 4
         "book", "check-out", "subscribe",
         // From version 10
         "add-money", "contribute", "order", "reload", "rent", "support", "tip", "top-up",
         // From version 12
-        "continue",
-
-        // https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttontype
-        "pay"
-    ];
+        "continue"];
 
     var ApplePay = {};
 
@@ -48771,26 +48762,13 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             return;
         }
 
-        // Check the button type
-        var type = Options.applePay.buttonType;
-        if (type && !Util.contains(BUTTON_TYPES, type)) {
-            type = null;
-        }
-
         // Create Apple Pay button
-        var $button = createButton($form, style, type);
-
-        // Append the button to the form
-        $form.children("div.wpwl-group-button").append($button);
-    }
-
-    function createButton($form, style, type) {
-        var $button;
-        if (Options.applePay.buttonSource === "js") {
-            $button = createButtonWithJs($form, style, type);
-        } else {
-            $button = createButtonWithCss(style, type);
-        }
+        var lang = (Options.locale) ? " lang='" + Options.locale + "'" : "";
+        var $button = $(Generate.string(
+            "<button type='button'",  lang,
+            " class='", getButtonClassNames(style), "'>",
+            "</button>"
+        ));
 
         // Attach the click handler
         $button.on('click.wpwlEvent', function(event) {
@@ -48800,51 +48778,17 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             }
         });
 
-        return $button;
-    }
-
-    function createButtonWithJs($form, style, type) {
-        $form.prepend('<script src="https://applepay.cdn-apple.com/jsapi/v1.1.0/apple-pay-sdk.js"></script>');
-
-       // white-outline was previously called white-with-line.
-       // We keep white-with-line for backward compatibility.
-       if (style === "white-with-line") {
-           style = "white-outline";
-       }
-
-        var $button = $("<apple-pay-button></apple-pay-button>");
-        $button.attr("buttonStyle", style);
-        if (type) {
-            $button.attr("type", type);
-        }
-        if (Options.locale) {
-            $button.attr("locale", Options.locale);
-        }
-        return $button;
-    }
-
-    function createButtonWithCss(style, type) {
-        // white-outline was previously called white-with-line.
-        // We keep white-with-line for backward compatibility.
-        if (style === "white-outline") {
-            style = "white-with-line";
-        }
-
-        var lang = (Options.locale) ? " lang='" + Options.locale + "'" : "";
-        var $button = $(Generate.string(
-            "<button type='button'",  lang,
-            " class='", getButtonClassNames(style, type), "'>",
-            "</button>"
-        ));
-        return $button;
+        // Append the button to the form
+        $form.children("div.wpwl-group-button").append($button);
     }
 
     // Returns CSS class names of the Apple Pay button
-    function getButtonClassNames(style, type) {
+    function getButtonClassNames(style) {
         var classNames = ["wpwl-apple-pay-button", "wpwl-apple-pay-button-" + style];
 
         // Button type is optional
-        if (type) {
+        var type = Options.applePay.buttonType;
+        if (type && Util.contains(BUTTON_TYPES, type)) {
             classNames.push("wpwl-apple-pay-button-type-" + type);
         }
 
