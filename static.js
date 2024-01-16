@@ -12525,14 +12525,6 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 		learnMore: {
 			displayCloseButton: true,
 			displayOkButton: true,
-		},
-		dcfScreen: {
-			height: '620',
-			width: '480',
-			left: '700',
-			top: '150',
-			windowTarget: '_blank',
-			userExperience: ''
 		}
 	};
 
@@ -52891,17 +52883,14 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 	/** Click to Pay Recognized and Email Lookup flow */
 	ClickToPayPaymentWidget.checkoutOfCard = function(id) {
 		var clickToPayForm = document.getElementsByClassName('wpwl-form wpwl-form-virtualAccount wpwl-form-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
-		var clickToPayDiv = document.getElementsByClassName('wpwl-container wpwl-container-virtualAccount-CLICK_TO_PAY wpwl-clearfix');
 		// remove ERROR_CLASS if any before submitting payment
 		PaymentView.removeErrorClassAndMessage(clickToPayForm);
-		var targetIframe = $(Generate.targetIframe('dcfIframe'));
-		$(clickToPayDiv).append(targetIframe);
-		var iframe = document.querySelectorAll('[name^="dcfIframe"]')[0];
-		var srcWindow;
-		var isPopup = Options.clickToPay.dcfScreen.userExperience === 'popup';
+		var srcWindow = window.open('', '_blank', 'popup,left=500,top=100,width=550,height=650');
+		window.childSrcWindow = srcWindow;
+
 		var checkoutRequestParams = {
 			srcDigitalCardId: id,
-			windowRef: ClickToPayPaymentWidget.getWindowReference(iframe, srcWindow, isPopup),
+			windowRef: srcWindow,
 			dpaTransactionOptions: {
 				dpaLocale: Locale.language + "_" + Locale.country
 			}
@@ -52913,11 +52902,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 
 		checkoutPromise
 			.then(function(result) {
-				if (isPopup) {
-					srcWindow.close();
-				} else {
-					$(iframe).remove();
-				}
+				srcWindow.close();
 				if (result.checkoutActionCode === "COMPLETE") {
 					ClickToPayPaymentWidget.addCustomParametersForRequest(result);
 					ClickToPayPaymentWidget.submitAjaxRequest(ClickToPayPaymentWidget.$form, false);
@@ -52925,11 +52910,7 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 					ClickToPayPaymentWidget.handleCheckoutActionCode(result.checkoutActionCode);
 				}
 			}).catch(function(error) {
-				if (isPopup) {
-					srcWindow.close();
-				} else {
-					$(iframe).remove();
-				}
+				srcWindow.close();
 				ClickToPayPaymentWidget.removeExistingCardList();
 				var validationErrors = {};
 				validationErrors = Util.extend(validationErrors, {
@@ -52970,17 +52951,14 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 
 	/** Click to Pay New User flow */
 	ClickToPayPaymentWidget.checkoutOfNewCard = function($cardForm, response) {
-		ClickToPayPaymentWidget.$form = $cardForm;
-		var cardDiv = document.getElementsByClassName('.wpwl-container-card');
 		// remove ERROR_CLASS if any before submitting payment
 		PaymentView.removeErrorClassAndMessage($cardForm);
-		var targetIframe = $(Generate.targetIframe('dcfIframe'));
-		$(cardDiv).append(targetIframe);
-		var iframe = document.querySelectorAll('[name^="dcfIframe"]')[0];
-		var srcWindow;
-		var isPopup = Options.clickToPay.dcfScreen.userExperience === 'popup';
+		ClickToPayPaymentWidget.$form = $cardForm;
+		var srcWindow = window.open('', '_blank', 'popup,left=500,top=100,width=550,height=650');
+		window.childSrcWindow = srcWindow;
+
 		var checkoutRequestParams = ClickToPayPaymentWidget.createCheckoutWithNewCardRequest(response);
-		checkoutRequestParams.windowRef = ClickToPayPaymentWidget.getWindowReference(iframe, srcWindow, isPopup);
+		checkoutRequestParams.windowRef = srcWindow;
 
 		var checkoutPromise = new Promise(function(resolve) {
 			resolve(clickToPay.checkoutWithNewCard(checkoutRequestParams));
@@ -52988,22 +52966,14 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 
 		checkoutPromise
 			.then(function(result) {
-				if (isPopup) {
-					srcWindow.close();
-				} else {
-					$(iframe).remove();
-				}
+				srcWindow.close();
 				if (result.checkoutActionCode === "COMPLETE") {
 					ClickToPayPaymentWidget.handleCompleteActionForNewCard(result, response);
 				} else {
 					ClickToPayPaymentWidget.handleCheckoutActionCode(result.checkoutActionCode);
 				}
 			}).catch(function(error) {
-				if (isPopup) {
-					srcWindow.close();
-				} else {
-					$(iframe).remove();
-				}
+				srcWindow.close();
 				var validationErrors = {};
 				validationErrors = Util.extend(validationErrors, {
 					clickToPayNewUserFlowError: $cardForm
@@ -53013,24 +52983,6 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				Options.onError(new WidgetError("CLICK_TO_PAY", "checkout_with_new_card", "Error occurred, cannot proceed."));
 				return;
 			});
-	};
-
-	/** This is to get window object for checkout flows when shopper selects a card from card list.
-	* Merchant have options to have DCF screen as popup also; default it will load in an iframe inline to existing forms.
-	*/
-	ClickToPayPaymentWidget.getWindowReference = function(iframe, srcWindow, isPopup) {
-		var dim = Options.clickToPay.dcfScreen;
-		if (isPopup) {
-			srcWindow = window.open('', dim.windowTarget, 'popup,left=' + dim.left + ',top=' + dim.top + ',width=' + dim.width + ',height=' + dim.height);
-		} else {
-			$(iframe).attr('style', 'display:block;'); // to have iframe inline to existing form
-			$(iframe).width(dim.width);
-			$(iframe).height(dim.height);
-			$(iframe).show();
-			srcWindow = iframe.contentWindow;
-		}
-		window.childSrcWindow = srcWindow;
-		return srcWindow;
 	};
 
 	/**
