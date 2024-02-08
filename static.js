@@ -49322,7 +49322,7 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             appendBilling(payment.billingContact, $form);
         }
         if (submitOnPaymentAuthorized.indexOf('customer') > -1) {
-            appendCustomer(payment.billingContact, $form);
+            appendCustomer(payment.billingContact, payment.shippingContact, $form);
         }
     };
 
@@ -49348,15 +49348,16 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             (billingContact.countryCode) ? billingContact.countryCode.toUpperCase() : null);
     }
 
-    function appendCustomer(billingContact, $form) {
-        if (!billingContact) {
-            return;
+    function appendCustomer(billingContact, shippingContact, $form) {
+        if (billingContact) {
+            appendHiddenInput($form, Parameter.GIVEN_NAME, billingContact.givenName);
+            appendHiddenInput($form, Parameter.SUR_NAME, billingContact.familyName);
         }
 
-        appendHiddenInput($form, Parameter.PHONE, billingContact.phoneNumber);
-        appendHiddenInput($form, Parameter.EMAIL, billingContact.emailAddress);
-        appendHiddenInput($form, Parameter.GIVEN_NAME, billingContact.givenName);
-        appendHiddenInput($form, Parameter.SUR_NAME, billingContact.familyName);
+        if (shippingContact) {
+            appendHiddenInput($form, Parameter.PHONE, shippingContact.phoneNumber);
+            appendHiddenInput($form, Parameter.EMAIL, shippingContact.emailAddress);
+        }
     }
 
     // Append a hidden input, with given name name values, to the form
