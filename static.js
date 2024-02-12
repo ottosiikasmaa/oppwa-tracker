@@ -12516,8 +12516,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 			autoSubmit: false,
 			hideLoader: false,
 			displayRememberMe: false,
-			otpResendLoading: false,
-			displayPayAnotherWay: true
+			otpResendLoading: false
 		},
 		srcMark: {
 			height: '40',
@@ -52771,23 +52770,19 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			' auto-submit=' + Options.clickToPay.otpScreen.autoSubmit +
 			' hide-loader=' + Options.clickToPay.otpScreen.hideLoader +
 			' display-remember-me=' + Options.clickToPay.otpScreen.displayRememberMe +
-			(Options.clickToPay.otpScreen.otpResendLoading ? ' otp-resend-loading=\"true\"' : '') +
 			' type="' + Options.clickToPay.otpScreen.type + '"' +
 			(ClickToPayPaymentWidget.isDarkTheme(Options.clickToPay.darkTheme) ? ' dark' : '') +
 			' ></src-otp-input>');
 
 		var srcOtpInput = document.querySelector('src-otp-input');
 
+		ClickToPayPaymentWidget.addEventListenerForSelectedChannel(result, srcOtpInput);
+
 		ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
 
 		// close event listener for SRC input - close the OTP input
 		srcOtpInput.addEventListener('close', function() {
 			$(srcOtpInput).remove();
-		});
-
-		// alternateRequested event listener for SRC input - Show channel selection option
-		srcOtpInput.addEventListener('alternateRequested', function() {
-			ClickToPayPaymentWidget.addEventListenerForChannelSelection(result, srcOtpInput, clickToPayForm);
 		});
 	};
 
@@ -52807,8 +52802,8 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		});
 	};
 
-	/** event listener for OTP channel selection UI component */
-	ClickToPayPaymentWidget.addEventListenerForChannelSelection = function(result, srcOtpInput, clickToPayForm) {
+	/** event listener for selected channel UI component */
+	ClickToPayPaymentWidget.addEventListenerForSelectedChannel = function(result, srcOtpInput) {
 		var channels = [];
 		var i = 0;
 		if ((result.supportedValidationChannels !== undefined && result.supportedValidationChannels !== null) && result.supportedValidationChannels.length > 0) {
@@ -52822,36 +52817,18 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				};
 				channels.push(option);
 			}
+			srcOtpInput.loadSupportedValidationChannels(channels);
+			srcOtpInput.otpResendLoading = false;
+			ClickToPayPaymentWidget.addResendOtpListenerToSrcChannel(srcOtpInput);
 		}
-		$(srcOtpInput).hide();
-		$(clickToPayForm).append('<src-otp-channel-selection' +
-			' card-brands="' + Options.clickToPay.initializedSrcCardBrands + '"' +
-			' locale=' + Locale.language + "_" + Locale.country +
-			' display-cancel-option=' + Options.clickToPay.otpScreen.displayCancelOption +
-			' display-header=' + Options.clickToPay.otpScreen.displayHeader +
-			' display-pay-another-way=' + Options.clickToPay.otpScreen.displayPayAnotherWay +
-			' type="' + Options.clickToPay.otpScreen.type + '"' +
-			(ClickToPayPaymentWidget.isDarkTheme(Options.clickToPay.darkTheme) ? ' dark' : '') +
-			' ></src-otp-channel-selection>');
-
-		var srcChannel = document.querySelector('src-otp-channel-selection');
-		srcChannel.identityValidationChannels = channels;
-		ClickToPayPaymentWidget.addContinueListenerToSrcChannel(srcChannel);
-		// close event listener for channel selection - close the OTP input
-		srcChannel.addEventListener('close', function() {
-			$(srcChannel).remove();
-			$(srcOtpInput).show();
-			ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
-		});
 	};
 
-	ClickToPayPaymentWidget.addContinueListenerToSrcChannel = function(srcChannel) {
-		// continue event listener for channel selection - Request OTP on selected channel
-		srcChannel.addEventListener('continue', function(obj) {
-			$(srcChannel).remove();
+	ClickToPayPaymentWidget.addResendOtpListenerToSrcChannel = function(srcOtpInput) {
+		// resendOtp event listener - Request OTP on selected channel
+		srcOtpInput.addEventListener('resendOtp', function(obj) {
 			if (obj.detail !== undefined && obj.detail !== null) {
-				if (obj.detail.identityType === "EMAIL" || obj.detail.identityType === "SMS") {
-					ClickToPayPaymentWidget.requestOtp(false, obj.detail.validationChannelId);
+				if (obj.detail === "EMAIL" || obj.detail === "SMS") {
+					ClickToPayPaymentWidget.requestOtp(false, obj.detail);
 				} else {
 					logger.error("Please try to enroll new card or use EMAIL or SMS validation.");
 					Options.onError(new WidgetError("CLICK_TO_PAY", "otp_channel_invalid", "Please try to enroll new card or use EMAIL or SMS validation."));
