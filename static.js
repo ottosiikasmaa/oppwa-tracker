@@ -51677,6 +51677,8 @@ define('module/AciInstantPay',['require','module/Options','module/Wpwl','module/
 			 return Util.trim(Wpwl.checkout.bankAccountCountry);
 		 } else if (!Util.isNullOrUndefined(Options.aciInstantPay) && !Util.isNullOrUndefined(Options.aciInstantPay.country) && !Util.isBlank(Options.aciInstantPay.country)) {
 			 return Util.trim(Options.aciInstantPay.country);
+		 } else if (!Util.isNullOrUndefined(Wpwl.checkout) && !Util.isNullOrUndefined(Wpwl.checkout.config) && !Util.isBlank(Wpwl.checkout.config.aciInstantPayCountry)) {
+			 return Util.trim(Wpwl.checkout.config.aciInstantPayCountry);
 		 }
 		 return "US";
 	 };
