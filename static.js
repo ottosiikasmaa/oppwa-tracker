@@ -12516,8 +12516,7 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 			autoSubmit: false,
 			hideLoader: false,
 			displayRememberMe: false,
-			otpResendLoading: false,
-			displayPayAnotherWay: true
+			otpResendLoading: false
 		},
 		srcMark: {
 			height: '40',
@@ -12890,7 +12889,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -13251,7 +13250,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -13373,7 +13372,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -13726,7 +13725,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -13839,7 +13838,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -14195,7 +14194,7 @@ define('module/Language',[],function(){
         			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
         			clickToPayInitializationError: "Click to Pay SDK not initialized",
         			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-        			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+        			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
         			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
         			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
         			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -14549,7 +14548,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -14905,7 +14904,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15009,7 +15008,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15113,7 +15112,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15217,7 +15216,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15321,7 +15320,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15422,7 +15421,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15523,7 +15522,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15624,7 +15623,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15731,7 +15730,7 @@ define('module/Language',[],function(){
              clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
              clickToPayInitializationError: "Click to Pay SDK not initialized",
              clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-             clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+             clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			 clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
              clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
              clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15833,7 +15832,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -15934,7 +15933,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -16035,7 +16034,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -16151,7 +16150,7 @@ define('module/Language',[],function(){
                 clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
                 clickToPayInitializationError: "Click to Pay SDK not initialized",
                 clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-                clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+                clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			    clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
                 clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
                 clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -16504,7 +16503,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -16605,7 +16604,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -16706,7 +16705,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -16896,7 +16895,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -17000,7 +16999,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -17101,7 +17100,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -17216,7 +17215,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -17332,7 +17331,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -17448,7 +17447,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -17563,7 +17562,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -17678,7 +17677,7 @@ define('module/Language',[],function(){
 			clickToPayAccessMyCards: "Enter your email to access cards or enroll in Click to Pay.",
 			clickToPayInitializationError: "Click to Pay SDK not initialized",
 			clickToPayCustomerNotPresent: "Not enrolled for Click to Pay or profile not accessible at the moment, please try again later or with different email address",
-			clickToPayCardsNotFound: "No cards founds with your Click to Pay registered profile",
+			clickToPayCardsNotFound: "No linked cards found with your Click to pay profile. Proceed by adding card.",
 			clickToPayCustomerNotEnrolled: "Looks like you haven't enrolled with Click to Pay. Enter card details to save your information with Click to Pay",
 			clickToPayFlowError: "Cannot proceed. Please use access your cards or enroll by entering your card details.",
 			clickToPayNewUserFlowError: "Cannot proceed. Please try different card or continue with card payment by unchecking Click to Pay enrollment.",
@@ -40209,10 +40208,47 @@ define('module/SupportMessage',['require','module/Message','shim/ObjectCreate','
 	return SupportMessage;
 });
 
-define('module/Tracking',['require','jquery','module/Generate','module/Wpwl'],function(require){
+
+define('module/AjaxSender',['require','jquery'],function(require){    
+    var $ = require('jquery');
+    var InternalRequestCommunication;
+
+    var AjaxSender = {};
+
+    /**
+     *  Use to determine if we are inside an ACI based iFrame
+     */
+    var iframeRegex = /^\/v[1-9]\/[a-zA-Z]+Iframe\.html/;
+    var isACIIframe = iframeRegex.test(location.pathname);
+
+    // For testing only
+    AjaxSender.__useLocation = function(loc){
+        isACIIframe = iframeRegex.test(loc || location.pathname);
+    };
+
+    AjaxSender.setComms = function(comms){
+        InternalRequestCommunication = comms;
+    };
+
+
+    AjaxSender.send = function(params){
+        if(!isACIIframe && InternalRequestCommunication) {
+            return InternalRequestCommunication.getSender().then(function (sender) {
+                return sender.send(params);
+            });
+        } else {
+            return $.ajax(params);
+        }
+    };
+
+    return AjaxSender;
+});
+
+define('module/Tracking',['require','jquery','module/Generate','module/Wpwl','module/AjaxSender'],function(require){
     var $ = require("jquery");
     var Generate = require("module/Generate");
     var Wpwl = require("module/Wpwl");
+    var AjaxSender = require('module/AjaxSender');
 
     var url = Generate.string(Wpwl.url, "/v", Wpwl.apiVersion, "/collect");
 
@@ -40228,7 +40264,11 @@ define('module/Tracking',['require','jquery','module/Generate','module/Wpwl'],fu
     Tracking.send = function(object){
         var data = $.extend({}, defaults, object);
 
-        return $.post(url, data);
+        return AjaxSender.send({
+            type: "POST",
+            url: url,
+            data: data,
+        });
     };
 
     /* jshint maxparams: 4 */
@@ -40263,1107 +40303,6 @@ define('module/SaqaUtil',['require','module/Wpwl','module/Options'],function(req
     };
 
     return SaqaUtil;
-});
-
-define('lib/Channel',['require','jquery'],function(require){
-	var $ = require('jquery');
-	
-	/*
-	 * js_channel is a very lightweight abstraction on top of
-	 * postMessage which defines message formats and semantics
-	 * to support interactions more rich than just message passing
-	 * js_channel supports:
-	 *  + query/response - traditional rpc
-	 *  + query/update/response - incremental async return of results
-	 *	to a query
-	 *  + notifications - fire and forget
-	 *  + error handling
-	 *
-	 * js_channel is based heavily on json-rpc, but is focused at the
-	 * problem of inter-iframe RPC.
-	 *
-	 * Message types:
-	 *  There are 5 types of messages that can flow over this channel,
-	 *  and you may determine what type of message an object is by
-	 *  examining its parameters:
-	 *  1. Requests
-	 *	+ integer id
-	 *	+ string method
-	 *	+ (optional) any params
-	 *  2. Callback Invocations (or just "Callbacks")
-	 *	+ integer id
-	 *	+ string callback
-	 *	+ (optional) params
-	 *  3. Error Responses (or just "Errors)
-	 *	+ integer id
-	 *	+ string error
-	 *	+ (optional) string message
-	 *  4. Responses
-	 *	+ integer id
-	 *	+ (optional) any result
-	 *  5. Notifications
-	 *	+ string method
-	 *	+ (optional) any params
-	 */
-
-	;var Channel = (function() {
-		"use strict";
-
-		// current transaction id, start out at a random *odd* number between 1 and a million
-		// There is one current transaction counter id per page, and it's shared between
-		// channel instances.  That means of all messages posted from a single javascript
-		// evaluation context, we'll never have two with the same id.
-		var s_curTranId = Math.floor(Math.random()*1000001);
-
-		// no two bound channels in the same javascript evaluation context may have the same origin, scope, and window.
-		// futher if two bound channels have the same window and scope, they may not have *overlapping* origins
-		// (either one or both support '*').  This restriction allows a single onMessage handler to efficiently
-		// route messages based on origin and scope.  The s_boundChans maps origins to scopes, to message
-		// handlers.  Request and Notification messages are routed using this table.
-		// Finally, channels are inserted into this table when built, and removed when destroyed.
-		var s_boundChans = { };
-
-		// add a channel to s_boundChans, throwing if a dup exists
-		function s_addBoundChan(win, origin, scope, handler) {
-			function hasWin(arr) {
-				for (var i = 0; i < arr.length; i++) if (arr[i].win === win) return true;
-				return false;
-			}
-
-			// does she exist?
-			var exists = false;
-
-
-			if (origin === '*') {
-				// we must check all other origins, sadly.
-				for (var k in s_boundChans) {
-					if (!s_boundChans.hasOwnProperty(k)) continue;
-					if (k === '*') continue;
-					if (typeof s_boundChans[k][scope] === 'object') {
-						exists = hasWin(s_boundChans[k][scope]);
-						if (exists) break;
-					}
-				}
-			} else {
-				// we must check only '*'
-				if ((s_boundChans['*'] && s_boundChans['*'][scope])) {
-					exists = hasWin(s_boundChans['*'][scope]);
-				}
-				if (!exists && s_boundChans[origin] && s_boundChans[origin][scope])
-				{
-					exists = hasWin(s_boundChans[origin][scope]);
-				}
-			}
-			if (exists) throw "A channel is already bound to the same window which overlaps with origin '"+ origin +"' and has scope '"+scope+"'";
-
-			if (typeof s_boundChans[origin] != 'object') s_boundChans[origin] = { };
-			if (typeof s_boundChans[origin][scope] != 'object') s_boundChans[origin][scope] = [ ];
-			s_boundChans[origin][scope].push({win: win, handler: handler});
-		}
-
-		function s_removeBoundChan(win, origin, scope) {
-			var arr = s_boundChans[origin][scope];
-			for (var i = 0; i < arr.length; i++) {
-				if (arr[i].win === win) {
-					arr.splice(i,1);
-				}
-			}
-			if (s_boundChans[origin][scope].length === 0) {
-				delete s_boundChans[origin][scope];
-			}
-		}
-
-		function s_isArray(obj) {
-			if (Array.isArray) return Array.isArray(obj);
-			else {
-				return (obj.constructor.toString().indexOf("Array") != -1);
-			}
-		}
-
-		// No two outstanding outbound messages may have the same id, period.  Given that, a single table
-		// mapping "transaction ids" to message handlers, allows efficient routing of Callback, Error, and
-		// Response messages.  Entries are added to this table when requests are sent, and removed when
-		// responses are received.
-		var s_transIds = { };
-
-		// class singleton onMessage handler
-		// this function is registered once and all incoming messages route through here.  This
-		// arrangement allows certain efficiencies, message data is only parsed once and dispatch
-		// is more efficient, especially for large numbers of simultaneous channels.
-		var s_onMessage = function(e) {
-			try {
-			  var m = JSON.parse(e.data);
-			  if (typeof m !== 'object' || m === null) throw "malformed";
-			} catch(e) {
-			  // just ignore any posted messages that do not consist of valid JSON
-			  return;
-			}
-
-			var w = e.source;
-			var o = e.origin;
-			var s, i, meth;
-
-			if (typeof m.method === 'string') {
-				var ar = m.method.split('::');
-				if (ar.length == 2) {
-					s = ar[0];
-					meth = ar[1];
-				} else {
-					meth = m.method;
-				}
-			}
-
-			if (typeof m.id !== 'undefined') i = m.id;
-
-			// w is message source window
-			// o is message origin
-			// m is parsed message
-			// s is message scope
-			// i is message id (or undefined)
-			// meth is unscoped method name
-			// ^^ based on these factors we can route the message
-
-			// if it has a method it's either a notification or a request,
-			// route using s_boundChans
-			if (typeof meth === 'string') {
-				var delivered = false;
-				if (s_boundChans[o] && s_boundChans[o][s]) {
-					for (var j = 0; j < s_boundChans[o][s].length; j++) {
-						if (s_boundChans[o][s][j].win === w) {
-							s_boundChans[o][s][j].handler(o, meth, m);
-							delivered = true;
-							break;
-						}
-					}
-				}
-
-				if (!delivered && s_boundChans['*'] && s_boundChans['*'][s]) {
-					for (var j = 0; j < s_boundChans['*'][s].length; j++) {
-						if (s_boundChans['*'][s][j].win === w) {
-							s_boundChans['*'][s][j].handler(o, meth, m);
-							break;
-						}
-					}
-				}
-			}
-			// otherwise it must have an id (or be poorly formed
-			else if (typeof i != 'undefined') {
-				if (s_transIds[i]) s_transIds[i](o, meth, m);
-			}
-		};
-
-		// Setup postMessage event listeners
-		if (window.addEventListener) window.addEventListener('message', s_onMessage, false);
-		else if(window.attachEvent) window.attachEvent('onmessage', s_onMessage);
-
-		/* a messaging channel is constructed from a window and an origin.
-		 * the channel will assert that all messages received over the
-		 * channel match the origin
-		 *
-		 * Arguments to Channel.build(cfg):
-		 *
-		 *   cfg.window - the remote window with which we'll communicate
-		 *   cfg.origin - the expected origin of the remote window, may be '*'
-		 *				which matches any origin
-		 *   cfg.scope  - the 'scope' of messages.  a scope string that is
-		 *				prepended to message names.  local and remote endpoints
-		 *				of a single channel must agree upon scope. Scope may
-		 *				not contain double colons ('::').
-		 *   cfg.debugOutput - A boolean value.  If true and window.console.log is
-		 *				a function, then debug strings will be emitted to that
-		 *				function.
-		 *   cfg.debugOutput - A boolean value.  If true and window.console.log is
-		 *				a function, then debug strings will be emitted to that
-		 *				function.
-		 *   cfg.postMessageObserver - A function that will be passed two arguments,
-		 *				an origin and a message.  It will be passed these immediately
-		 *				before messages are posted.
-		 *   cfg.gotMessageObserver - A function that will be passed two arguments,
-		 *				an origin and a message.  It will be passed these arguments
-		 *				immediately after they pass scope and origin checks, but before
-		 *				they are processed.
-		 *   cfg.onReady - A function that will be invoked when a channel becomes "ready",
-		 *				this occurs once both sides of the channel have been
-		 *				instantiated and an application level handshake is exchanged.
-		 *				the onReady function will be passed a single argument which is
-		 *				the channel object that was returned from build().
-		 */
-		return {
-			build: function(cfg) {
-				var debug = function(m) {
-					if (cfg.debugOutput && window.console && window.console.log) {
-						// try to stringify, if it doesn't work we'll let javascript's built in toString do its magic
-						try { if (typeof m !== 'string') m = JSON.stringify(m); } catch(e) { }
-						console.log("["+chanId+"] " + m);
-					}
-				};
-
-				/* browser capabilities check */
-				if (!window.postMessage) throw("jschannel cannot run this browser, no postMessage");
-				if (!window.JSON || !window.JSON.stringify || ! window.JSON.parse) {
-					throw("jschannel cannot run this browser, no JSON parsing/serialization");
-				}
-
-				/* basic argument validation */
-				if (typeof cfg != 'object') throw("Channel build invoked without a proper object argument");
-
-				if (!cfg.window || !cfg.window.postMessage) throw("Channel.build() called without a valid window argument");
-
-				/* we'd have to do a little more work to be able to run multiple channels that intercommunicate the same
-				 * window...  Not sure if we care to support that */
-				if (window === cfg.window) throw("target window is same as present window -- not allowed");
-
-				// let's require that the client specify an origin.  if we just assume '*' we'll be
-				// propagating unsafe practices.  that would be lame.
-				var validOrigin = false;
-				if (typeof cfg.origin === 'string') {
-					var oMatch;
-					if (cfg.origin === "*") validOrigin = true;
-					// allow valid domains under http and https.  Also, trim paths off otherwise valid origins.
-					else if (null !== (oMatch = cfg.origin.match(/^https?:\/\/(?:[-a-zA-Z0-9_\.])+(?::\d+)?/))) {
-						cfg.origin = oMatch[0].toLowerCase();
-						validOrigin = true;
-					}
-				}
-
-				if (!validOrigin) throw ("Channel.build() called with an invalid origin");
-
-				if (typeof cfg.scope !== 'undefined') {
-					if (typeof cfg.scope !== 'string') throw 'scope, when specified, must be a string';
-					if (cfg.scope.split('::').length > 1) throw "scope may not contain double colons: '::'";
-				}
-
-				/* private variables */
-				// generate a random and psuedo unique id for this channel
-				var chanId = (function () {
-					var text = "";
-					var alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-					for(var i=0; i < 5; i++) text += alpha.charAt(Math.floor(Math.random() * alpha.length));
-					return text;
-				})();
-
-				// registrations: mapping method names to call objects
-				var regTbl = { };
-				// current oustanding sent requests
-				var outTbl = { };
-				// current oustanding received requests
-				var inTbl = { };
-				// are we ready yet?  when false we will block outbound messages.
-				var ready = false;
-				var pendingQueue = [ ];
-
-				var createTransaction = function(id,origin,callbacks) {
-					var shouldDelayReturn = false;
-					var completed = false;
-
-					return {
-						origin: origin,
-						invoke: function(cbName, v) {
-							// verify in table
-							if (!inTbl[id]) throw "attempting to invoke a callback of a nonexistent transaction: " + id;
-							// verify that the callback name is valid
-							var valid = false;
-							for (var i = 0; i < callbacks.length; i++) if (cbName === callbacks[i]) { valid = true; break; }
-							if (!valid) throw "request supports no such callback '" + cbName + "'";
-
-							// send callback invocation
-							postMessage({ id: id, callback: cbName, params: v});
-						},
-						error: function(error, message) {
-							completed = true;
-							// verify in table
-							if (!inTbl[id]) throw "error called for nonexistent message: " + id;
-
-							// remove transaction from table
-							delete inTbl[id];
-
-							// send error
-							postMessage({ id: id, error: error, message: message });
-						},
-						complete: function(v) {
-							completed = true;
-							// verify in table
-							if (!inTbl[id]) throw "complete called for nonexistent message: " + id;
-							// remove transaction from table
-							delete inTbl[id];
-							// send complete
-							postMessage({ id: id, result: v });
-						},
-						delayReturn: function(delay) {
-							if (typeof delay === 'boolean') {
-								shouldDelayReturn = (delay === true);
-							}
-							return shouldDelayReturn;
-						},
-						completed: function() {
-							return completed;
-						}
-					};
-				};
-
-				var setTransactionTimeout = function(transId, timeout, method) {
-				  return window.setTimeout(function() {
-					if (outTbl[transId]) {
-					  // XXX: what if client code raises an exception here?
-					  var msg = "timeout (" + timeout + "ms) exceeded on method '" + method + "'";
-					  (1,outTbl[transId].error)("timeout_error", msg);
-					  delete outTbl[transId];
-					  delete s_transIds[transId];
-					}
-				  }, timeout);
-				};
-
-				var onMessage = function(origin, method, m) {
-					// if an observer was specified at allocation time, invoke it
-					if (typeof cfg.gotMessageObserver === 'function') {
-						// pass observer a clone of the object so that our
-						// manipulations are not visible (i.e. method unscoping).
-						// This is not particularly efficient, but then we expect
-						// that message observers are primarily for debugging anyway.
-						try {
-							cfg.gotMessageObserver(origin, m);
-						} catch (e) {
-							debug("gotMessageObserver() raised an exception: " + e.toString());
-						}
-					}
-
-					// now, what type of message is this?
-					if (m.id && method) {
-						// a request!  do we have a registered handler for this request?
-						if (regTbl[method]) {
-							var trans = createTransaction(m.id, origin, m.callbacks ? m.callbacks : [ ]);
-							inTbl[m.id] = { };
-							try {
-								// callback handling.  we'll magically create functions inside the parameter list for each
-								// callback
-								if (m.callbacks && s_isArray(m.callbacks) && m.callbacks.length > 0) {
-									for (var i = 0; i < m.callbacks.length; i++) {
-										var path = m.callbacks[i];
-										var obj = m.params;
-										var pathItems = path.split('/');
-										for (var j = 0; j < pathItems.length - 1; j++) {
-											var cp = pathItems[j];
-											if (typeof obj[cp] !== 'object') obj[cp] = { };
-											obj = obj[cp];
-										}
-										obj[pathItems[pathItems.length - 1]] = (function() {
-											var cbName = path;
-											return function(params) {
-												return trans.invoke(cbName, params);
-											};
-										})();
-									}
-								}
-								var resp = regTbl[method](trans, m.params);
-								if (!trans.delayReturn() && !trans.completed()) trans.complete(resp);
-							} catch(e) {
-								// automagic handling of exceptions:
-								var error = "runtime_error";
-								var message = null;
-								// * if it's a string then it gets an error code of 'runtime_error' and string is the message
-								if (typeof e === 'string') {
-									message = e;
-								} else if (typeof e === 'object') {
-									// either an array or an object
-									// * if it's an array of length two, then  array[0] is the code, array[1] is the error message
-									if (e && s_isArray(e) && e.length == 2) {
-										error = e[0];
-										message = e[1];
-									}
-									// * if it's an object then we'll look form error and message parameters
-									else if (typeof e.error === 'string') {
-										error = e.error;
-										if (!e.message) message = "";
-										else if (typeof e.message === 'string') message = e.message;
-										else e = e.message; // let the stringify/toString message give us a reasonable verbose error string
-									}
-								}
-
-								// message is *still* null, let's try harder
-								if (message === null) {
-									try {
-										message = JSON.stringify(e);
-										/* On MSIE8, this can result in 'out of memory', which
-										 * leaves message undefined. */
-										if (typeof(message) == 'undefined')
-										  message = e.toString();
-									} catch (e2) {
-										message = e.toString();
-									}
-								}
-
-								trans.error(error,message);
-							}
-						}
-					} else if (m.id && m.callback) {
-						if (!outTbl[m.id] ||!outTbl[m.id].callbacks || !outTbl[m.id].callbacks[m.callback])
-						{
-							debug("ignoring invalid callback, id:"+m.id+ " (" + m.callback +")");
-						} else {
-							// XXX: what if client code raises an exception here?
-							outTbl[m.id].callbacks[m.callback](m.params);
-						}
-					} else if (m.id) {
-						if (!outTbl[m.id]) {
-							debug("ignoring invalid response: " + m.id);
-						} else {
-							// XXX: what if client code raises an exception here?
-							if (m.error) {
-								(1,outTbl[m.id].error)(m.error, m.message);
-							} else {
-								if (m.result !== undefined) (1,outTbl[m.id].success)(m.result);
-								else (1,outTbl[m.id].success)();
-							}
-							delete outTbl[m.id];
-							delete s_transIds[m.id];
-						}
-					} else if (method) {
-						// tis a notification.
-						if (regTbl[method]) {
-							// yep, there's a handler for that.
-							// transaction has only origin for notifications.
-							regTbl[method]({ origin: origin }, m.params);
-							// if the client throws, we'll just let it bubble out
-							// what can we do?  Also, here we'll ignore return values
-						}
-					}
-				};
-
-				// now register our bound channel for msg routing
-				s_addBoundChan(cfg.window, cfg.origin, ((typeof cfg.scope === 'string') ? cfg.scope : ''), onMessage);
-
-				// scope method names based on cfg.scope specified when the Channel was instantiated
-				var scopeMethod = function(m) {
-					if (typeof cfg.scope === 'string' && cfg.scope.length) m = [cfg.scope, m].join("::");
-					return m;
-				};
-
-				// a small wrapper around postmessage whose primary function is to handle the
-				// case that clients start sending messages before the other end is "ready"
-				var postMessage = function(msg, force) {
-					if (!msg) throw "postMessage called with null message";
-
-					// delay posting if we're not ready yet.
-					var verb = (ready ? "post  " : "queue ");
-					debug(verb + " message: " + JSON.stringify(msg));
-					if (!force && !ready) {
-						pendingQueue.push(msg);
-					} else {
-						if (typeof cfg.postMessageObserver === 'function') {
-							try {
-								cfg.postMessageObserver(cfg.origin, msg);
-							} catch (e) {
-								debug("postMessageObserver() raised an exception: " + e.toString());
-							}
-						}
-
-						try{
-							// throws errors in tests, when child iframe is not loaded
-							cfg.window.postMessage(JSON.stringify(msg), cfg.origin);
-						} catch (e) {
-							console.log(e);
-						}
-					}
-				};
-
-				var onReady = function(trans, type) {
-					debug('ready msg received');
-					if (ready) throw "received ready message while in ready state.  help!";
-
-					if (type === 'ping') {
-						chanId += '-R';
-					} else {
-						chanId += '-L';
-					}
-
-					obj.unbind('__ready'); // now this handler isn't needed any more.
-					ready = true;
-					debug('ready msg accepted.');
-
-					if (type === 'ping') {
-						obj.notify({ method: '__ready', params: 'pong' });
-					}
-
-					// flush queue
-					while (pendingQueue.length) {
-						postMessage(pendingQueue.pop());
-					}
-
-					// invoke onReady observer if provided
-					if (typeof cfg.onReady === 'function') cfg.onReady(obj);
-				};
-
-				var obj = {
-					// tries to unbind a bound message handler.  returns false if not possible
-					unbind: function (method) {
-						if (regTbl[method]) {
-							if (!(delete regTbl[method])) throw ("can't delete method: " + method);
-							return true;
-						}
-						return false;
-					},
-					bind: function (method, cb) {
-						if (!method || typeof method !== 'string') throw "'method' argument to bind must be string";
-						if (!cb || typeof cb !== 'function') throw "callback missing from bind params";
-
-						if (regTbl[method]) throw "method '"+method+"' is already bound!";
-						regTbl[method] = cb;
-						return this;
-					},
-					call: function(m) {
-						if (!m) throw 'missing arguments to call function';
-						if (!m.method || typeof m.method !== 'string') throw "'method' argument to call must be string";
-						if (!m.success || typeof m.success !== 'function') throw "'success' callback missing from call";
-
-						// now it's time to support the 'callback' feature of jschannel.  We'll traverse the argument
-						// object and pick out all of the functions that were passed as arguments.
-						var callbacks = { };
-						var callbackNames = [ ];
-						var seen = [ ];
-
-						var pruneFunctions = function (path, obj) {
-							if ($.inArray(obj, seen) !== -1) {
-								throw "params cannot be a recursive data structure"
-							}
-							seen.push(obj);
-						   
-							if (typeof obj === 'object') {
-								for (var k in obj) {
-									if (!obj.hasOwnProperty(k)) continue;
-									var np = path + (path.length ? '/' : '') + k;
-									if (typeof obj[k] === 'function') {
-										callbacks[np] = obj[k];
-										callbackNames.push(np);
-										delete obj[k];
-									} else if (typeof obj[k] === 'object') {
-										pruneFunctions(np, obj[k]);
-									}
-								}
-							}
-						};
-						pruneFunctions("", m.params);
-
-						// build a 'request' message and send it
-						var msg = { id: s_curTranId, method: scopeMethod(m.method), params: m.params };
-						if (callbackNames.length) msg.callbacks = callbackNames;
-
-						if (m.timeout)
-						  // XXX: This function returns a timeout ID, but we don't do anything with it.
-						  // We might want to keep track of it so we can cancel it using clearTimeout()
-						  // when the transaction completes.
-						  setTransactionTimeout(s_curTranId, m.timeout, scopeMethod(m.method));
-
-						// insert into the transaction table
-						outTbl[s_curTranId] = { callbacks: callbacks, error: m.error, success: m.success };
-						s_transIds[s_curTranId] = onMessage;
-
-						// increment current id
-						s_curTranId++;
-
-						postMessage(msg);
-					},
-					notify: function(m) {
-						if (!m) throw 'missing arguments to notify function';
-						if (!m.method || typeof m.method !== 'string') throw "'method' argument to notify must be string";
-
-						// no need to go into any transaction table
-						postMessage({ method: scopeMethod(m.method), params: m.params });
-					},
-					destroy: function () {
-						s_removeBoundChan(cfg.window, cfg.origin, ((typeof cfg.scope === 'string') ? cfg.scope : ''));
-						if (window.removeEventListener) window.removeEventListener('message', onMessage, false);
-						else if(window.detachEvent) window.detachEvent('onmessage', onMessage);
-						ready = false;
-						regTbl = { };
-						inTbl = { };
-						outTbl = { };
-						cfg.origin = null;
-						pendingQueue = [ ];
-						debug("channel destroyed");
-						chanId = "";
-					}
-				};
-
-				obj.bind('__ready', onReady);
-				setTimeout(function() {
-					postMessage({ method: scopeMethod('__ready'), params: "ping" }, true);
-				}, 0);
-
-				return obj;
-			}
-		};
-	})();
-	
-	return Channel;
-});
-define('module/InternalRequestCommunicationSettings',[],function() {
-    var InternalRequestCommunicationSettings = {};
-
-    InternalRequestCommunicationSettings.IFRAME_NAME = 'internalRequest';
-    InternalRequestCommunicationSettings.SCOPE = 'internalRequestIframeCommunication';
-    InternalRequestCommunicationSettings.SEND_METHOD = 'send';
-    InternalRequestCommunicationSettings.LOAD_IOVATION_MDR = 'loadIovationMdr';
-
-    return InternalRequestCommunicationSettings;
-});
-
-define('module/AdditionalLogs',['require','module/Options'],function (require) {
-    var Options = require('module/Options');
-
-    var AdditionalLogs = {};
-
-    AdditionalLogs.isAdditionalLogsEnabled = function () {
-        return Options.enableAdditionalLogs;
-    };
-
-    return AdditionalLogs;
-});
-
-define('module/logging/LoggerFactory',['require','jquery','module/Generate','module/Wpwl','module/AdditionalLogs','module/Util'],function(require){
-    var $ = require('jquery');
-    var Generate = require('module/Generate');
-    var Wpwl = require('module/Wpwl');
-    var AdditionalLogs = require('module/AdditionalLogs');
-    var Util = require('module/Util');
-
-    var logsUrl;
-
-    var LogPusher = {
-        interval: null,
-        messageQueue: null,
-
-        /**
-         * Impure method, will remove from the messageQueue the messages that will be flushed.
-         */
-        getDataToFlush: function(){
-            var data = {};
-            var messagesToBeFlushed = this.messageQueue.length;
-            for (var i = 0; i < messagesToBeFlushed; i++) {
-                var message = this.messageQueue.shift();
-                var messagePrefix = 'messages[' + i + ']';
-                data[messagePrefix + '.logger'] = message.component;
-                data[messagePrefix + '.timestamp'] = message.timestamp;
-                data[messagePrefix + '.message'] = message.message;
-                data[messagePrefix + '.level'] = message.level;
-            }
-            return data;
-        },
-
-        isDirty: function(){
-            return !!this.messageQueue.length;
-        },
-        init: function(){
-            this.clean();
-        },
-        clean: function(){
-            this.messageQueue = [];
-        },
-        flush: function(){
-            if (!logsUrl && Wpwl.checkout.id){
-                logsUrl = Generate.string(Wpwl.url, "/v", Wpwl.apiVersion, "/checkouts/", Wpwl.checkout.id, "/logs");
-            }
-            if(logsUrl && this.isDirty()){
-                Util.ajax({
-                    method: "POST",
-                    url: logsUrl,
-                    dataType: "json",
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log("Error sending ajax: " + textStatus + " - " + errorThrown);
-                    },
-                    data: this.getDataToFlush()
-                });
-            }
-        },
-        pushMessage: function(component, level, message){
-            this.messageQueue.push({component: component,
-                level: level,
-                timestamp: Date.now(),
-                message: message});
-        },
-        start : function(_window){
-            var callPush = function() {LogPusher.flush();};
-            $(_window).on('beforeunload.wpwlEvent', callPush);
-            if(this.interval){
-                clearInterval(this.interval);
-            }
-            this.interval = setInterval(callPush, 5000);
-        }
-
-    };
-
-    LogPusher.init();
-
-    var Logger = function(component){
-        this.component = component;
-        this.isAdditionalLogsEnabled = AdditionalLogs.isAdditionalLogsEnabled();
-    };
-
-    Logger.prototype.info = function(message){
-        this.logMessage("INFO", message);
-    };
-
-    Logger.prototype.debug = function(message){
-        this.logMessage("DEBUG", message);
-    };
-
-    Logger.prototype.error = function(message){
-        this.logMessage("ERROR", message);
-    };
-
-    Logger.prototype.additionalLog = function() {};
-
-    Logger.prototype.logMessage = function(level, message){
-        LogPusher.pushMessage(this.component, level, message);
-    };
-
-    var LoggerFactory = {};
-
-    LoggerFactory.getLogger = function(component){
-        var logger = new Logger(component);
-        if (logger.isAdditionalLogsEnabled === true) {
-            logger.additionalLog = function(level, message) {
-                var levelParam = level.toUpperCase() + '_ADDITIONAL_LOGS';
-                console.log(levelParam + '\n' + message);
-                LogPusher.pushMessage(this.component, levelParam, message);
-            };
-        }
-        return logger;
-    };
-
-    LoggerFactory.initFor = function(_window){
-        LogPusher.start(_window);
-    };
-
-    LoggerFactory.flush = function(){
-        LogPusher.flush();
-    };
-
-    return LoggerFactory;
-});
-
-
-/**
- * Module represents a sender responsible for communicating with internalRequestIframe.
- *
- * Upon initialization sender will setup communication channel with iframe window and will
- * be ready to send messages, which will be handled by its conterpart - InternalRequestListener.
- */
-define('module/InternalRequestSender',['require','jquery','lib/Channel','module/Wpwl','module/InternalRequestCommunicationSettings','module/logging/LoggerFactory'],function(require) {
-    var $ = require('jquery');
-    var Channel = require('lib/Channel');
-    var Wpwl = require('module/Wpwl');
-    var InternalRequestCommunicationSettings = require('module/InternalRequestCommunicationSettings');
-    var LoggerFactory = require('module/logging/LoggerFactory');
-    var logger = LoggerFactory.getLogger('InternalRequestSender');
-
-    var COMMUNICATION_TIMEOUT = 60000;
-
-    var InternalRequestSender = function() {
-        this.channelReadyDeferred = $.Deferred();
-
-        this.$internalRequestIframe = $('[name=' + InternalRequestCommunicationSettings.IFRAME_NAME + ']');
-    };
-
-    InternalRequestSender.prototype.init = function() {
-        return this.iframeLoad()
-            .then(this.setupChannel.bind(this));
-    };
-
-    InternalRequestSender.prototype.iframeLoad = function() {
-        var iframeLoadDeferred = $.Deferred();
-
-        this.$internalRequestIframe.on('load', function() {
-            iframeLoadDeferred.resolve();
-        });
-
-        setTimeout(function() {
-            iframeLoadDeferred.reject(new Error('Failed to load internalRequest iframe within timeout.'));
-        }, COMMUNICATION_TIMEOUT);
-
-        return iframeLoadDeferred.promise();
-    };
-
-    InternalRequestSender.prototype.setupChannel = function() {
-        try {
-            this.channel = Channel.build({
-                window: this.$internalRequestIframe.get(0).contentWindow,
-                origin: Wpwl.url,
-                scope: InternalRequestCommunicationSettings.SCOPE,
-                onReady: this.onChannelReady.bind(this)
-            });
-        } catch (e) {
-            logger.additionalLog("ERROR", "Exception when setup channel:\n" + e);
-            this.rejectDeferred(e);
-        }
-
-        this.timeout = setTimeout(
-            this.rejectDeferred.bind(this, new Error('Failed to setup channel with internalRequest iframe within timeout.')),
-            COMMUNICATION_TIMEOUT);
-
-        return this.channelReadyDeferred.promise();
-    };
-
-    InternalRequestSender.prototype.rejectDeferred = function(reason) {
-        if (this.timeout !== undefined) {
-            this.timeout = clearTimeout(this.timeout);
-            // This is needed because some cases call directly the rejectDeferred without waiting for the timeout
-        }
-        this.channelReadyDeferred.reject(reason);
-    };
-
-    InternalRequestSender.prototype.onChannelReady = function() {
-        this.timeout = clearTimeout(this.timeout);
-        this.channelReadyDeferred.resolve(this);
-    };
-
-    InternalRequestSender.prototype.send = function(params) {
-        return this.callChannelAndReturnPromise(InternalRequestCommunicationSettings.SEND_METHOD, params);
-    };
-
-    InternalRequestSender.prototype.loadIovationMdr = function(checkoutUrl) {
-        return this.callChannelAndReturnPromise(InternalRequestCommunicationSettings.LOAD_IOVATION_MDR, checkoutUrl);
-    };
-
-    InternalRequestSender.prototype.callChannelAndReturnPromise = function(method, params) {
-        var deferred = $.Deferred();
-
-        this.channel.call({
-            method: method,
-            timeout: COMMUNICATION_TIMEOUT,
-            params: params,
-            success: deferred.resolve,
-            error: deferred.reject
-        });
-
-        return deferred.promise();
-    };
-
-    return InternalRequestSender;
-});
-
-define('lib/iovation',[],function() {
-var iovation = {};
-iovation.load = function() {
-
-/*
- Copyright(c) 2018, iovation, inc. All rights reserved.
-*/
-(function B(){function v(e,a){var b={},c;for(c=e.length-1;-1<c;c--)0<c?b[c]=function(){var d=c;return function(){return w(e[d],b[d+1],a)}}():w(e[c],b[c+1],a)}function w(e,n,k){var c=document.createElement("script"),f,g,l;l=A(a[k]&&a[k].staticVer&&a[k].staticVer+"/"||e[1]);e[0]=e[0].replace("##version##",l);f=e[0].split("?")[0].split("/");g=f[f.length-1].split(".")[0];u.test(e[1])&&l!==e[1]&&d("loader: Overriding configured version with staticVer.");c.setAttribute("src",e[0]);c&&c.addEventListener?
-c.addEventListener("error",function(){b[k+"_"+g+"_load_failure"]="true"}):c.attachEvent&&c.attachEvent("onerror",function(){b[k+"_"+g+"_load_failure"]="true"});n&&(c.onload=n);document.getElementsByTagName("head")[0].appendChild(c)}function d(e){if("function"===typeof a.trace_handler)try{a.trace_handler(e)}catch(b){}}function f(b,a){var d=null!==b&&void 0!==b;return!d||"1"!==b.toString()&&"true"!==b.toString().toLowerCase()?!d||"0"!==b.toString()&&"false"!==b.toString().toLowerCase()?"boolean"===
-typeof a?a:!1:!1:!0}function A(a){d("********** version before replace: "+a+" **********");d('localNamespace[ "url_dots_to_dashes" ]: '+b.url_dots_to_dashes);d("numericVersionPattern.test( output ): "+u.test(a));b.url_dots_to_dashes&&u.test(a)&&(a=a.replace(/\./g,"-"));d("version after replace: "+a);return a}var g=window,x=g.io_global_object_name||"IGLOO",a=g[x]=g[x]||{},b=a.loader=a.loader||{},y=[],z=[],u=/^[0-9]{1,3}(\.[0-9]{1,3}){2}\/$/;if(b.loaderMain)return d("loader: Loader script has already run, try reducing the number of places it's being included."),
-!1;b.loaderMain=B;b.loaderVer="5.2.2";(function(){var e=f(b.tp,!0),n=f(b.fp_static,!0),k=f(b.fp_dyn,!0),c=f(b.enable_legacy_compatibility),u=f(b.tp_split),v=b.tp_host&&b.tp_host.replace(/\/+$/,"")||"https://mpsnare.iesnare.com",l=b.fp_static_override_uri,m=void 0!==b.uri_hook?b.uri_hook+"/":"/iojs/",p=(b.version||"versionOrAliasIsRequired")+"/",w=b.subkey?g.encodeURIComponent(b.subkey)+"/":"",x=b.tp_resource||"wdp.js",q=b.tp_host?"&tp_host="+g.encodeURIComponent(b.tp_host):"",C=l?"&fp_static_uri="+
-g.encodeURIComponent(l):"",r,t,h;b.tp_host=v;r=f(a.enable_flash,!0);t=a.io&&a.io.enable_flash;h=a.fp&&a.fp.enable_flash;t=void 0!==t&&null!==t?f(t,!0):r;void 0!==h&&null!==h?h=f(h,!0):t=r;r=t?"&flash=true":"&flash=false";h=h?"&flash=true":"&flash=false";q="?loaderVer="+b.loaderVer+"&compat="+c+"&tp="+e+"&tp_split="+u+q+"&fp_static="+n+"&fp_dyn="+k+C;e||n||d("loader: Not currently configured to load fp_static or tp script(s).");a.fp&&a.fp.staticVer&&a.fp.staticVer+"/"!==p&&(p=A(a.fp.staticVer+"/"),
-d("loader: Configured version replaced with that from pre-loaded static script."));n||a.fp&&a.fp.staticMain?(m=(m+"##version##"+w).replace(/\/\//g,"/"),n&&(a.fp&&a.fp.staticMain?c&&!a.fp.preCompatMain&&d("loader: enable_legacy_compatibility on, but included static does not have the compat wrapper."):l?y.push([l,""]):y.push([m+"static_wdp.js"+q+h,p])),!k||a.fp&&a.fp.dynMain?a.fp&&a.fp.dynMain&&d("loader: First party dynamic script has already been loaded, disable fp_dyn or make sure you're not manually including the dynamic file separately."):
-y.push([m+"dyn_wdp.js"+q+h,p])):f(b.fp_dyn)&&d("loader: Invalid Config, first party dynamic script set to load without static.");e&&(a.io&&a.io.staticMain?d("loader: Third party script has already been loaded."):(m=v+"/##version##"+w,u?(z.push([m+"static_wdp.js"+q+r,p]),z.push([m+"dyn_wdp.js"+q+r,p]),b.tp_resource&&d("loader: Invalid Config: both tp_resource and tp_split set. Ignoring tp_resource.")):z.push([m+x+q+r,p])))})();v(y,"fp");v(z,"io")})();
-
-};
-
-return iovation;
-});
-
-/*jshint camelcase: false */
-define('module/IovationLoader',['require','jquery','lib/iovation'],function(require){
-	var $ = require("jquery");
-    var iovationjs = require("lib/iovation");
-
-    var IovationLoader = {};
-
-    IovationLoader.load = function(checkoutUrl) {
-        window.io_global_object_name = "IGLOO";
-        window.IGLOO = window.IGLOO || {
-            "enable_flash": false,
-            "bb_callback": function (bb, complete) {
-                if (complete) {
-                    var params = {
-                        url: checkoutUrl,
-                        method: "POST",
-                        contentType: "application/x-www-form-urlencoded",
-                        data: "customer.browserFingerprint.value=" + encodeURIComponent(bb)
-                    };
-                    $.ajax(params);
-                }
-            },
-            "loader": {
-                "uri_hook": "/fddr",
-                "version": "general5"
-            }
-        };
-
-        iovationjs.load();
-    };
-
-    return IovationLoader;
-});
-
-/**
- * Module represents a listener within internalRequestIframe.
- *
- * Upon initialization listener will setup communication channel with parent window and listen
- * for incoming messages from corresponding counterpart - InternalRequestSender.
- */
-define('module/InternalRequestListener',['require','jquery','lib/Channel','module/InternalRequestCommunicationSettings','module/IovationLoader','module/logging/LoggerFactory'],function(require) {
-    var $ = require('jquery');
-    var Channel = require('lib/Channel');
-    var InternalRequestCommunicationSettings = require('module/InternalRequestCommunicationSettings');
-    var IovationLoader = require('module/IovationLoader');
-    var LoggerFactory = require('module/logging/LoggerFactory');
-    var logger = LoggerFactory.getLogger('InternalRequestListener');
-
-    var InternalRequestListener = function() {
-        this.channelReadyDeferred = $.Deferred();
-    };
-
-    InternalRequestListener.prototype.init = function() {
-        this.setupChannel()
-            .done(this.initListeners.bind(this));
-    };
-
-    InternalRequestListener.prototype.setupChannel = function() {
-        try {
-            this.channel = Channel.build({
-                window: window.parent,
-                origin: "*",
-                scope: InternalRequestCommunicationSettings.SCOPE,
-                onReady: this.onChannelReady.bind(this)
-            });
-        } catch (e) {
-            logger.additionalLog("ERROR", "Exception when setup channel:\n" + e);
-            this.channelReadyDeferred.reject(e);
-        }
-
-        return this.channelReadyDeferred.promise();
-    };
-
-    InternalRequestListener.prototype.onChannelReady = function() {
-        this.channelReadyDeferred.resolve();
-    };
-
-    InternalRequestListener.prototype.initListeners = function() {
-        this.channel.bind(InternalRequestCommunicationSettings.SEND_METHOD, function(trans, params) {
-            var requestResult = this.send(params);
-
-            convertPromiseToTransAndDelayReturn(trans, requestResult);
-        }.bind(this));
-
-        this.channel.bind(InternalRequestCommunicationSettings.LOAD_IOVATION_MDR, function(trans, checkoutUrl) {
-            IovationLoader.load(checkoutUrl);
-        }.bind(this));
-    };
-
-    InternalRequestListener.prototype.send = $.ajax;
-
-    function convertPromiseToTransAndDelayReturn(trans, promise) {
-        promise
-            .then(trans.complete)
-            .fail(trans.error);
-
-        trans.delayReturn(true);
-    }
-
-    return InternalRequestListener;
-});
-
-/**
- * Module provides ability to communicate with OPP backend without performing cross-site request.
- *
- * This is implemented using hidden iframe loaded from OPP domain and with communication between
- * payment widget and that iframe: widget -> iframe -> OPP backend.
- */
-define('module/InternalRequestCommunication',['require','jquery','module/Generate','module/Util','module/Wpwl','module/Options','module/InternalRequestSender','module/InternalRequestListener','module/InternalRequestCommunicationSettings'],function(require) {
-    var $ = require('jquery');
-    var Generate = require('module/Generate');
-    var Util = require('module/Util');
-    var Wpwl = require('module/Wpwl');
-    var Options = require('module/Options');
-    var InternalRequestSender = require('module/InternalRequestSender');
-    var InternalRequestListener = require('module/InternalRequestListener');
-    var InternalRequestCommunicationSettings = require('module/InternalRequestCommunicationSettings');
-
-    var InternalRequestCommunication = {};
-
-    var senderDeferred = $.Deferred();
-    var senderPromise = senderDeferred.promise();
-
-    /**
-     * Initializes internal request sender so it can be used to send requests via internalRequestIframe
-     * to OPP backend. To obtain sender itself method 'getSender' should be used.
-     *
-     * Upon invocation current method will render hidden iframe and setup sender instance. Method should
-     * be called once per lifecycle of payment widgets. It can be called again after 'unloadSender'
-     * has been called.
-     */
-    InternalRequestCommunication.initSender = function($wpwlContainer) {
-        var lastWpwlContainer = $wpwlContainer.last();
-
-        if (!Util.isNullOrUndefined(lastWpwlContainer)) {
-            $(lastWpwlContainer).after(generateHiddenInternalRequestIframe());
-
-            var sender = new InternalRequestSender();
-
-            sender.init()
-                .then(function() {
-                    senderDeferred.resolve(sender);
-                })
-                .fail(function(reason) {
-                    senderDeferred.reject(reason);
-                });
-        }
-    };
-
-    /**
-     * Removes hidden iframe and releases sender instance.
-     */
-    InternalRequestCommunication.unloadSender = function() {
-        senderPromise.then(function(sender) {
-            sender.channel.destroy();
-        });
-
-        senderDeferred = $.Deferred();
-        senderPromise = senderDeferred.promise();
-
-        $('[name=' + InternalRequestCommunicationSettings.IFRAME_NAME + ']').remove();
-    };
-
-    /**
-     * Returns sender instance wrapped within promise.
-     *
-     * Since process of sender loading is asynchronous this method cannot return direct reference to sender
-     * instance as it can be not fully initialized yet.
-     */
-    InternalRequestCommunication.getSender = function() {
-        return senderPromise;
-    };
-
-    /**
-     * Initializes internal request listener.
-     *
-     * This method will do nothing if it has been called outside of scope of internalRequestIframe html.
-     */
-    InternalRequestCommunication.initListener = function() {
-        // Message namespace with specific value will indicate that javascript code is being
-        // executed within internalRequestIframe scope, and it is the only place where we need
-        // to initialize internalRequestListener
-        if (Options.messageNamespace === 'internalRequest') {
-            new InternalRequestListener().init();
-        }
-    };
-
-    function generateHiddenInternalRequestIframe() {
-        return Generate.outerHtml(
-            $('<iframe/>', {
-                'class': 'wpwl-control wpwl-control-iframe wpwl-control-internalRequestIframe disabled',
-                'style': 'display: none',
-                'name': InternalRequestCommunicationSettings.IFRAME_NAME,
-                'src': getInternalRequestIframeSrc()
-            })
-        );
-    }
-
-    function getInternalRequestIframeSrc() {
-        return Generate.string(Wpwl.url, '/v', Wpwl.apiVersion, '/internalRequestIframe.html', (Wpwl.minified ? '' : '?minified=false'));
-    }
-
-    return InternalRequestCommunication;
 });
 
 ( function( factory ) {
@@ -44197,7 +43136,7 @@ return $.ui.autocomplete;
 
 } );
 
-define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/NumberOnlyFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','module/SaqaUtil','module/GroupCardUtil','module/Locale','module/InternalRequestCommunication','jquery-ui/widgets/autocomplete'],function(require){
+define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','module/CVVHint','module/forms/BankAccountPaymentForm','module/InputFormatter','module/InputDateFormatter','module/DateFormatter','module/NumberOnlyFormatter','module/I18n','module/Message','module/MessageView','module/error/OppError','module/Options','module/State','module/Parameter','module/SupportMessage','module/Tracking','module/Util','module/Wpwl','module/Generate','module/Setting','module/Detection','module/SaqaUtil','module/GroupCardUtil','module/Locale','jquery-ui/widgets/autocomplete','module/AjaxSender'],function(require){
 	var $ = require('jquery');
 	var CardPaymentForm = require('module/forms/CardPaymentForm');
 	var CVVHint = require('module/CVVHint');
@@ -44223,8 +43162,8 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 	var SaqaUtil = require('module/SaqaUtil');
 	var GroupCardUtil = require('module/GroupCardUtil');
 	var Locale = require('module/Locale');
-	var InternalRequestCommunication = require('module/InternalRequestCommunication');
     require('jquery-ui/widgets/autocomplete');
+	var AjaxSender = require('module/AjaxSender');
 
 	var HAS_ERROR_CLASS = "wpwl-has-error";
 	
@@ -44592,14 +43531,7 @@ define('module/PaymentView',['require','jquery','module/forms/CardPaymentForm','
 			}
 		};
 
-		if (!Util.isACIIframe) {
-			InternalRequestCommunication.getSender().then(function (sender) {
-				Util._sender = sender;
-				sender.send(bicParams);
-			});
-		} else {
-			$.ajax(bicParams);
-		}
+		AjaxSender.send(bicParams);
     };
 
 	PaymentView.createAutocompleteGiropayBic = function (banks, id, hiddenId) {
@@ -45625,6 +44557,637 @@ define('module/AutoFocus',['require','jquery','module/Options'],function(require
     return AutoFocus;
 });
 
+define('lib/Channel',['require','jquery'],function(require){
+	var $ = require('jquery');
+	
+	/*
+	 * js_channel is a very lightweight abstraction on top of
+	 * postMessage which defines message formats and semantics
+	 * to support interactions more rich than just message passing
+	 * js_channel supports:
+	 *  + query/response - traditional rpc
+	 *  + query/update/response - incremental async return of results
+	 *	to a query
+	 *  + notifications - fire and forget
+	 *  + error handling
+	 *
+	 * js_channel is based heavily on json-rpc, but is focused at the
+	 * problem of inter-iframe RPC.
+	 *
+	 * Message types:
+	 *  There are 5 types of messages that can flow over this channel,
+	 *  and you may determine what type of message an object is by
+	 *  examining its parameters:
+	 *  1. Requests
+	 *	+ integer id
+	 *	+ string method
+	 *	+ (optional) any params
+	 *  2. Callback Invocations (or just "Callbacks")
+	 *	+ integer id
+	 *	+ string callback
+	 *	+ (optional) params
+	 *  3. Error Responses (or just "Errors)
+	 *	+ integer id
+	 *	+ string error
+	 *	+ (optional) string message
+	 *  4. Responses
+	 *	+ integer id
+	 *	+ (optional) any result
+	 *  5. Notifications
+	 *	+ string method
+	 *	+ (optional) any params
+	 */
+
+	;var Channel = (function() {
+		"use strict";
+
+		// current transaction id, start out at a random *odd* number between 1 and a million
+		// There is one current transaction counter id per page, and it's shared between
+		// channel instances.  That means of all messages posted from a single javascript
+		// evaluation context, we'll never have two with the same id.
+		var s_curTranId = Math.floor(Math.random()*1000001);
+
+		// no two bound channels in the same javascript evaluation context may have the same origin, scope, and window.
+		// futher if two bound channels have the same window and scope, they may not have *overlapping* origins
+		// (either one or both support '*').  This restriction allows a single onMessage handler to efficiently
+		// route messages based on origin and scope.  The s_boundChans maps origins to scopes, to message
+		// handlers.  Request and Notification messages are routed using this table.
+		// Finally, channels are inserted into this table when built, and removed when destroyed.
+		var s_boundChans = { };
+
+		// add a channel to s_boundChans, throwing if a dup exists
+		function s_addBoundChan(win, origin, scope, handler) {
+			function hasWin(arr) {
+				for (var i = 0; i < arr.length; i++) if (arr[i].win === win) return true;
+				return false;
+			}
+
+			// does she exist?
+			var exists = false;
+
+
+			if (origin === '*') {
+				// we must check all other origins, sadly.
+				for (var k in s_boundChans) {
+					if (!s_boundChans.hasOwnProperty(k)) continue;
+					if (k === '*') continue;
+					if (typeof s_boundChans[k][scope] === 'object') {
+						exists = hasWin(s_boundChans[k][scope]);
+						if (exists) break;
+					}
+				}
+			} else {
+				// we must check only '*'
+				if ((s_boundChans['*'] && s_boundChans['*'][scope])) {
+					exists = hasWin(s_boundChans['*'][scope]);
+				}
+				if (!exists && s_boundChans[origin] && s_boundChans[origin][scope])
+				{
+					exists = hasWin(s_boundChans[origin][scope]);
+				}
+			}
+			if (exists) throw "A channel is already bound to the same window which overlaps with origin '"+ origin +"' and has scope '"+scope+"'";
+
+			if (typeof s_boundChans[origin] != 'object') s_boundChans[origin] = { };
+			if (typeof s_boundChans[origin][scope] != 'object') s_boundChans[origin][scope] = [ ];
+			s_boundChans[origin][scope].push({win: win, handler: handler});
+		}
+
+		function s_removeBoundChan(win, origin, scope) {
+			var arr = s_boundChans[origin][scope];
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i].win === win) {
+					arr.splice(i,1);
+				}
+			}
+			if (s_boundChans[origin][scope].length === 0) {
+				delete s_boundChans[origin][scope];
+			}
+		}
+
+		function s_isArray(obj) {
+			if (Array.isArray) return Array.isArray(obj);
+			else {
+				return (obj.constructor.toString().indexOf("Array") != -1);
+			}
+		}
+
+		// No two outstanding outbound messages may have the same id, period.  Given that, a single table
+		// mapping "transaction ids" to message handlers, allows efficient routing of Callback, Error, and
+		// Response messages.  Entries are added to this table when requests are sent, and removed when
+		// responses are received.
+		var s_transIds = { };
+
+		// class singleton onMessage handler
+		// this function is registered once and all incoming messages route through here.  This
+		// arrangement allows certain efficiencies, message data is only parsed once and dispatch
+		// is more efficient, especially for large numbers of simultaneous channels.
+		var s_onMessage = function(e) {
+			try {
+			  var m = JSON.parse(e.data);
+			  if (typeof m !== 'object' || m === null) throw "malformed";
+			} catch(e) {
+			  // just ignore any posted messages that do not consist of valid JSON
+			  return;
+			}
+
+			var w = e.source;
+			var o = e.origin;
+			var s, i, meth;
+
+			if (typeof m.method === 'string') {
+				var ar = m.method.split('::');
+				if (ar.length == 2) {
+					s = ar[0];
+					meth = ar[1];
+				} else {
+					meth = m.method;
+				}
+			}
+
+			if (typeof m.id !== 'undefined') i = m.id;
+
+			// w is message source window
+			// o is message origin
+			// m is parsed message
+			// s is message scope
+			// i is message id (or undefined)
+			// meth is unscoped method name
+			// ^^ based on these factors we can route the message
+
+			// if it has a method it's either a notification or a request,
+			// route using s_boundChans
+			if (typeof meth === 'string') {
+				var delivered = false;
+				if (s_boundChans[o] && s_boundChans[o][s]) {
+					for (var j = 0; j < s_boundChans[o][s].length; j++) {
+						if (s_boundChans[o][s][j].win === w) {
+							s_boundChans[o][s][j].handler(o, meth, m);
+							delivered = true;
+							break;
+						}
+					}
+				}
+
+				if (!delivered && s_boundChans['*'] && s_boundChans['*'][s]) {
+					for (var j = 0; j < s_boundChans['*'][s].length; j++) {
+						if (s_boundChans['*'][s][j].win === w) {
+							s_boundChans['*'][s][j].handler(o, meth, m);
+							break;
+						}
+					}
+				}
+			}
+			// otherwise it must have an id (or be poorly formed
+			else if (typeof i != 'undefined') {
+				if (s_transIds[i]) s_transIds[i](o, meth, m);
+			}
+		};
+
+		// Setup postMessage event listeners
+		if (window.addEventListener) window.addEventListener('message', s_onMessage, false);
+		else if(window.attachEvent) window.attachEvent('onmessage', s_onMessage);
+
+		/* a messaging channel is constructed from a window and an origin.
+		 * the channel will assert that all messages received over the
+		 * channel match the origin
+		 *
+		 * Arguments to Channel.build(cfg):
+		 *
+		 *   cfg.window - the remote window with which we'll communicate
+		 *   cfg.origin - the expected origin of the remote window, may be '*'
+		 *				which matches any origin
+		 *   cfg.scope  - the 'scope' of messages.  a scope string that is
+		 *				prepended to message names.  local and remote endpoints
+		 *				of a single channel must agree upon scope. Scope may
+		 *				not contain double colons ('::').
+		 *   cfg.debugOutput - A boolean value.  If true and window.console.log is
+		 *				a function, then debug strings will be emitted to that
+		 *				function.
+		 *   cfg.debugOutput - A boolean value.  If true and window.console.log is
+		 *				a function, then debug strings will be emitted to that
+		 *				function.
+		 *   cfg.postMessageObserver - A function that will be passed two arguments,
+		 *				an origin and a message.  It will be passed these immediately
+		 *				before messages are posted.
+		 *   cfg.gotMessageObserver - A function that will be passed two arguments,
+		 *				an origin and a message.  It will be passed these arguments
+		 *				immediately after they pass scope and origin checks, but before
+		 *				they are processed.
+		 *   cfg.onReady - A function that will be invoked when a channel becomes "ready",
+		 *				this occurs once both sides of the channel have been
+		 *				instantiated and an application level handshake is exchanged.
+		 *				the onReady function will be passed a single argument which is
+		 *				the channel object that was returned from build().
+		 */
+		return {
+			build: function(cfg) {
+				var debug = function(m) {
+					if (cfg.debugOutput && window.console && window.console.log) {
+						// try to stringify, if it doesn't work we'll let javascript's built in toString do its magic
+						try { if (typeof m !== 'string') m = JSON.stringify(m); } catch(e) { }
+						console.log("["+chanId+"] " + m);
+					}
+				};
+
+				/* browser capabilities check */
+				if (!window.postMessage) throw("jschannel cannot run this browser, no postMessage");
+				if (!window.JSON || !window.JSON.stringify || ! window.JSON.parse) {
+					throw("jschannel cannot run this browser, no JSON parsing/serialization");
+				}
+
+				/* basic argument validation */
+				if (typeof cfg != 'object') throw("Channel build invoked without a proper object argument");
+
+				if (!cfg.window || !cfg.window.postMessage) throw("Channel.build() called without a valid window argument");
+
+				/* we'd have to do a little more work to be able to run multiple channels that intercommunicate the same
+				 * window...  Not sure if we care to support that */
+				if (window === cfg.window) throw("target window is same as present window -- not allowed");
+
+				// let's require that the client specify an origin.  if we just assume '*' we'll be
+				// propagating unsafe practices.  that would be lame.
+				var validOrigin = false;
+				if (typeof cfg.origin === 'string') {
+					var oMatch;
+					if (cfg.origin === "*") validOrigin = true;
+					// allow valid domains under http and https.  Also, trim paths off otherwise valid origins.
+					else if (null !== (oMatch = cfg.origin.match(/^https?:\/\/(?:[-a-zA-Z0-9_\.])+(?::\d+)?/))) {
+						cfg.origin = oMatch[0].toLowerCase();
+						validOrigin = true;
+					}
+				}
+
+				if (!validOrigin) throw ("Channel.build() called with an invalid origin");
+
+				if (typeof cfg.scope !== 'undefined') {
+					if (typeof cfg.scope !== 'string') throw 'scope, when specified, must be a string';
+					if (cfg.scope.split('::').length > 1) throw "scope may not contain double colons: '::'";
+				}
+
+				/* private variables */
+				// generate a random and psuedo unique id for this channel
+				var chanId = (function () {
+					var text = "";
+					var alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+					for(var i=0; i < 5; i++) text += alpha.charAt(Math.floor(Math.random() * alpha.length));
+					return text;
+				})();
+
+				// registrations: mapping method names to call objects
+				var regTbl = { };
+				// current oustanding sent requests
+				var outTbl = { };
+				// current oustanding received requests
+				var inTbl = { };
+				// are we ready yet?  when false we will block outbound messages.
+				var ready = false;
+				var pendingQueue = [ ];
+
+				var createTransaction = function(id,origin,callbacks) {
+					var shouldDelayReturn = false;
+					var completed = false;
+
+					return {
+						origin: origin,
+						invoke: function(cbName, v) {
+							// verify in table
+							if (!inTbl[id]) throw "attempting to invoke a callback of a nonexistent transaction: " + id;
+							// verify that the callback name is valid
+							var valid = false;
+							for (var i = 0; i < callbacks.length; i++) if (cbName === callbacks[i]) { valid = true; break; }
+							if (!valid) throw "request supports no such callback '" + cbName + "'";
+
+							// send callback invocation
+							postMessage({ id: id, callback: cbName, params: v});
+						},
+						error: function(error, message) {
+							completed = true;
+							// verify in table
+							if (!inTbl[id]) throw "error called for nonexistent message: " + id;
+
+							// remove transaction from table
+							delete inTbl[id];
+
+							// send error
+							postMessage({ id: id, error: error, message: message });
+						},
+						complete: function(v) {
+							completed = true;
+							// verify in table
+							if (!inTbl[id]) throw "complete called for nonexistent message: " + id;
+							// remove transaction from table
+							delete inTbl[id];
+							// send complete
+							postMessage({ id: id, result: v });
+						},
+						delayReturn: function(delay) {
+							if (typeof delay === 'boolean') {
+								shouldDelayReturn = (delay === true);
+							}
+							return shouldDelayReturn;
+						},
+						completed: function() {
+							return completed;
+						}
+					};
+				};
+
+				var setTransactionTimeout = function(transId, timeout, method) {
+				  return window.setTimeout(function() {
+					if (outTbl[transId]) {
+					  // XXX: what if client code raises an exception here?
+					  var msg = "timeout (" + timeout + "ms) exceeded on method '" + method + "'";
+					  (1,outTbl[transId].error)("timeout_error", msg);
+					  delete outTbl[transId];
+					  delete s_transIds[transId];
+					}
+				  }, timeout);
+				};
+
+				var onMessage = function(origin, method, m) {
+					// if an observer was specified at allocation time, invoke it
+					if (typeof cfg.gotMessageObserver === 'function') {
+						// pass observer a clone of the object so that our
+						// manipulations are not visible (i.e. method unscoping).
+						// This is not particularly efficient, but then we expect
+						// that message observers are primarily for debugging anyway.
+						try {
+							cfg.gotMessageObserver(origin, m);
+						} catch (e) {
+							debug("gotMessageObserver() raised an exception: " + e.toString());
+						}
+					}
+
+					// now, what type of message is this?
+					if (m.id && method) {
+						// a request!  do we have a registered handler for this request?
+						if (regTbl[method]) {
+							var trans = createTransaction(m.id, origin, m.callbacks ? m.callbacks : [ ]);
+							inTbl[m.id] = { };
+							try {
+								// callback handling.  we'll magically create functions inside the parameter list for each
+								// callback
+								if (m.callbacks && s_isArray(m.callbacks) && m.callbacks.length > 0) {
+									for (var i = 0; i < m.callbacks.length; i++) {
+										var path = m.callbacks[i];
+										var obj = m.params;
+										var pathItems = path.split('/');
+										for (var j = 0; j < pathItems.length - 1; j++) {
+											var cp = pathItems[j];
+											if (typeof obj[cp] !== 'object') obj[cp] = { };
+											obj = obj[cp];
+										}
+										obj[pathItems[pathItems.length - 1]] = (function() {
+											var cbName = path;
+											return function(params) {
+												return trans.invoke(cbName, params);
+											};
+										})();
+									}
+								}
+								var resp = regTbl[method](trans, m.params);
+								if (!trans.delayReturn() && !trans.completed()) trans.complete(resp);
+							} catch(e) {
+								// automagic handling of exceptions:
+								var error = "runtime_error";
+								var message = null;
+								// * if it's a string then it gets an error code of 'runtime_error' and string is the message
+								if (typeof e === 'string') {
+									message = e;
+								} else if (typeof e === 'object') {
+									// either an array or an object
+									// * if it's an array of length two, then  array[0] is the code, array[1] is the error message
+									if (e && s_isArray(e) && e.length == 2) {
+										error = e[0];
+										message = e[1];
+									}
+									// * if it's an object then we'll look form error and message parameters
+									else if (typeof e.error === 'string') {
+										error = e.error;
+										if (!e.message) message = "";
+										else if (typeof e.message === 'string') message = e.message;
+										else e = e.message; // let the stringify/toString message give us a reasonable verbose error string
+									}
+								}
+
+								// message is *still* null, let's try harder
+								if (message === null) {
+									try {
+										message = JSON.stringify(e);
+										/* On MSIE8, this can result in 'out of memory', which
+										 * leaves message undefined. */
+										if (typeof(message) == 'undefined')
+										  message = e.toString();
+									} catch (e2) {
+										message = e.toString();
+									}
+								}
+
+								trans.error(error,message);
+							}
+						}
+					} else if (m.id && m.callback) {
+						if (!outTbl[m.id] ||!outTbl[m.id].callbacks || !outTbl[m.id].callbacks[m.callback])
+						{
+							debug("ignoring invalid callback, id:"+m.id+ " (" + m.callback +")");
+						} else {
+							// XXX: what if client code raises an exception here?
+							outTbl[m.id].callbacks[m.callback](m.params);
+						}
+					} else if (m.id) {
+						if (!outTbl[m.id]) {
+							debug("ignoring invalid response: " + m.id);
+						} else {
+							// XXX: what if client code raises an exception here?
+							if (m.error) {
+								(1,outTbl[m.id].error)(m.error, m.message);
+							} else {
+								if (m.result !== undefined) (1,outTbl[m.id].success)(m.result);
+								else (1,outTbl[m.id].success)();
+							}
+							delete outTbl[m.id];
+							delete s_transIds[m.id];
+						}
+					} else if (method) {
+						// tis a notification.
+						if (regTbl[method]) {
+							// yep, there's a handler for that.
+							// transaction has only origin for notifications.
+							regTbl[method]({ origin: origin }, m.params);
+							// if the client throws, we'll just let it bubble out
+							// what can we do?  Also, here we'll ignore return values
+						}
+					}
+				};
+
+				// now register our bound channel for msg routing
+				s_addBoundChan(cfg.window, cfg.origin, ((typeof cfg.scope === 'string') ? cfg.scope : ''), onMessage);
+
+				// scope method names based on cfg.scope specified when the Channel was instantiated
+				var scopeMethod = function(m) {
+					if (typeof cfg.scope === 'string' && cfg.scope.length) m = [cfg.scope, m].join("::");
+					return m;
+				};
+
+				// a small wrapper around postmessage whose primary function is to handle the
+				// case that clients start sending messages before the other end is "ready"
+				var postMessage = function(msg, force) {
+					if (!msg) throw "postMessage called with null message";
+
+					// delay posting if we're not ready yet.
+					var verb = (ready ? "post  " : "queue ");
+					debug(verb + " message: " + JSON.stringify(msg));
+					if (!force && !ready) {
+						pendingQueue.push(msg);
+					} else {
+						if (typeof cfg.postMessageObserver === 'function') {
+							try {
+								cfg.postMessageObserver(cfg.origin, msg);
+							} catch (e) {
+								debug("postMessageObserver() raised an exception: " + e.toString());
+							}
+						}
+
+						try{
+							// throws errors in tests, when child iframe is not loaded
+							cfg.window.postMessage(JSON.stringify(msg), cfg.origin);
+						} catch (e) {
+							console.log(e);
+						}
+					}
+				};
+
+				var onReady = function(trans, type) {
+					debug('ready msg received');
+					if (ready) throw "received ready message while in ready state.  help!";
+
+					if (type === 'ping') {
+						chanId += '-R';
+					} else {
+						chanId += '-L';
+					}
+
+					obj.unbind('__ready'); // now this handler isn't needed any more.
+					ready = true;
+					debug('ready msg accepted.');
+
+					if (type === 'ping') {
+						obj.notify({ method: '__ready', params: 'pong' });
+					}
+
+					// flush queue
+					while (pendingQueue.length) {
+						postMessage(pendingQueue.pop());
+					}
+
+					// invoke onReady observer if provided
+					if (typeof cfg.onReady === 'function') cfg.onReady(obj);
+				};
+
+				var obj = {
+					// tries to unbind a bound message handler.  returns false if not possible
+					unbind: function (method) {
+						if (regTbl[method]) {
+							if (!(delete regTbl[method])) throw ("can't delete method: " + method);
+							return true;
+						}
+						return false;
+					},
+					bind: function (method, cb) {
+						if (!method || typeof method !== 'string') throw "'method' argument to bind must be string";
+						if (!cb || typeof cb !== 'function') throw "callback missing from bind params";
+
+						if (regTbl[method]) throw "method '"+method+"' is already bound!";
+						regTbl[method] = cb;
+						return this;
+					},
+					call: function(m) {
+						if (!m) throw 'missing arguments to call function';
+						if (!m.method || typeof m.method !== 'string') throw "'method' argument to call must be string";
+						if (!m.success || typeof m.success !== 'function') throw "'success' callback missing from call";
+
+						// now it's time to support the 'callback' feature of jschannel.  We'll traverse the argument
+						// object and pick out all of the functions that were passed as arguments.
+						var callbacks = { };
+						var callbackNames = [ ];
+						var seen = [ ];
+
+						var pruneFunctions = function (path, obj) {
+							if ($.inArray(obj, seen) !== -1) {
+								throw "params cannot be a recursive data structure"
+							}
+							seen.push(obj);
+						   
+							if (typeof obj === 'object') {
+								for (var k in obj) {
+									if (!obj.hasOwnProperty(k)) continue;
+									var np = path + (path.length ? '/' : '') + k;
+									if (typeof obj[k] === 'function') {
+										callbacks[np] = obj[k];
+										callbackNames.push(np);
+										delete obj[k];
+									} else if (typeof obj[k] === 'object') {
+										pruneFunctions(np, obj[k]);
+									}
+								}
+							}
+						};
+						pruneFunctions("", m.params);
+
+						// build a 'request' message and send it
+						var msg = { id: s_curTranId, method: scopeMethod(m.method), params: m.params };
+						if (callbackNames.length) msg.callbacks = callbackNames;
+
+						if (m.timeout)
+						  // XXX: This function returns a timeout ID, but we don't do anything with it.
+						  // We might want to keep track of it so we can cancel it using clearTimeout()
+						  // when the transaction completes.
+						  setTransactionTimeout(s_curTranId, m.timeout, scopeMethod(m.method));
+
+						// insert into the transaction table
+						outTbl[s_curTranId] = { callbacks: callbacks, error: m.error, success: m.success };
+						s_transIds[s_curTranId] = onMessage;
+
+						// increment current id
+						s_curTranId++;
+
+						postMessage(msg);
+					},
+					notify: function(m) {
+						if (!m) throw 'missing arguments to notify function';
+						if (!m.method || typeof m.method !== 'string') throw "'method' argument to notify must be string";
+
+						// no need to go into any transaction table
+						postMessage({ method: scopeMethod(m.method), params: m.params });
+					},
+					destroy: function () {
+						s_removeBoundChan(cfg.window, cfg.origin, ((typeof cfg.scope === 'string') ? cfg.scope : ''));
+						if (window.removeEventListener) window.removeEventListener('message', onMessage, false);
+						else if(window.detachEvent) window.detachEvent('onmessage', onMessage);
+						ready = false;
+						regTbl = { };
+						inTbl = { };
+						outTbl = { };
+						cfg.origin = null;
+						pendingQueue = [ ];
+						debug("channel destroyed");
+						chanId = "";
+					}
+				};
+
+				obj.bind('__ready', onReady);
+				setTimeout(function() {
+					postMessage({ method: scopeMethod('__ready'), params: "ping" }, true);
+				}, 0);
+
+				return obj;
+			}
+		};
+	})();
+	
+	return Channel;
+});
 define('module/StylePropertiesFilter',['require','jquery'],function(require){
     var $ = require("jquery");
 
@@ -45686,7 +45249,142 @@ define('module/StylePropertiesFilter',['require','jquery'],function(require){
     return StylePropertiesFilter;
 });
 
-define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','module/Options','module/PaymentView','module/StylePropertiesFilter','module/Tracking','module/Wpwl','module/Util','module/InternalRequestCommunication','module/logging/LoggerFactory'],function(require){
+define('module/AdditionalLogs',['require','module/Options'],function (require) {
+    var Options = require('module/Options');
+
+    var AdditionalLogs = {};
+
+    AdditionalLogs.isAdditionalLogsEnabled = function () {
+        return Options.enableAdditionalLogs;
+    };
+
+    return AdditionalLogs;
+});
+
+define('module/logging/LoggerFactory',['require','jquery','module/Generate','module/Wpwl','module/AdditionalLogs','module/AjaxSender'],function(require){
+    var $ = require('jquery');
+    var Generate = require('module/Generate');
+    var Wpwl = require('module/Wpwl');
+    var AdditionalLogs = require('module/AdditionalLogs');
+    var AjaxSender = require('module/AjaxSender');
+
+    var logsUrl;
+
+    var LogPusher = {
+        interval: null,
+        messageQueue: null,
+
+        /**
+         * Impure method, will remove from the messageQueue the messages that will be flushed.
+         */
+        getDataToFlush: function(){
+            var data = {};
+            var messagesToBeFlushed = this.messageQueue.length;
+            for (var i = 0; i < messagesToBeFlushed; i++) {
+                var message = this.messageQueue.shift();
+                var messagePrefix = 'messages[' + i + ']';
+                data[messagePrefix + '.logger'] = message.component;
+                data[messagePrefix + '.timestamp'] = message.timestamp;
+                data[messagePrefix + '.message'] = message.message;
+                data[messagePrefix + '.level'] = message.level;
+            }
+            return data;
+        },
+
+        isDirty: function(){
+            return !!this.messageQueue.length;
+        },
+        init: function(){
+            this.clean();
+        },
+        clean: function(){
+            this.messageQueue = [];
+        },
+        flush: function(){
+            if (!logsUrl && Wpwl.checkout.id){
+                logsUrl = Generate.string(Wpwl.url, "/v", Wpwl.apiVersion, "/checkouts/", Wpwl.checkout.id, "/logs");
+            }
+            if(logsUrl && this.isDirty()){
+                AjaxSender.send({
+                    method: "POST",
+                    url: logsUrl,
+                    dataType: "json",
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log("Error sending ajax: " + textStatus + " - " + errorThrown);
+                    },
+                    data: this.getDataToFlush()
+                });
+            }
+        },
+        pushMessage: function(component, level, message){
+            this.messageQueue.push({component: component,
+                level: level,
+                timestamp: Date.now(),
+                message: message});
+        },
+        start : function(_window){
+            var callPush = function() {LogPusher.flush();};
+            $(_window).on('beforeunload.wpwlEvent', callPush);
+            if(this.interval){
+                clearInterval(this.interval);
+            }
+            this.interval = setInterval(callPush, 5000);
+        }
+
+    };
+
+    LogPusher.init();
+
+    var Logger = function(component){
+        this.component = component;
+        this.isAdditionalLogsEnabled = AdditionalLogs.isAdditionalLogsEnabled();
+    };
+
+    Logger.prototype.info = function(message){
+        this.logMessage("INFO", message);
+    };
+
+    Logger.prototype.debug = function(message){
+        this.logMessage("DEBUG", message);
+    };
+
+    Logger.prototype.error = function(message){
+        this.logMessage("ERROR", message);
+    };
+
+    Logger.prototype.additionalLog = function() {};
+
+    Logger.prototype.logMessage = function(level, message){
+        LogPusher.pushMessage(this.component, level, message);
+    };
+
+    var LoggerFactory = {};
+
+    LoggerFactory.getLogger = function(component){
+        var logger = new Logger(component);
+        if (logger.isAdditionalLogsEnabled === true) {
+            logger.additionalLog = function(level, message) {
+                var levelParam = level.toUpperCase() + '_ADDITIONAL_LOGS';
+                console.log(levelParam + '\n' + message);
+                LogPusher.pushMessage(this.component, levelParam, message);
+            };
+        }
+        return logger;
+    };
+
+    LoggerFactory.initFor = function(_window){
+        LogPusher.start(_window);
+    };
+
+    LoggerFactory.flush = function(){
+        LogPusher.flush();
+    };
+
+    return LoggerFactory;
+});
+
+
+define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','module/Options','module/PaymentView','module/StylePropertiesFilter','module/Tracking','module/Wpwl','module/Util','module/logging/LoggerFactory'],function(require){
 	var $ = require('jquery');
 	var Channel = require('lib/Channel');
 	var Options = require('module/Options');
@@ -45695,15 +45393,8 @@ define('module/ParentToIframeCommunication',['require','jquery','lib/Channel','m
 	var Tracking = require('module/Tracking');
 	var Wpwl = require('module/Wpwl');
 	var Util = require('module/Util');
-	var InternalRequestCommunication = require('module/InternalRequestCommunication');
 	var LoggerFactory = require('module/logging/LoggerFactory');
 	var logger = LoggerFactory.getLogger('ParentToIframeCommunication');
-
-	if (!Util.isACIIframe) {
-		InternalRequestCommunication.getSender().then(function (sender) {
-			Util._sender = sender;
-		});
-	}
 
 	var COMMUNICATION_TIMEOUT = 60000;
 
@@ -48348,6 +48039,341 @@ define('module/OneClickPaymentWidget',['require','jquery','module/I18n','module/
     return OneClickPaymentWidget;
 });
 
+define('module/InternalRequestCommunicationSettings',[],function() {
+    var InternalRequestCommunicationSettings = {};
+
+    InternalRequestCommunicationSettings.IFRAME_NAME = 'internalRequest';
+    InternalRequestCommunicationSettings.SCOPE = 'internalRequestIframeCommunication';
+    InternalRequestCommunicationSettings.SEND_METHOD = 'send';
+    InternalRequestCommunicationSettings.LOAD_IOVATION_MDR = 'loadIovationMdr';
+
+    return InternalRequestCommunicationSettings;
+});
+
+/**
+ * Module represents a sender responsible for communicating with internalRequestIframe.
+ *
+ * Upon initialization sender will setup communication channel with iframe window and will
+ * be ready to send messages, which will be handled by its conterpart - InternalRequestListener.
+ */
+define('module/InternalRequestSender',['require','jquery','lib/Channel','module/Wpwl','module/InternalRequestCommunicationSettings','module/logging/LoggerFactory'],function(require) {
+    var $ = require('jquery');
+    var Channel = require('lib/Channel');
+    var Wpwl = require('module/Wpwl');
+    var InternalRequestCommunicationSettings = require('module/InternalRequestCommunicationSettings');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var logger = LoggerFactory.getLogger('InternalRequestSender');
+
+    var COMMUNICATION_TIMEOUT = 60000;
+
+    var InternalRequestSender = function() {
+        this.channelReadyDeferred = $.Deferred();
+
+        this.$internalRequestIframe = $('[name=' + InternalRequestCommunicationSettings.IFRAME_NAME + ']');
+    };
+
+    InternalRequestSender.prototype.init = function() {
+        return this.iframeLoad()
+            .then(this.setupChannel.bind(this));
+    };
+
+    InternalRequestSender.prototype.iframeLoad = function() {
+        var iframeLoadDeferred = $.Deferred();
+
+        this.$internalRequestIframe.on('load', function() {
+            iframeLoadDeferred.resolve();
+        });
+
+        setTimeout(function() {
+            iframeLoadDeferred.reject(new Error('Failed to load internalRequest iframe within timeout.'));
+        }, COMMUNICATION_TIMEOUT);
+
+        return iframeLoadDeferred.promise();
+    };
+
+    InternalRequestSender.prototype.setupChannel = function() {
+        try {
+            this.channel = Channel.build({
+                window: this.$internalRequestIframe.get(0).contentWindow,
+                origin: Wpwl.url,
+                scope: InternalRequestCommunicationSettings.SCOPE,
+                onReady: this.onChannelReady.bind(this)
+            });
+        } catch (e) {
+            logger.additionalLog("ERROR", "Exception when setup channel:\n" + e);
+            this.rejectDeferred(e);
+        }
+
+        this.timeout = setTimeout(
+            this.rejectDeferred.bind(this, new Error('Failed to setup channel with internalRequest iframe within timeout.')),
+            COMMUNICATION_TIMEOUT);
+
+        return this.channelReadyDeferred.promise();
+    };
+
+    InternalRequestSender.prototype.rejectDeferred = function(reason) {
+        if (this.timeout !== undefined) {
+            this.timeout = clearTimeout(this.timeout);
+            // This is needed because some cases call directly the rejectDeferred without waiting for the timeout
+        }
+        this.channelReadyDeferred.reject(reason);
+    };
+
+    InternalRequestSender.prototype.onChannelReady = function() {
+        this.timeout = clearTimeout(this.timeout);
+        this.channelReadyDeferred.resolve(this);
+    };
+
+    InternalRequestSender.prototype.send = function(params) {
+        return this.callChannelAndReturnPromise(InternalRequestCommunicationSettings.SEND_METHOD, params);
+    };
+
+    InternalRequestSender.prototype.loadIovationMdr = function(checkoutUrl) {
+        return this.callChannelAndReturnPromise(InternalRequestCommunicationSettings.LOAD_IOVATION_MDR, checkoutUrl);
+    };
+
+    InternalRequestSender.prototype.callChannelAndReturnPromise = function(method, params) {
+        var deferred = $.Deferred();
+
+        this.channel.call({
+            method: method,
+            timeout: COMMUNICATION_TIMEOUT,
+            params: params,
+            success: deferred.resolve,
+            error: deferred.reject
+        });
+
+        return deferred.promise();
+    };
+
+    return InternalRequestSender;
+});
+
+define('lib/iovation',[],function() {
+var iovation = {};
+iovation.load = function() {
+
+/*
+ Copyright(c) 2018, iovation, inc. All rights reserved.
+*/
+(function B(){function v(e,a){var b={},c;for(c=e.length-1;-1<c;c--)0<c?b[c]=function(){var d=c;return function(){return w(e[d],b[d+1],a)}}():w(e[c],b[c+1],a)}function w(e,n,k){var c=document.createElement("script"),f,g,l;l=A(a[k]&&a[k].staticVer&&a[k].staticVer+"/"||e[1]);e[0]=e[0].replace("##version##",l);f=e[0].split("?")[0].split("/");g=f[f.length-1].split(".")[0];u.test(e[1])&&l!==e[1]&&d("loader: Overriding configured version with staticVer.");c.setAttribute("src",e[0]);c&&c.addEventListener?
+c.addEventListener("error",function(){b[k+"_"+g+"_load_failure"]="true"}):c.attachEvent&&c.attachEvent("onerror",function(){b[k+"_"+g+"_load_failure"]="true"});n&&(c.onload=n);document.getElementsByTagName("head")[0].appendChild(c)}function d(e){if("function"===typeof a.trace_handler)try{a.trace_handler(e)}catch(b){}}function f(b,a){var d=null!==b&&void 0!==b;return!d||"1"!==b.toString()&&"true"!==b.toString().toLowerCase()?!d||"0"!==b.toString()&&"false"!==b.toString().toLowerCase()?"boolean"===
+typeof a?a:!1:!1:!0}function A(a){d("********** version before replace: "+a+" **********");d('localNamespace[ "url_dots_to_dashes" ]: '+b.url_dots_to_dashes);d("numericVersionPattern.test( output ): "+u.test(a));b.url_dots_to_dashes&&u.test(a)&&(a=a.replace(/\./g,"-"));d("version after replace: "+a);return a}var g=window,x=g.io_global_object_name||"IGLOO",a=g[x]=g[x]||{},b=a.loader=a.loader||{},y=[],z=[],u=/^[0-9]{1,3}(\.[0-9]{1,3}){2}\/$/;if(b.loaderMain)return d("loader: Loader script has already run, try reducing the number of places it's being included."),
+!1;b.loaderMain=B;b.loaderVer="5.2.2";(function(){var e=f(b.tp,!0),n=f(b.fp_static,!0),k=f(b.fp_dyn,!0),c=f(b.enable_legacy_compatibility),u=f(b.tp_split),v=b.tp_host&&b.tp_host.replace(/\/+$/,"")||"https://mpsnare.iesnare.com",l=b.fp_static_override_uri,m=void 0!==b.uri_hook?b.uri_hook+"/":"/iojs/",p=(b.version||"versionOrAliasIsRequired")+"/",w=b.subkey?g.encodeURIComponent(b.subkey)+"/":"",x=b.tp_resource||"wdp.js",q=b.tp_host?"&tp_host="+g.encodeURIComponent(b.tp_host):"",C=l?"&fp_static_uri="+
+g.encodeURIComponent(l):"",r,t,h;b.tp_host=v;r=f(a.enable_flash,!0);t=a.io&&a.io.enable_flash;h=a.fp&&a.fp.enable_flash;t=void 0!==t&&null!==t?f(t,!0):r;void 0!==h&&null!==h?h=f(h,!0):t=r;r=t?"&flash=true":"&flash=false";h=h?"&flash=true":"&flash=false";q="?loaderVer="+b.loaderVer+"&compat="+c+"&tp="+e+"&tp_split="+u+q+"&fp_static="+n+"&fp_dyn="+k+C;e||n||d("loader: Not currently configured to load fp_static or tp script(s).");a.fp&&a.fp.staticVer&&a.fp.staticVer+"/"!==p&&(p=A(a.fp.staticVer+"/"),
+d("loader: Configured version replaced with that from pre-loaded static script."));n||a.fp&&a.fp.staticMain?(m=(m+"##version##"+w).replace(/\/\//g,"/"),n&&(a.fp&&a.fp.staticMain?c&&!a.fp.preCompatMain&&d("loader: enable_legacy_compatibility on, but included static does not have the compat wrapper."):l?y.push([l,""]):y.push([m+"static_wdp.js"+q+h,p])),!k||a.fp&&a.fp.dynMain?a.fp&&a.fp.dynMain&&d("loader: First party dynamic script has already been loaded, disable fp_dyn or make sure you're not manually including the dynamic file separately."):
+y.push([m+"dyn_wdp.js"+q+h,p])):f(b.fp_dyn)&&d("loader: Invalid Config, first party dynamic script set to load without static.");e&&(a.io&&a.io.staticMain?d("loader: Third party script has already been loaded."):(m=v+"/##version##"+w,u?(z.push([m+"static_wdp.js"+q+r,p]),z.push([m+"dyn_wdp.js"+q+r,p]),b.tp_resource&&d("loader: Invalid Config: both tp_resource and tp_split set. Ignoring tp_resource.")):z.push([m+x+q+r,p])))})();v(y,"fp");v(z,"io")})();
+
+};
+
+return iovation;
+});
+
+/*jshint camelcase: false */
+define('module/IovationLoader',['require','jquery','lib/iovation'],function(require){
+	var $ = require("jquery");
+    var iovationjs = require("lib/iovation");
+
+    var IovationLoader = {};
+
+    IovationLoader.load = function(checkoutUrl) {
+        window.io_global_object_name = "IGLOO";
+        window.IGLOO = window.IGLOO || {
+            "enable_flash": false,
+            "bb_callback": function (bb, complete) {
+                if (complete) {
+                    var params = {
+                        url: checkoutUrl,
+                        method: "POST",
+                        contentType: "application/x-www-form-urlencoded",
+                        data: "customer.browserFingerprint.value=" + encodeURIComponent(bb)
+                    };
+                    $.ajax(params);
+                }
+            },
+            "loader": {
+                "uri_hook": "/fddr",
+                "version": "general5"
+            }
+        };
+
+        iovationjs.load();
+    };
+
+    return IovationLoader;
+});
+
+/**
+ * Module represents a listener within internalRequestIframe.
+ *
+ * Upon initialization listener will setup communication channel with parent window and listen
+ * for incoming messages from corresponding counterpart - InternalRequestSender.
+ */
+define('module/InternalRequestListener',['require','jquery','lib/Channel','module/InternalRequestCommunicationSettings','module/IovationLoader','module/logging/LoggerFactory'],function(require) {
+    var $ = require('jquery');
+    var Channel = require('lib/Channel');
+    var InternalRequestCommunicationSettings = require('module/InternalRequestCommunicationSettings');
+    var IovationLoader = require('module/IovationLoader');
+    var LoggerFactory = require('module/logging/LoggerFactory');
+    var logger = LoggerFactory.getLogger('InternalRequestListener');
+
+    var InternalRequestListener = function() {
+        this.channelReadyDeferred = $.Deferred();
+    };
+
+    InternalRequestListener.prototype.init = function() {
+        this.setupChannel()
+            .done(this.initListeners.bind(this));
+    };
+
+    InternalRequestListener.prototype.setupChannel = function() {
+        try {
+            this.channel = Channel.build({
+                window: window.parent,
+                origin: "*",
+                scope: InternalRequestCommunicationSettings.SCOPE,
+                onReady: this.onChannelReady.bind(this)
+            });
+        } catch (e) {
+            logger.additionalLog("ERROR", "Exception when setup channel:\n" + e);
+            this.channelReadyDeferred.reject(e);
+        }
+
+        return this.channelReadyDeferred.promise();
+    };
+
+    InternalRequestListener.prototype.onChannelReady = function() {
+        this.channelReadyDeferred.resolve();
+    };
+
+    InternalRequestListener.prototype.initListeners = function() {
+        this.channel.bind(InternalRequestCommunicationSettings.SEND_METHOD, function(trans, params) {
+            var requestResult = this.send(params);
+
+            convertPromiseToTransAndDelayReturn(trans, requestResult);
+        }.bind(this));
+
+        this.channel.bind(InternalRequestCommunicationSettings.LOAD_IOVATION_MDR, function(trans, checkoutUrl) {
+            IovationLoader.load(checkoutUrl);
+        }.bind(this));
+    };
+
+    InternalRequestListener.prototype.send = $.ajax;
+
+    function convertPromiseToTransAndDelayReturn(trans, promise) {
+        promise
+            .then(trans.complete)
+            .fail(trans.error);
+
+        trans.delayReturn(true);
+    }
+
+    return InternalRequestListener;
+});
+
+/**
+ * Module provides ability to communicate with OPP backend without performing cross-site request.
+ *
+ * This is implemented using hidden iframe loaded from OPP domain and with communication between
+ * payment widget and that iframe: widget -> iframe -> OPP backend.
+ */
+define('module/InternalRequestCommunication',['require','jquery','module/Generate','module/Util','module/Wpwl','module/Options','module/InternalRequestSender','module/InternalRequestListener','module/InternalRequestCommunicationSettings'],function(require) {
+    var $ = require('jquery');
+    var Generate = require('module/Generate');
+    var Util = require('module/Util');
+    var Wpwl = require('module/Wpwl');
+    var Options = require('module/Options');
+    var InternalRequestSender = require('module/InternalRequestSender');
+    var InternalRequestListener = require('module/InternalRequestListener');
+    var InternalRequestCommunicationSettings = require('module/InternalRequestCommunicationSettings');
+
+    var InternalRequestCommunication = {};
+
+    var senderDeferred = $.Deferred();
+    var senderPromise = senderDeferred.promise();
+
+    /**
+     * Initializes internal request sender so it can be used to send requests via internalRequestIframe
+     * to OPP backend. To obtain sender itself method 'getSender' should be used.
+     *
+     * Upon invocation current method will render hidden iframe and setup sender instance. Method should
+     * be called once per lifecycle of payment widgets. It can be called again after 'unloadSender'
+     * has been called.
+     */
+    InternalRequestCommunication.initSender = function($wpwlContainer) {
+        var lastWpwlContainer = $wpwlContainer.last();
+
+        if (!Util.isNullOrUndefined(lastWpwlContainer)) {
+            $(lastWpwlContainer).after(generateHiddenInternalRequestIframe());
+
+            var sender = new InternalRequestSender();
+
+            sender.init()
+                .then(function() {
+                    senderDeferred.resolve(sender);
+                })
+                .fail(function(reason) {
+                    senderDeferred.reject(reason);
+                });
+        }
+    };
+
+    /**
+     * Removes hidden iframe and releases sender instance.
+     */
+    InternalRequestCommunication.unloadSender = function() {
+        senderPromise.then(function(sender) {
+            sender.channel.destroy();
+        });
+
+        senderDeferred = $.Deferred();
+        senderPromise = senderDeferred.promise();
+
+        $('[name=' + InternalRequestCommunicationSettings.IFRAME_NAME + ']').remove();
+    };
+
+    /**
+     * Returns sender instance wrapped within promise.
+     *
+     * Since process of sender loading is asynchronous this method cannot return direct reference to sender
+     * instance as it can be not fully initialized yet.
+     */
+    InternalRequestCommunication.getSender = function() {
+        return senderPromise;
+    };
+
+    /**
+     * Initializes internal request listener.
+     *
+     * This method will do nothing if it has been called outside of scope of internalRequestIframe html.
+     */
+    InternalRequestCommunication.initListener = function() {
+        // Message namespace with specific value will indicate that javascript code is being
+        // executed within internalRequestIframe scope, and it is the only place where we need
+        // to initialize internalRequestListener
+        if (Options.messageNamespace === 'internalRequest') {
+            new InternalRequestListener().init();
+        }
+    };
+
+    function generateHiddenInternalRequestIframe() {
+        return Generate.outerHtml(
+            $('<iframe/>', {
+                'class': 'wpwl-control wpwl-control-iframe wpwl-control-internalRequestIframe disabled',
+                'style': 'display: none',
+                'name': InternalRequestCommunicationSettings.IFRAME_NAME,
+                'src': getInternalRequestIframeSrc()
+            })
+        );
+    }
+
+    function getInternalRequestIframeSrc() {
+        return Generate.string(Wpwl.url, '/v', Wpwl.apiVersion, '/internalRequestIframe.html', (Wpwl.minified ? '' : '?minified=false'));
+    }
+
+    return InternalRequestCommunication;
+});
+
 /* jshint ignore:start */
 define('module/integrations/AffirmLoader',['require','module/Wpwl'],function(require) {
 
@@ -49322,7 +49348,7 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             appendBilling(payment.billingContact, $form);
         }
         if (submitOnPaymentAuthorized.indexOf('customer') > -1) {
-            appendCustomer(payment.billingContact, $form);
+            appendCustomer(payment.billingContact, payment.shippingContact, $form);
         }
     };
 
@@ -49348,15 +49374,16 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
             (billingContact.countryCode) ? billingContact.countryCode.toUpperCase() : null);
     }
 
-    function appendCustomer(billingContact, $form) {
-        if (!billingContact) {
-            return;
+    function appendCustomer(billingContact, shippingContact, $form) {
+        if (billingContact) {
+            appendHiddenInput($form, Parameter.GIVEN_NAME, billingContact.givenName);
+            appendHiddenInput($form, Parameter.SUR_NAME, billingContact.familyName);
         }
 
-        appendHiddenInput($form, Parameter.PHONE, billingContact.phoneNumber);
-        appendHiddenInput($form, Parameter.EMAIL, billingContact.emailAddress);
-        appendHiddenInput($form, Parameter.GIVEN_NAME, billingContact.givenName);
-        appendHiddenInput($form, Parameter.SUR_NAME, billingContact.familyName);
+        if (shippingContact) {
+            appendHiddenInput($form, Parameter.PHONE, shippingContact.phoneNumber);
+            appendHiddenInput($form, Parameter.EMAIL, shippingContact.emailAddress);
+        }
     }
 
     // Append a hidden input, with given name name values, to the form
@@ -52770,23 +52797,19 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 			' auto-submit=' + Options.clickToPay.otpScreen.autoSubmit +
 			' hide-loader=' + Options.clickToPay.otpScreen.hideLoader +
 			' display-remember-me=' + Options.clickToPay.otpScreen.displayRememberMe +
-			(Options.clickToPay.otpScreen.otpResendLoading ? ' otp-resend-loading=\"true\"' : '') +
 			' type="' + Options.clickToPay.otpScreen.type + '"' +
 			(ClickToPayPaymentWidget.isDarkTheme(Options.clickToPay.darkTheme) ? ' dark' : '') +
 			' ></src-otp-input>');
 
 		var srcOtpInput = document.querySelector('src-otp-input');
 
+		ClickToPayPaymentWidget.addEventListenerForSelectedChannel(result, srcOtpInput);
+
 		ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
 
 		// close event listener for SRC input - close the OTP input
 		srcOtpInput.addEventListener('close', function() {
 			$(srcOtpInput).remove();
-		});
-
-		// alternateRequested event listener for SRC input - Show channel selection option
-		srcOtpInput.addEventListener('alternateRequested', function() {
-			ClickToPayPaymentWidget.addEventListenerForChannelSelection(result, srcOtpInput, clickToPayForm);
 		});
 	};
 
@@ -52806,8 +52829,8 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 		});
 	};
 
-	/** event listener for OTP channel selection UI component */
-	ClickToPayPaymentWidget.addEventListenerForChannelSelection = function(result, srcOtpInput, clickToPayForm) {
+	/** event listener for selected channel UI component */
+	ClickToPayPaymentWidget.addEventListenerForSelectedChannel = function(result, srcOtpInput) {
 		var channels = [];
 		var i = 0;
 		if ((result.supportedValidationChannels !== undefined && result.supportedValidationChannels !== null) && result.supportedValidationChannels.length > 0) {
@@ -52821,36 +52844,18 @@ define('module/integrations/ClickToPayPaymentWidget',['require','jquery','module
 				};
 				channels.push(option);
 			}
+			srcOtpInput.loadSupportedValidationChannels(channels);
+			srcOtpInput.otpResendLoading = false;
+			ClickToPayPaymentWidget.addResendOtpListenerToSrcChannel(srcOtpInput);
 		}
-		$(srcOtpInput).hide();
-		$(clickToPayForm).append('<src-otp-channel-selection' +
-			' card-brands="' + Options.clickToPay.initializedSrcCardBrands + '"' +
-			' locale=' + Locale.language + "_" + Locale.country +
-			' display-cancel-option=' + Options.clickToPay.otpScreen.displayCancelOption +
-			' display-header=' + Options.clickToPay.otpScreen.displayHeader +
-			' display-pay-another-way=' + Options.clickToPay.otpScreen.displayPayAnotherWay +
-			' type="' + Options.clickToPay.otpScreen.type + '"' +
-			(ClickToPayPaymentWidget.isDarkTheme(Options.clickToPay.darkTheme) ? ' dark' : '') +
-			' ></src-otp-channel-selection>');
-
-		var srcChannel = document.querySelector('src-otp-channel-selection');
-		srcChannel.identityValidationChannels = channels;
-		ClickToPayPaymentWidget.addContinueListenerToSrcChannel(srcChannel);
-		// close event listener for channel selection - close the OTP input
-		srcChannel.addEventListener('close', function() {
-			$(srcChannel).remove();
-			$(srcOtpInput).show();
-			ClickToPayPaymentWidget.addOtpChangedEventListener(srcOtpInput);
-		});
 	};
 
-	ClickToPayPaymentWidget.addContinueListenerToSrcChannel = function(srcChannel) {
-		// continue event listener for channel selection - Request OTP on selected channel
-		srcChannel.addEventListener('continue', function(obj) {
-			$(srcChannel).remove();
+	ClickToPayPaymentWidget.addResendOtpListenerToSrcChannel = function(srcOtpInput) {
+		// resendOtp event listener - Request OTP on selected channel
+		srcOtpInput.addEventListener('resendOtp', function(obj) {
 			if (obj.detail !== undefined && obj.detail !== null) {
-				if (obj.detail.identityType === "EMAIL" || obj.detail.identityType === "SMS") {
-					ClickToPayPaymentWidget.requestOtp(false, obj.detail.validationChannelId);
+				if (obj.detail === "EMAIL" || obj.detail === "SMS") {
+					ClickToPayPaymentWidget.requestOtp(false, obj.detail);
 				} else {
 					logger.error("Please try to enroll new card or use EMAIL or SMS validation.");
 					Options.onError(new WidgetError("CLICK_TO_PAY", "otp_channel_invalid", "Please try to enroll new card or use EMAIL or SMS validation."));
@@ -56094,9 +56099,9 @@ The name of this module is supposed to warn that this is not the preferred solut
 */
 /* jshint camelcase: false */
 /* globals ioGetBlackbox */
-define('module/BlockableIovationLoader',['jquery', 'module/logging/LoggerFactory', 'module/Util', 'module/InternalRequestCommunication'], 
+define('module/BlockableIovationLoader',['jquery', 'module/logging/LoggerFactory', 'module/AjaxSender'], 
 /* jshint maxparams: 4 */
-function($, LoggerFactory, Util, InternalRequestCommunication){
+function($, LoggerFactory, AjaxSender){
 
     var logger = LoggerFactory.getLogger('RedShieldDeviceId');
 
@@ -56113,14 +56118,7 @@ function($, LoggerFactory, Util, InternalRequestCommunication){
                 contentType: "application/x-www-form-urlencoded",
                 data: "customer.browserFingerprint.value=" + encodeURIComponent(data)
             };
-            if (!Util.isACIIframe) {
-                InternalRequestCommunication.getSender().then(function (sender) {
-                    Util._sender = sender;
-                    sender.send(params);
-                });
-            } else {
-                $.ajax(params);
-            }
+            AjaxSender.send(params);
 
             return true;
         }
@@ -60291,13 +60289,15 @@ require([
 	'jquery',
 	'module/Static',
 	'module/PciIframe',
-    'module/InternalRequestCommunication'
-], function($, Static, PciIframe, InternalRequestCommunication) {
+    'module/InternalRequestCommunication',
+    'module/AjaxSender'
+], function($, Static, PciIframe, InternalRequestCommunication, AjaxSender) {
 	var static = new Static();
 	var pciIframe = new PciIframe();
 
 	// static on ready
 	$(function(){
+		AjaxSender.setComms(InternalRequestCommunication);
 		static.onReady.call(static);
 		pciIframe.onReady.call(pciIframe);
 
