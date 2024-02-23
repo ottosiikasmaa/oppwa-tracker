@@ -51277,10 +51277,11 @@ define('module/integrations/CashAppPayPaymentWidget',['require','jquery','module
             try {
                 $('<div id="cash-app-pay"></div>').appendTo($form.parent());
                 hidePayButton();
+
                 var cashAppPayOptions = createCashAppPayOptions({
                     successCallbackUrl: params.successCallbackUrl,
                     failureCallbackUrl: params.failureCallbackUrl,
-                    mobileRedirectUrl: mobileRedirectUrl
+                    mobileRedirectUrl: isMobile() ? params.successCallbackUrl : mobileRedirectUrl
                 });
                 AfterPay.initializeForCashAppPay({
                      countryCode: country,
@@ -51332,6 +51333,36 @@ define('module/integrations/CashAppPayPaymentWidget',['require','jquery','module
          };
 
         return cashAppPayOptions;
+    }
+
+    CashAppPayPaymentWidget.isMobileDevice = function() {
+        return isMobile();
+    };
+
+    function isMobile() {
+        var isMobile = false;
+
+        if ("maxTouchPoints" in navigator) {
+            isMobile = navigator.maxTouchPoints > 0;
+        } else if ("msMaxTouchPoints" in navigator) {
+            isMobile = navigator.msMaxTouchPoints > 0;
+        } else {
+            var mQ = window.matchMedia && matchMedia("(pointer:coarse)");
+            if (mQ && mQ.media === "(pointer:coarse)") {
+                isMobile = !!mQ.matches;
+            } else if ('orientation' in window) {
+                isMobile = true; // deprecated, but good fallback
+            } else {
+                // Only as a last resort, fall back to user agent sniffing
+                var userAgent = navigator.userAgent;
+                isMobile = (
+                    /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(userAgent) ||
+                    /\b(Android|Windows Phone|iPad|iPod)\b/i.test(userAgent)
+                );
+            }
+        }
+
+        return isMobile;
     }
 
     return CashAppPayPaymentWidget;
