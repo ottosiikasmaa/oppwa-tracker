@@ -12536,6 +12536,10 @@ define('module/Options',['require','jquery','module/Setting','module/WpwlOptions
 		disappearErrorMessageTime: 7000
 	};
 
+	Options.iDEAL = {
+		showIdealV2Widget: false
+	};
+
 	// spinner
 	Options.spinner = {};
 
@@ -38285,7 +38289,7 @@ define('module/Generate',['require','jquery','dompurify','module/I18n','module/L
 
 	Generate.renderIdeal = function(data){
 		var brand = "IDEAL";
-		if (!Wpwl.checkout.config.idealV2WidgetEnabled) {
+		if (!(Wpwl.checkout.config.idealV2WidgetEnabled || Options.iDEAL.showIdealV2Widget)) {
 			var logo = Generate.string(Generate.groupStart("brand"), Generate.logo(brand), Generate.groupEnd());
 			var countries = data[paymentSystem];
 			var codes = [];
@@ -55451,8 +55455,9 @@ define('module/Payment',['require','jquery','module/forms/BankAccountPaymentForm
 	};
 
 	Payment.appendIdealV2WidgetEnabled = function($form) {
-		if (Wpwl.checkout.config.idealV2WidgetEnabled && PaymentView.getSelectedBrand($form) === "IDEAL") {
-			var idealV2Workflow = Generate.hiddenInput(Parameter.IDEAL_V2_WIDGET, Wpwl.checkout.config.idealV2WidgetEnabled);
+		var isIdealV2Widget = Wpwl.checkout.config.idealV2WidgetEnabled || Options.iDEAL.showIdealV2Widget;
+		if (isIdealV2Widget && PaymentView.getSelectedBrand($form) === "IDEAL") {
+			var idealV2Workflow = Generate.hiddenInput(Parameter.IDEAL_V2_WIDGET, isIdealV2Widget);
 			$form.append(idealV2Workflow);
 		}
 	};
@@ -58318,7 +58323,7 @@ define('module/PaymentWidget',['require','jquery','module/integrations/Affirm','
 				Payment.setMasterPassMessageListener();
 			}
 
-            if (brand === "IDEAL" && !Wpwl.checkout.config.idealV2WidgetEnabled) {
+            if (brand === "IDEAL" && !(Wpwl.checkout.config.idealV2WidgetEnabled || Options.iDEAL.showIdealV2Widget)) {
                 self.addOnReadyPromise(
                     IdealPaymentWidget.updateBanks(getCheckoutsConfigurationEndpoint('IDEAL_BANKS'))
                         .catch(function(oppError) {
