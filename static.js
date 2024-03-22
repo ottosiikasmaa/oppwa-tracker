@@ -48756,6 +48756,17 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
     var LoggerFactory = require('module/logging/LoggerFactory');
     var logger = LoggerFactory.getLogger('ApplePay');
 
+    var OPTIONS_WITH_NOTIFICATION = [
+        // https://developer.apple.com/documentation/apple_pay_on_the_web/applepayautomaticreloadpaymentrequest
+        "automaticReloadPaymentRequest",
+
+        // https://developer.apple.com/documentation/apple_pay_on_the_web/applepayrecurringpaymentrequest
+        "recurringPaymentRequest",
+
+        // https://developer.apple.com/documentation/apple_pay_on_the_web/applepaydeferredpaymentrequest
+        "deferredPaymentRequest"
+    ];
+
     // Options, defined in wpwlOptions.applePay, are copied to the Apple Pay payment request
     var REQUEST_OPTIONS = [
         // Required. Default is {label: "With Apple Pay", amount: amount_from_checkout}
@@ -48800,8 +48811,8 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
         // Can contain: phoneNumber, emailAddress, givenName, familyName, phoneticGivenName,
         // phoneticFamilyName, addressLines, subLocality, locality, postalCode,
         // subAdministrativeArea, administrativeArea, country, countryCode
-        "billingContact", "shippingContact"
-        ];
+        "billingContact", "shippingContact",
+    ].concat(OPTIONS_WITH_NOTIFICATION);
 
     var BUTTON_STYLES = ["white-with-line", "white", "black", "white-outline"];
 
@@ -48945,7 +48956,73 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
     }
 
     ApplePay.start = function($form) {
-        var session = new ApplePaySession(Options.applePay.version, createPaymentRequest());
+        var paymentRequest = createPaymentRequest();
+        if (!containsNotification(paymentRequest)) {
+            // Begin session right away
+            beginSession($form, paymentRequest);
+        } else {
+            // Set tokenNotificationURL and then begin session
+            createTokenId().always(function(tokenId) {
+                if (tokenId) {
+                    OPTIONS_WITH_NOTIFICATION.forEach(function(option) {
+                        if (paymentRequest[option]) {
+                            paymentRequest[option].tokenNotificationURL = Wpwl.url +
+                                "/v1/applePayRegistration/" + tokenId;
+                        }
+                    });
+                }
+                beginSession($form, paymentRequest);
+            });
+        }
+    };
+
+    function createPaymentRequest() {
+        var paymentRequest = {
+            currencyCode: Wpwl.checkout.currency || Options.applePay.currencyCode,
+            countryCode: Locale.country,
+        };
+        REQUEST_OPTIONS.forEach(function(option) {
+            if (Options.applePay[option]) {
+                paymentRequest[option] = Options.applePay[option];
+            }
+        });
+        paymentRequest.total.amount = paymentRequest.total.amount || Wpwl.checkout.amount;
+        return paymentRequest;
+    }
+
+    // Return true if paymentRequest contains an object in which tokenNotificationURL should be set
+    function containsNotification(paymentRequest) {
+        for (var i = 0; i < OPTIONS_WITH_NOTIFICATION.length; i++) {
+            if (paymentRequest[OPTIONS_WITH_NOTIFICATION[i]]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Call the server to create a registration token ID
+    function createTokenId() {
+        var createApplePayRegistrationUrl = Generate.string(Wpwl.url, "/v", Wpwl.apiVersion,
+            "/checkouts/", Wpwl.checkout.id, "/applePayRegistration");
+        return InternalRequestCommunication.getSender().then(function (sender) {
+            return sender.send({
+                method: "POST",
+                url: createApplePayRegistrationUrl,
+                dataType: "json"
+            });
+        })
+        .then(function(response) {
+            return response.id;
+        }, function(response) {
+            var info = "Creating Apple Pay token failed: " + JSON.stringify(response);
+            Tracking.exception(info);
+            return null;
+        });
+    }
+
+    // Creates ApplePaySession and call begin()
+    function beginSession($form, paymentRequest) {
+        var session = new ApplePaySession(Options.applePay.version, paymentRequest);
 
         if (Options.applePay.onCancel) {
             session.oncancel = ApplePay.onCancel;
@@ -48988,20 +49065,6 @@ define('module/ApplePay',['require','jquery','module/Generate','module/InternalR
         } else {
             ApplePay.fastCheckout(session, $form);
         }
-    };
-
-    function createPaymentRequest() {
-        var paymentRequest = {
-            currencyCode: Wpwl.checkout.currency || Options.applePay.currencyCode,
-            countryCode: Locale.country,
-        };
-        REQUEST_OPTIONS.forEach(function(option) {
-            if (Options.applePay[option]) {
-                paymentRequest[option] = Options.applePay[option];
-            }
-        });
-        paymentRequest.total.amount = paymentRequest.total.amount || Wpwl.checkout.amount;
-        return paymentRequest;
     }
 
     ApplePay.fastCheckout = function(session, $form) {
@@ -56705,8 +56768,8 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
         return Options.paypal.onInit(data, actions);
     };
 
-    PaypalRestPaymentForm.prototype.onCancel = function(data) {
-        Options.onError(new WidgetError(this.getBrand(), 'closed', data));
+    PaypalRestPaymentForm.prototype.onCancel = function() {
+        return this.sendCancellationCallback();
     };
 
     PaypalRestPaymentForm.prototype.onShippingChange = function(data, actions) {
@@ -56970,6 +57033,14 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
         }
     }
 
+    PaypalRestPaymentForm.prototype.sendCancellationCallback = function() {
+        var params = {
+            url: getCheckoutEndpoint(CONFIRM) + "?cancel=true",
+            method: HTTP_POST,
+            dataType: "text",
+        };
+        return PaypalRestPaymentForm.sendInternalRequestWithParams(params);
+    };
     return PaypalRestPaymentForm;
 });
 
