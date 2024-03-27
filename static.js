@@ -56768,7 +56768,8 @@ define('module/forms/PaypalRestPaymentForm',['require','shim/ObjectCreate','modu
         return Options.paypal.onInit(data, actions);
     };
 
-    PaypalRestPaymentForm.prototype.onCancel = function() {
+    PaypalRestPaymentForm.prototype.onCancel = function(data) {
+        Options.onError(new WidgetError(this.getBrand(), 'closed', data));
         return this.sendCancellationCallback();
     };
 
